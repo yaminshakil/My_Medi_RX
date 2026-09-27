@@ -5,11 +5,12 @@ namespace App\Repositories\Auth;
 use App\Interfaces\Auth\UserRepositoryInterface;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository implements UserRepositoryInterface
 {
-    public function all(): \Illuminate\Database\Eloquent\Collection
+    public function all(): Collection
     {
         return User::all();
     }
@@ -31,10 +32,10 @@ class UserRepository implements UserRepositoryInterface
 
         $users = $users->latest()->with('roles')->paginate($perPage)->withQueryString();
         $users->getCollection()->transform(fn ($user) => [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'roles' => $user->roles,
+            'id'         => $user->id,
+            'name'       => $user->name,
+            'email'      => $user->email,
+            'roles'      => $user->roles,
             'created_at' => $user->created_at->format('d M Y'),
         ]);
 
@@ -55,7 +56,7 @@ class UserRepository implements UserRepositoryInterface
     public function update(array $data, $user): int
     {
         $updateData = [
-            'name' => $data['name'],
+            'name'  => $data['name'],
             'email' => $data['email'],
         ] + $this->nameParts($data);
 
@@ -87,7 +88,7 @@ class UserRepository implements UserRepositoryInterface
         if (! empty($data['first_name']) || ! empty($data['last_name'])) {
             return [
                 'first_name' => $data['first_name'] ?? '',
-                'last_name' => $data['last_name'] ?? '',
+                'last_name'  => $data['last_name'] ?? '',
             ];
         }
 
@@ -95,7 +96,7 @@ class UserRepository implements UserRepositoryInterface
 
         return [
             'first_name' => $parts[0] ?? '',
-            'last_name' => $parts[1] ?? '',
+            'last_name'  => $parts[1] ?? '',
         ];
     }
 }

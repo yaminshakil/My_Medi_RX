@@ -1,4 +1,4 @@
-import ScrollToTop from '@/components/ScrollToTop';
+import ScrollToTop from '@/Components/ScrollToTop';
 import { Link, usePage } from '@inertiajs/react';
 import * as LucideIcons from 'lucide-react';
 

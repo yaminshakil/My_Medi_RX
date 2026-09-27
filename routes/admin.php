@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Admin\Menu\MenuController;
-use App\Http\Controllers\Admin\Auth\UserController;
-use App\Http\Controllers\Admin\Auth\RoleController;
 use App\Http\Controllers\Admin\Auth\PermissionController;
+use App\Http\Controllers\Admin\Auth\RoleController;
+use App\Http\Controllers\Admin\Auth\UserController;
+use App\Http\Controllers\Admin\Menu\MenuController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin'])->group(function () {

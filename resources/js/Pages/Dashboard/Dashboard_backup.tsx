@@ -1,5 +1,5 @@
-import DoctorFilterChart from '@/components/DoctorFilterChart';
-import AppLayout from '@/layouts/app-layout';
+import DoctorFilterChart from '@/Components/DoctorFilterChart';
+import AppLayout from '@/Layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import Box from '@mui/material/Box';

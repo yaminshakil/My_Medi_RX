@@ -1,4 +1,4 @@
-import RenderStars from '@/components/RenderStars';
+import RenderStars from '@/Components/RenderStars';
 import { Star } from 'lucide-react';
 
 export default function ReviewList({ reviews, item }) {

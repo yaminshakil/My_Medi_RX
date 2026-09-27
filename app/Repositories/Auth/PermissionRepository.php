@@ -20,8 +20,8 @@ class PermissionRepository implements PermissionRepositoryInterface
         $permissions = $permissions->latest()->with('permissions')->paginate($perPage)->withQueryString();
 
         $permissions->getCollection()->transform(fn ($permission) => [
-            'id' => $permission->id,
-            'name' => $permission->name,
+            'id'         => $permission->id,
+            'name'       => $permission->name,
             'created_at' => $permission->created_at->format('d M Y'),
         ]);
 

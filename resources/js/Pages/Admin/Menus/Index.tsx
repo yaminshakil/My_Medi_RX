@@ -1,6 +1,6 @@
-import { AdminPageHeader } from '@/components/AdminPageHeader';
-import { Pagination } from '@/components/pagination';
-import AppLayout from '@/layouts/app-layout';
+import { AdminPageHeader } from '@/Components/AdminPageHeader';
+import { Pagination } from '@/Components/pagination';
+import AppLayout from '@/Layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';

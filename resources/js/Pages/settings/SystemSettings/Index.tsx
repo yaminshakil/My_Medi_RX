@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
+import AppLayout from '@/Layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { Bell, FileText, Globe, Image, Monitor, Palette, Settings } from 'lucide-react';
@@ -36,27 +36,12 @@ export default function Index() {
         {
             title: 'Notification Setting',
             icon: Bell,
-            href: route('email-templates.index'),
+            //href: route('email-templates.index'),
         },
         {
             title: 'SEO Configuration',
             icon: Globe,
             href: route('settings.system.seo.edit'),
-        },
-        {
-            title: 'Manage Frontend',
-            icon: Monitor,
-            href: route('settings.frontend.index'),
-        },
-        {
-            title: 'Manage Pages',
-            icon: FileText,
-            href: route('admin.pages.index'),
-        },
-        {
-            title: 'Manage Footer Sections',
-            icon: FileText,
-            href: route('admin.footer-sections.index'),
         },
     ];
 

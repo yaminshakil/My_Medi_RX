@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 import dayjs from 'dayjs';
 import { Clock } from 'lucide-react';
 
@@ -58,13 +58,12 @@ export default function AvailableTimeSlot({ data, setData, selectedChamber, appo
                                         type="button"
                                         onClick={() => !isBooked && setData('appointment_time', slot.value)}
                                         disabled={disabled}
-                                        className={`flex items-center justify-center rounded-lg border px-4 py-2 text-sm ${
-                                            disabled
+                                        className={`flex items-center justify-center rounded-lg border px-4 py-2 text-sm ${disabled
                                                 ? 'cursor-not-allowed bg-gray-300 text-gray-500'
                                                 : data.appointment_time === slot.value
-                                                  ? 'text-white'
-                                                  : 'bg-gray-100 text-black hover:bg-blue-100'
-                                        }`}
+                                                    ? 'text-white'
+                                                    : 'bg-gray-100 text-black hover:bg-blue-100'
+                                            }`}
                                     >
                                         {data.appointment_time === slot.value ? (
                                             <Clock className="mr-4 cursor-pointer text-white" size={20} />

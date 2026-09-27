@@ -22,7 +22,7 @@ class MenuController extends Controller
 
         return Inertia::render('Admin/Menus/Index', [
             'allmenus' => $menus,
-            'status' => session('status'),
+            'status'   => session('status'),
         ]);
     }
 
@@ -39,9 +39,9 @@ class MenuController extends Controller
         ]);
 
         return Inertia::render('Admin/Menus/Create', [
-            'roles' => $roles,
+            'roles'       => $roles,
             'parentmenus' => $parentmenus,
-            'status' => session('status'),
+            'status'      => session('status'),
         ]);
     }
 
@@ -70,11 +70,11 @@ class MenuController extends Controller
         ]);
 
         return Inertia::render('Admin/Menus/Edit', [
-            'roles' => $roles,
-            'editmenu' => $editmenu,
-            'role' => $editmenu->roles->pluck('id')->toArray(),
+            'roles'       => $roles,
+            'editmenu'    => $editmenu,
+            'role'        => $editmenu->roles->pluck('id')->toArray(),
             'parentmenus' => $parentmenus,
-            'status' => session('status'),
+            'status'      => session('status'),
         ]);
     }
 

@@ -5,6 +5,7 @@ namespace App\Services\Auth;
 use App\Interfaces\Auth\UserRepositoryInterface;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserService
 {
@@ -38,7 +39,7 @@ class UserService
         return $this->userRepository->delete($id);
     }
 
-    public function all(): \Illuminate\Database\Eloquent\Collection
+    public function all(): Collection
     {
         return $this->userRepository->all();
     }

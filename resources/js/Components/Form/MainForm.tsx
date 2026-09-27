@@ -1,4 +1,4 @@
-import FormFooter from '@/components/Form/FormFooter';
+import FormFooter from '@/Components/Form/FormFooter';
 
 interface FormProps {
     handleSubmit: (e: React.FormEvent) => void;

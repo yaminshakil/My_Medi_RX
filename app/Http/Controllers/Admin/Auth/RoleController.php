@@ -34,7 +34,7 @@ class RoleController extends Controller
         $roles = $this->roleService->all($search, $perPage);
 
         return Inertia::render('Admin/Roles/index', [
-            'roles' => $roles,
+            'roles'   => $roles,
             'filters' => $request->only(['search', 'per_page']),
         ]);
     }
@@ -55,7 +55,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required',
+            'name'        => 'required',
             'permissions' => 'required',
         ]);
 
@@ -72,9 +72,9 @@ class RoleController extends Controller
         $role = $this->roleService->find($id);
 
         return Inertia::render('Admin/Roles/edit', [
-            'role' => $role,
+            'role'            => $role,
             'rolePermissions' => $role->permissions->pluck('name'),
-            'permissions' => Permission::pluck('name'),
+            'permissions'     => Permission::pluck('name'),
         ]);
     }
 
@@ -84,7 +84,7 @@ class RoleController extends Controller
     public function update(Request $request, string $id)
     {
         $data = $request->validate([
-            'name' => 'required',
+            'name'        => 'required',
             'permissions' => 'required',
         ]);
 

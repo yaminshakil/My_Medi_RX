@@ -1,11 +1,11 @@
-import { ConfirmDialog } from '@/components/ConfirmDialog';
-import { AdminPageHeader } from '@/components/AdminPageHeader';
-import PageHeader from '@/components/PageHeader';
-import { Pagination } from '@/components/pagination';
-import Table from '@/components/Table';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import AppLayout from '@/layouts/app-layout';
+import { ConfirmDialog } from '@/Components/ConfirmDialog';
+import { AdminPageHeader } from '@/Components/AdminPageHeader';
+import PageHeader from '@/Components/PageHeader';
+import { Pagination } from '@/Components/pagination';
+import Table from '@/Components/Table';
+import { Button } from '@/Components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
+import AppLayout from '@/Layouts/app-layout';
 import { useCan } from '@/lib/can';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
@@ -216,7 +216,7 @@ export default function Index({ users, roles = [] }: { users: { data: UserRow[] 
                                 className="h-10 w-18 shrink-0 hover:bg-red-500 hover:text-white px-3"
                                 title="Reset filters"
                             >
-                                <X size={10}/>
+                                <X size={10} />
                                 Clear
                             </Button>
                         </div>

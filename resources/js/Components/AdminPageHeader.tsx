@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
 import { router } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
@@ -14,7 +14,7 @@ interface AdminPageHeaderProps {
     filters?: ReactNode;
 }
 
-export function AdminPageHeader({ breadcrumbs = [], title, description, actions, toolbar, backHref , filters}: AdminPageHeaderProps) {
+export function AdminPageHeader({ breadcrumbs = [], title, description, actions, toolbar, backHref, filters }: AdminPageHeaderProps) {
     const fallbackBackHref = breadcrumbs.length > 1 ? breadcrumbs[breadcrumbs.length - 2]?.href : null;
     const resolvedTitle = title || breadcrumbs[breadcrumbs.length - 1]?.title || 'Admin';
 

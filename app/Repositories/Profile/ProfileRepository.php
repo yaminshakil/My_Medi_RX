@@ -4,7 +4,6 @@ namespace App\Repositories\Profile;
 
 use App\Interfaces\Profile\ProfileRepositoryInterface;
 use App\Models\Doctor;
-use App\Models\DoctorAssistant;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -13,18 +12,15 @@ class ProfileRepository implements ProfileRepositoryInterface
 {
     protected Doctor $doctor;
 
-    protected DoctorAssistant $assistant;
-
     protected Patient $patient;
 
     protected $user_id;
 
     protected $user;
 
-    public function __construct(Doctor $doctor, DoctorAssistant $assistant, Patient $patient)
+    public function __construct(Doctor $doctor, Patient $patient)
     {
         $this->doctor = $doctor;
-        $this->assistant = $assistant;
         $this->patient = $patient;
         $this->user_id = Auth::user()->id;
         $this->user = Auth::user();
@@ -46,19 +42,19 @@ class ProfileRepository implements ProfileRepositoryInterface
         }
 
         $doctor = Doctor::create([
-            'user_id' => $this->user_id,
-            'phone' => $data['phone'] ?? null,
-            'gender' => $data['gender'] ?? null,
-            'dob' => $data['dob'] ?? null,
-            'specialization' => $data['specialization'] ?? null,
+            'user_id'           => $this->user_id,
+            'phone'             => $data['phone'] ?? null,
+            'gender'            => $data['gender'] ?? null,
+            'dob'               => $data['dob'] ?? null,
+            'specialization'    => $data['specialization'] ?? null,
             'working_institute' => $data['working_institute'] ?? null,
-            'designation' => $data['designation'] ?? null,
-            'qualification' => $data['qualification'] ?? null,
-            'registration_no' => $data['registration_no'] ?? null,
-            'experience_years' => $data['experience_years'] ?? null,
-            'bio' => $data['bio'] ?? null,
-            'social' => $data['social'],
-            'active' => $data['active'] ?? true,
+            'designation'       => $data['designation'] ?? null,
+            'qualification'     => $data['qualification'] ?? null,
+            'registration_no'   => $data['registration_no'] ?? null,
+            'experience_years'  => $data['experience_years'] ?? null,
+            'bio'               => $data['bio'] ?? null,
+            'social'            => $data['social'],
+            'active'            => $data['active'] ?? true,
         ]);
 
         $this->user->specialties()->sync($data['specialization_ids']);
@@ -86,18 +82,18 @@ class ProfileRepository implements ProfileRepositoryInterface
         }
 
         $doctor = $doctor->update([
-            'phone' => $data['phone'] ?? null,
-            'gender' => $data['gender'] ?? null,
-            'dob' => $data['dob'] ?? null,
-            'specialization' => $data['specialization'] ?? null,
+            'phone'             => $data['phone'] ?? null,
+            'gender'            => $data['gender'] ?? null,
+            'dob'               => $data['dob'] ?? null,
+            'specialization'    => $data['specialization'] ?? null,
             'working_institute' => $data['working_institute'] ?? null,
-            'designation' => $data['designation'] ?? null,
-            'qualification' => $data['qualification'] ?? null,
-            'registration_no' => $data['registration_no'] ?? null,
-            'experience_years' => $data['experience_years'] ?? null,
-            'bio' => $data['bio'] ?? null,
-            'social' => $data['social'],
-            'active' => $data['active'] ?? true,
+            'designation'       => $data['designation'] ?? null,
+            'qualification'     => $data['qualification'] ?? null,
+            'registration_no'   => $data['registration_no'] ?? null,
+            'experience_years'  => $data['experience_years'] ?? null,
+            'bio'               => $data['bio'] ?? null,
+            'social'            => $data['social'],
+            'active'            => $data['active'] ?? true,
         ]);
 
         $this->user->specialties()->sync($data['specialization_ids']);
@@ -105,10 +101,7 @@ class ProfileRepository implements ProfileRepositoryInterface
         return $doctor;
     }
 
-    public function getDoctorAssistantProfile()
-    {
-        return $this->assistant::with('user', 'user.profileImage')->where('user_id', $this->user_id)->first();
-    }
+
 
     public function getPatientProfile()
     {

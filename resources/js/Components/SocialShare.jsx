@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 import { Facebook, Linkedin, MessageCircle, Twitter } from 'lucide-react';
 
 export default function SocialShare({ url, title }) {

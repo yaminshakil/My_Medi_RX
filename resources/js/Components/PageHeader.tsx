@@ -1,6 +1,6 @@
-import ShowPerPage from '@/components/ShowPerPage';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import ShowPerPage from '@/Components/ShowPerPage';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
 import { Plus, X } from 'lucide-react';
 
 export default function PageHeader({

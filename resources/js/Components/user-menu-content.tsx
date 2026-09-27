@@ -1,6 +1,6 @@
-import { useMobileNavigation } from '@/components/hooks/use-mobile-navigation';
-import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { UserInfo } from '@/components/user-info';
+import { useMobileNavigation } from '@/Components/hooks/use-mobile-navigation';
+import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/Components/ui/dropdown-menu';
+import { UserInfo } from '@/Components/user-info';
 import { type User } from '@/types';
 import { Link, router } from '@inertiajs/react';
 import { LogOut, Settings } from 'lucide-react';

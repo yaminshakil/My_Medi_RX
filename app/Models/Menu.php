@@ -28,13 +28,13 @@ class Menu extends Model
     public function format()
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'slug' => $this->slug,
-            'order_by' => $this->order_by,
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'slug'        => $this->slug,
+            'order_by'    => $this->order_by,
             'menu_method' => $this->menu_method,
-            'menu_icon' => $this->menu_icon,
-            'submenu' => $this->getChildMenus(),
+            'menu_icon'   => $this->menu_icon,
+            'submenu'     => $this->getChildMenus(),
         ];
     }
 
@@ -58,14 +58,14 @@ class Menu extends Model
             $query->whereIn('roles.id', $userRoles);
         })->where('parent_id', '=', $child)->orderBy('order_by', 'ASC')->get()->map(function ($format) {
             return [
-                'id' => $format->id,
-                'title' => $format->name,
-                'href' => $format->slug,
-                'order_by' => $format->order_by,
+                'id'          => $format->id,
+                'title'       => $format->name,
+                'href'        => $format->slug,
+                'order_by'    => $format->order_by,
                 'menu_method' => $format->menu_method,
-                'icon' => $format->menu_icon,
-                'submenu' => $format->getChildMenus(),
-                'roles' => $format->roles,
+                'icon'        => $format->menu_icon,
+                'submenu'     => $format->getChildMenus(),
+                'roles'       => $format->roles,
             ];
         });
     }

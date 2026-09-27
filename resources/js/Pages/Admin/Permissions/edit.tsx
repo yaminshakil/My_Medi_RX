@@ -1,5 +1,5 @@
-import { AdminPageHeader } from '@/components/AdminPageHeader';
-import AppLayout from '@/layouts/app-layout';
+import { AdminPageHeader } from '@/Components/AdminPageHeader';
+import AppLayout from '@/Layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';

@@ -20,10 +20,10 @@ class RoleRepository implements RoleRepositoryInterface
         $roles = $roles->latest()->with('permissions')->paginate($perPage)->withQueryString();
 
         $roles->getCollection()->transform(fn ($role) => [
-            'id' => $role->id,
-            'name' => $role->name,
+            'id'          => $role->id,
+            'name'        => $role->name,
             'permissions' => $role->permissions,
-            'created_at' => $role->created_at->format('d M Y'),
+            'created_at'  => $role->created_at->format('d M Y'),
         ]);
 
         return $roles;

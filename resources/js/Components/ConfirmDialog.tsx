@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 
 export function ConfirmDialog({ message, onConfirm, onCancel, isOpen, title }) {
     if (!isOpen) return null;

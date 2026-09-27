@@ -1,5 +1,5 @@
-import Navbar from '@/components/Navbar';
-import FooterFrontend from '@/layouts/FooterFrontend';
+import Navbar from '@/Components/Navbar';
+import FooterFrontend from '@/Layouts/FooterFrontend';
 
 export default function Guest({ children }) {
     return (

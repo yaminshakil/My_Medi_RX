@@ -1,7 +1,7 @@
-import { ConfirmDialog } from '@/components/ConfirmDialog';
-import Table from '@/components/Table';
-import { Button } from '@/components/ui/button';
-import AppLayout from '@/layouts/app-layout';
+import { ConfirmDialog } from '@/Components/ConfirmDialog';
+import Table from '@/Components/Table';
+import { Button } from '@/Components/ui/button';
+import AppLayout from '@/Layouts/app-layout';
 import { useCan } from '@/lib/can';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';

@@ -1,10 +1,10 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { AdminPageHeader } from '@/components/AdminPageHeader';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import AppLayout from '@/layouts/app-layout';
+import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui/avatar';
+import { AdminPageHeader } from '@/Components/AdminPageHeader';
+import { Badge } from '@/Components/ui/badge';
+import { Button } from '@/Components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
+import { Separator } from '@/Components/ui/separator';
+import AppLayout from '@/Layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import {
@@ -134,7 +134,7 @@ function InfoRow({ label, value, icon: Icon }: { label: string; value: string | 
 function StatusBadge({ status, label }: { status: string; label: string }) {
     return (
         <Badge variant={status == 'active' ? 'default' : status == 'suspended' ? 'secondary' : 'destructive'} className="text-xs">
-            {status =='active' ? label : status == 'suspended' ? 'Suspended' : `Inactive`}
+            {status == 'active' ? label : status == 'suspended' ? 'Suspended' : `Inactive`}
         </Badge>
     );
 }
@@ -165,7 +165,7 @@ function getInitials(name: string): string {
 }
 
 export default function Show({ user }: ShowProps) {
-    console.log(user.status);
+
     const billing = user.freemius_billing;
     const subscriptions = user.subscriptions || [];
     const payments = user.freemius_payment || [];
@@ -428,7 +428,7 @@ export default function Show({ user }: ShowProps) {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
                                 <Download className="size-5" />
-                               Pregnancy Tracking
+                                Pregnancy Tracking
                             </CardTitle>
                             <CardDescription>{activations.length} active installation(s)</CardDescription>
                         </CardHeader>

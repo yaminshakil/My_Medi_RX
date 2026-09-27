@@ -3,10 +3,10 @@
 namespace App\Http\Middleware;
 
 use App\Models\Menu;
-use Illuminate\Http\Request;
-use Inertia\Middleware;
 use Illuminate\Foundation\Inspiring;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
@@ -44,33 +44,36 @@ class HandleInertiaRequests extends Middleware
                 $query->whereIn('roles.id', $userRoles);
             })->where('parent_id', '=', null)->orderBy('order_by', 'ASC')->get()->map(function ($format) {
                 return [
-                    'id' => $format->id,
-                    'title' => $format->name,
-                    'href' => $format->slug,
-                    'order_by' => $format->order_by,
+                    'id'          => $format->id,
+                    'title'       => $format->name,
+                    'href'        => $format->slug,
+                    'order_by'    => $format->order_by,
                     'menu_method' => $format->menu_method,
-                    'icon' => $format->menu_icon,
-                    'submenu' => $format->getChildMenus(),
-                    'roles' => $format->roles,
+                    'icon'        => $format->menu_icon,
+                    'submenu'     => $format->getChildMenus(),
+                    'roles'       => $format->roles,
                 ];
             });
         }
 
         return [
             ...parent::share($request),
-            'name' => config('app.name'),
+            'name'  => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
-            'auth' => [
-                'user' => $request->user(),
+            'auth'  => [
+                'user'        => $request->user(),
                 'permissions' => fn () => $request->user()?->getAllPermissions()->pluck('name') ?? [],
             ],
             'ziggy' => fn (): array => [
-                ...(new Ziggy())->toArray(),
+                ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-            'flash' => [
-                'message' => $request->session()->all(),
+            'flash'       => [
+                'message' => [
+                    'success' => $request->session()->get('success'),
+                    'error'   => $request->session()->get('error'),
+                ],
             ],
             'menus' => $this->menus,
         ];

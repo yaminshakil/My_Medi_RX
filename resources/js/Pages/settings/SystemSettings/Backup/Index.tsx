@@ -1,6 +1,6 @@
-import { ConfirmDialog } from '@/components/ConfirmDialog';
-import { Button } from '@/components/ui/button';
-import AppLayout from '@/layouts/app-layout';
+import { ConfirmDialog } from '@/Components/ConfirmDialog';
+import { Button } from '@/Components/ui/button';
+import AppLayout from '@/Layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { ArrowLeft, Database, Download, Trash2 } from 'lucide-react';

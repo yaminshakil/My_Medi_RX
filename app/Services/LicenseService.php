@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Services;
+
 use App\Models\License;
-use Carbon\Carbon;
 
 class LicenseService
 {
@@ -14,7 +14,7 @@ class LicenseService
         //
     }
 
-    public function isActive(string $licenseKey, string $domain = null): bool
+    public function isActive(string $licenseKey, ?string $domain = null): bool
     {
         $license = License::where('license_key', $licenseKey)->first();
 

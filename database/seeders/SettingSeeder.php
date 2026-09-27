@@ -33,7 +33,7 @@ class SettingSeeder extends Seeder
             'site_base_color'            => '#1656ad',
             'primary_menu_bgcolor'       => '#852ba6',
             'site_button_bgcolor'        => '#4b80c7',
-            'site_button_hover_bgcolor'  => '#061f40',
+            'site_button_hover_bgcolor'  => '#1656ad',
             'site_header_top_bgcolor'    => '#343b54',
             'site_footer_bgcolor'        => '#334461',
             'site_footer_bottom_bgcolor' => '#343b54',

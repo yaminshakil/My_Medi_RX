@@ -1,4 +1,4 @@
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/Components/ui/collapsible';
 import {
     SidebarGroup,
     SidebarGroupLabel,
@@ -8,7 +8,7 @@ import {
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
-} from '@/components/ui/sidebar';
+} from '@/Components/ui/sidebar';
 import { NavItemWithSubmenu } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import * as LucideIcons from 'lucide-react';

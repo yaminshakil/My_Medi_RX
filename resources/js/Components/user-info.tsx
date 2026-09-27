@@ -1,5 +1,5 @@
-import { useInitials } from '@/components/hooks/use-initials';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useInitials } from '@/Components/hooks/use-initials';
+import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui/avatar';
 import { type User } from '@/types';
 
 export function UserInfo({ user, showEmail = false }: { user: User; showEmail?: boolean }) {

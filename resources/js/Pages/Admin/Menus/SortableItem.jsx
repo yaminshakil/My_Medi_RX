@@ -1,5 +1,5 @@
-import { ConfirmDialog } from '@/components/ConfirmDialog';
-import { Button } from '@/components/ui/button';
+import { ConfirmDialog } from '@/Components/ConfirmDialog';
+import { Button } from '@/Components/ui/button';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { router } from '@inertiajs/react';

@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 import useFormatCurrency from '@/lib/utils';
 import { router } from '@inertiajs/react';
 import { Edit, Trash2 } from 'lucide-react';
@@ -47,8 +47,8 @@ export default function Table({
                                     {col.render
                                         ? col.render(item)
                                         : col.isCurrency && typeof item[col.key] === 'number'
-                                          ? formatCurrency(item[col.key])
-                                          : (item[col.key] ?? '—')}
+                                            ? formatCurrency(item[col.key])
+                                            : (item[col.key] ?? '—')}
                                 </td>
                             ))}
 

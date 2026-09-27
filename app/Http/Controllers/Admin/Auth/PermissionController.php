@@ -34,7 +34,7 @@ class PermissionController extends Controller
 
         return Inertia::render('Admin/Permissions/index', [
             'permissions' => $permissions,
-            'filters' => $request->only(['search', 'per_page']),
+            'filters'     => $request->only(['search', 'per_page']),
         ]);
     }
 

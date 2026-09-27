@@ -1,9 +1,9 @@
-import { ConfirmDialog } from '@/components/ConfirmDialog';
-import { AdminPageHeader } from '@/components/AdminPageHeader';
-import PageHeader from '@/components/PageHeader';
-import { Pagination } from '@/components/pagination';
-import Table from '@/components/Table';
-import AppLayout from '@/layouts/app-layout';
+import { ConfirmDialog } from '@/Components/ConfirmDialog';
+import { AdminPageHeader } from '@/Components/AdminPageHeader';
+import PageHeader from '@/Components/PageHeader';
+import { Pagination } from '@/Components/pagination';
+import Table from '@/Components/Table';
+import AppLayout from '@/Layouts/app-layout';
 import { useCan } from '@/lib/can';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, useForm, usePage } from '@inertiajs/react';

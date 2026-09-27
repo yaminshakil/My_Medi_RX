@@ -48,7 +48,7 @@
                 --footer-bgcolor: {{ $appSettings['site_footer_bgcolor'] ?? '#334461' }};
                 --footerbottom-bgcolor: {{ $appSettings['site_footer_bottom_bgcolor'] ?? '#343b54' }};
                 --headertop-bgcolor: {{ $appSettings['site_header_top_bgcolor'] ?? '#343b54' }};
-                --btn-base-color: {{ $appSettings['site_button_bgcolor'] ?? '#4b80c7' }};
+                --btn-base-color: {{ $appSettings['site_button_bgcolor'] ?? '#1656ad' }};
                 --btn-base-hover-color: {{ $appSettings['site_button_hover_bgcolor'] ?? '#061f40' }};
             }
         </style>

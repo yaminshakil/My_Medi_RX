@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/Components/ui/button';
+import { Textarea } from '@/Components/ui/textarea';
 import { useForm } from '@inertiajs/react';
 import { Star } from 'lucide-react';
 import { useState } from 'react';
@@ -28,9 +28,8 @@ export default function ReviewForm({ reviewableType, reviewableId }) {
                     <Star
                         key={star}
                         size={32}
-                        className={`cursor-pointer ${
-                            star <= (hover || data.rating) ? 'fill-[var(--base-color)] text-[var(--base-color)]' : 'text-gray-300'
-                        }`}
+                        className={`cursor-pointer ${star <= (hover || data.rating) ? 'fill-[var(--base-color)] text-[var(--base-color)]' : 'text-gray-300'
+                            }`}
                         onClick={() => setData('rating', star)}
                         onMouseEnter={() => setHover(star)}
                         onMouseLeave={() => setHover(0)}

@@ -17,6 +17,7 @@ class AdminMenuSeeder extends Seeder
 
         // Top Level Menus
         $map['dashboard'] = DB::table('menus')->insertGetId($this->data('Dashboard', '/admin/dashboard', 'LayoutGrid', 0));
+        $map['doctors_parent'] = DB::table('menus')->insertGetId($this->data('Doctors', null, 'Stethoscope', 7));
         $map['users'] = DB::table('menus')->insertGetId($this->data('Users', '/admin/users', 'Users', 8));
         $map['roles'] = DB::table('menus')->insertGetId($this->data('Roles', '/admin/roles', 'Settings', 9));
         $map['permissions'] = DB::table('menus')->insertGetId($this->data('Permissions', '/admin/permissions', 'ShieldCheck', 10));
@@ -26,6 +27,8 @@ class AdminMenuSeeder extends Seeder
         // Sub-menus
         $map['menus_list'] = DB::table('menus')->insertGetId($this->data('Menus', '/admin/menus', 'Menu', 0, $map['menus_parent']));
         $map['menus_create'] = DB::table('menus')->insertGetId($this->data('Create Menu', '/admin/menus/create', 'Menu', 1, $map['menus_parent']));
+        $map['doctors'] = DB::table('menus')->insertGetId($this->data('Doctors', '/admin/doctors', 'Stethoscope', 0, $map['doctors_parent']));
+        $map['doctors_specialties'] = DB::table('menus')->insertGetId($this->data('MedicalSpecialties', '/admin/medical-specialties', 'Stethoscope', 1, $map['doctors_parent']));
 
         // Role Assignments
         $this->assignRoles($map['dashboard'], [1]);
@@ -36,6 +39,9 @@ class AdminMenuSeeder extends Seeder
         $this->assignRoles($map['menus_list'], [1]);
         $this->assignRoles($map['menus_create'], [1]);
         $this->assignRoles($map['settings'], [1]);
+        $this->assignRoles($map['doctors_parent'], [1, 2]);
+        $this->assignRoles($map['doctors'], [1, 2]);
+        $this->assignRoles($map['doctors_specialties'], [1, 2]);
     }
 
     /**

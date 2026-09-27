@@ -17,15 +17,15 @@ class InstallRepository implements InstallRepositoryInterface
         // Basic system checks
         $checks = [
             'php_version' => version_compare(PHP_VERSION, '8.1.0', '>='),
-            'extensions' => [
-                'OpenSSL' => extension_loaded('openssl'),
-                'PDO' => extension_loaded('pdo'),
-                'Mbstring' => extension_loaded('mbstring'),
+            'extensions'  => [
+                'OpenSSL'   => extension_loaded('openssl'),
+                'PDO'       => extension_loaded('pdo'),
+                'Mbstring'  => extension_loaded('mbstring'),
                 'Tokenizer' => extension_loaded('tokenizer'),
-                'XML' => extension_loaded('xml'),
+                'XML'       => extension_loaded('xml'),
             ],
             'writable' => [
-                'storage' => is_writable(storage_path()),
+                'storage'         => is_writable(storage_path()),
                 'bootstrap/cache' => is_writable(base_path('bootstrap/cache')),
             ],
         ];
@@ -65,7 +65,7 @@ class InstallRepository implements InstallRepositoryInterface
 
             return [
                 'success' => false,
-                'data' => null,
+                'data'    => null,
                 'message' => 'Failed to create installation record.',
             ];
         }
@@ -77,14 +77,14 @@ class InstallRepository implements InstallRepositoryInterface
         $content = file_get_contents($env);
 
         $replacements = [
-            'APP_NAME' => '"'.$data['app_name'].'"',
-            'APP_URL' => $data['app_url'],
+            'APP_NAME'      => '"'.$data['app_name'].'"',
+            'APP_URL'       => $data['app_url'],
             'DB_CONNECTION' => $data['db_connection'],
-            'DB_PORT' => $data['db_port'],
-            'DB_HOST' => $data['db_host'],
-            'DB_DATABASE' => $data['db_name'],
-            'DB_USERNAME' => $data['db_user'],
-            'DB_PASSWORD' => $data['db_password'] ?? '',
+            'DB_PORT'       => $data['db_port'],
+            'DB_HOST'       => $data['db_host'],
+            'DB_DATABASE'   => $data['db_name'],
+            'DB_USERNAME'   => $data['db_user'],
+            'DB_PASSWORD'   => $data['db_password'] ?? '',
         ];
 
         foreach ($replacements as $key => $value) {
@@ -105,7 +105,7 @@ class InstallRepository implements InstallRepositoryInterface
         $admin = User::updateOrCreate(
             ['email' => $data['email']],
             [
-                'name' => $data['name'],
+                'name'     => $data['name'],
                 'password' => Hash::make($data['password']),
             ]
         );

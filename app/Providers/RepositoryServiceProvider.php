@@ -14,6 +14,8 @@ use App\Repositories\Auth\UserRepository;
 use App\Repositories\DashboardRepository;
 use App\Repositories\EmailTemplate\EmailTemplateRepository;
 use App\Repositories\MenuRepository;
+use App\Repositories\Profile\ProfileRepository;
+use App\Interfaces\Profile\ProfileRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -29,6 +31,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PermissionRepositoryInterface::class, PermissionRepository::class);
         $this->app->bind(MenuRepositoryInterface::class, MenuRepository::class);
         $this->app->bind(EmailTemplateRepositoryInterface::class, EmailTemplateRepository::class);
+        $this->app->bind(ProfileRepositoryInterface::class, ProfileRepository::class);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,7 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasApiTokens;
 
     use HasFactory;
@@ -55,7 +55,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
 
@@ -100,5 +100,40 @@ class User extends Authenticatable
     public function getAvatarAttribute()
     {
         return $this->profile_image_url;
+    }
+
+    public function getIsActiveAttribute(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    public function getIsPatientAttribute(): bool
+    {
+        return $this->hasRole('Patient');
+    }
+
+    public function getIsAdminAttribute(): bool
+    {
+        return $this->hasRole('Admin');
+    }
+
+    public function getIsInactiveAttribute(): bool
+    {
+        return $this->status === 'inactive';
+    }
+
+    public function pharmacy()
+    {
+        return $this->hasOne(Pharmacy::class);
+    }
+
+    public function doctor()
+    {
+        return $this->hasOne(Doctor::class);
+    }
+
+    public function specialties()
+    {
+        return $this->belongsToMany(MedicalSpecialty::class, 'doctor_specialty', 'doctor_id', 'medical_specialty_id')->withTimestamps();
     }
 }

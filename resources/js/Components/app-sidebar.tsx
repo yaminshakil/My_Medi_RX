@@ -1,7 +1,7 @@
-import { NavFooter } from '@/components/nav-footer';
-import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem } from '@/components/ui/sidebar';
+import { NavFooter } from '@/Components/nav-footer';
+import { NavMain } from '@/Components/nav-main';
+import { NavUser } from '@/Components/nav-user';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem } from '@/Components/ui/sidebar';
 import { NavItemWithSubmenu, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 
@@ -12,7 +12,6 @@ export function AppSidebar() {
     const menus = props.menus || {};
     const mainNavItems: NavItemWithSubmenu[] = menus;
     const { appSettings } = usePage().props as { appSettings: Record<string, string> };
-    console.log(appSettings);
     const logoUrl = appSettings?.dashboard_logo ? `/storage/${appSettings?.dashboard_logo}` : '/default/dashboard_logo.png';
 
     return (

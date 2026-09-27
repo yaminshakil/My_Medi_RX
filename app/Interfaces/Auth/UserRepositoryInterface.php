@@ -4,10 +4,11 @@ namespace App\Interfaces\Auth;
 
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 interface UserRepositoryInterface
 {
-    public function all(): \Illuminate\Database\Eloquent\Collection;
+    public function all(): Collection;
 
     public function paginate($search, $perPage): LengthAwarePaginator;
 

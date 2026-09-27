@@ -5,7 +5,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/Components/ui/dropdown-menu';
 import { Link, usePage } from '@inertiajs/react';
 import { AlignJustify, Mail, Phone } from 'lucide-react';
 import React, { useState } from 'react';
@@ -126,11 +126,10 @@ export default function Navbar() {
                                 <Link
                                     href={route('pages.show', link.slug)}
                                     onClick={showNav}
-                                    className={`font-semibold transition-colors duration-300 ${
-                                        ziggy.location === route('pages.show', link.slug)
+                                    className={`font-semibold transition-colors duration-300 ${ziggy.location === route('pages.show', link.slug)
                                             ? 'text-sky-400 underline decoration-2 underline-offset-4'
                                             : 'text-white hover:text-sky-500'
-                                    }`}
+                                        }`}
                                 >
                                     {link.title}
                                 </Link>
@@ -139,11 +138,10 @@ export default function Navbar() {
                                         <li key={sidx} className="border-b border-white last:border-b-0">
                                             <Link
                                                 href={sub.url}
-                                                className={`block px-4 py-2 text-sm text-white hover:bg-[var(--btn-base-hover-color)] ${
-                                                    ziggy.location === sub.url
+                                                className={`block px-4 py-2 text-sm text-white hover:bg-[var(--btn-base-hover-color)] ${ziggy.location === sub.url
                                                         ? 'text-sky-400 underline decoration-2 underline-offset-4'
                                                         : 'text-white decoration-2 underline-offset-4 hover:underline'
-                                                }`}
+                                                    }`}
                                             >
                                                 {sub.title}
                                             </Link>
@@ -156,11 +154,10 @@ export default function Navbar() {
                                 <Link
                                     href={route('pages.show', link.slug)}
                                     onClick={showNav}
-                                    className={`font-semibold transition-colors duration-300 ${
-                                        ziggy.location === route('pages.show', link.slug)
+                                    className={`font-semibold transition-colors duration-300 ${ziggy.location === route('pages.show', link.slug)
                                             ? 'text-sky-400 underline decoration-2 underline-offset-4'
                                             : 'text-white hover:text-sky-500'
-                                    }`}
+                                        }`}
                                 >
                                     {link.title}
                                 </Link>
@@ -231,17 +228,15 @@ export default function Navbar() {
                     <div className={`hidden flex-row justify-end gap-2 md:flex`}>
                         <Link
                             href="/login"
-                            className={`${
-                                toggle ? 'flex' : 'hidden'
-                            } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
+                            className={`${toggle ? 'flex' : 'hidden'
+                                } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
                         >
                             Login
                         </Link>
                         <Link
                             href={route('register')}
-                            className={`${
-                                toggle ? 'flex' : 'hidden'
-                            } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
+                            className={`${toggle ? 'flex' : 'hidden'
+                                } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
                         >
                             Registration
                         </Link>
@@ -263,11 +258,10 @@ export default function Navbar() {
                                     <Link
                                         href={route('pages.show', link.slug)}
                                         onClick={showNav}
-                                        className={`font-semibold transition-colors duration-300 ${
-                                            ziggy.location === route('pages.show', link.slug)
+                                        className={`font-semibold transition-colors duration-300 ${ziggy.location === route('pages.show', link.slug)
                                                 ? 'text-sky-400 underline decoration-2 underline-offset-4'
                                                 : 'text-white hover:text-sky-500'
-                                        }`}
+                                            }`}
                                     >
                                         {link.title}
                                     </Link>
@@ -276,11 +270,10 @@ export default function Navbar() {
                                             <li key={sidx} className="border-b border-white last:border-b-0">
                                                 <Link
                                                     href={sub.url}
-                                                    className={`block px-4 py-2 text-sm text-white hover:bg-[var(--btn-base-hover-color)] ${
-                                                        ziggy.location === sub.url
+                                                    className={`block px-4 py-2 text-sm text-white hover:bg-[var(--btn-base-hover-color)] ${ziggy.location === sub.url
                                                             ? 'text-sky-400 underline decoration-2 underline-offset-4'
                                                             : 'text-white decoration-2 underline-offset-4 hover:underline'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     {sub.title}
                                                 </Link>
@@ -293,11 +286,10 @@ export default function Navbar() {
                                     <Link
                                         href={route('pages.show', link.slug)}
                                         onClick={showNav}
-                                        className={`font-semibold transition-colors duration-300 ${
-                                            ziggy.location === route('pages.show', link.slug)
+                                        className={`font-semibold transition-colors duration-300 ${ziggy.location === route('pages.show', link.slug)
                                                 ? 'text-sky-400 underline decoration-2 underline-offset-4'
                                                 : 'text-white hover:text-sky-500'
-                                        }`}
+                                            }`}
                                     >
                                         {link.title}
                                     </Link>
@@ -308,17 +300,15 @@ export default function Navbar() {
                     <div className={`flex flex-row justify-end gap-2 pb-4 md:hidden`}>
                         <Link
                             href="/login"
-                            className={`${
-                                toggle ? 'flex' : 'hidden'
-                            } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
+                            className={`${toggle ? 'flex' : 'hidden'
+                                } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
                         >
                             Login
                         </Link>
                         <Link
                             href={route('register')}
-                            className={`${
-                                toggle ? 'flex' : 'hidden'
-                            } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
+                            className={`${toggle ? 'flex' : 'hidden'
+                                } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
                         >
                             Registration
                         </Link>

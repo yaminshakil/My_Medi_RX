@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/button';
-import AppLayout from '@/layouts/app-layout';
+import { Button } from '@/Components/ui/button';
+import AppLayout from '@/Layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import Box from '@mui/material/Box';
@@ -190,9 +190,8 @@ export default function EprescriptionDashboard(props) {
                                         <Link
                                             key={chamber.id}
                                             href={route('chambers.setDefault', chamber.id)}
-                                            className={`${
-                                                chamber.is_active ? 'bg-[var(--btn-base-color)] text-white' : ''
-                                            } block px-4 py-2 text-sm text-gray-700 hover:bg-[var(--btn-base-hover-color)]`}
+                                            className={`${chamber.is_active ? 'bg-[var(--btn-base-color)] text-white' : ''
+                                                } block px-4 py-2 text-sm text-gray-700 hover:bg-[var(--btn-base-hover-color)]`}
                                         >
                                             {chamber.name}
                                         </Link>

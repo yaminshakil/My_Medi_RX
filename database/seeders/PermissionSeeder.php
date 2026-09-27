@@ -37,7 +37,7 @@ class PermissionSeeder extends Seeder
          */
         foreach ($permissions as $permission) {
             Permission::firstOrCreate([
-                'name' => $permission,
+                'name'       => $permission,
                 'guard_name' => 'web',
             ]);
         }
@@ -46,7 +46,7 @@ class PermissionSeeder extends Seeder
          * Admin
          */
         $adminRole = Role::firstOrCreate([
-            'name' => 'Admin',
+            'name'       => 'Admin',
             'guard_name' => 'web',
         ]);
 
@@ -67,7 +67,7 @@ class PermissionSeeder extends Seeder
          * Doctor
          */
         $doctorRole = Role::firstOrCreate([
-            'name' => 'Doctor',
+            'name'       => 'Doctor',
             'guard_name' => 'web',
         ]);
 
@@ -87,7 +87,7 @@ class PermissionSeeder extends Seeder
          * Patient
          */
         $patientRole = Role::firstOrCreate([
-            'name' => 'Patient',
+            'name'       => 'Patient',
             'guard_name' => 'web',
         ]);
 
@@ -101,22 +101,33 @@ class PermissionSeeder extends Seeder
         ]);
 
         /*
-         * Assistant
+         * Pharmacy
          */
-        $assistantRole = Role::firstOrCreate([
-            'name' => 'Assistant',
+        $patientRole = Role::firstOrCreate([
+            'name'       => 'Pharmacy',
             'guard_name' => 'web',
         ]);
 
-        $assistantRole->syncPermissions([
+        $patientRole->syncPermissions([
             'View',
             'Create',
             'Edit',
-            'patients.menu',
-            'appointments.menu',
-            'Appointment Create',
-            'Appointment Edit',
-            'Appointment Delete',
+            'Delete',
+        ]);
+
+        /*
+         * Hospital
+         */
+        $patientRole = Role::firstOrCreate([
+            'name'       => 'Hospital',
+            'guard_name' => 'web',
+        ]);
+
+        $patientRole->syncPermissions([
+            'View',
+            'Create',
+            'Edit',
+            'Delete',
         ]);
 
         /*

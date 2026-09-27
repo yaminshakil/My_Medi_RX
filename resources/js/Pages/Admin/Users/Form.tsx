@@ -1,7 +1,7 @@
-import MainForm from '@/components/Form/MainForm';
-import InputError from '@/components/input-error';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import MainForm from '@/Components/Form/MainForm';
+import InputError from '@/Components/input-error';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
 import { router } from '@inertiajs/react';
 
 interface Role {

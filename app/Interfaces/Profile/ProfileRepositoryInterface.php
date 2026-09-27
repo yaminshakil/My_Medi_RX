@@ -10,7 +10,5 @@ interface ProfileRepositoryInterface
 
     public function updateDoctorProfile(array $data);
 
-    public function getDoctorAssistantProfile();
-
     public function getPatientProfile();
 }
