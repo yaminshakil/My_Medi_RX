@@ -6,15 +6,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\MedicalSpecialty\MedicalSpecialtyService;
 use App\Models\Setting;
-use App\Http\Resources\Doctors\MedicalSpecialtiesResource;
+use App\Http\Resources\Doctors\MedicalSpecialtyGroupResource;
+use App\Services\Doctors\DoctorService;
 
 class MedicalSpecialtyController extends Controller
 {
     protected $service;
+    protected $doctorService;
 
-    public function __construct(MedicalSpecialtyService $service)
+    public function __construct(MedicalSpecialtyService $service, DoctorService $doctorService)
     {
         $this->service = $service;
+        $this->doctorService = $doctorService;
     }
 
     /**
@@ -30,7 +33,9 @@ class MedicalSpecialtyController extends Controller
         $perPage = $request->input('per_page', $recordsPerPage); // default 10
         $specialties = $this->service->getAll($search, $perPage);
 
-        return MedicalSpecialtiesResource::collection($specialties);
+        $specialties = $this->doctorService->getSpecialtiesForSelect();
+
+        return MedicalSpecialtyGroupResource::collection($specialties);
     }
 
     /**

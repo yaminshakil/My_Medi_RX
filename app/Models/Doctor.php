@@ -74,4 +74,12 @@ class Doctor extends Model
     {
         return $this->hasMany(DoctorExperience::class);
     }
+
+    public function getIsActiveAttribute(): bool
+    {
+        if (! isset($this->active)) {
+            return false;
+        }
+        return $this->active === true;
+    }
 }

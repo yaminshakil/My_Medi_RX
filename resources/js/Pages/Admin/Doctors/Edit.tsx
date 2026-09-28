@@ -70,7 +70,7 @@ export default function Edit({ doctor, specialties }) {
                     submitBtnTitle="Update"
                     heading="Edit Doctor"
                     isUpdate={true}
-                    initialImage={doctor?.user?.profile_image?.profile_image_url}
+                    initialImage={doctor?.user?.profile_image?.image_url}
                 />
             </div>
         </AppLayout>

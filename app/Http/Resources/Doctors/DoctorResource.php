@@ -21,10 +21,9 @@ class DoctorResource extends JsonResource
             'FirstName'         => $this->user->first_name,
             'LastName'          => $this->user->last_name,
             'email'             => $this->user->email,
-            'status'            => $this->status,
+            'status'            => $this->active,
             'mobile'            => $this->phone,
             'isActive'          => $this->isActive,
-            'isInactive'        => $this->isInactive,
             'registration_no'   => $this->registration_no,
             'gender'            => $this->gender,
             'dob'               => $this->dob,
@@ -40,7 +39,7 @@ class DoctorResource extends JsonResource
             'experiences'          => $this->experiences,
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
-            'profile_image'     => $this->profileImage ? $this->profileImage->path : null,
+            'profile_image'     => $this->user->profileImage ? $this->user->profileImage->path : null,
         ];
     }
 }
