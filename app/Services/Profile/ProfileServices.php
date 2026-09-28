@@ -31,10 +31,6 @@ class ProfileServices
         return $this->profileRepository->updateDoctorProfile($data);
     }
 
-    public function getDoctorAssistantProfile()
-    {
-        return $this->profileRepository->getDoctorAssistantProfile();
-    }
 
     public function getPatientProfile()
     {

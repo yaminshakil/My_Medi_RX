@@ -76,17 +76,6 @@ class ProfileController extends Controller
             ->with('success', 'Profile Updated successfully.');
     }
 
-    public function getDoctorAssistantProfile()
-    {
-        $assistant = $this->profileService->getDoctorAssistantProfile();
-        if ($assistant) {
-            return Inertia::render('Admin/DoctorAssistants/Edit', [
-                'doctorAssistant' => $assistant,
-            ]);
-        } else {
-            return Inertia::render('Admin/DoctorAssistants/Create');
-        }
-    }
 
     public function getPatientProfile()
     {

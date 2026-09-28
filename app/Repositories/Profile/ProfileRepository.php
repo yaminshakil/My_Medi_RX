@@ -64,16 +64,36 @@ class ProfileRepository implements ProfileRepositoryInterface
 
     public function updateDoctorProfile(array $data)
     {
-        $doctor = Doctor::where('user_id', $this->user_id)->first();
+        $doctor = Doctor::updateOrCreate(
+            [
+                'user_id' => $this->user_id,
+            ],
+            [
+                'phone'             => $data['phone'] ?? null,
+                'gender'            => $data['gender'] ?? null,
+                'dob'               => $data['dob'] ?? null,
+                'specialization'    => $data['specialization'] ?? null,
+                'working_institute' => $data['working_institute'] ?? null,
+                'designation'       => $data['designation'] ?? null,
+                'qualification'     => $data['qualification'] ?? null,
+                'registration_no'   => $data['registration_no'] ?? null,
+                'experience_years'  => $data['experience_years'] ?? null,
+                'bio'               => $data['bio'] ?? null,
+                'social'            => $data['social'] ?? null,
+                'active'            => $data['active'] ?? true,
+            ]
+        );
 
+        // Profile image
         if (isset($data['profile_image'])) {
-            // Delete old image if exists
             if ($this->user->profileImage) {
-                Storage::disk('public')->delete($this->user->profileImage->path);
+                Storage::disk('public')->delete(
+                    $this->user->profileImage->path
+                );
+
                 $this->user->profileImage()->delete();
             }
 
-            // Store new
             $path = $data['profile_image']->store('profiles', 'public');
 
             $this->user->profileImage()->create([
@@ -81,24 +101,12 @@ class ProfileRepository implements ProfileRepositoryInterface
             ]);
         }
 
-        $doctor = $doctor->update([
-            'phone'             => $data['phone'] ?? null,
-            'gender'            => $data['gender'] ?? null,
-            'dob'               => $data['dob'] ?? null,
-            'specialization'    => $data['specialization'] ?? null,
-            'working_institute' => $data['working_institute'] ?? null,
-            'designation'       => $data['designation'] ?? null,
-            'qualification'     => $data['qualification'] ?? null,
-            'registration_no'   => $data['registration_no'] ?? null,
-            'experience_years'  => $data['experience_years'] ?? null,
-            'bio'               => $data['bio'] ?? null,
-            'social'            => $data['social'],
-            'active'            => $data['active'] ?? true,
-        ]);
+        // Specialties
+        $this->user->specialties()->sync(
+            $data['specialization_ids'] ?? []
+        );
 
-        $this->user->specialties()->sync($data['specialization_ids']);
-
-        return $doctor;
+        return $doctor->fresh();
     }
 
 
