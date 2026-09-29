@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
+use App\Notifications\DoctorRegisteredNotification;
+use Illuminate\Support\Facades\Notification;
 
 class AuthController extends Controller
 {
@@ -47,6 +49,13 @@ class AuthController extends Controller
         $user->syncRoles($roles);
 
         event(new Registered($user));
+
+        $admins = User::role('Admin')->get();
+
+        Notification::send(
+            $admins,
+            new DoctorRegisteredNotification($doctor)
+        );
 
         if ($user) {
             return $this->generateLoginResponse($user);

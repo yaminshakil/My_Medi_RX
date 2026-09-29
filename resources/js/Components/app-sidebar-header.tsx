@@ -3,6 +3,8 @@ import { SidebarTrigger } from '@/Components/ui/sidebar';
 import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { Globe } from 'lucide-react';
+import NotificationBell from '@/Components/NotificationBell';
+
 
 export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: BreadcrumbItemType[] }) {
     const { props } = usePage();
@@ -12,9 +14,12 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
                 <SidebarTrigger className="-ml-1" />
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
             </div>
-            <a target="__blank" href={props.ziggy.url}>
-                <Globe className="h-6 w-6 text-[var(--base-color)]" />
-            </a>
+            <div className="flex items-center gap-2">
+                <NotificationBell />
+                <a target="__blank" href={props.ziggy.url}>
+                    <Globe className="h-6 w-6 text-[var(--base-color)]" />
+                </a>
+            </div>
         </header>
     );
 }

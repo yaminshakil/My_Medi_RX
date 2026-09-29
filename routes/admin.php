@@ -20,4 +20,14 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin'])-
     Route::resource('roles', RoleController::class)->middleware('permission:roles.menu');
 
     Route::resource('permissions', PermissionController::class)->middleware('permission:permissions.menu');
+
+    Route::post('/notifications/{notification}/read', function ($id) {
+        $notification = auth()->user()
+            ->unreadNotifications()
+            ->findOrFail($id);
+
+        $notification->markAsRead();
+
+        return back();
+    })->name('notifications.read');
 });
