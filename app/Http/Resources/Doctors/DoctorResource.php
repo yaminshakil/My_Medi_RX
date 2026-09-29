@@ -37,8 +37,6 @@ class DoctorResource extends JsonResource
             'featured'          => $this->featured,
             'educations'        => $this->educations,
             'experiences'       => $this->experiences,
-            'created_at'        => $this->created_at,
-            'updated_at'        => $this->updated_at,
             'profile_image'     => $this->user->profileImage ? $this->user->profileImage->path : null,
         ];
     }

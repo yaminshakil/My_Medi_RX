@@ -70,10 +70,8 @@ class DoctorEducationController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->educationService->delete($id);
+        $doctorData = $this->educationService->delete($id);
 
-        return ApiResponseService::success($doctorData, 'Education updated successfully.');
-
-        return redirect()->back()->with('success', 'Education deleted successfully.');
+        return ApiResponseService::success($doctorData, 'Education deleted successfully.');
     }
 }

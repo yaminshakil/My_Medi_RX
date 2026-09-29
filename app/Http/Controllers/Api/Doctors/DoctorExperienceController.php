@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Doctors;
 use App\Http\Controllers\Controller;
 use App\Services\ApiResponseService;
 use App\Services\Doctors\DoctorExperienceService;
+use App\Http\Requests\Doctor\CreateExperienceRequest;
+use App\Http\Requests\Doctor\UpdateExperienceRequest;
 use Illuminate\Http\Request;
 
 class DoctorExperienceController extends Controller
@@ -27,7 +29,7 @@ class DoctorExperienceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateExperienceRequest $request)
     {
         $data = $request->validated();
 
@@ -49,7 +51,7 @@ class DoctorExperienceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateExperienceRequest $request, string $id)
     {
         //
     }

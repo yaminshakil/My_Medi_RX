@@ -23,6 +23,7 @@ class UpdateEducationRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'doctor_id' => 'required|exists:doctors,id',
             'degree'    => 'required|string|max:255',
             'institute' => 'required|string|max:255',
             'year'      => 'required|string|max:4',
