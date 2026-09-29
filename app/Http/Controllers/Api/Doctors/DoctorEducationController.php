@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Api\Doctors;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Doctor\CreateEducationRequest;
 use App\Http\Requests\Doctor\UpdateEducationRequest;
-use App\Services\Doctors\DoctorEducationService;
-use Illuminate\Http\Request;
 use App\Services\ApiResponseService;
+use App\Services\Doctors\DoctorEducationService;
 
 class DoctorEducationController extends Controller
 {
@@ -53,9 +52,17 @@ class DoctorEducationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateEducationRequest $request, string $id)
     {
-        //
+        $request->validated();
+
+        $doctorData = $this->educationService->update($id, $request->only([
+            'degree', 'institute', 'year', 'country',
+        ]));
+
+        $doctorData = $this->educationService->listByDoctor($request->doctor_id);
+
+        return ApiResponseService::success($doctorData, 'Education updated successfully.');
     }
 
     /**
@@ -63,6 +70,10 @@ class DoctorEducationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->educationService->delete($id);
+
+        return ApiResponseService::success($doctorData, 'Education updated successfully.');
+
+        return redirect()->back()->with('success', 'Education deleted successfully.');
     }
 }

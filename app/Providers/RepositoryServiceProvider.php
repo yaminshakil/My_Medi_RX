@@ -8,6 +8,7 @@ use App\Interfaces\Auth\UserRepositoryInterface;
 use App\Interfaces\DashboardRepositoryInterface;
 use App\Interfaces\EmailTemplate\EmailTemplateRepositoryInterface;
 use App\Interfaces\MenuRepositoryInterface;
+use App\Interfaces\Profile\ProfileRepositoryInterface;
 use App\Repositories\Auth\PermissionRepository;
 use App\Repositories\Auth\RoleRepository;
 use App\Repositories\Auth\UserRepository;
@@ -15,7 +16,6 @@ use App\Repositories\DashboardRepository;
 use App\Repositories\EmailTemplate\EmailTemplateRepository;
 use App\Repositories\MenuRepository;
 use App\Repositories\Profile\ProfileRepository;
-use App\Interfaces\Profile\ProfileRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider

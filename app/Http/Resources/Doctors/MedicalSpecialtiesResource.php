@@ -15,12 +15,12 @@ class MedicalSpecialtiesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-           'id'                => $this->id,
-           'name'              => $this->name,
-           'icon'         => $this->icon,
-           'description'          => $this->description,
-           'parent_id'          => $this->parent_id,
-           'parent'          => $this->parent,
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'icon'        => $this->icon,
+            'description' => $this->description,
+            'parent_id'   => $this->parent_id,
+            'parent'      => $this->parent,
         ];
     }
 }

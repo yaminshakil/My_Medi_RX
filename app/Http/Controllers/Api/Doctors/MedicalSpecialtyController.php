@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Api\Doctors;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Services\MedicalSpecialty\MedicalSpecialtyService;
-use App\Models\Setting;
 use App\Http\Resources\Doctors\MedicalSpecialtyGroupResource;
+use App\Models\Setting;
 use App\Services\Doctors\DoctorService;
+use App\Services\MedicalSpecialty\MedicalSpecialtyService;
+use Illuminate\Http\Request;
 
 class MedicalSpecialtyController extends Controller
 {
     protected $service;
+
     protected $doctorService;
 
     public function __construct(MedicalSpecialtyService $service, DoctorService $doctorService)

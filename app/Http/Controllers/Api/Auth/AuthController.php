@@ -135,14 +135,11 @@ class AuthController extends Controller
         $permissions = $user->getPermissionsViaRoles()->pluck('name');
 
         $userData = [
-            'user'   => $userResource->resolve(),
-            'tokens' => [
+            'user'       => $userResource->resolve(),
+            'token_type' => 'Bearer',
+            'tokens'     => [
                 'accessToken'  => $tokens['accessToken'],
                 'refreshToken' => $tokens['refreshToken'],
-            ],
-            'authorization' => [
-                'roles'       => $roles,
-                'permissions' => $permissions,
             ],
         ];
 

@@ -34,4 +34,9 @@ class DoctorEducationService
     {
         return $this->educationRepo->delete($id);
     }
+
+    public function find(int $id)
+    {
+        return $this->educationRepo->find($id);
+    }
 }

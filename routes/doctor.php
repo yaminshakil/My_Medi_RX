@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin\Doctors\DoctorEducationController;
 use App\Http\Controllers\Admin\Doctors\DoctorExperienceController;
 use App\Http\Controllers\Admin\Doctors\ManageDoctorController;
 use App\Http\Controllers\Admin\MedicalSpecialty\MedicalSpecialtyController;
-use App\Http\Controllers\Frontend\Doctors\DoctorController;
 use App\Http\Controllers\Profile\ProfileController;
 use Illuminate\Support\Facades\Route;
 

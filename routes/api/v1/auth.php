@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\UserPasswordResetController;
 use Illuminate\Support\Facades\Route;
-use App\Enums\TokenAbility;
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');

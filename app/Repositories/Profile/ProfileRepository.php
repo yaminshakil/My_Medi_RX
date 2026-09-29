@@ -109,8 +109,6 @@ class ProfileRepository implements ProfileRepositoryInterface
         return $doctor->fresh();
     }
 
-
-
     public function getPatientProfile()
     {
         return $this->patient::with('user', 'user.profileImage')->where('user_id', $this->user_id)->first();

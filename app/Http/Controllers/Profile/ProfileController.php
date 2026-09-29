@@ -76,7 +76,6 @@ class ProfileController extends Controller
             ->with('success', 'Profile Updated successfully.');
     }
 
-
     public function getPatientProfile()
     {
         $patient = $this->profileService->getPatientProfile();

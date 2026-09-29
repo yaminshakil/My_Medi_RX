@@ -3,17 +3,14 @@
 namespace App\Http\Controllers\Api\Doctors;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Resources\Doctors\DoctorResource;
 use App\Http\Requests\Doctor\CreateDoctorProfileRequest;
 use App\Http\Requests\Doctor\UpdateDoctorProfileRequest;
-use App\Services\Profile\ProfileServices;
-use App\Services\Doctors\DoctorService;
-use App\Http\Requests\Doctor\CreateExperienceRequest;
-use App\Http\Requests\Doctor\UpdateExperienceRequest;
-use App\Services\Doctors\DoctorExperienceService;
-use App\Services\Doctors\DoctorEducationService;
+use App\Http\Resources\Doctors\DoctorResource;
 use App\Services\ApiResponseService;
+use App\Services\Doctors\DoctorEducationService;
+use App\Services\Doctors\DoctorExperienceService;
+use App\Services\Doctors\DoctorService;
+use App\Services\Profile\ProfileServices;
 
 class DoctorController extends Controller
 {
@@ -22,8 +19,8 @@ class DoctorController extends Controller
         protected DoctorService $doctorService,
         protected DoctorExperienceService $doctorExperienceService,
         protected DoctorEducationService $DoctorEducationService,
-    ) {
-    }
+    ) {}
+
     /**
      * Display a listing of the resource.
      */

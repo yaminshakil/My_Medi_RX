@@ -80,6 +80,7 @@ class Doctor extends Model
         if (! isset($this->active)) {
             return false;
         }
+
         return $this->active === true;
     }
 }
