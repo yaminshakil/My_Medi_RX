@@ -32,12 +32,14 @@ class AuthController extends Controller
             'email'             => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password'          => ['required', 'confirmed', Rules\Password::defaults()],
             'registration_type' => 'required|string|in:Doctor,Patient',
+            'mobile'         => 'required|string|max:255',
         ]);
 
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,
             'email'      => $request->email,
+            'mobile'      => $request->mobile,
             'password'   => Hash::make($request->password),
         ]);
 
@@ -53,16 +55,31 @@ class AuthController extends Controller
         }
     }
 
-    public function login(LoginRequest $request)
+    public function login(Request $request)
     {
         // 1. Handle Social Logins
         if (in_array($request->login_type, ['google', 'facebook', 'apple'])) {
             return $this->handleSocialLogin($request);
         }
 
-        $credentials = $request->only('email', 'password');
+        $request->validate([
+        'login' => ['required', 'string'],
+        'password' => ['required', 'string'],
+    ]);
 
-        $user = User::where('email', $request->email)->first();
+        $login = $request->login;
+
+        // Find user by email or mobile
+        $user = User::where('email', $login)
+            ->orWhere('mobile', $login)
+            ->first();
+
+        // Find user by BMDC number
+        if (!$user) {
+            $user = User::whereHas('doctor', function ($query) use ($login) {
+                $query->where('registration_no', $login);
+            })->first();
+        }
 
         if (empty($user)) {
             return ApiResponseService::error('Invalid Login Credentials', [], Response::HTTP_UNAUTHORIZED);
@@ -79,6 +96,12 @@ class AuthController extends Controller
         if ($user->status === 'inactive') {
             return ApiResponseService::error('This account is currently inactive.', [], Response::HTTP_UNAUTHORIZED);
         }
+
+        // Authenticate using users table
+        $credentials = [
+            'id' => $user->id,
+            'password' => $request->password,
+        ];
 
         if (Auth::attempt($credentials)) {
             $user = $request->user();
@@ -121,18 +144,10 @@ class AuthController extends Controller
 
     protected function generateLoginResponse($user)
     {
-        try {
-            app(RewardSystemService::class)->awardDailyLoginPointsIfEligible($user);
-        } catch (\Throwable $exception) {
-            logger()->warning('Daily login reward could not be awarded: '.$exception->getMessage());
-        }
-
         // Generate Tokens using your AuthService
         $tokens = AuthService::generateTokens($user);
 
         $userResource = new UserBasicResource($user);
-        $roles = $user->getRoleNames();
-        $permissions = $user->getPermissionsViaRoles()->pluck('name');
 
         $userData = [
             'user'       => $userResource->resolve(),
