@@ -53,7 +53,11 @@ class DoctorExperienceController extends Controller
      */
     public function update(UpdateExperienceRequest $request, string $id)
     {
-        //
+        $data = $request->validated();
+
+        $this->experienceService->update($id, $data);
+
+        return ApiResponseService::success([], 'Experience updated successfully.');
     }
 
     /**
@@ -61,6 +65,7 @@ class DoctorExperienceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->experienceService->delete($id);
+        return ApiResponseService::success([], 'Experience deleted successfully.');
     }
 }
