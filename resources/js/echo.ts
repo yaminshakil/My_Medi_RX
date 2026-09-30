@@ -7,6 +7,7 @@ console.log('Pusher cluster:', import.meta.env.VITE_PUSHER_APP_CLUSTER);
 declare global {
     interface Window {
         Pusher: typeof Pusher;
+        Echo: Echo;
     }
 }
 

@@ -68,4 +68,5 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 require __DIR__.'/doctor.php';
+require __DIR__.'/patient.php';
 require __DIR__.'/admin.php';
