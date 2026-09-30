@@ -23,7 +23,7 @@ class UpdateExperienceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'doctor_id' => 'required|exists:doctors,id',
+            'doctor_id'     => 'required|exists:doctors,id',
             'hospital_name' => 'required|string|max:255',
             'position'      => 'required|string|max:255',
             'from_year'     => 'required|string|max:10',

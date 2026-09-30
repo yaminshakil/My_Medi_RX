@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Api\Doctors;
 
 use App\Http\Controllers\Controller;
-use App\Services\ApiResponseService;
-use App\Services\Doctors\DoctorExperienceService;
 use App\Http\Requests\Doctor\CreateExperienceRequest;
 use App\Http\Requests\Doctor\UpdateExperienceRequest;
-use Illuminate\Http\Request;
+use App\Services\ApiResponseService;
+use App\Services\Doctors\DoctorExperienceService;
 
 class DoctorExperienceController extends Controller
 {
@@ -66,6 +65,7 @@ class DoctorExperienceController extends Controller
     public function destroy(string $id)
     {
         $this->experienceService->delete($id);
+
         return ApiResponseService::success([], 'Experience deleted successfully.');
     }
 }

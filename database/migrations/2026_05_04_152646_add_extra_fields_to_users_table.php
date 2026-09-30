@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password')->nullable()->change(); // Password isn't required for Social login
             $table->enum('status', ['active', 'inactive', 'suspended'])
                 ->default('active')->after('remember_token');
+            $table->index(['name', 'mobile', 'status']);
         });
     }
 

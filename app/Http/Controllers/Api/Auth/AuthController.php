@@ -3,21 +3,22 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Authentication\LoginRequest;
 use App\Http\Resources\Auth\UserBasicResource;
 use App\Models\User;
+use App\Notifications\DoctorRegisteredNotification;
 use App\Services\ApiResponseService;
 use App\Services\AuthService;
-use App\Services\RewardSystemService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Notification;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
-use App\Notifications\DoctorRegisteredNotification;
-use Illuminate\Support\Facades\Notification;
+use App\Models\Doctor;
+use App\Http\Requests\Auth\RegisterRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -26,41 +27,59 @@ class AuthController extends Controller
      *
      * @throws ValidationException
      */
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $request->validate([
-            'first_name'        => 'required|string|max:255',
-            'last_name'         => 'required|string|max:255',
-            'email'             => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password'          => ['required', 'confirmed', Rules\Password::defaults()],
-            'registration_type' => 'required|string|in:Doctor,Patient',
-            'mobile'         => 'required|string|max:255',
-        ]);
+        $validated = $request->validated();
 
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name'  => $request->last_name,
-            'email'      => $request->email,
-            'mobile'      => $request->mobile,
-            'password'   => Hash::make($request->password),
-        ]);
+        try {
+            $user = DB::transaction(function () use ($validated) {
+                $user = User::create([
+                    'first_name' => $validated['first_name'],
+                    'last_name'  => $validated['last_name'],
+                    'email'      => $validated['email'],
+                    'mobile'     => $validated['mobile'],
+                    'password'   => Hash::make($validated['password']),
+                ]);
 
-        $roles = $request->registration_type;
-        $user->syncRoles($roles);
+                // Assign role
+                $user->syncRoles($validated['registration_type']);
 
-        event(new Registered($user));
+                // Doctor registration
+                if ($validated['registration_type'] === 'Doctor') {
+                    $doctor = Doctor::create([
+                        'user_id'         => $user->id,
+                        'registration_no' => $validated['bmdc_number'],
+                        'phone'           => $validated['mobile'],
+                    ]);
 
-        $admins = User::role('Admin')->get();
+                    // Notify administrators
+                    $admins = User::role('Admin')->get();
 
-        Notification::send(
-            $admins,
-            new DoctorRegisteredNotification($doctor)
-        );
+                    Notification::send(
+                        $admins,
+                        new DoctorRegisteredNotification($doctor)
+                    );
+                }
 
-        if ($user) {
+                return $user;
+            });
+
+            event(new Registered($user));
+
             return $this->generateLoginResponse($user);
-        } else {
-            return ApiResponseService::error('Invalid user creation!', [], Response::HTTP_UNAUTHORIZED);
+        } catch (\Exception $e) {
+            Log::error('Registration failed', [
+            'registration_type' => $validated['registration_type'] ?? null,
+            'email' => $validated['email'] ?? null,
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ]);
+            return ApiResponseService::error(
+                'Registration failed. Please try again.',
+                [],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
@@ -72,9 +91,9 @@ class AuthController extends Controller
         }
 
         $request->validate([
-        'login' => ['required', 'string'],
-        'password' => ['required', 'string'],
-    ]);
+            'login'    => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
 
         $login = $request->login;
 
@@ -84,7 +103,7 @@ class AuthController extends Controller
             ->first();
 
         // Find user by BMDC number
-        if (!$user) {
+        if (! $user) {
             $user = User::whereHas('doctor', function ($query) use ($login) {
                 $query->where('registration_no', $login);
             })->first();
@@ -108,7 +127,7 @@ class AuthController extends Controller
 
         // Authenticate using users table
         $credentials = [
-            'id' => $user->id,
+            'id'       => $user->id,
             'password' => $request->password,
         ];
 

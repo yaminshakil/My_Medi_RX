@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -18,7 +17,7 @@ return new class extends Migration
                 ->constrained()
                 ->onDelete('cascade'); // link with users table
             $table->string('phone')->nullable();
-            $table->string('registration_no')->nullable();
+            $table->string('registration_no')->unique()->nullable();
             $table->string('gender')->nullable();
             $table->date('dob')->nullable();
 
