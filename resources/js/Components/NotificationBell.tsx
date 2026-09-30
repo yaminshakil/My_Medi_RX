@@ -1,6 +1,7 @@
 import { Bell } from 'lucide-react';
 import { router, usePage } from '@inertiajs/react';
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import echo from '@/echo';
 
 interface NotificationItem {
     id: string;
@@ -11,6 +12,12 @@ interface NotificationItem {
 }
 
 interface NotificationProps {
+    auth: {
+        user: {
+            id: number;
+        };
+    };
+
     notifications: {
         unread_count: number;
         items: NotificationItem[];
@@ -18,80 +25,161 @@ interface NotificationProps {
 }
 
 export default function NotificationBell() {
-    const { notifications } = usePage<NotificationProps>().props;
+    const { auth, notifications } =
+        usePage<NotificationProps>().props;
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const notificationRef = useRef<HTMLDivElement>(null);
+    const [items, setItems] = useState(
+        notifications.items
+    );
 
-    const handleNotificationClick = (id: string, url: string) => {
+    const [unreadCount, setUnreadCount] = useState(
+        notifications.unread_count
+    );
+
+    const notificationRef =
+        useRef<HTMLDivElement>(null);
+
+    /*
+     * Listen for real-time notifications
+     */
+    useEffect(() => {
+        const channelName = `App.Models.User.${auth.user.id}`;
+
+        console.log(
+            '🔔 Subscribing to:',
+            JSON.stringify(channelName)
+        );
+
+        const channel = echo.private(channelName);
+
+        channel.notification(
+            (notification: NotificationItem) => {
+                console.log(
+                    '🔥 New real-time notification:',
+                    notification
+                );
+
+                setItems((current) => [
+                    {
+                        ...notification,
+                        id:
+                            notification.id ??
+                            crypto.randomUUID(),
+                    },
+                    ...current,
+                ]);
+
+                setUnreadCount((count) => count + 1);
+            }
+        );
+
+        return () => {
+            console.log(
+                '🔕 Leaving:',
+                JSON.stringify(channelName)
+            );
+
+            echo.leave(channelName);
+        };
+    }, [auth.user.id]);
+
+    /*
+     * Close dropdown when clicking outside
+     */
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                notificationRef.current &&
+                !notificationRef.current.contains(
+                    event.target as Node
+                )
+            ) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener(
+            'mousedown',
+            handleClickOutside
+        );
+
+        return () => {
+            document.removeEventListener(
+                'mousedown',
+                handleClickOutside
+            );
+        };
+    }, []);
+
+    /*
+     * Handle notification click
+     */
+    const handleNotificationClick = (
+        id: string,
+        url: string
+    ) => {
         router.post(
             route('notifications.read', id),
             {},
             {
                 onSuccess: () => {
+                    setUnreadCount((count) =>
+                        Math.max(count - 1, 0)
+                    );
+
+                    setItems((current) =>
+                        current.filter(
+                            (item) => item.id !== id
+                        )
+                    );
+
                     setIsOpen(false);
+
                     router.visit(url);
                 },
             }
         );
     };
 
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                notificationRef.current &&
-                !notificationRef.current.contains(event.target as Node)
-            ) {
-                setIsOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
     return (
         <div
             ref={notificationRef}
             className="relative"
         >
-            {/* Notification Bell */}
+            {/* Bell */}
             <button
                 type="button"
-                onClick={() => setIsOpen((prev) => !prev)}
+                onClick={() =>
+                    setIsOpen((previous) => !previous)
+                }
                 className="relative rounded-full p-2 hover:bg-gray-100"
                 aria-label="Notifications"
                 aria-expanded={isOpen}
             >
                 <Bell size={22} />
 
-                {notifications.unread_count > 0 && (
+                {unreadCount > 0 && (
                     <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-xs text-white">
-                        {notifications.unread_count}
+                        {unreadCount}
                     </span>
                 )}
             </button>
 
-            {/* Notification Dropdown */}
+            {/* Dropdown */}
             {isOpen && (
                 <div className="absolute right-0 top-12 z-50 w-80 overflow-hidden rounded-lg border bg-white shadow-lg">
-                    {/* Header */}
                     <div className="border-b p-3 font-semibold">
                         Notifications
                     </div>
 
-                    {/* Notifications */}
-                    {notifications.items.length === 0 ? (
+                    {items.length === 0 ? (
                         <div className="p-5 text-center text-sm text-gray-500">
                             No new notifications
                         </div>
                     ) : (
-                        notifications.items.map((notification) => (
+                        items.map((notification) => (
                             <button
                                 type="button"
                                 key={notification.id}

@@ -181,7 +181,7 @@ export default function Show({ user }: ShowProps) {
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
                 <AdminPageHeader
                     breadcrumbs={breadcrumbs}
-                    description="View full user profile, subscriptions, payments and license activations"
+                    description="View full user profile, Patients, Prescriptions and Analytics"
                     actions={
                         <Button variant="outline" size="sm" onClick={() => router.visit(route('users.edit', user.id))} className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white">
                             Edit User
@@ -247,15 +247,15 @@ export default function Show({ user }: ShowProps) {
                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                             <div className="text-center">
                                 <p className="text-2xl font-bold">{subscriptions.length}</p>
-                                <p className="text-xs text-muted-foreground">Subscriptions</p>
+                                <p className="text-xs text-muted-foreground">Total Rx</p>
                             </div>
                             <div className="text-center">
                                 <p className="text-2xl font-bold">{activeSubscriptions}</p>
-                                <p className="text-xs text-muted-foreground">Active</p>
+                                <p className="text-xs text-muted-foreground">Active Patients</p>
                             </div>
                             <div className="text-center">
                                 <p className="text-2xl font-bold">{payments.length}</p>
-                                <p className="text-xs text-muted-foreground">Payments</p>
+                                <p className="text-xs text-muted-foreground">This Month</p>
                             </div>
                             <div className="text-center">
                                 <p className="text-2xl font-bold">{activations.length}</p>
@@ -266,14 +266,14 @@ export default function Show({ user }: ShowProps) {
                 </Card>
 
                 <div className="grid gap-6 lg:grid-cols-2">
-                    {/* Billing Information */}
+                    {/* Doctor Analytics */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
                                 <CreditCard className="size-5" />
-                                Billing Information
+                                Doctor Analytics
                             </CardTitle>
-                            <CardDescription>Freemius billing details and address</CardDescription>
+                            <CardDescription>Doctor Analytics</CardDescription>
                         </CardHeader>
                         <CardContent>
                             {billing ? (
@@ -312,17 +312,17 @@ export default function Show({ user }: ShowProps) {
                                     )}
                                 </div>
                             ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No billing information available</p>
+                                <p className="py-8 text-center text-sm text-muted-foreground">No Doctor Analytics available</p>
                             )}
                         </CardContent>
                     </Card>
 
-                    {/* Subscriptions */}
+                    {/* Prescription statistics */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
                                 <RefreshCw className="size-5" />
-                                Subscriptions
+                                Prescription statistics
                             </CardTitle>
                             <CardDescription>{subscriptions.length} subscription(s) found</CardDescription>
                         </CardHeader>
@@ -361,19 +361,19 @@ export default function Show({ user }: ShowProps) {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No subscriptions found</p>
+                                <p className="py-8 text-center text-sm text-muted-foreground">No Prescription statistics found</p>
                             )}
                         </CardContent>
                     </Card>
 
-                    {/* Payments */}
+                    {/* Top medicines */}
                     <Card>
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <div>
                                     <CardTitle className="flex items-center gap-2 text-lg">
                                         <Receipt className="size-5" />
-                                        Payments
+                                        Top medicines
                                     </CardTitle>
                                     <CardDescription>
                                         {payments.length} payment(s) &middot; Total spent: {payments[0]?.currency?.toUpperCase() || 'USD'}{' '}
@@ -418,17 +418,17 @@ export default function Show({ user }: ShowProps) {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No payments found</p>
+                                <p className="py-8 text-center text-sm text-muted-foreground">No Top medicines found</p>
                             )}
                         </CardContent>
                     </Card>
 
-                    {/* Pregnancy Tracking */}
+                    {/* Patient adherence statistics */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
                                 <Download className="size-5" />
-                                Pregnancy Tracking
+                                Patient adherence statistics
                             </CardTitle>
                             <CardDescription>{activations.length} active installation(s)</CardDescription>
                         </CardHeader>
@@ -465,7 +465,7 @@ export default function Show({ user }: ShowProps) {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No Pregnancy Tracking found</p>
+                                <p className="py-8 text-center text-sm text-muted-foreground">No Patient adherence statistics found</p>
                             )}
                         </CardContent>
                     </Card>

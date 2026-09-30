@@ -7,6 +7,11 @@ import { createRoot } from 'react-dom/client';
 
 // React Toastify CSS (if used)
 import 'react-toastify/dist/ReactToastify.css';
+import { configureEcho } from '@laravel/echo-react';
+
+configureEcho({
+    broadcaster: 'pusher',
+});
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

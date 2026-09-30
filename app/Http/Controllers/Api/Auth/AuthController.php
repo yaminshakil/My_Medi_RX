@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Auth\UserBasicResource;
 use App\Models\User;
-use App\Notifications\DoctorRegisteredNotification;
+use App\Notifications\UserRegisteredNotification;
 use App\Services\ApiResponseService;
 use App\Services\AuthService;
 use Illuminate\Auth\Events\Registered;
@@ -51,18 +51,18 @@ class AuthController extends Controller
                         'registration_no' => $validated['bmdc_number'],
                         'phone'           => $validated['mobile'],
                     ]);
-
-                    // Notify administrators
-                    $admins = User::role('Admin')->get();
-
-                    Notification::send(
-                        $admins,
-                        new DoctorRegisteredNotification($doctor)
-                    );
                 }
 
                 return $user;
             });
+
+            // Notify administrators
+            $admins = User::role('Admin')->get();
+
+            Notification::send(
+                $admins,
+                new UserRegisteredNotification($user)
+            );
 
             event(new Registered($user));
 
