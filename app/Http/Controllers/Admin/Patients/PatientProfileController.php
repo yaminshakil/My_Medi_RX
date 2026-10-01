@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin\Patients;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Patients\CreatePatientProfileRequest;
 use App\Http\Requests\Patients\UpdatePatientProfileRequest;
-use App\Interfaces\Eprescriptions\AppointmentRepositoryInterface;
 use App\Interfaces\Patients\PatientProfileRepositoryInterface;
 use Inertia\Inertia;
 
@@ -13,14 +12,10 @@ class PatientProfileController extends Controller
 {
     protected $patients;
 
-    protected $appointments;
-
     public function __construct(
         PatientProfileRepositoryInterface $patients,
-        AppointmentRepositoryInterface $appointments
     ) {
         $this->patients = $patients;
-        $this->appointments = $appointments;
     }
 
     /**
@@ -68,15 +63,5 @@ class PatientProfileController extends Controller
         $this->patients->delete($id);
 
         return redirect()->back()->with('success', 'Patient deleted successfully');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function appointmentDestroy(string $id)
-    {
-        $this->appointments->delete($id);
-
-        return redirect()->back()->with('success', 'Appointments deleted successfully');
     }
 }

@@ -7,4 +7,5 @@ require __DIR__.'/v1/auth.php';
 Route::middleware('auth:sanctum')
     ->group(function () {
         require base_path('routes/api/v1/doctor.php');
+        require base_path('routes/api/v1/patient.php');
     });

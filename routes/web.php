@@ -38,6 +38,30 @@ Route::get('install', function () {
     }
 });
 
+Route::get('migrate', function () {
+    try {
+        // Run migrations
+        Artisan::call('migrate');
+        // Define the source and destination paths
+        Artisan::call('optimize:clear');
+
+        return [
+            'success' => true,
+            'message' => 'Migration created successfully.',
+        ];
+    } catch (Exception $e) {
+        Log::error('InstallRepository error: '.$e->getMessage(), [
+            'trace' => $e->getTraceAsString(),
+        ]);
+
+        return [
+            'success' => false,
+            'data'    => null,
+            'message' => 'Failed to create Migration record.',
+        ];
+    }
+});
+
 Route::get('/clear', function () {
     try {
         // Run migrations
