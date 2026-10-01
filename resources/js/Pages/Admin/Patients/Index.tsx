@@ -244,16 +244,16 @@ export default function Index(props) {
                                                         </div>
                                                     </td>
                                                     <td colSpan="2" className="border bg-gray-50 p-4">
-                                                        {canCreate && (
-                                                            <Button
-                                                                className="cursor-pointer rounded-lg !p-3 text-white md:ml-2"
-                                                                onClick={() => {
-                                                                    router.get(route('appointments.quick', patient.id));
-                                                                }}
-                                                            >
-                                                                + Quick Appointment
-                                                            </Button>
-                                                        )}
+
+                                                        <Button
+                                                            className="cursor-pointer rounded-lg !p-3 text-white md:ml-2"
+                                                            onClick={() => {
+                                                                router.visit(route('patients.show', patient.id));
+                                                            }}
+                                                        >
+                                                            View Details
+                                                        </Button>
+
                                                     </td>
                                                 </tr>
                                             )}

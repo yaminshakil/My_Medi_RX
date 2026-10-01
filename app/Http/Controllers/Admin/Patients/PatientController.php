@@ -70,6 +70,16 @@ class PatientController extends Controller
         return redirect()->route('patients.index')->with('success', 'Patient created successfully');
     }
 
+    public function show($id)
+    {
+        $patient = $this->patientService->find($id);
+        $patient->load('user', 'vitals', 'prescriptions');
+
+        return Inertia::render('Admin/Patients/Show', [
+            'patient' => $patient,
+        ]);
+    }
+
     public function edit($id)
     {
         $patient = $this->patientService->find($id);
