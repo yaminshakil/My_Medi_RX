@@ -70,7 +70,10 @@ class PatientProfileRepository implements PatientProfileRepositoryInterface
     public function delete(int $id): bool
     {
         $patient = $this->find($id);
-
+        if ($patient && $patient->profileImage) {
+            Storage::disk('public')->delete($patient->profileImage->path);
+            $patient->profileImage()->delete();
+        }
         return $patient ? (bool) $patient->delete() : false;
     }
 }

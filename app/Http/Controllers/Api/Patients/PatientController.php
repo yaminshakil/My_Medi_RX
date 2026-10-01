@@ -8,23 +8,42 @@ use App\Http\Requests\Patients\CreatePatientProfileRequest;
 use App\Http\Requests\Patients\UpdatePatientProfileRequest;
 use App\Services\Patients\PatientProfileService;
 use App\Services\ApiResponseService;
+use App\Http\Resources\Patients\PatientCollection;
 use App\Http\Resources\Patients\PatientResource;
+use App\Models\Setting;
+use App\Services\Patients\PatientService;
 
 class PatientController extends Controller
 {
     protected $patients;
+    protected $patientService;
 
     public function __construct(
         PatientProfileService $patients,
+        PatientService $patientService
     ) {
         $this->patients = $patients;
+        $this->patientService = $patientService;
     }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $recordsPerPage = Setting::getValue('records_per_page', 10);
+
+        $search = $request->filled('search') ? $request->search : null;
+        $sortBy = $request->input('sort_by', 'created_at');
+        $sortDirection = $request->input('sort_direction', 'desc');
+        $perPage = $request->input('per_page', $recordsPerPage);
+
+        // Pass Eloquent collection/paginator directly
+        $patients = $this->patientService->all($search, $sortBy, $sortDirection, $perPage);
+
+        return ApiResponseService::success(
+            new PatientCollection($patients),
+            'Patients retrieved successfully!'
+        );
     }
 
     /**
@@ -76,6 +95,7 @@ class PatientController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->patients->delete($id);
+        return ApiResponseService::success([], 'Patient Profile deleted successfully!');
     }
 }

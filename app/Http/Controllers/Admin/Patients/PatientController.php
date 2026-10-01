@@ -37,6 +37,19 @@ class PatientController extends Controller
 
         $patients = $this->patientService->all($search, $sortBy, $sortDirection, $perPage);
 
+        $patients->getCollection()->transform(fn ($patient) => [
+            'id' => $patient->id,
+            'name' => $patient->name,
+            'phone' => $patient->phone,
+            'patient_number' => $patient->patient_number,
+            'gender' => ucfirst(strtolower($patient->gender)),
+            'address' => $patient->address,
+            'city' => $patient->city,
+            'vitals' => $patient->vitals()->latest()->take(1)->get(),
+            'prescriptions' => $patient->prescriptions,
+            'created_at' => $patient->created_at->format('Y-m-d'),
+        ]);
+
         return Inertia::render('Admin/Patients/Index', [
             'patients' => $patients,
             'filters' => $request->only(['search', 'per_page', 'sort_by', 'sort_direction']),

@@ -24,37 +24,31 @@ class PatientRepository implements PatientRepositoryInterface
 
     public function all($search, $sortBy, $sortDirection, $perPage): LengthAwarePaginator
     {
-        $patients = Patient::query();
+        $patients = Patient::query()
+        // Eager load relations to avoid N+1 queries
+        ->with([
+            'vitals' => fn ($query) => $query->latest()->limit(1),
+            'prescriptions',
+            'profile_image',
+        ]);
 
         if ($search) {
             $patients->where(
                 fn ($query) => $query->where('name', 'like', "%{$search}%")
                     ->orWhere('patient_number', 'like', "%{$search}%")
                     ->orWhere('phone', 'like', "%{$search}%")
-                    ->orWhere('address', 'like', "{$search}")
-                    ->orWhere('city', 'like', "{$search}")
+                    ->orWhere('address', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%")
             );
         }
 
         if (in_array($sortBy, ['patient_number', 'name', 'phone', 'gender', 'address', 'city', 'created_at'])) {
             $patients->orderBy($sortBy, $sortDirection);
+        } else {
+            $patients->latest();
         }
 
-        $patients = $patients->latest()->paginate($perPage)->withQueryString();
-        $patients->getCollection()->transform(fn ($patient) => [
-            'id' => $patient->id,
-            'name' => $patient->name,
-            'phone' => $patient->phone,
-            'patient_number' => $patient->patient_number,
-            'gender' => ucfirst(strtolower($patient->gender)),
-            'address' => $patient->address,
-            'city' => $patient->city,
-            'vitals' => $patient->vitals()->latest()->take(1)->get(),
-            'prescriptions' => $patient->prescriptions,
-            'created_at' => $patient->created_at->format('Y-m-d'),
-        ]);
-
-        return $patients;
+        return $patients->paginate($perPage)->withQueryString();
     }
 
     public function find(int $id): ?Patient

@@ -79,7 +79,7 @@ class Patient extends Model
         return $this->hasOne(Vital::class)->latest();
     }
 
-    public function profileImage()
+    public function profile_image()
     {
         return $this->morphOne(Image::class, 'imageable');
     }
