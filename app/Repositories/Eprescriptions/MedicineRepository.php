@@ -21,8 +21,8 @@ class MedicineRepository implements MedicineRepositoryInterface
         $this->user = Auth::user();
         if ($this->user->hasRole('Doctor')) {
             $this->doctor_id = $this->user->id;
-        } elseif ($this->user->hasRole('Assistant')) {
-            $this->doctor_id = $this->user->doctor_assistant->doctor_id;
+        } else {
+            $this->doctor_id = $this->user->id;
         }
     }
 

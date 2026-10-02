@@ -42,6 +42,8 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
             $this->doctor_id = $this->user->doctor_assistant->doctor_id;
         } elseif ($this->user->hasRole('Patient')) {
             $this->patient_id = $this->user->patient->id;
+        } else {
+            $this->doctor_id = $this->user->id;
         }
     }
 
@@ -161,7 +163,6 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
                 $this->gynaeHistoryRepo->create($cleaned);
             }
 
-            Appointment::where('id', $data['appointment_id'])->update(['status' => 'completed']);
             DB::commit();
 
             return $prescription;
@@ -192,7 +193,7 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
     public function saveAndNewPrescription()
     {
         // Dummy doctor & chamber for example
-        $doctor = User::with(['medicine_doses', 'medicine_durations', 'chamber'])->where('id', Auth::user()->id)->first();
+        $doctor = User::with(['medicine_doses', 'medicine_durations'])->where('id', Auth::user()->id)->first();
         $doctor = [
             'id' => $doctor->id,
             'name' => $doctor->name,
@@ -219,7 +220,7 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
     public function getAllPatient()
     {
         $patients = Patient::latest()->get();
-        $patients->load(['vital', 'appointment', 'prescriptions' => function ($prescriptionQuery) {
+        $patients->load(['vital', 'prescriptions' => function ($prescriptionQuery) {
             $prescriptionQuery->where('doctor_id', $this->doctor_id)
                 ->latest(); // order prescriptions by latest
         }]);
@@ -231,7 +232,6 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
                 'patient_number' => $patient->patient_number,
                 'mobile' => $patient->phone,
                 'vital' => $patient->vital,
-                'appointment' => $patient->appointment,
                 'prescriptions' => $patient->prescriptions,
                 'gender' => ucfirst(strtolower($patient->gender)),
                 'age' => $patient->date_of_birth->diff(Carbon::now()),

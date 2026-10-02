@@ -20,6 +20,8 @@ class ManufacturerRepository implements ManufacturerRepositoryInterface
             $this->doctor_id = $this->user->id;
         } elseif ($this->user->hasRole('Assistant')) {
             $this->doctor_id = $this->user->doctor_assistant->doctor_id;
+        } else {
+            $this->doctor_id = $this->user->id;
         }
     }
 

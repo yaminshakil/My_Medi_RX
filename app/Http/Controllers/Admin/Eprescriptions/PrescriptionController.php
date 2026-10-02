@@ -7,7 +7,6 @@ use App\Http\Requests\Eprescription\CreateEprescriptionRequest;
 use App\Http\Requests\Patients\CreatePatientRequest;
 use App\Interfaces\Patients\PatientRepositoryInterface;
 use App\Models\Prescription;
-use App\Services\Eprescriptions\AppointmentService;
 use App\Services\Eprescriptions\PrescriptionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,19 +16,15 @@ class PrescriptionController extends Controller
 {
     protected $prescriptionService;
 
-    protected $appointmentService;
-
     protected $prescriptionpatient;
 
     protected $user;
 
     public function __construct(
         PrescriptionService $prescriptionService,
-        AppointmentService $appointmentService,
         PatientRepositoryInterface $prescriptionpatient
     ) {
         $this->prescriptionService = $prescriptionService;
-        $this->appointmentService = $appointmentService;
         $this->prescriptionpatient = $prescriptionpatient;
         $this->user = Auth::user();
     }
@@ -123,24 +118,6 @@ class PrescriptionController extends Controller
         return redirect()->route('prescriptions.saveandnew')->with('uuid', $prescription->uuid)->with('is_followup', $prescription->is_followup);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function quickAppointment($patient_id)
-    {
-        try {
-            $data = $this->appointmentService->quickAppointment($patient_id);
-            $appointment = $this->appointmentService->create($data);
-            $templateSlug = 'appointment_confirmation';
-            $this->appointmentService->appointmentMail($appointment, $templateSlug);
-
-            return redirect()->back()->with('patient_id', $patient_id);
-
-        } catch (\Exception $e) {
-
-            return back()->with('error', 'Doctor does not have a chamber.');
-        }
-    }
 
     /** All Pateints */
     public function getAllPateint()

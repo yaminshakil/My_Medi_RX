@@ -46,7 +46,7 @@ export default function NotificationBell() {
     /*
      * 2. Listen for real-time Laravel Broadcast notifications
      */
-    console.log('👀 NotificationBell component rendered. Auth user:', auth?.user);
+
 
     useEffect(() => {
         // 2. Check if auth.user.id exists
