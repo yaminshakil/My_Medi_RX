@@ -16,4 +16,8 @@ return [
     'show' => 'Show',
     'rows_per_page' => 'Rows per page',
     'No_entries_found' => 'No entries found.',
+    'Showing' => 'Showing',
+    'to' => 'to',
+    'from_total' => 'from total',
+    'entries' => 'entries',
 ];

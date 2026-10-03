@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
+use App\Services\TranslationService;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -59,49 +60,51 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'locale' => app()->getLocale(),
-            'translations' => ['messages' => __('messages'),],
+            'translations' => app(
+                TranslationService::class
+            )->all(),
             'languages' => collect(config('languages.supported'))->map(fn ($name, $code) => [
-                'code' => $code,
-                'name' => $name,
-            ])->values()->all(),
+                            'code' => $code,
+                            'name' => $name,
+                        ])->values()->all(),
             'name'  => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth'  => [
-                'user'        => $request->user(),
-                'permissions' => fn () => $request->user()?->getAllPermissions()->pluck('name') ?? [],
-            ],
+                            'user'        => $request->user(),
+                            'permissions' => fn () => $request->user()?->getAllPermissions()->pluck('name') ?? [],
+                        ],
             'ziggy' => fn (): array => [
-                ...(new Ziggy())->toArray(),
-                'location' => $request->url(),
-            ],
+                            ...(new Ziggy())->toArray(),
+                            'location' => $request->url(),
+                        ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash'       => [
-                'message' => [
-                    'success' => $request->session()->get('success'),
-                    'error'   => $request->session()->get('error'),
-                ],
-            ],
+                            'message' => [
+                                'success' => $request->session()->get('success'),
+                                'error'   => $request->session()->get('error'),
+                            ],
+                        ],
             'menus'         => $this->menus,
             'notifications' => fn () => [
-                'unread_count' => Auth::check()
-                    ? Auth::user()->unreadNotifications()->count()
-                    : 0,
+                            'unread_count' => Auth::check()
+                                ? Auth::user()->unreadNotifications()->count()
+                                : 0,
 
-                'items' => Auth::check() && Auth::user()->hasRole('Admin')
-                    ? Auth::user()
-                        ->unreadNotifications()
-                        ->latest()
-                        ->take(10)
-                        ->get()
-                        ->map(fn ($notification) => [
-                            'id'         => $notification->id,
-                            'title'      => $notification->data['title'],
-                            'message'    => $notification->data['message'],
-                            'url'        => $notification->data['url'],
-                            'created_at' => $notification->created_at,
-                        ])
-                    : [],
-            ],
+                            'items' => Auth::check() && Auth::user()->hasRole('Admin')
+                                ? Auth::user()
+                                    ->unreadNotifications()
+                                    ->latest()
+                                    ->take(10)
+                                    ->get()
+                                    ->map(fn ($notification) => [
+                                        'id'         => $notification->id,
+                                        'title'      => $notification->data['title'],
+                                        'message'    => $notification->data['message'],
+                                        'url'        => $notification->data['url'],
+                                        'created_at' => $notification->created_at,
+                                    ])
+                                : [],
+                        ],
         ];
     }
 }

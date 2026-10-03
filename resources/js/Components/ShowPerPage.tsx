@@ -6,7 +6,7 @@ export default function ShowPerPage({ perPageItem, handlePerPageChange }) {
     const { translations } = usePage<AppPageProps>().props;
     return (
         <div>
-            <label className="mr-2 text-sm text-gray-600">{translations.messages.show}</label>
+            <label className="mr-2 text-sm text-gray-600">{translations.common.show}</label>
             <select
                 value={perPageItem ? perPageItem : appSettings?.records_per_page}
                 onChange={(e) => {
@@ -20,7 +20,7 @@ export default function ShowPerPage({ perPageItem, handlePerPageChange }) {
                 <option value="25">25</option>
                 <option value="50">50</option>
             </select>
-            <span className="ml-2 text-sm text-gray-600">{translations.messages.rows_per_page}</span>
+            <span className="ml-2 text-sm text-gray-600">{translations.common.rows_per_page}</span>
         </div>
     );
 }

@@ -102,7 +102,7 @@ export default function Index({ specialties }) {
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: translations.messages.medical_specialties,
+            title: translations.common.medical_specialties,
             href: '/dashboard',
         },
     ];
@@ -110,7 +110,7 @@ export default function Index({ specialties }) {
     console.log(specialties);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={translations.messages.medical_specialties} />
+            <Head title={translations.common.medical_specialties} />
             <ToastContainer />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <PageHeader
@@ -118,7 +118,7 @@ export default function Index({ specialties }) {
                     perPageItem={filters.per_page}
                     handlePerPageChange={handlePerPageChange}
                     handleSearch={handleSearch}
-                    placeholder={translations.messages.search_specialty}
+                    placeholder={translations.common.search_specialty}
                     handleReset={handleReset}
                     handleCreate={handleCreate}
                     canCreate={canCreate}
@@ -134,7 +134,7 @@ export default function Index({ specialties }) {
                             onEdit={handleEdit}
                             onDelete={handleDelete}
                             actionHeadClass="border p-4 w-24 text-center"
-                            emptyMessage={translations.messages.no_specialty_found}
+                            emptyMessage={translations.common.no_specialty_found}
                         />
                         <div className="mt-4 w-full">
                             <Pagination items={specialties} />
@@ -143,7 +143,7 @@ export default function Index({ specialties }) {
                 </div>
             </div>
             <ConfirmDialog
-                title={translations.messages.delete_specialty}
+                title={translations.common.delete_specialty}
                 message={`Are you sure you want to delete this <b>${specialty?.name}</b>?`}
                 onConfirm={handleConfirm}
                 onCancel={handleCancel}
