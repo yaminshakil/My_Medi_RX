@@ -21,6 +21,7 @@ import {
     ShoppingCart,
     UserIcon,
 } from 'lucide-react';
+import user from 'pusher-js/types/src/core/user';
 
 interface Role {
     id: number;
@@ -99,26 +100,26 @@ function getInitials(name: string): string {
         .slice(0, 2);
 }
 
-export default function Show({ user }: ShowProps) {
+export default function Show({ patient }: ShowProps) {
 
-    const billing = user?.freemius_billing || [];
-    const subscriptions = user?.subscriptions || [];
-    const payments = user?.freemius_payment || [];
-    const activations = user?.license_activations || [];
+    const billing = patient?.user?.freemius_billing || [];
+    const subscriptions = patient?.user?.subscriptions || [];
+    const payments = patient?.user?.freemius_payment || [];
+    const activations = patient?.user?.license_activations || [];
 
     const totalSpent = payments.reduce((sum, p) => sum + Number(p.gross || 0), 0);
     const activeSubscriptions = subscriptions.filter((s) => s.is_active).length;
-
+    console.log(patient.user);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`User - ${user.name}`} />
+            <Head title={`User - ${patient?.user?.name}`} />
 
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
                 <AdminPageHeader
                     breadcrumbs={breadcrumbs}
                     description="View full user profile, Patients, Prescriptions and Analytics"
                     actions={
-                        <Button variant="outline" size="sm" onClick={() => router.visit(route('users.edit', user.id))} className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white">
+                        <Button variant="outline" size="sm" onClick={() => router.visit(route('users.edit', patient?.user?.id))} className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white">
                             Edit User
                         </Button>
                     }
@@ -129,41 +130,41 @@ export default function Show({ user }: ShowProps) {
                         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
                             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                                 <Avatar className="size-20 border-2 border-white shadow-md">
-                                    <AvatarImage src={user.avatar || undefined} alt={user.name} />
+                                    <AvatarImage src={patient?.user?.avatar || undefined} alt={patient?.user?.name} />
                                     <AvatarFallback className="bg-primary text-xl font-bold text-primary-foreground">
-                                        {getInitials(user.name)}
+                                        {getInitials(patient?.user?.name)}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="space-y-1">
                                     <div className="flex flex-wrap items-center gap-2">
-                                        <h1 className="text-2xl font-bold">{user.name}</h1>
-                                        {user.email_verified_at && (
+                                        <h1 className="text-2xl font-bold">{patient?.user?.name}</h1>
+                                        {patient?.user?.email_verified_at && (
                                             <Badge variant="outline" className="gap-1 border-green-200 text-green-700">
                                                 <BadgeCheck className="size-3" />
                                                 Verified
                                             </Badge>
                                         )}
-                                        <StatusBadge status={user.status} label="Active" />
+                                        <StatusBadge status={patient?.user?.status} label="Active" />
                                     </div>
                                     <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                                         <span className="flex items-center gap-1">
                                             <Mail className="size-3.5" />
-                                            {user.email}
+                                            {patient?.user?.email}
                                         </span>
-                                        {user.mobile && (
+                                        {patient?.user?.mobile && (
                                             <span className="flex items-center gap-1">
                                                 <Phone className="size-3.5" />
-                                                {user.mobile}
+                                                {patient?.user?.mobile}
                                             </span>
                                         )}
                                         <span className="flex items-center gap-1">
                                             <Calendar className="size-3.5" />
-                                            Joined {formatDate(user.created_at)}
+                                            Joined {formatDate(patient?.user?.created_at)}
                                         </span>
                                     </div>
-                                    {user.roles.length > 0 && (
+                                    {patient?.user?.roles.length > 0 && (
                                         <div className="flex flex-wrap gap-1.5 pt-1">
-                                            {user.roles.map((role) => (
+                                            {patient?.user?.roles.map((role) => (
                                                 <Badge key={role.id} variant="secondary" className="capitalize">
                                                     <UserIcon className="mr-1 size-3" />
                                                     {role.name}
@@ -201,14 +202,14 @@ export default function Show({ user }: ShowProps) {
                 </Card>
 
                 <div className="grid gap-6 lg:grid-cols-2">
-                    {/* Doctor Analytics */}
+                    {/* Patient Analytics */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
                                 <CreditCard className="size-5" />
-                                Doctor Analytics
+                                Medication History
                             </CardTitle>
-                            <CardDescription>Doctor Analytics</CardDescription>
+                            <CardDescription>Medication History</CardDescription>
                         </CardHeader>
                         <CardContent>
                             {billing ? (
@@ -247,19 +248,19 @@ export default function Show({ user }: ShowProps) {
                                     )}
                                 </div>
                             ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No Doctor Analytics available</p>
+                                <p className="py-8 text-center text-sm text-muted-foreground">No Medication History available</p>
                             )}
                         </CardContent>
                     </Card>
 
-                    {/* Prescription statistics */}
+                    {/* Prescription history */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
                                 <RefreshCw className="size-5" />
-                                Prescription statistics
+                                Prescription history
                             </CardTitle>
-                            <CardDescription>{subscriptions.length} subscription(s) found</CardDescription>
+                            <CardDescription>{subscriptions.length} history(s) found</CardDescription>
                         </CardHeader>
                         <CardContent>
                             {subscriptions.length > 0 ? (
@@ -296,7 +297,7 @@ export default function Show({ user }: ShowProps) {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No Prescription statistics found</p>
+                                <p className="py-8 text-center text-sm text-muted-foreground">No Prescription history found</p>
                             )}
                         </CardContent>
                     </Card>

@@ -34,7 +34,7 @@ class ManufacturerRepository implements ManufacturerRepositoryInterface
             );
         }
 
-        $manufacturer = $manufacturer->where('doctor_id', $this->doctor_id);
+        //$manufacturer = $manufacturer->where('doctor_id', $this->doctor_id);
 
         $manufacturer = $manufacturer->latest()->paginate($perPage)->withQueryString();
 

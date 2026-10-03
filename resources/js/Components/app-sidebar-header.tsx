@@ -4,6 +4,7 @@ import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { Globe } from 'lucide-react';
 import NotificationBell from '@/Components/NotificationBell';
+import LanguageSwitcher from '@/Components/LanguageSwitcher';
 
 
 export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: BreadcrumbItemType[] }) {
@@ -19,6 +20,7 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
                 <a target="__blank" href={props.ziggy.url}>
                     <Globe className="h-6 w-6 text-[var(--base-color)]" />
                 </a>
+                <LanguageSwitcher />
             </div>
         </header>
     );

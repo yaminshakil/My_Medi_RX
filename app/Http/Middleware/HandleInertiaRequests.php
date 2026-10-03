@@ -58,6 +58,12 @@ class HandleInertiaRequests extends Middleware
 
         return [
             ...parent::share($request),
+            'locale' => app()->getLocale(),
+            'translations' => ['messages' => __('messages'),],
+            'languages' => collect(config('languages.supported'))->map(fn ($name, $code) => [
+                'code' => $code,
+                'name' => $name,
+            ])->values()->all(),
             'name'  => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth'  => [
@@ -65,7 +71,7 @@ class HandleInertiaRequests extends Middleware
                 'permissions' => fn () => $request->user()?->getAllPermissions()->pluck('name') ?? [],
             ],
             'ziggy' => fn (): array => [
-                ...(new Ziggy)->toArray(),
+                ...(new Ziggy())->toArray(),
                 'location' => $request->url(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',

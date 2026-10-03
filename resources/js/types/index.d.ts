@@ -1,5 +1,29 @@
 import type { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
+import { PageProps as InertiaPageProps } from '@inertiajs/core';
+
+export interface Language {
+    code: string;
+    name: string;
+}
+
+export interface TranslationMessages {
+    dashboard: string;
+    patients: string;
+    doctors: string;
+    prescriptions: string;
+    save: string;
+    update: string;
+    delete: string;
+}
+
+export interface AppPageProps extends InertiaPageProps {
+    locale: string;
+    languages: Language[];
+    translations: {
+        messages: TranslationMessages;
+    };
+}
 
 export interface User {
     id: number;

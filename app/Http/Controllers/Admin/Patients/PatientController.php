@@ -73,7 +73,7 @@ class PatientController extends Controller
     public function show($id)
     {
         $patient = $this->patientService->find($id);
-        $patient->load('user', 'vitals', 'prescriptions');
+        $patient->load('user', 'user.roles', 'vitals', 'prescriptions');
 
         return Inertia::render('Admin/Patients/Show', [
             'patient' => $patient,

@@ -89,6 +89,24 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::get('user/profile', [ProfileController::class, 'index'])->name('user.profile');
 });
 
+Route::get('/language/{locale}', function ($locale) {
+    if (!array_key_exists($locale, config('languages.supported'))) {
+        abort(404);
+    }
+
+    session()->put('locale', $locale);
+
+    app()->setLocale($locale);
+
+    logger()->info('Language switched', [
+        'selected' => $locale,
+        'session' => session('locale'),
+    ]);
+
+
+    return back();
+})->name('language.switch');
+
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 require __DIR__.'/doctor.php';
