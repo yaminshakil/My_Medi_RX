@@ -81,8 +81,8 @@ export default function Index({ specialties }) {
 
     const columns = [
         { key: '#', label: '#', render: (item) => item.id },
-        { key: 'name', label: 'Name' },
-        { key: 'description', label: 'Description' },
+        { key: 'name', label: 'Name', render: (item) => item.translated_name ? item.translated_name : '-' },
+        { key: 'description', label: 'Description', render: (item) => item.translated_description ? item.translated_description : '-' },
         { key: 'Parent', label: 'Parent', render: (item) => item.parent?.name ?? '-' },
         {
             key: 'is_surgical',
@@ -107,6 +107,7 @@ export default function Index({ specialties }) {
         },
     ];
 
+    console.log(specialties);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={translations.messages.medical_specialties} />

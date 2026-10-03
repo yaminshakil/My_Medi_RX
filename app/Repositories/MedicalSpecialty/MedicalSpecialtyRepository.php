@@ -38,7 +38,16 @@ class MedicalSpecialtyRepository implements MedicalSpecialtyRepositoryInterface
 
     public function create(array $data): MedicalSpecialty
     {
-        return MedicalSpecialty::create($data);
+        $translations = $data['translations'] ?? [];
+
+        unset($data['translations']);
+
+        $specialty = MedicalSpecialty::create($data);
+
+        foreach ($translations as $field => $locales) {
+            $specialty->setTranslations($field, $locales);
+        }
+        return $specialty;
     }
 
     public function update(MedicalSpecialty $specialty, array $data): MedicalSpecialty

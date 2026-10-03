@@ -14,6 +14,23 @@ class MedicalSpecialty extends Model
 
     protected $fillable = ['name', 'icon', 'description', 'parent_id', 'is_surgical'];
 
+    protected $appends = [
+    'translated_name',
+    'translated_description'
+];
+
+    public function getTranslatedNameAttribute(): ?string
+    {
+        return $this->translated('name')
+            ?? $this->name;
+    }
+
+    public function getTranslatedDescriptionAttribute(): ?string
+    {
+        return $this->translated('description')
+            ?? $this->description;
+    }
+
     public function children()
     {
         return $this->hasMany(MedicalSpecialty::class, 'parent_id');

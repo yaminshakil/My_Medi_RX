@@ -19,6 +19,21 @@ class MedicalSpecialtyRequest extends FormRequest
             'description' => 'nullable|string',
             'parent_id' => 'nullable|exists:medical_specialties,id',
             'is_surgical' => 'boolean',
+            'translations' => [
+            'nullable',
+            'array',
+        ],
+
+        'translations.name' => [
+            'nullable',
+            'array',
+        ],
+
+        'translations.name.*' => [
+            'nullable',
+            'string',
+            'max:255',
+        ],
         ];
     }
 }
