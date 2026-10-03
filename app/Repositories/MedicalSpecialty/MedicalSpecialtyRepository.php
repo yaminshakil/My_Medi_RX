@@ -9,13 +9,23 @@ class MedicalSpecialtyRepository implements MedicalSpecialtyRepositoryInterface
 {
     public function all($search, $perPage)
     {
+        $locale = app()->getLocale();
+
         $medicalSpecialty = MedicalSpecialty::query();
-        if ($search) {
-            $medicalSpecialty->where(
-                fn ($query) => $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%")
-            );
-        }
+
+        $medicalSpecialty =  $medicalSpecialty->with([
+           'translations' => function ($query) use ($locale) {
+               $query->where('field', 'name')
+                   ->whereIn('locale', [
+                       $locale,
+                       config('languages.default', 'en'),
+                   ]);
+           }
+        ])
+        ->when($search, function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        });
+
         $medicalSpecialty = $medicalSpecialty->with('parent')->latest()->paginate($perPage)->withQueryString();
 
         return $medicalSpecialty;

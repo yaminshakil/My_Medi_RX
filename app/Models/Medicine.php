@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTranslations;
 
 class Medicine extends Model
 {
     use HasFactory;
+    use HasTranslations;
 
     protected $fillable = [
         'brand_name',

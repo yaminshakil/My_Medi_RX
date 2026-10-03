@@ -8,15 +8,11 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler, useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import { AppPageProps } from '@/types';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Medical Specialties',
-        href: '/medical-specialties',
-    },
-];
 
 export default function Index({ specialties }) {
+    const { translations } = usePage<AppPageProps>().props;
     const { flash, filters } = usePage().props;
     const [showConfirm, setShowConfirm] = useState(false);
     const [specialty, setSpecialty] = useState(false);
@@ -102,9 +98,18 @@ export default function Index({ specialties }) {
         router.visit(route('medical-specialties.create'));
     };
 
+
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: translations.messages.medical_specialties,
+            href: '/dashboard',
+        },
+    ];
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Medical Specialties" />
+            <Head title={translations.messages.medical_specialties} />
             <ToastContainer />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <PageHeader
@@ -112,7 +117,7 @@ export default function Index({ specialties }) {
                     perPageItem={filters.per_page}
                     handlePerPageChange={handlePerPageChange}
                     handleSearch={handleSearch}
-                    placeholder="Search Specialty ..."
+                    placeholder={translations.messages.search_specialty}
                     handleReset={handleReset}
                     handleCreate={handleCreate}
                     canCreate={canCreate}
@@ -128,7 +133,7 @@ export default function Index({ specialties }) {
                             onEdit={handleEdit}
                             onDelete={handleDelete}
                             actionHeadClass="border p-4 w-24 text-center"
-                            emptyMessage="No Specialty found."
+                            emptyMessage={translations.messages.no_specialty_found}
                         />
                         <div className="mt-4 w-full">
                             <Pagination items={specialties} />
@@ -137,7 +142,7 @@ export default function Index({ specialties }) {
                 </div>
             </div>
             <ConfirmDialog
-                title="Delete Specialty"
+                title={translations.messages.delete_specialty}
                 message={`Are you sure you want to delete this <b>${specialty?.name}</b>?`}
                 onConfirm={handleConfirm}
                 onCancel={handleCancel}

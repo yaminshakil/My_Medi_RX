@@ -24,12 +24,6 @@ class SetLocale
 
         App::setLocale($locale);
 
-        // Debug
-        logger()->info('Locale Middleware', [
-            'session_locale' => session('locale'),
-            'app_locale' => App::getLocale(),
-        ]);
-
         return $next($request);
     }
 }
