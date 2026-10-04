@@ -158,6 +158,42 @@ class StaticTranslationsSeeder extends Seeder
                 'en' => 'Role',
                 'bn' => 'ভূমিকা',
             ],
+            'profile_settings' => [
+                'en' => 'Profile settings',
+                'bn' => 'প্রোফাইল সেটিংস',
+            ],
+            'logout' => [
+                'en' => 'Log Out',
+                'bn' => 'লগ আউট',
+            ],
+            'settings' => [
+                'en' => 'Settings',
+                'bn' => 'সেটিংস',
+            ],
+            'settings_description' => [
+                'en' => 'Manage your profile and account settings',
+                'bn' => 'আপনার প্রোফাইল ও অ্যাকাউন্টের সেটিংস পরিচালনা করুন',
+            ],
+            'Profile' => [
+                'en' => 'Profile',
+                'bn' => 'প্রোফাইল',
+            ],
+            'profile_information' => [
+                'en' => 'Profile information',
+                'bn' => 'প্রোফাইল তথ্য',
+            ],
+            'profile_information_sub' => [
+                'en' => 'Update your name and email address',
+                'bn' => 'আপনার নাম এবং ইমেইল ঠিকানা আপডেট করুন',
+            ],
+            'email_address' => [
+                'en' => 'Email address',
+                'bn' => 'ইমেইল ঠিকানা',
+            ],
+            'delete_account' => [
+                'en' => 'Delete account',
+                'bn' => 'অ্যাকাউন্ট মুছে ফেলুন',
+            ],
         ];
 
         $now = now();
