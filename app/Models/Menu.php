@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Traits\HasTranslations;
 
 class Menu extends Model
 {
     use HasFactory;
+    use HasTranslations;
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +26,16 @@ class Menu extends Model
         'menu_icon',
         'parent_id',
     ];
+
+    protected $appends = [
+          'translated_name',
+       ];
+
+    public function getTranslatedNameAttribute(): ?string
+    {
+        return $this->translated('name')
+            ?? $this->name;
+    }
 
     public function format()
     {
@@ -40,7 +52,20 @@ class Menu extends Model
 
     public function childmenus()
     {
-        return $this->hasMany(Menu::class, 'parent_id')->orderBy('order_by', 'ASC');
+        $locale = app()->getLocale();
+        $defaultLocale = config('languages.default', 'en');
+
+        return $this->hasMany(Menu::class, 'parent_id')
+            ->with([
+                'translations' => function ($query) use ($locale, $defaultLocale) {
+                    $query->where('field', 'name')
+                        ->whereIn('locale', array_unique([
+                            $locale,
+                            $defaultLocale,
+                        ]));
+                },
+            ])
+            ->orderBy('order_by', 'ASC');
     }
 
     public function roles()
@@ -59,7 +84,7 @@ class Menu extends Model
         })->where('parent_id', '=', $child)->orderBy('order_by', 'ASC')->get()->map(function ($format) {
             return [
                 'id'          => $format->id,
-                'title'       => $format->name,
+                'title'       => $format->translated_name,
                 'href'        => $format->slug,
                 'order_by'    => $format->order_by,
                 'menu_method' => $format->menu_method,

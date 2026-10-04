@@ -107,7 +107,6 @@ export default function Index({ specialties }) {
         },
     ];
 
-    console.log(specialties);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={translations.common.medical_specialties} />

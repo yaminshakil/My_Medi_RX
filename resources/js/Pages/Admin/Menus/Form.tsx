@@ -2,8 +2,14 @@ import MainForm from '@/Components/Form/MainForm';
 import InputError from '@/Components/input-error';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { Select } from 'antd';
+import type { Language } from '@/types';
+import { AppPageProps } from '@/types';
+
+interface SharedProps {
+    languages: Language[];
+}
 
 interface Role {
     value: number;
@@ -23,6 +29,9 @@ interface FormData {
     role: string;
     parent_id: number;
     order_by: number;
+    translations?: {
+        name?: Record<string, string>;
+    };
 }
 
 interface FormProps {
@@ -37,6 +46,9 @@ interface FormProps {
     parentmenus: Parentmenus[];
 }
 export default function Form({ data, setData, handleSubmit, processing, errors, submitTitle = 'Create', roles, parentmenus, heading }: FormProps) {
+    console.log(data);
+    const { languages } = usePage<SharedProps>().props;
+    const { translations } = usePage<AppPageProps>().props;
     const onHandleChange = (event) => {
         setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
     };
@@ -45,12 +57,29 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
         router.get(route('menus.index'));
     };
 
+    /**
+     * Update translation value
+     */
+    const updateTranslation = (
+        locale: string,
+        value: string,
+    ) => {
+        setData('translations', {
+            ...(data.translations ?? {}),
+
+            name: {
+                ...(data.translations?.name ?? {}),
+                [locale]: value,
+            },
+        });
+    };
+
     return (
         <MainForm handleSubmit={handleSubmit} handleCancel={handleCancel} processing={processing} submitTitle={submitTitle}>
             <h1 className="items-start !text-left font-extrabold">{heading}</h1>
             <div className="grid gap-2">
                 <Label htmlFor="name" className="after:text-red-500 after:content-['*']">
-                    Name
+                    {translations.common.name}
                 </Label>
 
                 <Input
@@ -67,9 +96,71 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
                 <InputError message={errors.name} className="mt-2" />
             </div>
 
+            {/* =========================
+                            Dynamic Translations
+                        ========================== */}
+            <div className="grid gap-2 rounded-lg border p-4">
+                <div>
+                    <h3 className="font-semibold">
+                        {translations.common.Translations}
+                    </h3>
+
+                    <p className="text-sm text-muted-foreground">
+                        {translations.common.Enter_the_specialty_name_in_each_supported_language}
+                    </p>
+                </div>
+
+                {languages.map((language) => (
+                    console.log(data.translations),
+                    <div
+                        key={language.code}
+                        className="grid gap-2"
+                    >
+                        <Label
+                            htmlFor={`translation_name_${language.code}`}
+                        >
+                            {translations.common.name} ({language.name})
+                        </Label>
+
+                        <Input
+                            id={`translation_name_${language.code}`}
+                            dir={
+                                language.code === 'ar'
+                                    ? 'rtl'
+                                    : 'ltr'
+                            }
+                            className="w-full border"
+                            value={
+                                data.translations?.name?.[
+                                language.code
+                                ] ?? ''
+                            }
+                            onChange={(e) =>
+                                updateTranslation(
+                                    language.code,
+                                    e.target.value,
+                                )
+                            }
+                        />
+
+                        {errors[
+                            `translations.name.${language.code}`
+                        ] && (
+                                <InputError
+                                    message={
+                                        errors[
+                                        `translations.name.${language.code}`
+                                        ]
+                                    }
+                                />
+                            )}
+                    </div>
+                ))}
+            </div>
+
             <div className="grid gap-2">
                 <Label htmlFor="slug" className="after:text-red-500 after:content-['*']">
-                    Slug
+                    {translations.common.slug}
                 </Label>
 
                 <Input
@@ -86,7 +177,9 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
                 <InputError message={errors.slug} className="mt-2" />
             </div>
             <div className="grid gap-2">
-                <Label htmlFor="menu_icon">Icon (Lucide icon name)</Label>
+                <Label htmlFor="menu_icon">
+                    {translations.common.icon} ({translations.common.lucid_icon_name})
+                </Label>
 
                 <Input
                     id="menu_icon"
@@ -103,7 +196,7 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
 
             <div className="grid w-1/4 gap-2">
                 <Label htmlFor="order_by" className="after:text-red-500 after:content-['*']">
-                    Order
+                    {translations.common.order}
                 </Label>
 
                 <Input
@@ -121,7 +214,9 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
             </div>
 
             <div className="grid gap-2">
-                <Label htmlFor="parent_id">Parent Menu</Label>
+                <Label htmlFor="parent_id">
+                    {translations.common.parent_menu}
+                </Label>
                 <Select
                     id="parent_id"
                     allowClear
@@ -136,7 +231,9 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
             </div>
 
             <div className="grid gap-2">
-                <Label htmlFor="user_role">Role</Label>
+                <Label htmlFor="user_role">
+                    {translations.common.role}
+                </Label>
                 <Select
                     id="user_role"
                     mode="multiple"

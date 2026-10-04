@@ -35,7 +35,7 @@ export default function SortableItem({ id, menu, onDelete }) {
     const handleCancel = () => {
         setShowConfirm(false);
     };
-
+    console.log('Submenus:', menu.submenu);
     return (
         <li
             ref={setNodeRef}

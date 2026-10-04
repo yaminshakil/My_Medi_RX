@@ -4,19 +4,21 @@ import AppLayout from '@/Layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import SortableItem from './SortableItem';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Menus',
-        href: '/menus',
-    },
-];
 
 export default function Index({ allmenus }) {
+    const { translations } = usePage<AppPageProps>().props;
     const [menus, setMenus] = useState(allmenus.data);
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: translations.common.menus,
+            href: '/menus',
+        },
+    ];
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -91,9 +93,9 @@ export default function Index({ allmenus }) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Menus" />
+            <Head title={translations.common.menus} />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl px-4">
-                <AdminPageHeader breadcrumbs={breadcrumbs} description="Manage navigation menu items and order" />
+                <AdminPageHeader breadcrumbs={breadcrumbs} description={translations.common.menus_desc} />
                 <div className="w-full overflow-x-hidden py-6">
                     <div className="mx-auto">
                         <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg sm:px-4">

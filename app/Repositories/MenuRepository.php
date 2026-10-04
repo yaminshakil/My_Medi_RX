@@ -11,7 +11,24 @@ class MenuRepository implements MenuRepositoryInterface
 {
     public function getAllParentMenus()
     {
-        return Menu::whereNull('parent_id')->orderBy('order_by', 'ASC')->get();
+        $locale = app()->getLocale();
+        $defaultLocale = config('languages.default', 'en');
+
+        $locales = array_unique([$locale, $defaultLocale]);
+
+        return Menu::with([
+            'translations' => function ($query) use ($locales) {
+                $query->where('field', 'name')
+                    ->whereIn('locale', $locales);
+            },
+            'childmenus.translations' => function ($query) use ($locales) {
+                $query->where('field', 'name')
+                    ->whereIn('locale', $locales);
+            },
+        ])
+        ->whereNull('parent_id')
+        ->orderBy('order_by', 'ASC')
+        ->get();
     }
 
     public function getAllRoles()
@@ -21,20 +38,48 @@ class MenuRepository implements MenuRepositoryInterface
 
     public function create(array $data)
     {
-        return Menu::create($data);
+        $translations = $data['translations'] ?? [];
+
+        unset($data['translations']);
+
+        $menu = Menu::create($data);
+
+        foreach ($translations as $field => $locales) {
+            $menu->setTranslations($field, $locales);
+        }
+
+        return $menu;
     }
 
     public function find($id)
     {
-        return Menu::findOrFail($id);
+        $locale = app()->getLocale();
+        $defaultLocale = config('languages.default', 'en');
+
+        return Menu::with([
+            'translations' => function ($query) use ($locale, $defaultLocale) {
+                $query->where('field', 'name')
+                    ->whereIn('locale', array_unique([
+                        $locale,
+                        $defaultLocale,
+                    ]));
+            },
+        ])->findOrFail($id);
     }
 
     public function update($id, array $data)
     {
+        $translations = $data['translations'] ?? [];
+
+        unset($data['translations']);
         $menu = $this->find($id);
         $menu->update($data);
 
-        return $menu;
+        foreach ($translations as $field => $locales) {
+            $menu->setTranslations($field, $locales);
+        }
+
+        return $menu->refresh();
     }
 
     public function delete($id)

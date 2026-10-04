@@ -47,9 +47,17 @@ class MenuController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
-        ]);
+            'translations' => 'nullable|array',
+            'translations.name' => 'nullable|array',
+        ];
+
+        foreach (array_keys(config('languages.supported')) as $locale) {
+            $rules["translations.name.{$locale}"] = 'nullable|string|max:255';
+        }
+
+        $validated = $request->validate($rules);
 
         $this->menuService->createMenu($request->all());
 
@@ -63,7 +71,7 @@ class MenuController extends Controller
             'label' => $role->name,
         ]);
 
-        $editmenu = $this->menuService->find($id);
+        $menu = $this->menuService->find($id);
         $parentmenus = $this->menuService->getAllParentMenus()->map(fn ($menu) => [
             'value' => $menu->id,
             'label' => $menu->name,
@@ -71,18 +79,41 @@ class MenuController extends Controller
 
         return Inertia::render('Admin/Menus/Edit', [
             'roles'       => $roles,
-            'editmenu'    => $editmenu,
-            'role'        => $editmenu->roles->pluck('id')->toArray(),
+            'editmenu' => [
+            'id' => $menu->id,
+            'name' => $menu->name,
+            'slug' => $menu->slug,
+            'order_by' => $menu->order_by,
+            'menu_method' => $menu->menu_method,
+            'menu_icon' => $menu->menu_icon,
+            'parent_id' => $menu->parent_id,
+            'translations' => [
+                'name' => $menu->translations
+                    ->where('field', 'name')
+                    ->pluck('value', 'locale')
+                    ->toArray(),
+                ],
+            ],
+            'role'        => $menu->roles->pluck('id')->toArray(),
             'parentmenus' => $parentmenus,
             'status'      => session('status'),
+
         ]);
     }
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
-        ]);
+            'translations' => 'nullable|array',
+            'translations.name' => 'nullable|array',
+        ];
+
+        foreach (array_keys(config('languages.supported')) as $locale) {
+            $rules["translations.name.{$locale}"] = 'nullable|string|max:255';
+        }
+
+        $validated = $request->validate($rules);
 
         $this->menuService->updateMenu($id, $request->all());
 

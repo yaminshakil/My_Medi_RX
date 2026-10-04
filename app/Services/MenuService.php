@@ -32,13 +32,27 @@ class MenuService
 
         $menus->getCollection()->transform(fn ($menu) => [
             'id'          => $menu->id,
-            'name'        => $menu->name,
+            'name'        => $menu->translated_name,
+            'translations' => $menu->translations
+            ->groupBy('field')
+            ->map(fn ($items) => $items->pluck('value', 'locale')),
             'slug'        => $menu->slug,
             'order_by'    => $menu->order_by,
             'menu_method' => $menu->menu_method,
             'menu_icon'   => $menu->menu_icon,
             'is_admin'    => Auth::user()->hasRole('admin'),
-            'submenu'     => $menu->childmenus,
+            'submenu'     => $menu->childmenus->map(function ($child) {
+                return [
+                    'id' => $child->id,
+                    'name' => $child->translated_name,
+                    'slug' => $child->slug,
+                    'translations' => [
+                        'name' => $child->translations
+                            ->pluck('value', 'locale')
+                            ->toArray(),
+                    ],
+                ];
+            }),
         ]);
 
         return $menus;

@@ -52,9 +52,19 @@ class MedicalSpecialtyRepository implements MedicalSpecialtyRepositoryInterface
 
     public function update(MedicalSpecialty $specialty, array $data): MedicalSpecialty
     {
+        $translations = $data['translations'] ?? [];
+
+        unset($data['translations']);
+
+        // Update main table fields
         $specialty->update($data);
 
-        return $specialty;
+        // Update translations table
+        foreach ($translations as $field => $locales) {
+            $specialty->setTranslations($field, $locales);
+        }
+
+        return $specialty->refresh();
     }
 
     public function delete(MedicalSpecialty $specialty): bool

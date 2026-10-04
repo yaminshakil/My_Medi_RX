@@ -1,8 +1,9 @@
 import { Button } from '@/Components/ui/button';
 import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { AppPageProps } from '@/types';
 
 interface AdminPageHeaderProps {
     breadcrumbs?: BreadcrumbItemType[];
@@ -15,6 +16,7 @@ interface AdminPageHeaderProps {
 }
 
 export function AdminPageHeader({ breadcrumbs = [], title, description, actions, toolbar, backHref, filters }: AdminPageHeaderProps) {
+    const { translations } = usePage<AppPageProps>().props;
     const fallbackBackHref = breadcrumbs.length > 1 ? breadcrumbs[breadcrumbs.length - 2]?.href : null;
     const resolvedTitle = title || breadcrumbs[breadcrumbs.length - 1]?.title || 'Admin';
 
@@ -54,7 +56,7 @@ export function AdminPageHeader({ breadcrumbs = [], title, description, actions,
                         className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white"
                     >
                         <ArrowLeft className="h-4 w-4" />
-                        Back
+                        {translations.common.back}
                     </Button>
                     <div>
                         <h1 className="text-2xl font-bold tracking-tight">{resolvedTitle}</h1>

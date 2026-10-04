@@ -86,6 +86,78 @@ class StaticTranslationsSeeder extends Seeder
                 'en' => 'entries',
                 'bn' => 'এন্ট্রি',
             ],
+            'menus' => [
+                'en' => 'Menus',
+                'bn' => 'মেনু',
+            ],
+            'menus_desc' => [
+                'en' => 'Manage navigation menu items and order',
+                'bn' => 'নেভিগেশন মেনুর আইটেম ও ক্রম পরিচালনা করুন',
+            ],
+            'create_menu' => [
+                'en' => 'Create Menu',
+                'bn' => 'মেনু তৈরি করুন',
+            ],
+            'create_menu_desc' => [
+                'en' => 'Add a new navigation menu item to your application.',
+                'bn' => 'আপনার এপ্লিকেশনে একটি নতুন নেভিগেশন মেনু আইটেম যোগ করুন।',
+            ],
+            'edit_menu' => [
+                'en' => 'Edit Menu',
+                'bn' => 'মেনু সম্পাদনা',
+            ],
+            'edit_menu_description' => [
+                'en' => 'Update an existing navigation menu item',
+                'bn' => 'বিদ্যমান নেভিগেশন মেনু আইটেম আপডেট করুন',
+            ],
+            'back' => [
+                'en' => 'Back',
+                'bn' => 'ফিরে যান',
+            ],
+            'create' => [
+                'en' => 'Create',
+                'bn' => 'তৈরি করুন',
+            ],
+            'cancel' => [
+                'en' => 'Cancel',
+                'bn' => 'বাতিল',
+            ],
+            'name' => [
+                'en' => 'Name',
+                'bn' => 'নাম',
+            ],
+            'Translations' => [
+                'en' => 'Translations',
+                'bn' => 'অনুবাদ',
+            ],
+            'Enter_the_specialty_name_in_each_supported_language' => [
+                'en' => 'Enter the specialty name in each supported language.',
+                'bn' => 'প্রতিটি সমর্থিত ভাষায় বিশেষত্বের নাম লিখুন।',
+            ],
+            'slug' => [
+                'en' => 'Slug',
+                'bn' => 'স্লাগ',
+            ],
+            'icon' => [
+                'en' => 'Icon',
+                'bn' => 'আইকন',
+            ],
+            'lucid_icon_name' => [
+                'en' => 'Lucid Icon Name',
+                'bn' => 'লুসিড আইকন নাম',
+            ],
+            'order' => [
+                'en' => 'Order',
+                'bn' => 'ক্রম',
+            ],
+            'parent_menu' => [
+                'en' => 'Parent Menu',
+                'bn' => 'প্রধান মেনু',
+            ],
+            'role' => [
+                'en' => 'Role',
+                'bn' => 'ভূমিকা',
+            ],
         ];
 
         $now = now();

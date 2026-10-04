@@ -46,7 +46,7 @@ class HandleInertiaRequests extends Middleware
             })->where('parent_id', '=', null)->orderBy('order_by', 'ASC')->get()->map(function ($format) {
                 return [
                     'id'          => $format->id,
-                    'title'       => $format->name,
+                    'title'       => $format->translated_name,
                     'href'        => $format->slug,
                     'order_by'    => $format->order_by,
                     'menu_method' => $format->menu_method,
