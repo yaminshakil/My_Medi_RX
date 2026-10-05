@@ -1,4 +1,4 @@
-import AppLayout from '@/layouts/app-layout';
+import AppLayout from '@/Layouts/app-layout';
 import { Head, router, useForm } from '@inertiajs/react';
 import Form from './Form';
 

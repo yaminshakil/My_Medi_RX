@@ -127,8 +127,8 @@ export default function Navbar() {
                                     href={route('pages.show', link.slug)}
                                     onClick={showNav}
                                     className={`font-semibold transition-colors duration-300 ${ziggy.location === route('pages.show', link.slug)
-                                            ? 'text-sky-400 underline decoration-2 underline-offset-4'
-                                            : 'text-white hover:text-sky-500'
+                                        ? 'text-sky-400 underline decoration-2 underline-offset-4'
+                                        : 'text-white hover:text-sky-500'
                                         }`}
                                 >
                                     {link.title}
@@ -139,8 +139,8 @@ export default function Navbar() {
                                             <Link
                                                 href={sub.url}
                                                 className={`block px-4 py-2 text-sm text-white hover:bg-[var(--btn-base-hover-color)] ${ziggy.location === sub.url
-                                                        ? 'text-sky-400 underline decoration-2 underline-offset-4'
-                                                        : 'text-white decoration-2 underline-offset-4 hover:underline'
+                                                    ? 'text-sky-400 underline decoration-2 underline-offset-4'
+                                                    : 'text-white decoration-2 underline-offset-4 hover:underline'
                                                     }`}
                                             >
                                                 {sub.title}
@@ -155,8 +155,8 @@ export default function Navbar() {
                                     href={route('pages.show', link.slug)}
                                     onClick={showNav}
                                     className={`font-semibold transition-colors duration-300 ${ziggy.location === route('pages.show', link.slug)
-                                            ? 'text-sky-400 underline decoration-2 underline-offset-4'
-                                            : 'text-white hover:text-sky-500'
+                                        ? 'text-sky-400 underline decoration-2 underline-offset-4'
+                                        : 'text-white hover:text-sky-500'
                                         }`}
                                 >
                                     {link.title}
@@ -259,8 +259,8 @@ export default function Navbar() {
                                         href={route('pages.show', link.slug)}
                                         onClick={showNav}
                                         className={`font-semibold transition-colors duration-300 ${ziggy.location === route('pages.show', link.slug)
-                                                ? 'text-sky-400 underline decoration-2 underline-offset-4'
-                                                : 'text-white hover:text-sky-500'
+                                            ? 'text-sky-400 underline decoration-2 underline-offset-4'
+                                            : 'text-white hover:text-sky-500'
                                             }`}
                                     >
                                         {link.title}
@@ -271,8 +271,8 @@ export default function Navbar() {
                                                 <Link
                                                     href={sub.url}
                                                     className={`block px-4 py-2 text-sm text-white hover:bg-[var(--btn-base-hover-color)] ${ziggy.location === sub.url
-                                                            ? 'text-sky-400 underline decoration-2 underline-offset-4'
-                                                            : 'text-white decoration-2 underline-offset-4 hover:underline'
+                                                        ? 'text-sky-400 underline decoration-2 underline-offset-4'
+                                                        : 'text-white decoration-2 underline-offset-4 hover:underline'
                                                         }`}
                                                 >
                                                     {sub.title}
@@ -287,8 +287,8 @@ export default function Navbar() {
                                         href={route('pages.show', link.slug)}
                                         onClick={showNav}
                                         className={`font-semibold transition-colors duration-300 ${ziggy.location === route('pages.show', link.slug)
-                                                ? 'text-sky-400 underline decoration-2 underline-offset-4'
-                                                : 'text-white hover:text-sky-500'
+                                            ? 'text-sky-400 underline decoration-2 underline-offset-4'
+                                            : 'text-white hover:text-sky-500'
                                             }`}
                                     >
                                         {link.title}

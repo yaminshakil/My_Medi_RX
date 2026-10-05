@@ -1,7 +1,7 @@
-import { CommonModal } from '@/components/CommonModal';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { CommonModal } from '@/Components/CommonModal';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Textarea } from '@/Components/ui/textarea';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -27,9 +27,8 @@ function SortableInstructionItem({ inst, selectedInstructions, onSelect, onEdit,
             ref={setNodeRef}
             style={style}
             {...attributes}
-            className={`flex cursor-pointer items-center justify-between rounded-lg border p-2 ${
-                selected ? 'border-green-500 bg-green-100' : 'hover:bg-gray-100'
-            } ${isDragging ? 'bg-gray-200' : ''}`}
+            className={`flex cursor-pointer items-center justify-between rounded-lg border p-2 ${selected ? 'border-green-500 bg-green-100' : 'hover:bg-gray-100'
+                } ${isDragging ? 'bg-gray-200' : ''}`}
             onClick={() => onSelect(inst)}
         >
             <div className="flex items-center gap-2">
@@ -113,19 +112,27 @@ export default function InstructionSelector({ data, setData, selectedInstruction
     }, [selectedInstructions]);
 
     // Save / Update
-    const handleSaveInstruction = () => {
-        if (!newInstruction.trim()) return;
-        if (editId) {
-            axios.put(`/admin/api/instructions/${editId}`, { text: newInstruction }).then(() => {
-                setNewInstruction('');
-                setEditId(null);
-                loadInstructions();
-            });
-        } else {
-            axios.post('/admin/api/instructions', { text: newInstruction }).then(() => {
-                setNewInstruction('');
-                loadInstructions();
-            });
+    const handleSaveInstruction = async () => {
+        const text = newInstruction.trim();
+        console.log(text);
+        if (!text) return;
+
+        try {
+            if (editId) {
+                await axios.put(`/admin/api/instructions/${editId}`, {
+                    text,
+                });
+            } else {
+                await axios.post('/admin/api/instructions', {
+                    text,
+                });
+            }
+
+            setNewInstruction('');
+            setEditId(null);
+            loadInstructions();
+        } catch (error) {
+            console.error('Failed to save instruction:', error);
         }
     };
 

@@ -39,7 +39,6 @@ class VitalController extends Controller
             'heart_rate' => $vital->heart_rate,
             'temperature' => $vital->temperature,
             'respiratory_rate' => $vital->respiratory_rate,
-            'respiratory_rate' => $vital->respiratory_rate,
             'oxygen_saturation' => $vital->oxygen_saturation,
             'created_at' => $vital->created_at->format('d M Y'),
         ]);

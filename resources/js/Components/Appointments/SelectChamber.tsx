@@ -21,8 +21,8 @@ export default function SelectChamber({ data, setData, chambers, selectedChamber
                             });
                         }}
                         className={`rounded-lg border px-4 py-2 ${selectedChamber?.id === ch.id
-                                ? 'border text-white'
-                                : 'border border-[var(--base-color)] bg-gray-100 text-black hover:bg-lime-100'
+                            ? 'border text-white'
+                            : 'border border-[var(--base-color)] bg-gray-100 text-black hover:bg-lime-100'
                             }`}
                     >
                         {ch.name}

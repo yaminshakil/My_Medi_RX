@@ -32,15 +32,24 @@ class InstructionController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'text' => 'required|string|max:255|unique:instructions,text',
-        ]);
+        try {
+            $validated = $request->validate([
+                'text' => 'required|string|max:255|unique:instructions,text',
+            ]);
 
-        $validated += ['doctor_id' => auth()->id()];
+            $validated += ['doctor_id' => auth()->id()];
 
-        $instruction = Instruction::create($validated);
+            $instruction = Instruction::create($validated);
 
-        return response()->json($instruction, 201);
+            return response()->json($instruction, 201);
+        } catch (\Exception $e) {
+            \Log::error('Failed to send password reset OTP', [
+                'text' => $request->text,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return response()->json('Failed to send email. Please try again later.', 201);
+        }
     }
 
     public function update(Request $request, Instruction $instruction)

@@ -8,6 +8,8 @@ import { createRoot } from 'react-dom/client';
 // React Toastify CSS (if used)
 import 'react-toastify/dist/ReactToastify.css';
 import { configureEcho } from '@laravel/echo-react';
+import 'react-calendar/dist/Calendar.css'; // Import default styles
+import 'react-datetime-picker/dist/DateTimePicker.css';
 
 configureEcho({
     broadcaster: 'pusher',

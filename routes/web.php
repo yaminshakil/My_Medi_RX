@@ -112,4 +112,5 @@ require __DIR__.'/auth.php';
 require __DIR__.'/doctor.php';
 require __DIR__.'/patient.php';
 require __DIR__.'/prescription.php';
+require __DIR__.'/hospital.php';
 require __DIR__.'/admin.php';

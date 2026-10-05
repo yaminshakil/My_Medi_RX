@@ -59,10 +59,10 @@ export default function AvailableTimeSlot({ data, setData, selectedChamber, appo
                                         onClick={() => !isBooked && setData('appointment_time', slot.value)}
                                         disabled={disabled}
                                         className={`flex items-center justify-center rounded-lg border px-4 py-2 text-sm ${disabled
-                                                ? 'cursor-not-allowed bg-gray-300 text-gray-500'
-                                                : data.appointment_time === slot.value
-                                                    ? 'text-white'
-                                                    : 'bg-gray-100 text-black hover:bg-blue-100'
+                                            ? 'cursor-not-allowed bg-gray-300 text-gray-500'
+                                            : data.appointment_time === slot.value
+                                                ? 'text-white'
+                                                : 'bg-gray-100 text-black hover:bg-blue-100'
                                             }`}
                                     >
                                         {data.appointment_time === slot.value ? (

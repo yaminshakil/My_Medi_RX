@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 import { router } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 

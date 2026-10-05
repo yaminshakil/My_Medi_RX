@@ -1,5 +1,5 @@
-import { ConfirmDialog } from '@/components/ConfirmDialog';
-import { Pagination } from '@/components/pagination';
+import { ConfirmDialog } from '@/Components/ConfirmDialog';
+import { Pagination } from '@/Components/pagination';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import Authenticated from '@/Layouts/Authenticated';

@@ -1,15 +1,15 @@
-import AddPatient from '@/components/AddPatient';
-import AddVital from '@/components/AddVital';
-import { CommonModal } from '@/components/CommonModal';
-import { ConfirmDialog } from '@/components/ConfirmDialog';
-import GynaeHistoryForm from '@/components/GynaeHistoryForm';
-import GynaeHistorySidebar from '@/components/GynaeHistorySidebar';
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import AppLayout from '@/layouts/app-layout';
+import AddPatient from '@/Components/AddPatient';
+import AddVital from '@/Components/AddVital';
+import { CommonModal } from '@/Components/CommonModal';
+import { ConfirmDialog } from '@/Components/ConfirmDialog';
+import GynaeHistoryForm from '@/Components/GynaeHistoryForm';
+import GynaeHistorySidebar from '@/Components/GynaeHistorySidebar';
+import InputError from '@/Components/input-error';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Textarea } from '@/Components/ui/textarea';
+import AppLayout from '@/Layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import axios from 'axios';
@@ -772,10 +772,10 @@ export default function Create(props) {
                         !data.patient_id
                             ? 'You have net selected any Patient?'
                             : !data.appointment_id
-                              ? 'This Patient have not any Appointment?'
-                              : !data.medications[0]?.medicine_id
-                                ? 'You did not added any medicine!'
-                                : 'You have net selected any Patient?'
+                                ? 'This Patient have not any Appointment?'
+                                : !data.medications[0]?.medicine_id
+                                    ? 'You did not added any medicine!'
+                                    : 'You have net selected any Patient?'
                     }
                     onConfirm={handleConfirm}
                     onCancel={handleCancel}

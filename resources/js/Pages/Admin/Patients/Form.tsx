@@ -1,9 +1,9 @@
-import FormFooter from '@/components/Form/FormFooter';
-import InputError from '@/components/input-error';
-import LogoCropper from '@/components/LogoCropper';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import FormFooter from '@/Components/Form/FormFooter';
+import InputError from '@/Components/input-error';
+import LogoCropper from '@/Components/LogoCropper';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Textarea } from '@/Components/ui/textarea';
 import { router } from '@inertiajs/react';
 import { Select } from 'antd';
 

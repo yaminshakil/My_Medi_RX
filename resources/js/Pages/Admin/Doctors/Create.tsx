@@ -1,4 +1,4 @@
-import AppLayout from '@/layouts/app-layout';
+import AppLayout from '@/Layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
