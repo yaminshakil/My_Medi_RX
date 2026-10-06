@@ -56,7 +56,7 @@ class HospitalController extends Controller
             'address' => 'required|string|max:255',
         ]);
         $this->hospitalRepository->createHospital($request->all());
-        return redirect()->intended('/hospitals')->with('success', 'Your Hospital has been created successfully!');
+        return redirect()->intended('/admin/hospitals')->with('success', 'Your Hospital has been created successfully!');
     }
 
     /**
@@ -70,9 +70,9 @@ class HospitalController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $uuid)
+    public function edit(string $id)
     {
-        $hospital = $this->hospitalRepository->getHospitalById($uuid);
+        $hospital = $this->hospitalRepository->getHospitalById($id);
 
         return Inertia::render('Admin/Hospital/Edit', [
                 'hospital' => $hospital,
@@ -91,7 +91,7 @@ class HospitalController extends Controller
             'address' => 'required|string|max:255',
         ]);
         $this->hospitalRepository->updateHospital($request->all(), $id);
-        return redirect()->intended('/hospitals')->with('success', 'Your Hospital has been created successfully!');
+        return redirect()->intended('/admin/hospitals')->with('success', 'Your Hospital has been updated successfully!');
     }
 
     /**

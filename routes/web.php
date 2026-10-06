@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LocationController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -88,6 +89,10 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('user/profile', [ProfileController::class, 'index'])->name('user.profile');
 });
+
+Route::get('/divisions', [LocationController::class, 'getDivisions']);
+Route::get('/districts/{division}', [LocationController::class, 'getDistricts']);
+Route::get('/thanas/{district}', [LocationController::class, 'getThanas']);
 
 Route::get('/language/{locale}', function ($locale) {
     if (!array_key_exists($locale, config('languages.supported'))) {

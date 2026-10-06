@@ -266,7 +266,7 @@ export default function Index({ hospital }) {
             href: route('hospital.index'),
         },
     ];
-    console.log(hospital.data);
+    console.log(hospital);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Hospitals" />

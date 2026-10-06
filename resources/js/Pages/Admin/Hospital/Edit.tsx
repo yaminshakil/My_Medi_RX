@@ -1,18 +1,30 @@
-import React, { useState, useEffect } from "react";
-import Authenticated from '@/Layouts/Authenticated';
-import Button from '@/Components/Button';
-import Input from '@/Components/Input';
-import InputError from '@/Components/InputError';
-import Label from '@/Components/Label';
-import { Head, Link, useForm, router, usePage } from '@inertiajs/react';
-import Checkbox from '@/Components/Checkbox';
-import TextArea from '@/Components/TextArea';
+import React, { useEffect } from 'react';
+import AppLayout from '@/Layouts/app-layout';
+import { Head, usePage, useForm, router } from '@inertiajs/react';
+
+import { Hospital, ArrowLeft, Save, Upload, Image as ImageIcon } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Textarea } from '@/Components/ui/textarea';
+import { Label } from '@/Components/ui/label';
+import { Checkbox } from '@/Components/ui/checkbox';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/Components/ui/card';
+
 import GeoLocation from '@/Components/GeoLocation';
 import BannerCropper from '@/Components/BannerCropper';
+import LogoCropper from '@/Components/LogoCropper';
 
 export default function Edit(props) {
     const { hospital } = usePage().props;
-    console.log(hospital.data[0].banner_url);
+    console.log(hospital.data[0].logo_image_url);
     const { data, setData, post, processing, errors, reset } = useForm({
         hospital_name: hospital.data[0].hospital_name || '',
         hospital_logo: hospital.data[0].hospital_logo || '',
@@ -53,174 +65,411 @@ export default function Edit(props) {
         setData({ ...data, [e.target.name]: value });
     };
 
+    const isAdmin = usePage().props.auth?.role?.slug === 'admin';
 
+    const handleLogoChange = (e) => {
+        const file = e.target.files?.[0];
 
+        if (file) {
+            setData('hospital_logo', file);
+        }
+    };
+    console.log(hospital.data[0].banner_url);
     return (
-        <Authenticated
-            auth={props.auth}
-            errors={props.errors}
-            menu={props.menu}
-            dashboardlogoUrl={props.dashboardlogoUrl}
+        <AppLayout
+
         >
-            <div className="container mx-4 my-12">
-                <Head title="Edit Hospital" />
-                <div className="flex items-center justify-end mt-4">
-                    <button
-                        type='button'
-                        className={
-                            `ml-4 bg-lime-700 inline-flex items-center px-4 py-2 bg-gray-900 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest active:bg-gray-900 transition ease-in-out duration-150`
-                        }
-                        onClick={() => { router.visit(route('hospital.index'), { method: 'get' }) }}
-                    >
-                        Back
-                    </button>
+            <Head title="Create Hospital" />
+
+            <div className="container mx-auto max-w-6xl px-4 py-8">
+                {/* Page Header */}
+                <div className="mb-6 flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10">
+                        <Hospital className="h-6 w-6 text-primary" />
+                    </div>
+
+                    <div>
+                        <h1 className="text-2xl font-semibold tracking-tight">
+                            Create Hospital
+                        </h1>
+                        <p className="text-sm text-muted-foreground">
+                            Add a new hospital to the system.
+                        </p>
+                    </div>
                 </div>
 
-                <form className="w-full sm:w-2/3 mx-auto pb-4" onSubmit={submit}>
-                    <fieldset className="border border-solid border-gray-300 p-3 mt-4">
-                        <legend>Edit Hospital</legend>
-                        <div>
-                            <Label forInput="hospital_name" value="Hospital Name" />
-                            <Input
-                                type="text"
-                                name="hospital_name"
-                                value={data.hospital_name}
-                                className="mt-1 block w-full"
-                                autoComplete="hospital_name"
-                                isFocused={true}
-                                handleChange={onHandleChange}
-                                required
-                            />
-                            <InputError message={errors.hospital_name} className="mt-2" />
-                        </div>
+                <form onSubmit={submit}>
+                    <Card>
+                        <CardHeader className="border-b">
+                            <CardTitle className="flex items-center gap-2">
+                                <Hospital className="h-5 w-5" />
+                                Hospital Information
+                            </CardTitle>
 
-                        <div className="mt-4">
-                            <Label forInput="hospital_description" value="Hospital Description *" />
-                            <TextArea
-                                name="hospital_description"
-                                value={data.hospital_description}
-                                className="mt-1 block w-full h-36"
-                                autoComplete="hospital_description"
-                                handleChange={onHandleChange}
+                            <CardDescription>
+                                Enter the hospital details, contact information,
+                                location and branding.
+                            </CardDescription>
+                        </CardHeader>
 
-                            />
+                        <CardContent className="space-y-8 pt-6">
+                            {/* Basic Information */}
+                            <section>
+                                <div className="mb-4">
+                                    <h2 className="text-base font-semibold">
+                                        Basic Information
+                                    </h2>
+                                    <p className="text-sm text-muted-foreground">
+                                        Provide the hospital's basic details.
+                                    </p>
+                                </div>
 
-                            <InputError message={errors.hospital_description} className="mt-2" />
-                        </div>
+                                <div className="grid gap-5 md:grid-cols-2">
+                                    {/* Hospital Name */}
+                                    <div className="space-y-2 md:col-span-2">
+                                        <Label htmlFor="hospital_name">
+                                            Hospital Name
+                                            <span className="ml-1 text-destructive">
+                                                *
+                                            </span>
+                                        </Label>
 
-                        <div className="mt-4">
-                            <Label forInput="mobile_number" value="Mobile Number" />
-                            <Input
-                                type="text"
-                                name="mobile_number"
-                                value={data.mobile_number}
-                                className="mt-1 block w-full"
-                                autoComplete="mobile_number"
-                                isFocused={true}
-                                handleChange={onHandleChange}
-                                required
-                            />
-                            <InputError message={errors.mobile_number} className="mt-2" />
-                        </div>
+                                        <Input
+                                            id="hospital_name"
+                                            name="hospital_name"
+                                            value={data.hospital_name}
+                                            onChange={onHandleChange}
+                                            placeholder="Enter hospital name"
+                                            autoFocus
+                                            required
+                                        />
 
-                        <div className="mt-4">
-                            <Label forInput="phone_number" value="Phone Number" />
-                            <Input
-                                type="text"
-                                name="phone_number"
-                                value={data.phone_number}
-                                className="mt-1 block w-full"
-                                autoComplete="phone_number"
-                                isFocused={true}
-                                handleChange={onHandleChange}
+                                        {errors.hospital_name && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.hospital_name}
+                                            </p>
+                                        )}
+                                    </div>
 
-                            />
-                            <InputError message={errors.phone_number} className="mt-2" />
-                        </div>
+                                    {/* Description */}
+                                    <div className="space-y-2 md:col-span-2">
+                                        <Label htmlFor="hospital_description">
+                                            Description
+                                        </Label>
 
-                        <div className="mt-4">
-                            <Label forInput="hospital_url" value="Hospital Url" />
-                            <Input
-                                type="text"
-                                name="hospital_url"
-                                value={data.hospital_url}
-                                className="mt-1 block w-full"
-                                autoComplete="hospital_url"
-                                isFocused={true}
-                                handleChange={onHandleChange}
+                                        <Textarea
+                                            id="hospital_description"
+                                            name="hospital_description"
+                                            value={data.hospital_description}
+                                            onChange={onHandleChange}
+                                            placeholder="Write a short description about the hospital..."
+                                            className="min-h-[120px]"
+                                        />
 
-                            />
-                            <InputError message={errors.hospital_url} className="mt-2" />
-                        </div>
+                                        {errors.hospital_description && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.hospital_description}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            </section>
 
-                        <div className="mt-4">
-                            <Label forInput="address" value="Hospital Address" />
-                            <TextArea
-                                name="address"
-                                value={data.address}
-                                className="mt-1 block w-full"
-                                autoComplete="address"
-                                handleChange={onHandleChange}
-                                required={true}
-                            />
+                            {/* Contact Information */}
+                            <section className="border-t pt-6">
+                                <div className="mb-4">
+                                    <h2 className="text-base font-semibold">
+                                        Contact Information
+                                    </h2>
+                                    <p className="text-sm text-muted-foreground">
+                                        Add phone and website information.
+                                    </p>
+                                </div>
 
-                            <InputError message={errors.address} className="mt-2" />
-                        </div>
+                                <div className="grid gap-5 md:grid-cols-2">
+                                    {/* Mobile */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="mobile_number">
+                                            Mobile Number
+                                            <span className="ml-1 text-destructive">
+                                                *
+                                            </span>
+                                        </Label>
 
-                        <GeoLocation data={data} setData={setData} errors={errors} />
+                                        <Input
+                                            id="mobile_number"
+                                            name="mobile_number"
+                                            value={data.mobile_number}
+                                            onChange={onHandleChange}
+                                            placeholder="01XXXXXXXXX"
+                                            required
+                                        />
 
-                        <div className="mt-4 flex justify-start items-center w-full">
-                            <Label className="w-28 text-left mr-1" forInput="sort_order" value="Display Order" />
-                            <Input
-                                type="number"
-                                name="sort_order"
-                                value={data.sort_order}
-                                className="mt-1 block w-20"
-                                autoComplete="sort_order"
-                                isFocused={true}
-                                handleChange={onHandleChange}
-                            />
-                            <InputError message={errors.sort_order} className="mt-2" />
-                        </div>
+                                        {errors.mobile_number && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.mobile_number}
+                                            </p>
+                                        )}
+                                    </div>
 
-                        <div className="mt-4 w-full">
-                            <Label forInput="hospital_logo" value="Hospital Logo (Dim 800x800, png, jpg)" />
+                                    {/* Phone */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="phone_number">
+                                            Phone Number
+                                        </Label>
 
-                            <input className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary" accept="image/*" type="file" name="hospital_logo" value={''} onChange={e => { setData('hospital_logo', e.target?.files[0]); }} />
-                            {data.hospital_logo instanceof File ? <img className="mt-1" width="200" src={URL.createObjectURL(data.hospital_logo)} /> : data.hospital_logo ? <img className="mt-1" width="200" src={usePage().props?.imageUrl + '/storage/' + data.hospital_logo} /> : null}
-                            <InputError message={errors.hostpital_log} className="mt-2" />
-                        </div>
-                        {/* Banner Cropping Section */}
-                        <div className="mt-4 w-full">
-                            <Label forInput="banner_url" value="Hospital Banner (16:9 Aspect Ratio)" />
-                            <BannerCropper
-                                data={data}
-                                setData={setData}
-                                initialImage={hospital.data[0].banner_url ? `/storage/${hospital.data[0].banner_url}` : null}
-                                initialCropData={hospital.data[0].banner_crop_data}
-                            />
-                            <InputError message={errors.banner_url} className="mt-2" />
-                            <InputError message={errors.banner_crop_data} className="mt-2" />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4 mt-4">
-                            <div className="col-span-1 mt-4">
-                                <label className="flex items-center">
-                                    <Checkbox name="status" value={data.status} handleChange={onHandleChange} />
+                                        <Input
+                                            id="phone_number"
+                                            name="phone_number"
+                                            value={data.phone_number}
+                                            onChange={onHandleChange}
+                                            placeholder="Enter phone number"
+                                        />
 
-                                    <span className="ml-2 text-sm text-gray-600">Is Active</span>
-                                </label>
-                                <InputError message={errors.status} className="mt-2" />
-                            </div>
-                        </div>
+                                        {errors.phone_number && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.phone_number}
+                                            </p>
+                                        )}
+                                    </div>
 
-                        <div className="flex items-center justify-end mt-4">
-                            <Button className="ml-4 bg-lime-700" processing={processing}>
-                                Save
+                                    {/* Website */}
+                                    <div className="space-y-2 md:col-span-2">
+                                        <Label htmlFor="hospital_url">
+                                            Website URL
+                                        </Label>
+
+                                        <Input
+                                            id="hospital_url"
+                                            name="hospital_url"
+                                            value={data.hospital_url}
+                                            onChange={onHandleChange}
+                                            placeholder="https://example.com"
+                                        />
+
+                                        {errors.hospital_url && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.hospital_url}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* Address */}
+                            <section className="border-t pt-6">
+                                <div className="mb-4">
+                                    <h2 className="text-base font-semibold">
+                                        Location
+                                    </h2>
+                                    <p className="text-sm text-muted-foreground">
+                                        Enter the hospital address and geographic
+                                        information.
+                                    </p>
+                                </div>
+
+                                <div className="space-y-5">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="address">
+                                            Address
+                                            <span className="ml-1 text-destructive">
+                                                *
+                                            </span>
+                                        </Label>
+
+                                        <Textarea
+                                            id="address"
+                                            name="address"
+                                            value={data.address}
+                                            onChange={onHandleChange}
+                                            placeholder="Enter complete hospital address"
+                                            className="min-h-[100px]"
+                                            required
+                                        />
+
+                                        {errors.address && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.address}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <GeoLocation
+                                        data={data}
+                                        setData={setData}
+                                        errors={errors}
+                                    />
+                                </div>
+                            </section>
+
+                            {/* Admin Settings */}
+                            {isAdmin && (
+                                <section className="border-t pt-6">
+                                    <div className="mb-4">
+                                        <h2 className="text-base font-semibold">
+                                            Admin Settings
+                                        </h2>
+                                        <p className="text-sm text-muted-foreground">
+                                            Configure display and visibility settings.
+                                        </p>
+                                    </div>
+
+                                    <div className="grid gap-5 md:grid-cols-2">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="sort_order">
+                                                Display Order
+                                            </Label>
+
+                                            <Input
+                                                id="sort_order"
+                                                type="number"
+                                                name="sort_order"
+                                                value={data.sort_order}
+                                                onChange={onHandleChange}
+                                                min="0"
+                                            />
+
+                                            {errors.sort_order && (
+                                                <p className="text-sm text-destructive">
+                                                    {errors.sort_order}
+                                                </p>
+                                            )}
+                                        </div>
+
+                                        <div className="flex items-center gap-3 pt-7">
+                                            <Checkbox
+                                                id="status"
+                                                checked={data.status}
+                                                onCheckedChange={(checked) =>
+                                                    setData(
+                                                        'status',
+                                                        checked === true
+                                                    )
+                                                }
+                                            />
+
+                                            <div>
+                                                <Label
+                                                    htmlFor="status"
+                                                    className="cursor-pointer"
+                                                >
+                                                    Active Hospital
+                                                </Label>
+
+                                                <p className="text-xs text-muted-foreground">
+                                                    Hospital will be visible to users.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {errors.status && (
+                                        <p className="mt-2 text-sm text-destructive">
+                                            {errors.status}
+                                        </p>
+                                    )}
+                                </section>
+                            )}
+
+                            {/* Hospital Logo */}
+                            <section className="border-t pt-6">
+                                <div className="mb-4">
+                                    <h2 className="text-base font-semibold">
+                                        Hospital Branding
+                                    </h2>
+                                    <p className="text-sm text-muted-foreground">
+                                        Upload your hospital logo and banner.
+                                    </p>
+                                </div>
+
+                                <div className="grid gap-6 md:grid-cols-2">
+                                    {/* Logo */}
+                                    <div className="flex flex-col items-center gap-4 rounded-lg border p-4">
+                                        <Label htmlFor="profile_image">Profile Image</Label>
+                                        <LogoCropper data={data} setData={setData} field="hospital_logo" initialImage={hospital.data[0].logo_image_url} />
+                                        {errors.hospital_logo && (
+                                            <p className="mt-2 text-sm text-destructive">
+                                                {errors.hospital_logo}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Banner */}
+                                    <div className="space-y-3">
+                                        <Label>
+                                            Hospital Banner
+                                        </Label>
+
+                                        <div className="rounded-lg border p-4">
+                                            <p className="mb-3 text-xs text-muted-foreground">
+                                                Recommended aspect ratio: 16:9
+                                            </p>
+
+                                            <BannerCropper
+                                                data={data}
+                                                setData={setData}
+                                                field="banner_url"
+                                                errors={errors}
+                                                initialImage={hospital.data[0].banner_url}
+                                                fieldCropData="banner_crop_data"
+                                            />
+                                        </div>
+
+                                        {errors.banner_url && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.banner_url}
+                                            </p>
+                                        )}
+
+                                        {errors.banner_crop_data && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.banner_crop_data}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            </section>
+                        </CardContent>
+
+                        {/* Footer Actions */}
+                        <div className="flex flex-col-reverse gap-3 border-t bg-muted/30 px-6 py-4 sm:flex-row sm:justify-end">
+                            {isAdmin && (
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() =>
+                                        router.visit(
+                                            route('hospital.index'),
+                                            { method: 'get' }
+                                        )
+                                    }
+                                    disabled={processing}
+                                >
+                                    <ArrowLeft className="mr-2 h-4 w-4" />
+                                    Back
+                                </Button>
+                            )}
+
+                            <Button
+                                type="submit"
+                                disabled={processing}
+                            >
+                                {processing ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Saving...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Save className="mr-2 h-4 w-4" />
+                                        Save Hospital
+                                    </>
+                                )}
                             </Button>
                         </div>
-                    </fieldset>
+                    </Card>
                 </form>
             </div>
-        </Authenticated>
+        </AppLayout>
     );
 }

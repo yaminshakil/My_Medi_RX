@@ -86,8 +86,8 @@ class Patient extends Model
 
     public function getProfileImageUrlAttribute()
     {
-        return $this->profileImage
-            ? asset('storage/'.$this->profileImage->path)
+        return $this->profile_image
+            ? asset('storage/'.$this->profile_image->path)
             : asset('images/patient.png');
     }
 

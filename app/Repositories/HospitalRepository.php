@@ -22,7 +22,7 @@ class HospitalRepository implements HospitalRepositoryInterface
             ->paginate($perPage)
             ->withQueryString();
 
-        return HospitalResource::collection($hospitals);
+        return $hospitals;
     }
 
     public function getHospital()
@@ -32,13 +32,9 @@ class HospitalRepository implements HospitalRepositoryInterface
 
     public function getHospitalById($uuid)
     {
-        $hospital = Hospital::where('uuid', $uuid)->get();
+        $hospital = Hospital::where('id', $uuid)->get();
         $hospital->load([
             'doctors' => fn ($q) => $q->with(['profile', 'specialties', 'specialties.parent', 'chambers']),
-            'services',
-            'ratings.user',
-            'offers',
-            'offers.offerable'
         ]);
 
         return HospitalResource::collection($hospital);
@@ -60,7 +56,6 @@ class HospitalRepository implements HospitalRepositoryInterface
     public function updateHospital($data, $id)
     {
         $hospital_logo = null;
-
         if (!empty($data['hospital_logo']) && $data['hospital_logo'] instanceof \Illuminate\Http\UploadedFile) {
             if ($data['prev_hospital_logo'] != null) {
                 Storage::disk('public')->delete($data['prev_hospital_logo']);

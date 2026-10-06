@@ -70,7 +70,7 @@ class PatientRepository implements PatientRepositoryInterface
 
         if (isset($data['profile_image'])) {
             $profileImagePath = $data['profile_image']->store('profiles', 'public');
-            $patient->profileImage()->create([
+            $patient->profile_image()->create([
                 'path' => $profileImagePath,
             ]);
         }
@@ -84,15 +84,15 @@ class PatientRepository implements PatientRepositoryInterface
 
         if (isset($data['profile_image'])) {
             // Delete old image if exists
-            if ($patient->profileImage) {
-                Storage::disk('public')->delete($this->user->profileImage->path);
-                $patient->profileImage()->delete();
+            if ($patient->profile_image) {
+                Storage::disk('public')->delete($this->user->profile_image->path);
+                $patient->profile_image()->delete();
             }
 
             // Store new
             $path = $data['profile_image']->store('profiles', 'public');
 
-            $patient->profileImage()->create([
+            $patient->profile_image()->create([
                 'path' => $path,
             ]);
         }

@@ -9,7 +9,8 @@ use Illuminate\Support\Str;
 
 class Hospital extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'hospital_name',
@@ -50,15 +51,15 @@ class Hospital extends Model
                     ->withTimestamps();
     }
 
-    public function services()
-    {
-        return $this->hasMany(DiagnosticService::class);
-    }
+    // public function services()
+    // {
+    //     return $this->hasMany(DiagnosticService::class);
+    // }
 
-    public function ratings()
-    {
-        return $this->hasMany(DiagnosticRating::class);
-    }
+    // public function ratings()
+    // {
+    //     return $this->hasMany(DiagnosticRating::class);
+    // }
 
     // ✅ Tell Laravel to use uuid instead of id for route binding
     public function getRouteKeyName()
@@ -75,10 +76,6 @@ class Hospital extends Model
         });
     }
 
-    public function offers()
-    {
-        return $this->morphMany(Offer::class, 'offerable');
-    }
 
     public function chambers()
     {
@@ -89,5 +86,14 @@ class Hospital extends Model
     public function getLogoImageUrlAttribute()
     {
         return $this->hospital_logo ? asset('storage/'.$this->hospital_logo) : null;
+    }
+
+    public function getBannerUrlAttribute()
+    {
+        $bannerUrl = $this->getRawOriginal('banner_url');
+
+        return $bannerUrl
+            ? asset('storage/' . $bannerUrl)
+            : null;
     }
 }

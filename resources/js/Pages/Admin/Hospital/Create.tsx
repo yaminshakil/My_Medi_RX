@@ -67,6 +67,11 @@ export default function Create(props) {
         );
     };
 
+    const onSelectHandleChange = (e) => {
+        let value = Array.from(e.target.selectedOptions, option => option.value);
+        setData({ ...data, [e.target.name]: value });
+    };
+
     const submit = (e) => {
         e.preventDefault();
 
