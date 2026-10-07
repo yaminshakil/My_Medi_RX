@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Interfaces\HospitalRepositoryInterface;
 use App\Models\Setting;
+use App\Http\Requests\Hospital\HospitalStoreRequest;
 
 class HospitalController extends Controller
 {
@@ -48,14 +49,9 @@ class HospitalController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(HospitalStoreRequest $request)
     {
-        $request->validate([
-            'hospital_name' => 'required|string|max:255',
-            'mobile_number' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-        ]);
-        $this->hospitalRepository->createHospital($request->all());
+        $this->hospitalRepository->createHospital($request->validated());
         return redirect()->intended('/admin/hospitals')->with('success', 'Your Hospital has been created successfully!');
     }
 
@@ -64,7 +60,11 @@ class HospitalController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $hospital = $this->hospitalRepository->getHospitalById($id);
+
+        return Inertia::render('Admin/Hospital/Show', [
+            'hospital' => $hospital,
+        ]);
     }
 
     /**

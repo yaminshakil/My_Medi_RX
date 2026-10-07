@@ -6,7 +6,10 @@ use App\Interfaces\HospitalRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\HospitalResource;
 use App\Models\Hospital;
+use App\Models\HospitalType;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class HospitalRepository implements HospitalRepositoryInterface
 {

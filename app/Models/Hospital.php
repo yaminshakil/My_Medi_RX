@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Hospital extends Model
 {
@@ -14,12 +16,14 @@ class Hospital extends Model
 
     protected $fillable = [
         'hospital_name',
+        'hospital_type_id',
         'address',
         'thana_id',
         'district_id',
         'division_id',
         'hospital_description',
         'hospital_url',
+        'email',
         'mobile_number',
         'emergency_contact',
         'phone_number',
@@ -40,7 +44,8 @@ class Hospital extends Model
     protected $dates = ['deleted_at'];
 
     protected $casts = [
-        'banner_crop_data' => 'array'
+        'banner_crop_data' => 'array',
+        'verified_at' => 'datetime',
     ];
 
     protected $appends = ['logo_image_url'];
@@ -95,5 +100,19 @@ class Hospital extends Model
         return $bannerUrl
             ? asset('storage/' . $bannerUrl)
             : null;
+    }
+    public function hospitalType(): BelongsTo
+    {
+        return $this->belongsTo(HospitalType::class);
+    }
+
+    public function verificationDocuments(): HasMany
+    {
+        return $this->hasMany(HospitalVerificationDocument::class);
+    }
+
+    public function verifier(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'verified_by');
     }
 }

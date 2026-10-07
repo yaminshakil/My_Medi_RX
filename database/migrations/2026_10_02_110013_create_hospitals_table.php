@@ -13,7 +13,12 @@ return new class () extends Migration {
         Schema::create('hospitals', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('hospital_type')->nullable();
+            $table->foreignId('hospital_type_id')
+                ->nullable()
+                ->after('hospital_name')
+                ->constrained('hospital_types')
+                ->nullOnDelete();
+            $table->string('email')->nullable();
             $table->string('hospital_name');
             $table->string('mobile_number');
             $table->string('emergency_contact')->nullable();
