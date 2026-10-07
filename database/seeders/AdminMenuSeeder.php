@@ -22,6 +22,7 @@ class AdminMenuSeeder extends Seeder
         $map['users'] = DB::table('menus')->insertGetId($this->data('Users', '/admin/users', 'Users', 8));
         $map['roles'] = DB::table('menus')->insertGetId($this->data('Roles', '/admin/roles', 'Settings', 9));
         $map['permissions'] = DB::table('menus')->insertGetId($this->data('Permissions', '/admin/permissions', 'ShieldCheck', 10));
+        $map['medicines_parent'] = DB::table('menus')->insertGetId($this->data('Medicines', null, 'Pill', 13));
         $map['menus_parent'] = DB::table('menus')->insertGetId($this->data('Menus', null, 'Menu', 13));
         $map['settings'] = DB::table('menus')->insertGetId($this->data('System Settings', '/admin/settings/system', 'Settings', 14));
 
@@ -31,6 +32,9 @@ class AdminMenuSeeder extends Seeder
         $map['doctors'] = DB::table('menus')->insertGetId($this->data('Doctors', '/admin/doctors', 'Stethoscope', 0, $map['doctors_parent']));
         $map['doctors_specialties'] = DB::table('menus')->insertGetId($this->data('MedicalSpecialties', '/admin/medical-specialties', 'Stethoscope', 1, $map['doctors_parent']));
         $map['patients_child'] = DB::table('menus')->insertGetId($this->data('Patients', '/admin/patients', 'Users', 0, $map['patients_parent']));
+        $map['medicines_list'] = DB::table('menus')->insertGetId($this->data('Medicines', '/admin/medicines', 'Pill', 0, $map['medicines_parent']));
+        $map['medicines_manufacturers'] = DB::table('menus')->insertGetId($this->data('Manufacturers', '/admin/manufacturers', 'Building2', 1, $map['medicines_parent']));
+        $map['medicines_manufacturers'] = DB::table('menus')->insertGetId($this->data('Manufacturers', '/admin/manufacturers', 'Building2', 1, $map['medicines_parent']));
 
         // Role Assignments
         $this->assignRoles($map['dashboard'], [1]);

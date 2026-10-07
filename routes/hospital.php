@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Hospital\HospitalController;
 use App\Http\Controllers\Frontend\Diagnostic\DiagnosticController;
+use App\Http\Controllers\Admin\Hospital\HospitalVerificationController;
 
 Route::middleware('web')->group(function () {
     Route::get('/diagnostics', [DiagnosticController::class, 'index'])->name('diagnostics.index');
@@ -24,3 +25,47 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin'])-
     Route::delete('services/delete/{id}', [DiagnosticController::class, 'deleteDiagnosticServices'])->name('diagnostic.servies.destroy');
     Route::post('/diagnostics/{id}/rate', [DiagnosticController::class, 'storeRating'])->name('diagnostics.rate');
 });
+
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->group(function () {
+        Route::get(
+            'hospitals/{uuid}/verification',
+            [HospitalVerificationController::class, 'show']
+        )->name('hospital.verification');
+
+        Route::post(
+            'hospitals/{uuid}/verification/documents',
+            [HospitalVerificationController::class, 'uploadDocument']
+        )->name('hospital.verification.documents.store');
+
+        Route::delete(
+            'hospital-verification-documents/{id}',
+            [HospitalVerificationController::class, 'destroyDocument']
+        )->name('hospital.verification.documents.destroy');
+
+        Route::post(
+            'hospital-verification-documents/{id}/approve',
+            [HospitalVerificationController::class, 'approveDocument']
+        )->name('hospital.verification.documents.approve');
+
+        Route::post(
+            'hospital-verification-documents/{id}/reject',
+            [HospitalVerificationController::class, 'rejectDocument']
+        )->name('hospital.verification.documents.reject');
+
+        Route::post(
+            'hospitals/{uuid}/verification/approve',
+            [HospitalVerificationController::class, 'approveHospital']
+        )->name('hospital.verification.approve');
+
+        Route::post(
+            'hospitals/{uuid}/verification/reject',
+            [HospitalVerificationController::class, 'rejectHospital']
+        )->name('hospital.verification.reject');
+
+        Route::post(
+            'hospitals/{uuid}/verification/suspend',
+            [HospitalVerificationController::class, 'suspendHospital']
+        )->name('hospital.verification.suspend');
+    });

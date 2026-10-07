@@ -43,10 +43,7 @@ return new class () extends Migration {
 
             $table->timestamps();
 
-            $table->index([
-                'hospital_id',
-                'verification_status',
-            ]);
+            $table->index(['hospital_id', 'verification_status'], 'hvd_hospital_status_idx');
         });
     }
 

@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Interfaces\HospitalRepositoryInterface;
 use App\Models\Setting;
 use App\Http\Requests\Hospital\HospitalStoreRequest;
+use App\Models\HospitalType;
 
 class HospitalController extends Controller
 {
@@ -30,7 +31,7 @@ class HospitalController extends Controller
         }
         $perPage = $request->input('per_page', $recordsPerPage); // default 10
         $hospital = $this->hospitalRepository->getAllHospital($perPage, $search);
-        return Inertia::render('Admin/Hospital/Main', [
+        return Inertia::render('Admin/Hospitals/Main', [
             'hospital' => $hospital,
             'status' => session('status'),
         ]);
@@ -41,8 +42,10 @@ class HospitalController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/Hospital/Create', [
-            'status' => session('status'),
+        return Inertia::render('Admin/Hospitals/Create', [
+            'hospitalTypes' => HospitalType::where('status', true)
+                ->orderBy('sort_order')
+                ->get(['id', 'name']),
         ]);
     }
 
@@ -52,7 +55,7 @@ class HospitalController extends Controller
     public function store(HospitalStoreRequest $request)
     {
         $this->hospitalRepository->createHospital($request->validated());
-        return redirect()->intended('/admin/hospitals')->with('success', 'Your Hospital has been created successfully!');
+        return redirect()->intended('/Admin/Hospitals')->with('success', 'Your Hospital has been created successfully!');
     }
 
     /**
@@ -62,7 +65,7 @@ class HospitalController extends Controller
     {
         $hospital = $this->hospitalRepository->getHospitalById($id);
 
-        return Inertia::render('Admin/Hospital/Show', [
+        return Inertia::render('Admin/Hospitals/Show', [
             'hospital' => $hospital,
         ]);
     }
@@ -74,7 +77,7 @@ class HospitalController extends Controller
     {
         $hospital = $this->hospitalRepository->getHospitalById($id);
 
-        return Inertia::render('Admin/Hospital/Edit', [
+        return Inertia::render('Admin/Hospitals/Edit', [
                 'hospital' => $hospital,
                 'status' => session('status'),
             ]);
@@ -91,7 +94,7 @@ class HospitalController extends Controller
             'address' => 'required|string|max:255',
         ]);
         $this->hospitalRepository->updateHospital($request->all(), $id);
-        return redirect()->intended('/admin/hospitals')->with('success', 'Your Hospital has been updated successfully!');
+        return redirect()->intended('/Admin/Hospitals')->with('success', 'Your Hospital has been updated successfully!');
     }
 
     /**

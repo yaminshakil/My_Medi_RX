@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 class HospitalRepository implements HospitalRepositoryInterface
 {
-    public function getAllHospital($perPage = 10, $search = null)
+    public function getAllHospital($perPage = 10, $search = null, $verification_status = null)
     {
         $hospitals = Hospital::where('status', 1);
 
@@ -22,6 +22,27 @@ class HospitalRepository implements HospitalRepositoryInterface
         }
 
         $hospitals = $hospitals->orderBy('sort_order', 'ASC')
+            ->paginate($perPage)
+            ->withQueryString();
+
+        $hospitals = Hospital::query()
+            ->with('hospitalType')
+            ->when(
+                $search,
+                fn ($query, $search) =>
+                    $query->where(function ($q) use ($search) {
+                        $q->where('hospital_name', 'like', "%{$search}%")
+                            ->orWhere('mobile_number', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    })
+            )
+            ->when(
+                $verification_status,
+                fn ($query, $status) =>
+                    $query->where('verification_status', $status)
+            )
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
             ->paginate($perPage)
             ->withQueryString();
 
