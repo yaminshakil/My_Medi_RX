@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Hospital;
+namespace App\Http\Controllers\Admin\Hospitals;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -54,7 +54,8 @@ class HospitalController extends Controller
      */
     public function store(HospitalStoreRequest $request)
     {
-        $this->hospitalRepository->createHospital($request->validated());
+        $data = $request->validated();
+        $this->hospitalRepository->createHospital($data);
         return redirect()->intended('/Admin/Hospitals')->with('success', 'Your Hospital has been created successfully!');
     }
 

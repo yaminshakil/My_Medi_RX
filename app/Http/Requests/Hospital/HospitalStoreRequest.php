@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Hospital;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
 
 class HospitalStoreRequest extends FormRequest
 {
@@ -10,6 +12,14 @@ class HospitalStoreRequest extends FormRequest
     {
         return true;
     }
+
+    // protected function failedValidation(Validator $validator)
+    // {
+    //     dd([
+    //         'validation_errors' => $validator->errors()->toArray(),
+    //         'request_data_sent' => $this->all(),
+    //     ]);
+    // }
 
     public function rules(): array
     {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppLayout from '@/Layouts/app-layout';
 import { Head, usePage, useForm, router } from '@inertiajs/react';
 
@@ -20,10 +20,18 @@ import {
 
 import GeoLocation from '@/Components/GeoLocation';
 import BannerCropper from '@/Components/BannerCropper';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/Components/ui/select';
 
 export default function Create(props) {
     const { data, setData, post, processing, errors, reset } = useForm({
         hospital_name: '',
+        hospital_type_id: '',
         hospital_logo: '',
         banner_url: '',
         banner_crop_data: '',
@@ -38,6 +46,8 @@ export default function Create(props) {
         sort_order: 0,
         status: true,
     });
+
+    const [loadingHospitals, setLoadingHospitals] = useState(false);
 
     const isAdmin = usePage().props.auth?.role?.slug === 'admin';
 
@@ -86,6 +96,22 @@ export default function Create(props) {
         if (file) {
             setData('hospital_logo', file);
         }
+    };
+
+    /**
+   * Division change
+   */
+    const handleTypeChange = (value: string) => {
+        const divisionId = Number(value);
+
+        setData('division_id', divisionId);
+
+        // Reset dependent fields
+        setData('district_id', null);
+        setData('thana_id', null);
+
+        setDistricts([]);
+        setThanas([]);
     };
 
     return (
@@ -160,6 +186,42 @@ export default function Create(props) {
                                         {errors.hospital_name && (
                                             <p className="text-sm text-destructive">
                                                 {errors.hospital_name}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="hospital_type_id">Hospital Type</Label>
+
+                                        <Select
+                                            value={data.hospital_type_id?.toString() ?? ''}
+                                            onValueChange={handleTypeChange}
+                                        >
+                                            <SelectTrigger id="hospital_type_id" className="w-full">
+                                                <SelectValue
+                                                    placeholder={
+                                                        loadingHospitals
+                                                            ? 'Loading hospital types...'
+                                                            : 'Select Hospital Type'
+                                                    }
+                                                />
+                                            </SelectTrigger>
+
+                                            <SelectContent>
+                                                {hospitals.map((hospital) => (
+                                                    <SelectItem
+                                                        key={hospital.id}
+                                                        value={hospital.id.toString()}
+                                                    >
+                                                        {hospital.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+
+                                        {errors.hospital_type_id && (
+                                            <p className="text-sm font-medium text-destructive">
+                                                {errors.hospital_type_id}
                                             </p>
                                         )}
                                     </div>

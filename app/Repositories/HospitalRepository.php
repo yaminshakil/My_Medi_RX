@@ -15,15 +15,15 @@ class HospitalRepository implements HospitalRepositoryInterface
 {
     public function getAllHospital($perPage = 10, $search = null, $verification_status = null)
     {
-        $hospitals = Hospital::where('status', 1);
+        // $hospitals = Hospital::where('status', 1);
 
-        if ($search) {
-            $hospitals->where('hospital_name', 'like', "%{$search}%");
-        }
+        // if ($search) {
+        //     $hospitals->where('hospital_name', 'like', "%{$search}%");
+        // }
 
-        $hospitals = $hospitals->orderBy('sort_order', 'ASC')
-            ->paginate($perPage)
-            ->withQueryString();
+        // $hospitals = $hospitals->orderBy('sort_order', 'ASC')
+        //     ->paginate($perPage)
+        //     ->withQueryString();
 
         $hospitals = Hospital::query()
             ->with('hospitalType')

@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\Hospital\HospitalController;
+use App\Http\Controllers\Admin\Hospitals\HospitalController;
 use App\Http\Controllers\Frontend\Diagnostic\DiagnosticController;
-use App\Http\Controllers\Admin\Hospital\HospitalVerificationController;
+use App\Http\Controllers\Admin\Hospitals\HospitalVerificationController;
 
 Route::middleware('web')->group(function () {
     Route::get('/diagnostics', [DiagnosticController::class, 'index'])->name('diagnostics.index');

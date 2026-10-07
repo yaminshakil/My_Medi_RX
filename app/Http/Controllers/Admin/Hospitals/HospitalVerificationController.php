@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Hospital;
+namespace App\Http\Controllers\Admin\Hospitals;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hospital;
