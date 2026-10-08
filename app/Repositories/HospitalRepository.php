@@ -66,15 +66,38 @@ class HospitalRepository implements HospitalRepositoryInterface
 
     public function createHospital($data)
     {
-        $hospital_logo = null;
-        if (!empty($data['hospital_logo']) && $data['hospital_logo'] instanceof \Illuminate\Http\UploadedFile) {
-            $data['hospital_logo'] = $data['hospital_logo']->store('hospitals', 'public');
-        }
-        if (!empty($data['banner_url']) && $data['banner_url'] instanceof \Illuminate\Http\UploadedFile) {
-            $data['banner_url'] = $data['banner_url']->store('hospitals', 'public');
-        }
-        $data += ['created_by' => Auth::user()->id];
-        return Hospital::create($data);
+        $hospital = null;
+        DB::transaction(function () use ($data, &$hospital) {
+            $hospital = new Hospital();
+            $hospital->hospital_name = $data['hospital_name'];
+            $hospital->hospital_type_id = $data['hospital_type_id'];
+            $hospital->address = $data['address'];
+            $hospital->hospital_description = $data['hospital_description'] ?? null;
+            $hospital->email = $data['email'] ?? null;
+            $hospital->mobile_number = $data['mobile_number'] ?? null;
+            $hospital->emergency_contact = $data['emergency_contact'] ?? null;
+            $hospital->phone_number = $data['phone_number'] ?? null;
+            if (!empty($data['hospital_logo']) && $data['hospital_logo'] instanceof \Illuminate\Http\UploadedFile) {
+                $hospital->hospital_logo = $data['hospital_logo']->store('hospitals', 'public');
+            }
+            if (!empty($data['banner_url']) && $data['banner_url'] instanceof \Illuminate\Http\UploadedFile) {
+                $hospital->banner_url = $data['banner_url']->store('hospitals', 'public');
+            }
+            $hospital->sort_order = 0;
+            $hospital->status = 0; // Set default status to inactive
+            $hospital->verification_status = 'pending'; // Set default verification status to pending
+            $hospital->created_by = Auth::user()->id;
+            $hospital->save();
+        });
+        // $hospital_logo = null;
+        // if (!empty($data['hospital_logo']) && $data['hospital_logo'] instanceof \Illuminate\Http\UploadedFile) {
+        //     $data['hospital_logo'] = $data['hospital_logo']->store('hospitals', 'public');
+        // }
+        // if (!empty($data['banner_url']) && $data['banner_url'] instanceof \Illuminate\Http\UploadedFile) {
+        //     $data['banner_url'] = $data['banner_url']->store('hospitals', 'public');
+        // }
+
+        return $hospital;
     }
 
     public function updateHospital($data, $id)

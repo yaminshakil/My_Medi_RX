@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppLayout from '@/Layouts/app-layout';
 import { Head, usePage, useForm, router } from '@inertiajs/react';
 
@@ -21,12 +21,20 @@ import {
 import GeoLocation from '@/Components/GeoLocation';
 import BannerCropper from '@/Components/BannerCropper';
 import LogoCropper from '@/Components/LogoCropper';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/Components/ui/select';
 
 export default function Edit(props) {
-    const { hospital } = usePage().props;
-    console.log(hospital.data[0].logo_image_url);
+    const { hospital, hospitalTypes } = usePage().props;
+    const [loadingHospitals, setLoadingHospitals] = useState(false);
     const { data, setData, post, processing, errors, reset } = useForm({
         hospital_name: hospital.data[0].hospital_name || '',
+        hospital_type_id: hospital.data[0].hospital_type_id || '',
         hospital_logo: hospital.data[0].hospital_logo || '',
         address: hospital.data[0].address || '',
         hospital_description: hospital.data[0].hospital_description || '',
@@ -42,7 +50,16 @@ export default function Edit(props) {
         banner_url: null,
         prev_banner_url: hospital.data[0].banner_url || '',
         banner_crop_data: hospital.data[0].banner_crop_data,
+        registration_no: hospital.data[0].registration_no || '',
+        service_time: hospital.data[0].service_time || '',
+        organization_notice: hospital.data[0].organization_notice || '',
+        latitude: hospital.data[0].latitude || 00.000000,
+        longitude: hospital.data[0].longitude || 00.000000,
+        verification_status: hospital.data[0].verification_status || 'pending',
+        verification_note: hospital.data[0].verification_note || '',
     });
+
+    console.log('thana_id', hospital.data[0]);
 
     useEffect(() => {
         return () => {
@@ -74,7 +91,14 @@ export default function Edit(props) {
             setData('hospital_logo', file);
         }
     };
-    console.log(hospital.data[0].banner_url);
+    /**
+  * Hospital type change
+  */
+    const handleTypeChange = (value: string) => {
+        const hospitalTypeId = Number(value);
+
+        setData('hospital_type_id', hospitalTypeId);
+    };
     return (
         <AppLayout
 
@@ -147,6 +171,42 @@ export default function Edit(props) {
                                         {errors.hospital_name && (
                                             <p className="text-sm text-destructive">
                                                 {errors.hospital_name}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="hospital_type_id">Hospital Type</Label>
+
+                                        <Select
+                                            value={data.hospital_type_id?.toString() ?? ''}
+                                            onValueChange={handleTypeChange}
+                                        >
+                                            <SelectTrigger id="hospital_type_id" className="w-full">
+                                                <SelectValue
+                                                    placeholder={
+                                                        loadingHospitals
+                                                            ? 'Loading hospital types...'
+                                                            : 'Select Hospital Type'
+                                                    }
+                                                />
+                                            </SelectTrigger>
+
+                                            <SelectContent>
+                                                {hospitalTypes.map((type) => (
+                                                    <SelectItem
+                                                        key={type.id}
+                                                        value={type.id.toString()}
+                                                    >
+                                                        {type.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+
+                                        {errors.hospital_type_id && (
+                                            <p className="text-sm font-medium text-destructive">
+                                                {errors.hospital_type_id}
                                             </p>
                                         )}
                                     </div>

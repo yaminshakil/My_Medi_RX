@@ -29,6 +29,7 @@ import {
 } from '@/Components/ui/select';
 
 export default function Create(props) {
+    const { hospitalTypes } = usePage().props;
     const { data, setData, post, processing, errors, reset } = useForm({
         hospital_name: '',
         hospital_type_id: '',
@@ -40,11 +41,18 @@ export default function Create(props) {
         hospital_url: '',
         mobile_number: '',
         phone_number: '',
+        registration_no: '',
+        service_time: '',
+        organization_notice: '',
+        latitude: '',
+        longitude: '',
         thana_id: '',
         district_id: '',
         division_id: '',
         sort_order: 0,
         status: true,
+        verification_status: 'pending',
+        verification_note: '',
     });
 
     const [loadingHospitals, setLoadingHospitals] = useState(false);
@@ -77,10 +85,6 @@ export default function Create(props) {
         );
     };
 
-    const onSelectHandleChange = (e) => {
-        let value = Array.from(e.target.selectedOptions, option => option.value);
-        setData({ ...data, [e.target.name]: value });
-    };
 
     const submit = (e) => {
         e.preventDefault();
@@ -99,19 +103,12 @@ export default function Create(props) {
     };
 
     /**
-   * Division change
+   * Hospital type change
    */
     const handleTypeChange = (value: string) => {
-        const divisionId = Number(value);
+        const hospitalTypeId = Number(value);
 
-        setData('division_id', divisionId);
-
-        // Reset dependent fields
-        setData('district_id', null);
-        setData('thana_id', null);
-
-        setDistricts([]);
-        setThanas([]);
+        setData('hospital_type_id', hospitalTypeId);
     };
 
     return (
@@ -208,12 +205,12 @@ export default function Create(props) {
                                             </SelectTrigger>
 
                                             <SelectContent>
-                                                {hospitals.map((hospital) => (
+                                                {hospitalTypes.map((type) => (
                                                     <SelectItem
-                                                        key={hospital.id}
-                                                        value={hospital.id.toString()}
+                                                        key={type.id}
+                                                        value={type.id.toString()}
                                                     >
-                                                        {hospital.name}
+                                                        {type.name}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>

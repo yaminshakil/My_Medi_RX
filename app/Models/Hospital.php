@@ -37,6 +37,10 @@ class Hospital extends Model
         'registration_no',
         'service_time',
         'organization_notice',
+        'verification_status',
+        'verified_at',
+        'verified_by',
+        'verification_note',
         'created_by',
         'updated_by'
     ];

@@ -42,10 +42,11 @@ class HospitalController extends Controller
      */
     public function create()
     {
+        $hospitalTypes = HospitalType::where('status', true)
+            ->orderBy('sort_order')
+            ->get(['id', 'name']);
         return Inertia::render('Admin/Hospitals/Create', [
-            'hospitalTypes' => HospitalType::where('status', true)
-                ->orderBy('sort_order')
-                ->get(['id', 'name']),
+            'hospitalTypes' => $hospitalTypes,
         ]);
     }
 
@@ -56,7 +57,7 @@ class HospitalController extends Controller
     {
         $data = $request->validated();
         $this->hospitalRepository->createHospital($data);
-        return redirect()->intended('/Admin/Hospitals')->with('success', 'Your Hospital has been created successfully!');
+        return redirect()->intended('/admin/hospitals')->with('success', 'Your Hospital has been created successfully!');
     }
 
     /**
@@ -77,9 +78,13 @@ class HospitalController extends Controller
     public function edit(string $id)
     {
         $hospital = $this->hospitalRepository->getHospitalById($id);
+        $hospitalTypes = HospitalType::where('status', true)
+            ->orderBy('sort_order')
+            ->get(['id', 'name']);
 
         return Inertia::render('Admin/Hospitals/Edit', [
                 'hospital' => $hospital,
+                'hospitalTypes' => $hospitalTypes,
                 'status' => session('status'),
             ]);
     }
@@ -95,7 +100,7 @@ class HospitalController extends Controller
             'address' => 'required|string|max:255',
         ]);
         $this->hospitalRepository->updateHospital($request->all(), $id);
-        return redirect()->intended('/Admin/Hospitals')->with('success', 'Your Hospital has been updated successfully!');
+        return redirect()->intended('/admin/hospitals')->with('success', 'Your Hospital has been updated successfully!');
     }
 
     /**

@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             CountriesTableSeeder::class,
             SettingSeeder::class,
             MedicalSpecialtiesSeeder::class,
+            HospitalTypeSeeder::class,
+            StaticTranslationsSeeder::class,
             SuperAdminSeeder::class,
         ]);
     }
