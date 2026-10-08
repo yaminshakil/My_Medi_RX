@@ -100,10 +100,7 @@ class Hospital extends Model
     public function getBannerUrlAttribute()
     {
         $bannerUrl = $this->getRawOriginal('banner_url');
-
-        return $bannerUrl
-            ? asset('storage/' . $bannerUrl)
-            : null;
+        return $bannerUrl ? asset('storage/'.$bannerUrl) : null;
     }
     public function hospitalType(): BelongsTo
     {

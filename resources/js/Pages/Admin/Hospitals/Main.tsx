@@ -14,7 +14,6 @@ import { Hospital } from 'lucide-react';
 export default function Index({ hospital }) {
     const { translations } = usePage<AppPageProps>().props;
     const { flash, filters } = usePage().props;
-    console.log(hospital);
     const [showConfirm, setShowConfirm] = useState(false);
     const [selectedHospital, setSelectedHospital] = useState<any>(null);
 
@@ -123,7 +122,7 @@ export default function Index({ hospital }) {
     const handleEdit: FormEventHandler = (item) => {
         router.get(
             item.edit_url ??
-            route('hospital.edit', item.id)
+            route('hospital.edit', { id: item.id })
         );
     };
 
@@ -265,11 +264,11 @@ export default function Index({ hospital }) {
             render: (item) => (
                 <span
                     className={`badge ${item.verification_status === 'approved'
-                        ? 'badge--success'
-                        : 'badge--warning'
+                        ? 'badge--success capitalize'
+                        : 'badge--warning capitalize'
                         }`}
                 >
-                    {item.verification_status === 'approved' ? 'Approved' : 'Pending'}
+                    {item.verification_status}
                 </span>
             ),
         },
@@ -364,7 +363,7 @@ export default function Index({ hospital }) {
 
                         {/* Pagination */}
                         <div className="mt-4 w-full">
-                            <Pagination items={hospital} />
+                            <Pagination items={hospital.meta} />
                         </div>
                     </div>
                 </div>

@@ -75,9 +75,9 @@ class HospitalController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $uuid)
     {
-        $hospital = $this->hospitalRepository->getHospitalById($id);
+        $hospital = $this->hospitalRepository->getHospitalById($uuid);
         $hospitalTypes = HospitalType::where('status', true)
             ->orderBy('sort_order')
             ->get(['id', 'name']);

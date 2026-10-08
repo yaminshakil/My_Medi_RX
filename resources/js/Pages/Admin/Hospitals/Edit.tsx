@@ -33,36 +33,37 @@ export default function Edit(props) {
     const { hospital, hospitalTypes } = usePage().props;
     const [loadingHospitals, setLoadingHospitals] = useState(false);
     const { data, setData, post, processing, errors, reset } = useForm({
-        hospital_name: hospital.data[0].hospital_name || '',
-        hospital_type_id: hospital.data[0].hospital_type_id || '',
-        hospital_logo: hospital.data[0].hospital_logo || '',
-        address: hospital.data[0].address || '',
-        hospital_description: hospital.data[0].hospital_description || '',
-        hospital_url: hospital.data[0].hospital_url || '',
-        mobile_number: hospital.data[0].mobile_number || '',
-        phone_number: hospital.data[0].phone_number || '',
-        thana_id: hospital.data[0].thana_id || '',
-        district_id: hospital.data[0].district_id || '',
-        division_id: hospital.data[0].division_id || '',
-        sort_order: hospital.data[0].sort_order || '',
-        status: hospital.data[0].status || 0,
-        prev_hospital_logo: hospital.data[0].hospital_logo || '',
+        hospital_name: hospital.data[0]?.hospital_name || '',
+        hospital_type_id: hospital.data[0]?.hospital_type_id || '',
+        hospital_logo: hospital.data[0]?.hospital_logo || '',
+        address: hospital.data[0]?.address || '',
+        hospital_description: hospital.data[0]?.hospital_description || '',
+        hospital_url: hospital.data[0]?.hospital_url || '',
+        mobile_number: hospital.data[0]?.mobile_number || '',
+        phone_number: hospital.data[0]?.phone_number || '',
+        thana_id: hospital.data[0]?.thana_id || '',
+        district_id: hospital.data[0]?.district_id || '',
+        division_id: hospital.data[0]?.division_id || '',
+        sort_order: hospital.data[0]?.sort_order || '',
+        status: hospital.data[0]?.status || 0,
+        prev_hospital_logo: hospital.data[0]?.hospital_logo || '',
         banner_url: null,
-        prev_banner_url: hospital.data[0].banner_url || '',
-        banner_crop_data: hospital.data[0].banner_crop_data,
-        registration_no: hospital.data[0].registration_no || '',
-        service_time: hospital.data[0].service_time || '',
-        organization_notice: hospital.data[0].organization_notice || '',
-        latitude: hospital.data[0].latitude || '00.000000',
-        longitude: hospital.data[0].longitude || '00.000000',
-        verification_status: hospital.data[0].verification_status || 'pending',
-        verification_note: hospital.data[0].verification_note || '',
+        prev_banner_url: hospital.data[0]?.banner_url || '',
+        banner_crop_data: hospital.data[0]?.banner_crop_data,
+        registration_no: hospital.data[0]?.registration_no || '',
+        service_time: hospital.data[0]?.service_time || '',
+        organization_notice: hospital.data[0]?.organization_notice || '',
+        latitude: hospital.data[0]?.latitude || '00.000000',
+        longitude: hospital.data[0]?.longitude || '00.000000',
+        verification_status: hospital.data[0]?.verification_status || 'pending',
+        verification_note: hospital.data[0]?.verification_note || '',
+        hospital_email: hospital.data[0]?.hospital_email || '',
     });
 
 
     useEffect(() => {
         return () => {
-            reset('hospital_name', 'address', 'hospital_description', 'hospital_url', 'mobile_number', 'phone_number', 'sort_order', 'thana', 'district', 'status');
+            reset('hospital_name', 'address', 'hospital_description', 'hospital_url', 'mobile_number', 'phone_number', 'sort_order', 'thana', 'district', 'status', 'hospital_email');
         };
     }, []);
 
@@ -102,7 +103,7 @@ export default function Edit(props) {
         <AppLayout
 
         >
-            <Head title="Create Hospital" />
+            <Head title="Edit Hospital" />
 
             <div className="container mx-auto max-w-6xl px-4 py-8">
                 {/* Page Header */}
@@ -113,10 +114,10 @@ export default function Edit(props) {
 
                     <div>
                         <h1 className="text-2xl font-semibold tracking-tight">
-                            Create Hospital
+                            Edit Hospital
                         </h1>
                         <p className="text-sm text-muted-foreground">
-                            Add a new hospital to the system.
+                            Update the hospital details.
                         </p>
                     </div>
                 </div>
@@ -210,6 +211,31 @@ export default function Edit(props) {
                                         )}
                                     </div>
 
+                                    <div className="space-y-2">
+                                        <Label htmlFor="registration_no">
+                                            Hospital Registration Number
+                                            <span className="ml-1 text-destructive">
+                                                *
+                                            </span>
+                                        </Label>
+
+                                        <Input
+                                            id="registration_no"
+                                            name="registration_no"
+                                            value={data.registration_no}
+                                            onChange={onHandleChange}
+                                            placeholder="Enter hospital registration number"
+                                            autoFocus
+                                            required
+                                        />
+
+                                        {errors.registration_no && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.registration_no}
+                                            </p>
+                                        )}
+                                    </div>
+
                                     {/* Description */}
                                     <div className="space-y-2 md:col-span-2">
                                         <Label htmlFor="hospital_description">
@@ -293,7 +319,7 @@ export default function Edit(props) {
                                     </div>
 
                                     {/* Website */}
-                                    <div className="space-y-2 md:col-span-2">
+                                    <div className="space-y-2">
                                         <Label htmlFor="hospital_url">
                                             Website URL
                                         </Label>
@@ -312,6 +338,26 @@ export default function Edit(props) {
                                             </p>
                                         )}
                                     </div>
+                                    {/* Website */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="service_time">
+                                            Service Time
+                                        </Label>
+
+                                        <Input
+                                            id="service_time"
+                                            name="service_time"
+                                            value={data.service_time}
+                                            onChange={onHandleChange}
+                                            placeholder="Service Time"
+                                        />
+
+                                        {errors.service_time && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.service_time}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
                             </section>
 
@@ -325,6 +371,53 @@ export default function Edit(props) {
                                         Enter the hospital address and geographic
                                         information.
                                     </p>
+                                </div>
+
+                                <div className="grid gap-5 md:grid-cols-2">
+                                    {/* Website */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="hospital_url">
+                                            Latitude
+                                        </Label>
+
+                                        <Input
+                                            id="latitude"
+                                            name="latitude"
+                                            value={data.latitude}
+                                            onChange={onHandleChange}
+                                            placeholder="Enter Latitude"
+                                        />
+
+                                        {errors.latitude && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.latitude}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="longitude">
+                                            Longitude
+                                            <span className="ml-1 text-destructive">
+                                                *
+                                            </span>
+                                        </Label>
+
+                                        <Input
+                                            id="longitude"
+                                            name="longitude"
+                                            value={data.longitude}
+                                            onChange={onHandleChange}
+                                            placeholder="Enter Longitude"
+                                            autoFocus
+                                            required
+                                        />
+
+                                        {errors.longitude && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.longitude}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div className="space-y-5">
@@ -445,7 +538,7 @@ export default function Edit(props) {
                                     {/* Logo */}
                                     <div className="flex flex-col items-center gap-4 rounded-lg border p-4">
                                         <Label htmlFor="profile_image">Profile Image</Label>
-                                        <LogoCropper data={data} setData={setData} field="hospital_logo" initialImage={hospital.data[0].logo_image_url} />
+                                        <LogoCropper data={data} setData={setData} field="hospital_logo" initialImage={hospital.data[0]?.logo_image_url} />
                                         {errors.hospital_logo && (
                                             <p className="mt-2 text-sm text-destructive">
                                                 {errors.hospital_logo}
@@ -469,7 +562,7 @@ export default function Edit(props) {
                                                 setData={setData}
                                                 field="banner_url"
                                                 errors={errors}
-                                                initialImage={hospital.data[0].banner_url}
+                                                initialImage={hospital.data[0]?.banner_url}
                                                 fieldCropData="banner_crop_data"
                                             />
                                         </div>

@@ -53,6 +53,7 @@ export default function Create(props) {
         status: true,
         verification_status: 'pending',
         verification_note: '',
+        hospital_email: '',
     });
 
     const [loadingHospitals, setLoadingHospitals] = useState(false);
@@ -71,7 +72,8 @@ export default function Create(props) {
                 'sort_order',
                 'thana',
                 'district',
-                'status'
+                'status',
+                'hospital_email'
             );
         };
     }, []);
@@ -183,6 +185,32 @@ export default function Create(props) {
                                         {errors.hospital_name && (
                                             <p className="text-sm text-destructive">
                                                 {errors.hospital_name}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-2 md:col-span-2">
+                                        <Label htmlFor="hospital_email">
+                                            Hospital Email
+                                            <span className="ml-1 text-destructive">
+                                                *
+                                            </span>
+                                        </Label>
+
+                                        <Input
+                                            id="hospital_email"
+                                            name="hospital_email"
+                                            value={data.hospital_email}
+                                            onChange={onHandleChange}
+                                            placeholder="Enter hospital email"
+                                            type="email"
+                                            autoFocus
+                                            required
+                                        />
+
+                                        {errors.hospital_email && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.hospital_email}
                                             </p>
                                         )}
                                     </div>

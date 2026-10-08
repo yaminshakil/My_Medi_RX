@@ -5,6 +5,7 @@ namespace App\Http\Requests\Hospital;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rule;
 
 class HospitalStoreRequest extends FormRequest
 {
@@ -115,15 +116,25 @@ class HospitalStoreRequest extends FormRequest
             ],
 
             'hospital_logo' => [
+                'sometimes',
                 'nullable',
-                'image',
-                'max:2048',
+                Rule::when($this->hasFile('hospital_logo'), ['image', 'max:2048']),
+            ],
+            'prev_hospital_logo' => [
+                'sometimes',
+                'nullable',
+                Rule::when($this->hasFile('prev_hospital_logo'), ['image', 'max:2048']),
             ],
 
             'banner_url' => [
+                'sometimes',
                 'nullable',
-                'image',
-                'max:5120',
+                Rule::when($this->hasFile('banner_url'), ['image', 'max:5120']),
+            ],
+            'prev_banner_url' => [
+                'sometimes',
+                'nullable',
+                Rule::when($this->hasFile('prev_banner_url'), ['image', 'max:5120']),
             ],
 
             'hospital_url' => [
