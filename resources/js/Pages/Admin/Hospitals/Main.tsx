@@ -14,7 +14,7 @@ import { Hospital } from 'lucide-react';
 export default function Index({ hospital }) {
     const { translations } = usePage<AppPageProps>().props;
     const { flash, filters } = usePage().props;
-
+    console.log(hospital);
     const [showConfirm, setShowConfirm] = useState(false);
     const [selectedHospital, setSelectedHospital] = useState<any>(null);
 
@@ -257,6 +257,38 @@ export default function Index({ hospital }) {
                     {item.status ? 'Active' : 'Inactive'}
                 </span>
             ),
+        },
+        {
+            key: 'verification_status',
+            label: 'Verification Status',
+            className: 'text-center',
+            render: (item) => (
+                <span
+                    className={`badge ${item.verification_status === 'approved'
+                        ? 'badge--success'
+                        : 'badge--warning'
+                        }`}
+                >
+                    {item.verification_status === 'approved' ? 'Approved' : 'Pending'}
+                </span>
+            ),
+        },
+        {
+            key: 'verification_url',
+            label: 'Website',
+            render: (item) =>
+                item.verification_url ? (
+                    <a
+                        href={item.verification_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                    >
+                        Verification Link
+                    </a>
+                ) : (
+                    '-'
+                ),
         },
     ];
 

@@ -15,16 +15,6 @@ class HospitalRepository implements HospitalRepositoryInterface
 {
     public function getAllHospital($perPage = 10, $search = null, $verification_status = null)
     {
-        // $hospitals = Hospital::where('status', 1);
-
-        // if ($search) {
-        //     $hospitals->where('hospital_name', 'like', "%{$search}%");
-        // }
-
-        // $hospitals = $hospitals->orderBy('sort_order', 'ASC')
-        //     ->paginate($perPage)
-        //     ->withQueryString();
-
         $hospitals = Hospital::query()
             ->with('hospitalType')
             ->when(
@@ -83,19 +73,20 @@ class HospitalRepository implements HospitalRepositoryInterface
             if (!empty($data['banner_url']) && $data['banner_url'] instanceof \Illuminate\Http\UploadedFile) {
                 $hospital->banner_url = $data['banner_url']->store('hospitals', 'public');
             }
+            $hospital->district_id = $data['district_id'] ?? null;
+            $hospital->thana_id = $data['thana_id'] ?? null;
+            $hospital->division_id = $data['division_id'] ?? null;
+            $hospital->hospital_url = $data['hospital_url'] ?? null;
+            $hospital->latitude = $data['latitude'] ?? null;
+            $hospital->longitude = $data['longitude'] ?? null;
+            $hospital->registration_no = $data['registration_no'] ?? null;
+            $hospital->service_time = $data['service_time'] ?? null;
             $hospital->sort_order = 0;
             $hospital->status = 0; // Set default status to inactive
             $hospital->verification_status = 'pending'; // Set default verification status to pending
             $hospital->created_by = Auth::user()->id;
             $hospital->save();
         });
-        // $hospital_logo = null;
-        // if (!empty($data['hospital_logo']) && $data['hospital_logo'] instanceof \Illuminate\Http\UploadedFile) {
-        //     $data['hospital_logo'] = $data['hospital_logo']->store('hospitals', 'public');
-        // }
-        // if (!empty($data['banner_url']) && $data['banner_url'] instanceof \Illuminate\Http\UploadedFile) {
-        //     $data['banner_url'] = $data['banner_url']->store('hospitals', 'public');
-        // }
 
         return $hospital;
     }

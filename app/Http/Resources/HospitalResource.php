@@ -60,9 +60,7 @@ class HospitalResource extends JsonResource
             'updated_by' => $this->updated_by,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'verification_url' => Auth::user()->can('hospitals.verification')
-        ? URL::route('hospital.verification', $this->uuid)
-        : null,
+            'verification_url' => URL::route('hospital.verification', $this->uuid),
             'edit_url' => Auth::user()->can('edit') ? URL::route('hospital.edit', $this->uuid) : null,
             'is_admin' => Auth::user()->hasRole('admin'),
         ];

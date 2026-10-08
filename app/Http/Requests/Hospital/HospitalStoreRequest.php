@@ -13,14 +13,6 @@ class HospitalStoreRequest extends FormRequest
         return true;
     }
 
-    // protected function failedValidation(Validator $validator)
-    // {
-    //     dd([
-    //         'validation_errors' => $validator->errors()->toArray(),
-    //         'request_data_sent' => $this->all(),
-    //     ]);
-    // }
-
     public function rules(): array
     {
         return [

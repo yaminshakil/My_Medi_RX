@@ -59,7 +59,6 @@ export default function Edit(props) {
         verification_note: hospital.data[0].verification_note || '',
     });
 
-    console.log('thana_id', hospital.data[0]);
 
     useEffect(() => {
         return () => {

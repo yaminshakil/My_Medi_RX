@@ -92,14 +92,9 @@ class HospitalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(HospitalStoreRequest $request, string $id)
     {
-        $request->validate([
-            'hospital_name' => 'required|string|max:255',
-            'mobile_number' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-        ]);
-        $this->hospitalRepository->updateHospital($request->all(), $id);
+        $this->hospitalRepository->updateHospital($request->validated(), $id);
         return redirect()->intended('/admin/hospitals')->with('success', 'Your Hospital has been updated successfully!');
     }
 
