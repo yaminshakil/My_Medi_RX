@@ -53,8 +53,8 @@ export default function Edit(props) {
         registration_no: hospital.data[0].registration_no || '',
         service_time: hospital.data[0].service_time || '',
         organization_notice: hospital.data[0].organization_notice || '',
-        latitude: hospital.data[0].latitude || 00.000000,
-        longitude: hospital.data[0].longitude || 00.000000,
+        latitude: hospital.data[0].latitude || '00.000000',
+        longitude: hospital.data[0].longitude || '00.000000',
         verification_status: hospital.data[0].verification_status || 'pending',
         verification_note: hospital.data[0].verification_note || '',
     });

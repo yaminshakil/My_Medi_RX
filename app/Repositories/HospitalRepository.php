@@ -130,6 +130,11 @@ class HospitalRepository implements HospitalRepositoryInterface
 
     public function deleteHospital($id)
     {
+        $hospital = Hospital::findOrFail($id);
+        // Delete the file from storage if an image path exists
+        if ($hospital->banner_url && Storage::disk('public')->exists($hospital->banner_url)) {
+            Storage::disk('public')->delete($hospital->banner_url);
+        }
         return Hospital::destroy($id);
     }
 }

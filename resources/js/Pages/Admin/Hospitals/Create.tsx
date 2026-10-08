@@ -223,6 +223,31 @@ export default function Create(props) {
                                         )}
                                     </div>
 
+                                    <div className="space-y-2">
+                                        <Label htmlFor="registration_no">
+                                            Hospital Registration Number
+                                            <span className="ml-1 text-destructive">
+                                                *
+                                            </span>
+                                        </Label>
+
+                                        <Input
+                                            id="registration_no"
+                                            name="registration_no"
+                                            value={data.registration_no}
+                                            onChange={onHandleChange}
+                                            placeholder="Enter hospital registration number"
+                                            autoFocus
+                                            required
+                                        />
+
+                                        {errors.registration_no && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.registration_no}
+                                            </p>
+                                        )}
+                                    </div>
+
                                     {/* Description */}
                                     <div className="space-y-2 md:col-span-2">
                                         <Label htmlFor="hospital_description">
@@ -306,7 +331,7 @@ export default function Create(props) {
                                     </div>
 
                                     {/* Website */}
-                                    <div className="space-y-2 md:col-span-2">
+                                    <div className="space-y-2">
                                         <Label htmlFor="hospital_url">
                                             Website URL
                                         </Label>
@@ -325,6 +350,52 @@ export default function Create(props) {
                                             </p>
                                         )}
                                     </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="service_time">
+                                            Service Time
+                                            <span className="ml-1 text-destructive">
+                                                *
+                                            </span>
+                                        </Label>
+
+                                        <Input
+                                            type="datetime-local"
+                                            id="service_time"
+                                            name="service_time"
+                                            value={data.service_time}
+                                            onChange={onHandleChange}
+                                            placeholder="Enter service time"
+                                            autoFocus
+                                            required
+                                        />
+
+                                        {errors.service_time && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.service_time}
+                                            </p>
+                                        )}
+                                    </div>
+                                    {/* Organization Notice */}
+                                    <div className="space-y-2 md:col-span-2">
+                                        <Label htmlFor="organization_notice">
+                                            Organization Notice
+                                        </Label>
+
+                                        <Textarea
+                                            id="organization_notice"
+                                            name="organization_notice"
+                                            value={data.organization_notice}
+                                            onChange={onHandleChange}
+                                            placeholder="Write a short notice about the organization..."
+                                            className="min-h-[120px]"
+                                        />
+
+                                        {errors.organization_notice && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.organization_notice}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
                             </section>
 
@@ -339,7 +410,52 @@ export default function Create(props) {
                                         information.
                                     </p>
                                 </div>
+                                <div className="grid gap-5 md:grid-cols-2">
+                                    {/* Website */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="hospital_url">
+                                            Latitude
+                                        </Label>
 
+                                        <Input
+                                            id="latitude"
+                                            name="latitude"
+                                            value={data.latitude}
+                                            onChange={onHandleChange}
+                                            placeholder="Enter Latitude"
+                                        />
+
+                                        {errors.latitude && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.latitude}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="longitude">
+                                            Longitude
+                                            <span className="ml-1 text-destructive">
+                                                *
+                                            </span>
+                                        </Label>
+
+                                        <Input
+                                            id="longitude"
+                                            name="longitude"
+                                            value={data.longitude}
+                                            onChange={onHandleChange}
+                                            placeholder="Enter Longitude"
+                                            autoFocus
+                                            required
+                                        />
+
+                                        {errors.longitude && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.longitude}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
                                 <div className="space-y-5">
                                     <div className="space-y-2">
                                         <Label htmlFor="address">
@@ -530,6 +646,8 @@ export default function Create(props) {
                                                 data={data}
                                                 setData={setData}
                                                 errors={errors}
+                                                field="banner_url"
+                                                fieldCropData="banner_crop_data"
                                             />
                                         </div>
 
