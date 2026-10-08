@@ -175,6 +175,32 @@ export default function Edit(props) {
                                         )}
                                     </div>
 
+                                    <div className="space-y-2 md:col-span-2">
+                                        <Label htmlFor="hospital_email">
+                                            Hospital Email
+                                            <span className="ml-1 text-destructive">
+                                                *
+                                            </span>
+                                        </Label>
+
+                                        <Input
+                                            id="hospital_email"
+                                            name="hospital_email"
+                                            value={data.hospital_email}
+                                            onChange={onHandleChange}
+                                            placeholder="Enter hospital email"
+                                            type="email"
+                                            autoFocus
+                                            required
+                                        />
+
+                                        {errors.hospital_email && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.hospital_email}
+                                            </p>
+                                        )}
+                                    </div>
+
                                     <div className="space-y-2">
                                         <Label htmlFor="hospital_type_id">Hospital Type</Label>
 
