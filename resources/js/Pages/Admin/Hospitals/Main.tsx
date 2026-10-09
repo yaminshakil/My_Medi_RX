@@ -175,6 +175,7 @@ export default function Index({ hospital }) {
         }
     }, [flash]);
 
+
     /**
      * Table columns
      */
@@ -283,7 +284,7 @@ export default function Index({ hospital }) {
                         rel="noopener noreferrer"
                         className="text-primary hover:underline"
                     >
-                        Verification Link
+                        Verify
                     </a>
                 ) : (
                     '-'

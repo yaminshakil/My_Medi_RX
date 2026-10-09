@@ -23,6 +23,8 @@ use App\Repositories\Patients\PatientProfileRepository;
 use App\Repositories\Patients\PatientRepository;
 use App\Interfaces\HospitalRepositoryInterface;
 use App\Repositories\HospitalRepository;
+use App\Repositories\Eprescriptions\DoctorChamberRepository;
+use App\Interfaces\Eprescriptions\DoctorChamberRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -41,6 +43,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PatientRepositoryInterface::class, PatientRepository::class);
         $this->app->bind(PatientProfileRepositoryInterface::class, PatientProfileRepository::class);
         $this->app->bind(HospitalRepositoryInterface::class, HospitalRepository::class);
+        $this->app->bind(DoctorChamberRepositoryInterface::class, DoctorChamberRepository::class);
     }
 
     /**

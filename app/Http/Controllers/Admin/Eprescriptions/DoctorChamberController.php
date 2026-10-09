@@ -7,6 +7,7 @@ use App\Http\Requests\Eprescription\CreateDoctorChamberRequest;
 use App\Http\Requests\Eprescription\UpdateDoctorChamberRequest;
 use App\Interfaces\Eprescriptions\DoctorChamberRepositoryInterface;
 use App\Models\DoctorChamber;
+use App\Models\Hospital;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -72,7 +73,16 @@ class DoctorChamberController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/Eprescriptions/Chambers/Create');
+        $hospitals = Hospital::all();
+        $hospitaloptions = $hospitals->map(function ($hospital) {
+            return [
+                'value' => $hospital->id,
+                'label' => $hospital->hospital_name
+            ];
+        });
+        return Inertia::render('Admin/Eprescriptions/Chambers/Create', [
+            'hospitaloptions' => $hospitaloptions
+        ]);
     }
 
     /**
@@ -93,6 +103,14 @@ class DoctorChamberController extends Controller
     {
         $doctorChamber = $this->doctorChamberRepository->find($id);
 
+        $hospitals = Hospital::all();
+        $hospitaloptions = $hospitals->map(function ($hospital) {
+            return [
+                'value' => $hospital->id,
+                'label' => $hospital->hospital_name
+            ];
+        });
+
         return Inertia::render('Admin/Eprescriptions/Chambers/Edit', [
             'doctorChamber' => [
                 'id' => $doctorChamber->id,
@@ -109,7 +127,9 @@ class DoctorChamberController extends Controller
                 'city' => $doctorChamber->city,
                 'address' => $doctorChamber->address,
                 'appoinment_limit' => $doctorChamber->appoinment_limit,
+                'hospital_id' => $doctorChamber->hospital_id,
             ],
+            'hospitaloptions' => $hospitaloptions
         ]);
     }
 
