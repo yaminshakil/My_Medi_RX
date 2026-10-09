@@ -51,7 +51,7 @@ class HospitalResource extends JsonResource
             'division_id' => $this->division_id,
             'sort_order' => $this->sort_order,
             'status' => $this->status,
-            'verification_status' => $this->verification_status,
+            'verification_status' => str_replace('_', ' ', ucfirst($this->verification_status)),
             'verified_at' => $this->verified_at,
             'verified_by' => $this->verified_by,
             'verification_note' => $this->verification_note,

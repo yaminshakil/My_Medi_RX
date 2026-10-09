@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Head, router, useForm } from '@inertiajs/react';
 
 import AppLayout from '@/Layouts/app-layout';
+import VerificationDocumentUpload from './VerificationDocumentUpload';
 
 import {
     Card,
@@ -334,6 +335,21 @@ export default function Verification({
                             )
                         )}
 
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            Upload Verification Document
+                        </CardTitle>
+                    </CardHeader>
+
+                    <CardContent>
+                        <VerificationDocumentUpload
+                            hospitalUuid={hospital.uuid}
+                            documentTypes={documentTypes}
+                        />
                     </CardContent>
                 </Card>
 
