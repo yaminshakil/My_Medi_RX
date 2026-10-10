@@ -73,6 +73,7 @@ class HospitalController extends Controller
     public function getAllHospitalType(Request $request)
     {
         $hospitalTypes = $this->hospitalRepository->getAllHospitalType();
+        dd($hospitalTypes);
         return ApiResponseService::success($hospitalTypes, 'Hospital types retrieved successfully!');
     }
 }
