@@ -131,4 +131,11 @@ class HospitalRepository implements HospitalRepositoryInterface
         }
         return Hospital::destroy($id);
     }
+
+    public function getAllHospitalType()
+    {
+        return HospitalType::where('status', true)
+            ->orderBy('sort_order')
+            ->get(['id', 'name']);
+    }
 }

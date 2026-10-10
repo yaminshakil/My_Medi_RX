@@ -8,13 +8,25 @@ use App\Http\Controllers\Admin\Eprescriptions\MedicineDurationController;
 use App\Http\Controllers\Admin\Eprescriptions\PrescriptionController;
 use App\Http\Controllers\Admin\Eprescriptions\VitalController;
 use App\Http\Controllers\Admin\Eprescriptions\DoctorChamberController;
+use App\Http\Controllers\Admin\Eprescriptions\AppointmentController;
 use Illuminate\Support\Facades\Route;
+
+Route::group(['middleware' => ['web', 'auth']], function () {
+    Route::get('appointments/create/{doctor_id}/{chamber_id?}', [AppointmentController::class, 'create'])->name('appointments.create_for_patient');
+});
 
 Route::prefix('admin')->middleware(['web', 'auth', 'profile.exists', 'role.redirect:Admin,Doctor,Assistant,Patient'])->group(function () {
     Route::resource('prescriptions', PrescriptionController::class);
     Route::get('/eprescription/{uuid}/pdf', [PrescriptionController::class, 'downloadPdf'])
         ->name('eprescription.pdf');
+
+    /* Appointments */
+    Route::get('appointments/today', [AppointmentController::class, 'getTodaysAppointment'])->name('appointments.today');
+    Route::get('appointments/new', [AppointmentController::class, 'getNewAppointment'])->name('appointments.new');
+    Route::resource('appointments', AppointmentController::class);
+    Route::post('appointments/changestatus', [AppointmentController::class, 'changeStatus'])->name('appointments.changestatus');
 });
+
 
 Route::prefix('admin')->middleware(['web', 'auth', 'profile.exists', 'role.redirect:Admin,Doctor'])->group(function () {
     Route::get('/get-medicines', [PrescriptionController::class, 'getAllMedicine'])

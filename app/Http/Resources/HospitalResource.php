@@ -35,10 +35,8 @@ class HospitalResource extends JsonResource
             'hospital_description' => $this->hospital_description,
             'hospital_logo' => $this->hospital_logo,
             'logo_image_url' => $this->logo_image_url,
-            'logo_crop_data' => $this->logo_crop_data,
             'banner_url' => $this->banner_url,
             'banner_image_url' => $this->banner_image_url,
-            'banner_crop_data' => $this->banner_crop_data,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'registration_no' => $this->registration_no,
@@ -58,11 +56,7 @@ class HospitalResource extends JsonResource
             'doctors' => $this->whenLoaded('doctors'),
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'verification_url' => URL::route('hospital.verification', $this->uuid),
-            'edit_url' => Auth::user()->can('edit') ? URL::route('hospital.edit', $this->uuid) : null,
-            'is_admin' => Auth::user()->hasRole('admin'),
+            'verification_url' => URL::route('hospital.verification', $this->uuid)
         ];
     }
 }

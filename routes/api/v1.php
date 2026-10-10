@@ -9,4 +9,5 @@ Route::middleware('auth:sanctum')
         require base_path('routes/api/v1/doctor.php');
         require base_path('routes/api/v1/patient.php');
         require base_path('routes/api/v1/medicine.php');
+        require base_path('routes/api/v1/hospital.php');
     });
