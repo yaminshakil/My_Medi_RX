@@ -38,7 +38,7 @@ class BloodBagController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('BloodBank/Bags/Create', ['options' => $this->options()]);
+        return Inertia::render('Admin/BloodBank/Bags/Create', ['options' => $this->options()]);
     }
 
     public function store(StoreBloodBagRequest $request): RedirectResponse

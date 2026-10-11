@@ -1,6 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'; // Breeze layout; change this one import if yours lives elsewhere
 import { Head, Link, usePage } from '@inertiajs/react';
 import { cx } from './ui';
+import AppLayout from '@/Layouts/app-layout';
 
 // [label, route name, pattern used to highlight the active tab]
 const nav = [
@@ -15,7 +16,7 @@ export default function BloodBankLayout({ title, actions, children }) {
     const { flash } = usePage().props;
 
     return (
-        <AuthenticatedLayout
+        <AppLayout
             header={
                 <div className="space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-3">
@@ -57,6 +58,6 @@ export default function BloodBankLayout({ title, actions, children }) {
                     {children}
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AppLayout>
     );
 }
