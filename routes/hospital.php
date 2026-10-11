@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\Hospitals\HospitalController;
 use App\Http\Controllers\Frontend\Diagnostic\DiagnosticController;
 use App\Http\Controllers\Admin\Hospitals\HospitalVerificationController;
 use App\Http\Controllers\Admin\Hospitals\DepartmentController;
+use App\Http\Controllers\Admin\Hospitals\DoctorRosterController;
+use App\Http\Controllers\Admin\Hospitals\DoctorRosterLookupController;
 
 Route::middleware('web')->group(function () {
     Route::get('/diagnostics', [DiagnosticController::class, 'index'])->name('diagnostics.index');
@@ -82,4 +84,37 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         ->name('department.doctors.update');
     Route::delete('departments/{department}/doctors/{user}', [DepartmentController::class, 'removeDoctor'])
         ->name('department.doctors.destroy');
+});
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/doctor-roster', [DoctorRosterController::class, 'index'])
+        ->name('doctor-roster.index');
+
+    Route::post('/doctor-shifts', [DoctorRosterController::class, 'storeShift'])->name('doctor-shifts.store');
+    Route::put('/doctor-shifts/{shift}', [DoctorRosterController::class, 'updateShift'])->name('doctor-shifts.update');
+    Route::delete('/doctor-shifts/{shift}', [DoctorRosterController::class, 'deleteShift'])->name('doctor-shifts.destroy');
+
+    Route::post('/doctor-availabilities', [DoctorRosterController::class, 'storeAvailability'])->name('doctor-availabilities.store');
+    Route::put('/doctor-availabilities/{availability}', [DoctorRosterController::class, 'updateAvailability'])->name('doctor-availabilities.update');
+    Route::delete('/doctor-availabilities/{availability}', [DoctorRosterController::class, 'deleteAvailability'])->name('doctor-availabilities.destroy');
+
+    Route::post('/doctor-rosters', [DoctorRosterController::class, 'storeRoster'])->name('doctor-rosters.store');
+    Route::put('/doctor-rosters/{roster}', [DoctorRosterController::class, 'updateRoster'])->name('doctor-rosters.update');
+    Route::delete('/doctor-rosters/{roster}', [DoctorRosterController::class, 'deleteRoster'])->name('doctor-rosters.destroy');
+
+    Route::post('/doctor-leaves', [DoctorRosterController::class, 'storeLeave'])->name('doctor-leaves.store');
+    Route::patch('/doctor-leaves/{leave}/approve', [DoctorRosterController::class, 'approveLeave'])->name('doctor-leaves.approve');
+    Route::patch('/doctor-leaves/{leave}/reject', [DoctorRosterController::class, 'rejectLeave'])->name('doctor-leaves.reject');
+});
+
+Route::prefix('admin/api')->middleware('auth')->group(function () {
+    Route::get(
+        '/hospitals/{hospital:id}/departments',
+        [DoctorRosterLookupController::class, 'departments']
+    );
+
+    Route::get(
+        '/departments/{department}/doctors',
+        [DoctorRosterLookupController::class, 'doctors']
+    );
 });
