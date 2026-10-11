@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class DoctorChamber extends Model
 {
@@ -11,6 +12,7 @@ class DoctorChamber extends Model
 
     protected $fillable = [
         'name',
+        'hospital_id',
         'city',
         'address',
         'header_left',

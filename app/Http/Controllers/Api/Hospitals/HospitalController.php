@@ -40,7 +40,7 @@ class HospitalController extends Controller
     {
         $data = $request->validated();
         $hospital = $this->hospitalRepository->createHospital($data);
-        return ApiResponseService::success($hospital, 'Hospitals retrieved successfully!');
+        return ApiResponseService::success($hospital, 'Hospital created successfully!');
     }
 
     /**
@@ -48,15 +48,19 @@ class HospitalController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $hospital = $this->hospitalRepository->getHospitalById($id);
+        return ApiResponseService::success($hospital, 'Hospital retrieved successfully!');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(HospitalStoreRequest $request, string $id)
     {
-        //
+        $hospital = $this->hospitalRepository->getHospitalById($id);
+        $data = $request->validated();
+        $this->hospitalRepository->updateHospital($hospital, $data);
+        return ApiResponseService::success($hospital, 'Hospital updated successfully!');
     }
 
     /**
@@ -64,7 +68,9 @@ class HospitalController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $hospital = $this->hospitalRepository->getHospitalById($id);
+        $this->hospitalRepository->deleteHospital($hospital);
+        return ApiResponseService::success(null, 'Hospital deleted successfully!');
     }
 
     /**
@@ -73,7 +79,6 @@ class HospitalController extends Controller
     public function getAllHospitalType(Request $request)
     {
         $hospitalTypes = $this->hospitalRepository->getAllHospitalType();
-        dd($hospitalTypes);
         return ApiResponseService::success($hospitalTypes, 'Hospital types retrieved successfully!');
     }
 }

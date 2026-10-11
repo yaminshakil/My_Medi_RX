@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Hospital extends Model
 {
@@ -115,5 +116,20 @@ class Hospital extends Model
     public function verifier(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    public function hospitals(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Hospital::class,
+            'doctor_chambers',
+            'user_id',
+            'hospital_id'
+        )->withTimestamps();
+    }
+
+    public function departments(): HasMany
+    {
+        return $this->hasMany(Department::class);
     }
 }

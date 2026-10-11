@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -146,5 +147,28 @@ class User extends Authenticatable
     public function medicine_durations()
     {
         return $this->hasMany(MedicineDuration::class, 'doctor_id');
+    }
+
+    public function hospitals(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Hospital::class,
+            'doctor_chambers',
+            'user_id',
+            'hospital_id'
+        )->withTimestamps();
+    }
+
+    public function departments(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Department::class,
+            'department_doctor'
+        )->withPivot([
+            'room_number',
+            'extension_number',
+            'is_department_head',
+            'status',
+        ])->withTimestamps();
     }
 }

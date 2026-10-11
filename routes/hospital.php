@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Hospitals\HospitalController;
 use App\Http\Controllers\Frontend\Diagnostic\DiagnosticController;
 use App\Http\Controllers\Admin\Hospitals\HospitalVerificationController;
+use App\Http\Controllers\Admin\Hospitals\DepartmentController;
 
 Route::middleware('web')->group(function () {
     Route::get('/diagnostics', [DiagnosticController::class, 'index'])->name('diagnostics.index');
@@ -69,3 +70,16 @@ Route::middleware(['auth'])
             [HospitalVerificationController::class, 'suspendHospital']
         )->name('hospital.verification.suspend');
     });
+
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::resource('departments', DepartmentController::class)
+        ->parameters(['departments' => 'department'])
+        ->names('department');
+
+    Route::post('departments/{department}/doctors', [DepartmentController::class, 'assignDoctor'])
+        ->name('department.doctors.store');
+    Route::put('departments/{department}/doctors/{user}', [DepartmentController::class, 'updateDoctor'])
+        ->name('department.doctors.update');
+    Route::delete('departments/{department}/doctors/{user}', [DepartmentController::class, 'removeDoctor'])
+        ->name('department.doctors.destroy');
+});
