@@ -9,6 +9,7 @@ use App\Http\Requests\Eprescription\UpdateMedicineRequest;
 use App\Models\Setting;
 use App\Services\Eprescriptions\MedicineService;
 use App\Services\ApiResponseService;
+use App\Http\Resources\Medicines\MedicineResource;
 
 class MedicineController extends Controller
 {
@@ -33,14 +34,15 @@ class MedicineController extends Controller
         $perPage = $request->input('per_page', $recordsPerPage); // default 10
 
         $medicines = $this->service->list($perPage, $search);
+        $medicineData = MedicineResource::collection($medicines);
 
-        return ApiResponseService::success($medicines, 'Manufacturer created successfully!');
+        return ApiResponseService::success($medicineData, 'Manufacturer created successfully!');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateMedicineRequest $request)
     {
         //
     }
@@ -56,7 +58,7 @@ class MedicineController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateMedicineRequest $request, string $id)
     {
         //
     }
