@@ -2,6 +2,7 @@ export type HospitalOption = { id: number; hospital_name: string };
 
 export type DoctorAssignment = {
     id: number;
+    uuid: string;
     name: string;
     email: string;
     pivot: {

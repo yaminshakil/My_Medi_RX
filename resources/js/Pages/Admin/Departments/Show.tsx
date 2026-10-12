@@ -48,7 +48,7 @@ export default function Show({ department, availableDoctors, canAssignDoctors }:
     const saveEdit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!editingDoctor) return;
-        editForm.put(route('department.doctors.update', [department.id, editingDoctor.id]), {
+        editForm.put(route('department.doctors.update', { department: department.id, user: editingDoctor.uuid }), {
             onSuccess: () => setEditingDoctor(null),
         });
     };

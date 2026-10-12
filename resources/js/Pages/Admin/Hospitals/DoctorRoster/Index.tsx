@@ -9,6 +9,7 @@ import { Label } from '@/Components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs';
 import DoctorAssignmentFields from './DoctorAssignmentFields';
+import dayjs from 'dayjs';
 
 type LinkItem = { url: string | null; label: string; active: boolean };
 type Paginated<T> = { data: T[]; links: LinkItem[]; current_page: number; last_page: number; total: number };
@@ -201,15 +202,15 @@ export default function Index({ shifts, availabilities, rosters, leaves, days, h
                                     <DoctorAssignmentFields
                                         hospitals={hospitals}
                                         shifts={shifts}
-                                        hospitalId={availabilityForm.data.hospital_id}
-                                        departmentId={availabilityForm.data.department_id}
-                                        doctorId={availabilityForm.data.doctor_id}
-                                        shiftId={availabilityForm.data.shift_id}
-                                        errors={availabilityForm.errors}
-                                        setHospitalId={(value) => availabilityForm.setData('hospital_id', value)}
-                                        setDepartmentId={(value) => availabilityForm.setData('department_id', value)}
-                                        setDoctorId={(value) => availabilityForm.setData('doctor_id', value)}
-                                        setShiftId={(value) => availabilityForm.setData('shift_id', value)}
+                                        hospitalId={rosterForm.data.hospital_id}
+                                        departmentId={rosterForm.data.department_id}
+                                        doctorId={rosterForm.data.doctor_id}
+                                        shiftId={rosterForm.data.shift_id}
+                                        errors={rosterForm.errors}
+                                        setHospitalId={(value) => rosterForm.setData('hospital_id', value)}
+                                        setDepartmentId={(value) => rosterForm.setData('department_id', value)}
+                                        setDoctorId={(value) => rosterForm.setData('doctor_id', value)}
+                                        setShiftId={(value) => rosterForm.setData('shift_id', value)}
                                     />
                                 </div>
                                 <div><Label>Duty date</Label><Input type="date" value={rosterForm.data.roster_date} onChange={e => rosterForm.setData('roster_date', e.target.value)} required /></div>
@@ -223,7 +224,9 @@ export default function Index({ shifts, availabilities, rosters, leaves, days, h
                         </CardContent></Card>
                         <Card><CardHeader><CardTitle>Dated duties</CardTitle></CardHeader><CardContent>
                             <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="border-b text-left"><th className="p-2">Date</th><th className="p-2">Doctor</th><th className="p-2">Department</th><th className="p-2">Time</th><th className="p-2">Room</th><th className="p-2">Status</th><th className="p-2">Action</th></tr></thead>
-                                <tbody>{rosters.data.map(r => <tr key={r.id} className="border-b"><td className="p-2">{r.roster_date}</td><td className="p-2">{r.doctor?.name ?? '—'}</td><td className="p-2">{r.department?.name ?? '—'}</td><td className="p-2">{r.start_time}–{r.end_time}</td><td className="p-2">{r.room_label ?? '—'}</td><td className="p-2">{r.status}</td><td className="p-2"><Button variant="destructive" size="sm" onClick={() => remove(route('admin.doctor-rosters.destroy', r.id))}>Delete</Button></td></tr>)}</tbody>
+                                <tbody>{rosters.data.map(r => <tr key={r.id} className="border-b"><td className="p-2">{dayjs(r.roster_date, ['YYYY-MM-DD']).format(
+                                    'YYYY-MM-DD',
+                                )}</td><td className="p-2">{r.doctor?.name ?? '—'}</td><td className="p-2">{r.department?.name ?? '—'}</td><td className="p-2">{r.start_time}–{r.end_time}</td><td className="p-2">{r.room_label ?? '—'}</td><td className="p-2">{r.status}</td><td className="p-2"><Button variant="destructive" size="sm" onClick={() => remove(route('admin.doctor-rosters.destroy', r.id))}>Delete</Button></td></tr>)}</tbody>
                             </table></div>{pagination(rosters)}
                         </CardContent></Card>
                     </TabsContent>
@@ -235,11 +238,11 @@ export default function Index({ shifts, availabilities, rosters, leaves, days, h
                                     <DoctorAssignmentFields
                                         hospitals={hospitals}
                                         shifts={shifts}
-                                        hospitalId={availabilityForm.data.hospital_id}
-                                        departmentId={availabilityForm.data.department_id}
-                                        doctorId={availabilityForm.data.doctor_id}
-                                        shiftId={availabilityForm.data.shift_id}
-                                        errors={availabilityForm.errors}
+                                        hospitalId={leaveForm.data.hospital_id}
+                                        departmentId={leaveForm.data.department_id}
+                                        doctorId={leaveForm.data.doctor_id}
+                                        shiftId={leaveForm.data.shift_id}
+                                        errors={leaveForm.errors}
                                         setHospitalId={(value) => availabilityForm.setData('hospital_id', value)}
                                         setDepartmentId={(value) => availabilityForm.setData('department_id', value)}
                                         setDoctorId={(value) => availabilityForm.setData('doctor_id', value)}
