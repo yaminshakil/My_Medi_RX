@@ -24,7 +24,7 @@ class StoreBloodBagRequest extends FormRequest
             'blood_group'     => ['required', Rule::in(BloodGroup::values())],
             'component'       => ['required', Rule::in(BloodComponent::values())],
             'volume_ml'       => ['required', 'integer', 'min:10', 'max:1000'],
-            'collected_at'    => ['required', 'date', 'before_or_equal:now'],
+            'collected_at'    => ['required', 'date'],
             'expires_at'      => ['nullable', 'date', 'after:collected_at'],
             'storage_unit_id' => ['required', 'integer', 'exists:bb_storage_units,id'],
             'quarantine'      => ['boolean'],

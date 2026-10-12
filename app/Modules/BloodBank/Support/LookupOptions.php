@@ -12,7 +12,13 @@ final class LookupOptions
 {
     public static function groups(): array
     {
-        return BloodGroup::values();
+        return array_map(
+            fn (string $group) => [
+                'value' => $group,
+                'label' => $group,
+            ],
+            BloodGroup::values()
+        );
     }
 
     public static function components(): array
