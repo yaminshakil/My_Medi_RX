@@ -171,4 +171,9 @@ class User extends Authenticatable
             'status',
         ])->withTimestamps();
     }
+
+    public function hospital()
+    {
+        return $this->hasOne(Hospital::class, 'created_by', 'id');
+    }
 }

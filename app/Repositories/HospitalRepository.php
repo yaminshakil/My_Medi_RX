@@ -138,4 +138,10 @@ class HospitalRepository implements HospitalRepositoryInterface
             ->orderBy('sort_order')
             ->get(['id', 'name']);
     }
+
+    public function find(int $id)
+    {
+        dd($id);
+        return Hospital::query()->find($id);
+    }
 }

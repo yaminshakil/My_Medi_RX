@@ -11,4 +11,5 @@ interface HospitalRepositoryInterface
     public function updateHospital($data, $id);
     public function deleteHospital($id);
     public function getAllHospitalType();
+    public function find(int $id);
 }

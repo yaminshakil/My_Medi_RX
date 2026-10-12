@@ -26,7 +26,7 @@ class EmergencyRequestController extends Controller
 
     public function index(Request $request): Response
     {
-        return Inertia::render('BloodBank/Emergency/Index', [
+        return Inertia::render('Admin/BloodBank/Emergency/Index', [
             'requests' => $this->requests->paginate($request->only('status'))
                 ->through(fn ($r) => EmergencyRequestResource::make($r)->resolve()),
             'options' => [
@@ -63,7 +63,7 @@ class EmergencyRequestController extends Controller
     {
         $emergencyRequest->load(['hospital:id,name', 'donors']);
 
-        return Inertia::render('BloodBank/Emergency/Show', [
+        return Inertia::render('Admin/BloodBank/Emergency/Show', [
             'request' => EmergencyRequestResource::make($emergencyRequest)->resolve(),
             'donors'  => $emergencyRequest->donors
                 ->sortBy(fn ($d) => $d->pivot->distance_km)

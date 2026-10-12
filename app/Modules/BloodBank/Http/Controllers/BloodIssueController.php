@@ -32,7 +32,7 @@ class BloodIssueController extends Controller
     {
         $filters = $request->only(['search', 'component', 'physician_id', 'from', 'to']);
 
-        return Inertia::render('BloodBank/Issues/Index', [
+        return Inertia::render('Admin/BloodBank/Issues/Index', [
             'issues'     => $this->issues->paginate($filters)->through(fn ($i) => BloodIssueResource::make($i)->resolve()),
             'filters'    => (object) $filters,
             'components' => LookupOptions::components(),

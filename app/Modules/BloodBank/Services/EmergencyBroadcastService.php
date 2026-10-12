@@ -16,6 +16,7 @@ use App\Modules\BloodBank\Repositories\Contracts\HospitalRepositoryInterface;
 use App\Modules\BloodBank\Support\BloodCompatibility;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\Hospital;
 
 /** One-click emergency request: find compatible verified donors near the hospital and alert them. */
 class EmergencyBroadcastService
@@ -29,12 +30,16 @@ class EmergencyBroadcastService
 
     public function broadcast(User $user, array $data): EmergencyRequest
     {
-        $hospital = $user->hospital_id ? $this->hospitals->find($user->hospital_id) : null;
+        $hospital_id =  DB::table('hospitals')
+                    ->where('created_by', $user->id)
+                    ->value('id');
+        $hospital = Hospital::find($hospital_id);
 
         if (! $hospital) {
             throw new BloodBankException('Your account is not linked to a hospital, so there is no location to search from.');
         }
-        if (! $hospital->hasCoordinates()) {
+
+        if (is_null($hospital->latitude) || is_null($hospital->longitude)) {
             throw new BloodBankException("Add latitude and longitude to {$hospital->name} before broadcasting requests.");
         }
 

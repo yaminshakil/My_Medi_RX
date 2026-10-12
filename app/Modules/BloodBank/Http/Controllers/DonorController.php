@@ -22,7 +22,7 @@ class DonorController extends Controller
     {
         $filters = $request->only(['search', 'blood_group', 'verified']);
 
-        return Inertia::render('BloodBank/Donors/Index', [
+        return Inertia::render('Admin/BloodBank/Donors/Index', [
             'donors' => $this->donors->paginate($filters)->through(fn ($d) => [
                 'id'              => $d->id,
                 'name'            => $d->name,
