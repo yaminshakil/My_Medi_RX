@@ -49,7 +49,7 @@ class BloodIssueController extends Controller
         $patient   = $request->filled('patient_id') ? $this->patients->find((int) $request->input('patient_id')) : null;
         $component = BloodComponent::tryFrom((string) $request->input('component'));
 
-        return Inertia::render('BloodBank/Issues/Create', [
+        return Inertia::render('Admin/BloodBank/Issues/Create', [
             'filters'  => (object) $request->only(['patient_search', 'patient_id', 'component', 'include_all']),
             'patients' => fn () => $request->filled('patient_search')
                 ? $this->patients->search($request->input('patient_search'))->map(fn ($p) => $this->patientRow($p))->values()
@@ -81,7 +81,7 @@ class BloodIssueController extends Controller
     {
         $issue->load(['bag.storageUnit', 'patient', 'physician', 'issuer:id,name']);
 
-        return Inertia::render('BloodBank/Issues/Show', [
+        return Inertia::render('Admin/BloodBank/Issues/Show', [
             'issue' => BloodIssueResource::make($issue)->resolve(),
         ]);
     }

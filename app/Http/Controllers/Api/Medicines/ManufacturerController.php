@@ -8,6 +8,7 @@ use App\Http\Requests\Eprescription\CreateManufacturerRequest;
 use App\Http\Requests\Eprescription\UpdateManufacturerRequest;
 use App\Models\Setting;
 use App\Services\Eprescriptions\ManufacturerService;
+use App\Services\ApiResponseService;
 
 class ManufacturerController extends Controller
 {
@@ -40,7 +41,11 @@ class ManufacturerController extends Controller
      */
     public function store(CreateManufacturerRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $menufacturer = $this->service->create($validated);
+
+        return ApiResponseService::success($menufacturer, 'Manufacturer created successfully!');
     }
 
     /**
@@ -56,7 +61,13 @@ class ManufacturerController extends Controller
      */
     public function update(UpdateManufacturerRequest $request, string $id)
     {
-        //
+        $validated = $request->validated();
+
+        $manufacturer = $this->service->update($id, $validated);
+
+        $manufacturer = $this->service->find($id);
+
+        return ApiResponseService::success($manufacturer, 'Manufacturer updated successfully!');
     }
 
     /**
@@ -64,6 +75,11 @@ class ManufacturerController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $manufacturer = $this->service->find($id);
+        if ($manufacturer) {
+            $this->service->delete($id);
+            return ApiResponseService::success([], 'Manufacturer deleted successfully!');
+        }
+        return ApiResponseService::success([], 'No Manufacturer found');
     }
 }

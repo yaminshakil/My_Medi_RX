@@ -141,7 +141,6 @@ class HospitalRepository implements HospitalRepositoryInterface
 
     public function find(int $id)
     {
-        dd($id);
         return Hospital::query()->find($id);
     }
 }
