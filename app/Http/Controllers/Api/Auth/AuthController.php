@@ -91,11 +91,11 @@ class AuthController extends Controller
         }
 
         $request->validate([
-            'login'    => ['required', 'string'],
+            'identifier'    => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
 
-        $login = $request->login;
+        $login = $request->identifier;
 
         // Find user by email or mobile
         $user = User::where('email', $login)
