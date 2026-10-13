@@ -146,7 +146,6 @@ class AppointmentController extends Controller
 
             $templateSlug = 'appointment_confirmation';
             $this->appointmentService->appointmentMail($appointment, $templateSlug);
-            \Log::info('Request', $templateSlug);
             return ApiResponseService::success(
                 $appointment,
                 'Appointments booked successfully!'

@@ -164,6 +164,7 @@ export default function Create(props) {
         if (selectedPatient?.appointment) {
             setData((prev) => ({ ...prev, appointment_id: selectedPatient?.appointment.id, vital_id: selectedPatient?.vital?.id }));
         }
+        console.log('selectedPatient?.appointment', selectedPatient?.appointment);
     }, [selectedPatient]);
 
     const fetchPatients = () => {
@@ -297,7 +298,6 @@ export default function Create(props) {
 
     const saveAndNew: FormEventHandler = (e) => {
         e.preventDefault();
-        console.log(data);
         setLoadingButton('saveNew');
         if (!data.patient_id || !data.medications.length || !data.appointment_id) {
             setShowConfirm(true);

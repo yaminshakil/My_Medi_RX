@@ -46,14 +46,13 @@ class SystemSettngsController extends Controller
 
     // Logo and Icon
 
+    // Logo and Icon
+
     public function editSiteIdentitySettings()
     {
-        $settings = Setting::whereIn('meta_key', [
-            'logo_path',
-            'navbar_logo_path',
-            'dashboard_logo_path',
-            'favicon_path',
-        ])->pluck('meta_value', 'meta_key')->toArray();
+        $settings = Setting::where('meta_key', 'logo')
+            ->where('meta_key', 'favicon')
+            ->pluck('meta_value', 'meta_key')->toArray();
 
         return Inertia::render('settings/SystemSettings/SiteIdentity/Index', [
             'settings' => $settings,
@@ -64,8 +63,24 @@ class SystemSettngsController extends Controller
     {
         $data = $request->validated();
 
-        foreach ($data as $key => $value) {
-            Setting::setValue($key, $value);
+        if ($request->hasFile('logo')) {
+            $path = $request->file('logo')->store('logos', 'public');
+            Setting::updateOrCreate(['meta_key' => 'logo'], ['meta_value' => $path]);
+        }
+
+        if ($request->hasFile('navbar_logo')) {
+            $path = $request->file('navbar_logo')->store('logos', 'public');
+            Setting::updateOrCreate(['meta_key' => 'navbar_logo'], ['meta_value' => $path]);
+        }
+
+        if ($request->hasFile('dashboard_logo')) {
+            $path = $request->file('dashboard_logo')->store('logos', 'public');
+            Setting::updateOrCreate(['meta_key' => 'dashboard_logo'], ['meta_value' => $path]);
+        }
+
+        if ($request->hasFile('favicon')) {
+            $path = $request->file('favicon')->store('favicons', 'public');
+            Setting::updateOrCreate(['meta_key' => 'favicon'], ['meta_value' => $path]);
         }
 
         return redirect()->back()->with('success', 'Settings updated successfully.');
