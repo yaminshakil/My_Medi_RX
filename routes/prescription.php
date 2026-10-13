@@ -11,9 +11,9 @@ use App\Http\Controllers\Admin\Eprescriptions\DoctorChamberController;
 use App\Http\Controllers\Admin\Eprescriptions\AppointmentController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['web', 'auth']], function () {
-    Route::get('appointments/create/{doctor_id}/{chamber_id?}', [AppointmentController::class, 'create'])->name('appointments.create_for_patient');
-});
+// Route::group(['middleware' => ['web', 'auth']], function () {
+//     Route::get('appointments/create/{doctor_id}/{chamber_id?}', [AppointmentController::class, 'create'])->name('appointments.create_for_patient');
+// });
 
 Route::prefix('admin')->middleware(['web', 'auth', 'profile.exists', 'role.redirect:Admin,Doctor,Assistant,Patient'])->group(function () {
     Route::resource('prescriptions', PrescriptionController::class);

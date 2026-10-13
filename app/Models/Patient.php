@@ -95,4 +95,15 @@ class Patient extends Model
     {
         return Carbon::today()->format('d-M-Y');
     }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    public function appointment()
+    {
+        return $this->hasOne(Appointment::class, 'patient_id')->whereDate('appointment_date', Carbon::today())
+            ->where('status', '!=', 'completed');
+    }
 }

@@ -13,6 +13,7 @@ use App\Services\Eprescriptions\AppointmentNumberService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class AppointmentRepository implements AppointmentRepositoryInterface
 {
@@ -200,8 +201,24 @@ class AppointmentRepository implements AppointmentRepositoryInterface
 
             $subject = ShortcodeHelper::parse($template->subject, $data);
             $body = ShortcodeHelper::parse($template->body, $data);
+            try {
+                Mail::to($patient->email)
+                    ->send(new AppointmentMail($subject, $body, $patientData));
 
-            Mail::to($patient->email)->send(new AppointmentMail($subject, $body, $patientData));
+                Log::info('Appointment email sent successfully', [
+                    'appointment_id' => $appointment->id,
+                    'recipient' => $patient->email,
+                ]);
+            } catch (\Throwable $e) {
+                Log::error('Appointment email failed', [
+                    'appointment_id' => $appointment->id,
+                    'error' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                ]);
+
+                throw $e;
+            }
         }
     }
 }

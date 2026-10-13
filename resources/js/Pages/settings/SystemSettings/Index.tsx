@@ -36,7 +36,7 @@ export default function Index() {
         {
             title: 'Notification Setting',
             icon: Bell,
-            //href: route('email-templates.index'),
+            href: route('settings.system.email-templates.index'),
         },
         {
             title: 'SEO Configuration',

@@ -56,6 +56,7 @@ class DoctorChamberRepository implements DoctorChamberRepositoryInterface
             'chamber_logo' => $chamber_logo,
             'doctor_id' => $this->doctor_id,
             'is_active' => 0,
+            'user_id'   => $this->user->id,
         ]);
 
         return $doctorchamber;
@@ -87,6 +88,7 @@ class DoctorChamberRepository implements DoctorChamberRepositoryInterface
                 'report_fee' => $data['report_fee'],
                 'chamber_logo' => $chamber_logo,
                 'doctor_id' => $this->doctor_id,
+                'user_id'   => $this->user->id,
             ]);
         } else {
             $doctorchamber = $doctorChamber->update([
@@ -102,6 +104,7 @@ class DoctorChamberRepository implements DoctorChamberRepositoryInterface
                 'followup_fee' => $data['followup_fee'],
                 'report_fee' => $data['report_fee'],
                 'doctor_id' => $this->doctor_id,
+                'user_id'   => $this->user->id,
             ]);
         }
         $doctorChamber->save();

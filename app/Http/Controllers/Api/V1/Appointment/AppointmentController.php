@@ -141,11 +141,14 @@ class AppointmentController extends Controller
     {
         try {
             $data = $request->validated();
+
             $appointment = $this->appointmentService->create($data);
+
             $templateSlug = 'appointment_confirmation';
-            $appointmentData = $this->appointmentService->appointmentMail($appointment, $templateSlug);
+            $this->appointmentService->appointmentMail($appointment, $templateSlug);
+            \Log::info('Request', $templateSlug);
             return ApiResponseService::success(
-                $appointmentData,
+                $appointment,
                 'Appointments booked successfully!'
             );
         } catch (\Exception $e) {
@@ -164,9 +167,17 @@ class AppointmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateAppointmentRequest $request, string $id)
     {
-        //
+        $data = $request->validated();
+        $this->appointmentService->update($data, $id);
+
+        $appointmentData = $this->appointmentService->find($id);
+
+        return ApiResponseService::success(
+            $appointmentData,
+            'Appointments updated successfully!'
+        );
     }
 
     /**

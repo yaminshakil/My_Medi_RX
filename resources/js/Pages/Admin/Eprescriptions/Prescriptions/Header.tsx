@@ -1,4 +1,4 @@
-import { Button } from '@/Components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
 import { Card, Select } from 'antd';
 import dayjs from 'dayjs';
@@ -50,6 +50,35 @@ export default function PatientAndAppointmentHeader({ patients, data, setData, s
                     </Link>
                 </div>
             )}
+            <div className="flex items-center space-x-2 text-sm">
+                {selectedPatient?.appointment ? (
+                    <div className="text-left">
+                        <label className="text-lg font-bold">Selected Appointment</label>
+
+                        <Card
+                            className="mt-4"
+                            title={dayjs(`${selectedPatient?.appointment?.appointmentdatetime}`, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD')}
+                            size="small"
+                        >
+                            <p>
+                                <strong>Appointment No:</strong> {selectedPatient?.appointment?.appointment_number}
+                            </p>
+                            <p>
+                                <strong>Appointment Time:</strong>{' '}
+                                {dayjs(`${selectedPatient?.appointment?.appointmentdatetime}`, 'YYYY-MM-DD HH:mm').format('hh:mm:ss A')}
+                            </p>
+                        </Card>
+                    </div>
+                ) : (
+                    <div>
+                        {selectedPatient && (
+                            <Button onClick={(e) => quickAppointment(e)} type="button">
+                                + Add Quick Appointment
+                            </Button>
+                        )}
+                    </div>
+                )}
+            </div>
         </header>
     );
 }

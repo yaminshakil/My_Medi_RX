@@ -220,7 +220,7 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
     public function getAllPatient()
     {
         $patients = Patient::latest()->get();
-        $patients->load(['vital', 'prescriptions' => function ($prescriptionQuery) {
+        $patients->load(['vital', 'appointment', 'prescriptions' => function ($prescriptionQuery) {
             $prescriptionQuery->where('doctor_id', $this->doctor_id)
                 ->latest(); // order prescriptions by latest
         }]);
@@ -233,6 +233,7 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
                 'mobile' => $patient->phone,
                 'vital' => $patient->vital,
                 'prescriptions' => $patient->prescriptions,
+                'appointment' => $patient->appointment,
                 'gender' => ucfirst(strtolower($patient->gender)),
                 'age' => $patient->date_of_birth->diff(Carbon::now()),
                 'current_date' => Carbon::now()->format('d-M-Y'),

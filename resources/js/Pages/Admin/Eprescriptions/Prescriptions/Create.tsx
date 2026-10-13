@@ -1,15 +1,15 @@
-import AddPatient from '@/Components/AddPatient';
-import AddVital from '@/Components/AddVital';
-import { CommonModal } from '@/Components/CommonModal';
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import GynaeHistoryForm from '@/Components/GynaeHistoryForm';
-import GynaeHistorySidebar from '@/Components/GynaeHistorySidebar';
-import InputError from '@/Components/input-error';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import AppLayout from '@/Layouts/app-layout';
+import AddPatient from '@/components/AddPatient';
+import AddVital from '@/components/AddVital';
+import { CommonModal } from '@/components/CommonModal';
+import { ConfirmDialog } from '@/components/ConfirmDialog';
+import GynaeHistoryForm from '@/components/GynaeHistoryForm';
+import GynaeHistorySidebar from '@/components/GynaeHistorySidebar';
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import axios from 'axios';
@@ -158,6 +158,7 @@ export default function Create(props) {
     };
 
     const selectedPatient = patients.find((p) => p.id === data.patient_id);
+    console.log(selectedPatient);
 
     useEffect(() => {
         if (selectedPatient?.appointment) {
@@ -296,6 +297,7 @@ export default function Create(props) {
 
     const saveAndNew: FormEventHandler = (e) => {
         e.preventDefault();
+        console.log(data);
         setLoadingButton('saveNew');
         if (!data.patient_id || !data.medications.length || !data.appointment_id) {
             setShowConfirm(true);
@@ -437,6 +439,7 @@ export default function Create(props) {
         }
     }, [flash]);
 
+    console.log(selectedPatient);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="E-Prescription" />

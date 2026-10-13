@@ -26,6 +26,7 @@ class DoctorChamber extends Model
         'report_fee',
         'appoinment_limit',
         'is_active',
+        'user_id'
     ];
 
     protected $casts = [

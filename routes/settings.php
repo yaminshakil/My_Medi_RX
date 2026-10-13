@@ -3,6 +3,7 @@
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SystemSettngsController;
+use App\Http\Controllers\Settings\EmailTemplate\EmailTemplateController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -39,5 +40,6 @@ Route::prefix('admin')->middleware('auth', 'role:Admin')->group(function () {
         Route::get('/configcachesettings', [SystemSettngsController::class, 'clearConfigCachSettings'])->name('configcachesettings.clear');
         Route::get('/eventcachesettings', [SystemSettngsController::class, 'clearEventCachSettings'])->name('eventcachesettings.clear');
         Route::get('/allcachesettings', [SystemSettngsController::class, 'clearAllCachSettings'])->name('allcachesettings.clear');
+        Route::resource('email-templates', EmailTemplateController::class);
     });
 });

@@ -176,4 +176,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Hospital::class, 'created_by', 'id');
     }
+
+    public function chambers()
+    {
+        return $this->hasMany(DoctorChamber::class, 'doctor_id');
+    }
+
+    public function chamber()
+    {
+        return $this->hasOne(DoctorChamber::class, 'doctor_id', 'id')->where('is_active', true);
+    }
 }
