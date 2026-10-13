@@ -35,8 +35,7 @@ class MedicineController extends Controller
 
         $medicines = $this->service->list($perPage, $search);
         $medicineData = MedicineResource::collection($medicines);
-
-        return ApiResponseService::success($medicineData, 'Manufacturer created successfully!');
+        return ApiResponseService::success($medicineData, 'Manufacturer retrive successfully!');
     }
 
     /**
@@ -44,7 +43,10 @@ class MedicineController extends Controller
      */
     public function store(CreateMedicineRequest $request)
     {
-        //
+        $data = $request->validated();
+        $medicine = $this->service->store($data);
+        $medicineData = new MedicineResource($medicine);
+        return ApiResponseService::success($medicineData, 'Medicine created successfully!');
     }
 
     /**
@@ -60,7 +62,13 @@ class MedicineController extends Controller
      */
     public function update(UpdateMedicineRequest $request, string $id)
     {
-        //
+        $data = $request->validated();
+
+        $this->service->update($id, $data);
+        $medicine = $this->service->get($id);
+        $medicine = $this->service->get($id);
+        $medicineData = new MedicineResource($medicine);
+        return ApiResponseService::success($medicineData, 'Medicine created successfully!');
     }
 
     /**
@@ -68,6 +76,7 @@ class MedicineController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->service->destroy($id);
+        return ApiResponseService::success([], 'Medicine deleted successfully!');
     }
 }
