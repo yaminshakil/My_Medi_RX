@@ -4,7 +4,7 @@ namespace App\Interfaces\Profile;
 
 interface ProfileRepositoryInterface
 {
-    public function getDoctorProfile();
+    public function getDoctorProfile($id);
 
     public function createDoctorProfile(array $data);
 

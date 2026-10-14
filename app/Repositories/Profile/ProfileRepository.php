@@ -26,10 +26,10 @@ class ProfileRepository implements ProfileRepositoryInterface
         $this->user = Auth::user();
     }
 
-    public function getDoctorProfile()
+    public function getDoctorProfile($id)
     {
         return $this->doctor::with('user', 'user.specialties', 'user.profileImage')
-            ->where('user_id', $this->user_id)->first();
+            ->where('user_id', $id)->first();
     }
 
     public function createDoctorProfile(array $data)

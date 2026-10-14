@@ -16,9 +16,9 @@ class ProfileServices
         $this->profileRepository = $profileRepository;
     }
 
-    public function getDoctorProfile()
+    public function getDoctorProfile($id)
     {
-        return $this->profileRepository->getDoctorProfile();
+        return $this->profileRepository->getDoctorProfile($id);
     }
 
     public function createDoctorProfile(array $data)

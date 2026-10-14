@@ -16,12 +16,12 @@ Route::post('password/change', [UserPasswordResetController::class, 'changePassw
 
 // Protected API routes using Access Token
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
 });
 
 // Refresh Token route
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
     Route::post('/refresh-token', [AuthController::class, 'refresh']);
 });

@@ -19,7 +19,8 @@ class DoctorController extends Controller
         protected DoctorService $doctorService,
         protected DoctorExperienceService $doctorExperienceService,
         protected DoctorEducationService $DoctorEducationService,
-    ) {}
+    ) {
+    }
 
     /**
      * Display a listing of the resource.
@@ -48,7 +49,7 @@ class DoctorController extends Controller
      */
     public function show(string $id)
     {
-        $doctor = $this->profileService->getDoctorProfile();
+        $doctor = $this->profileService->getDoctorProfile($id);
         $doctorData = new DoctorResource($doctor);
 
         return ApiResponseService::success($doctorData, 'Profile retrived successfully!');
