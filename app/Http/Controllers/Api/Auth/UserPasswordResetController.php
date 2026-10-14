@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class UserPasswordResetController extends Controller
 {
@@ -25,24 +26,31 @@ class UserPasswordResetController extends Controller
     public function sendResetLinkEmail(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
-        ]);
+        'email' => ['required', 'email'],
+    ]);
 
         $status = Password::sendResetLink(
             $request->only('email')
         );
 
+        Log::info('Password reset email result', [
+            'status' => $status,
+        ]);
+
         if ($status === Password::RESET_LINK_SENT) {
-            // For security, always show success message even if email doesn't exist
-            // This prevents email enumeration attacks
-            return ApiResponseService::success([], 'We have emailed your password reset link!');
+            return ApiResponseService::success(
+                [],
+                'We have emailed your password reset link!'
+            );
         }
 
-        // Map Laravel password status to user-friendly messages
-        $errorMessage = $this->getErrorMessage($status);
+        Log::warning('Password reset email was not sent', [
+            'status' => $status,
+        ]);
 
-        return ApiResponseService::error($errorMessage);
-        // return ApiResponseService::success([], 'We have emailed your password reset link!');
+        return ApiResponseService::error(
+            $this->getErrorMessage($status)
+        );
     }
 
     /**

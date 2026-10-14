@@ -5,6 +5,7 @@ import PrescriptionChart from './PrescriptionChart'; // your LineChart component
 const { Option } = Select;
 
 export default function DoctorFilterChart({ data, doctorsMap }) {
+
     const doctorKeys = Object.keys(doctorsMap);
 
     // Default: show first 3 doctors

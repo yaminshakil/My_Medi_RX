@@ -63,7 +63,7 @@ class DoctorController extends Controller
         $data = $request->validated();
 
         $doctor = $this->profileService->updateDoctorProfile($data);
-        $doctor = $this->profileService->getDoctorProfile();
+        $doctor = $this->profileService->getDoctorProfile($id);
 
         $doctorData = new DoctorResource($doctor);
 
@@ -75,7 +75,7 @@ class DoctorController extends Controller
      */
     public function destroy(string $id)
     {
-        $doctor = $this->profileService->getDoctorProfile();
+        $doctor = $this->profileService->getDoctorProfile($id);
         $this->doctorService->delete($doctor);
 
         return ApiResponseService::success([], 'Doctor Deleted successfully.');

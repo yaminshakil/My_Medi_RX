@@ -66,6 +66,7 @@ Route::get('migrate', function () {
 Route::get('/clear', function () {
     try {
         // Run migrations
+        Artisan::call('storage:link');
         Artisan::call('optimize:clear');
 
         return [

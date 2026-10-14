@@ -3,58 +3,57 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-// use App\Interfaces\DashboardRepositoryInterface;
-// use App\Interfaces\Eprescriptions\DoctorChamberRepositoryInterface;
+use App\Interfaces\DashboardRepositoryInterface;
+use App\Interfaces\Eprescriptions\DoctorChamberRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    // private DashboardRepositoryInterface $dashboardRepository;
+    private DashboardRepositoryInterface $dashboardRepository;
 
-    // private DoctorChamberRepositoryInterface $doctorChamberRepository;
+    private DoctorChamberRepositoryInterface $doctorChamberRepository;
 
     protected $user;
 
     public function __construct(
-        // DashboardRepositoryInterface $dashboardRepository,
-        // DoctorChamberRepositoryInterface $doctorChamberRepository
+        DashboardRepositoryInterface $dashboardRepository,
+        DoctorChamberRepositoryInterface $doctorChamberRepository
     ) {
-        // $this->dashboardRepository = $dashboardRepository;
-        // $this->doctorChamberRepository = $doctorChamberRepository;
+        $this->dashboardRepository = $dashboardRepository;
+        $this->doctorChamberRepository = $doctorChamberRepository;
         $this->user = Auth::user();
     }
 
     public function index()
     {
-        // $token = $this->dashboardRepository->getToken();
+        $token = $this->dashboardRepository->getToken();
 
-        // if ($this->user->hasRole('Doctor') || $this->user->hasRole('Assistant')) {
-        //     $eprescriptions = $this->dashboardRepository->ePrescriptionDashboardInfo();
-        //     $chambers = $this->doctorChamberRepository->all();
+        if ($this->user->hasRole('Doctor') || $this->user->hasRole('Assistant')) {
+            $eprescriptions = $this->dashboardRepository->ePrescriptionDashboardInfo();
+            $chambers = $this->doctorChamberRepository->all();
 
-        //     return Inertia::render('Dashboard/EprescriptionDashboard', [
-        //         'token' => $token,
-        //         'status' => session('status'),
-        //         'eprescriptions' => $eprescriptions,
-        //         'chambers' => $chambers,
-        //     ]);
-        // } elseif ($this->user->hasRole('Admin')) {
-        //     $eprescriptions = $this->dashboardRepository->getAdminDashboardInfo();
+            return Inertia::render('Dashboard/EprescriptionDashboard', [
+                'token' => $token,
+                'status' => session('status'),
+                'eprescriptions' => $eprescriptions,
+                'chambers' => $chambers,
+            ]);
+        } elseif ($this->user->hasRole('Admin')) {
+            $eprescriptions = $this->dashboardRepository->getAdminDashboardInfo();
 
-        //     return Inertia::render('Dashboard/Dashboard', [
-        //         'token' => $token,
-        //         'status' => session('status'),
-        //         'eprescriptions' => $eprescriptions,
-        //     ]);
-        // } elseif ($this->user->hasRole('Patient')) {
-        //     $patientinfo = $this->dashboardRepository->patientDashboardInfo();
+            return Inertia::render('Dashboard/Dashboard', [
+                'token' => $token,
+                'status' => session('status'),
+                'eprescriptions' => $eprescriptions,
+            ]);
+        } elseif ($this->user->hasRole('Patient')) {
+            $patientinfo = $this->dashboardRepository->patientDashboardInfo();
 
-        //     return Inertia::render('Dashboard/PatientDashboard', [
-        //         'token' => $token,
-        //         'patientinfo' => $patientinfo,
-        //     ]);
-        // }
-        return Inertia::render('Dashboard/Dashboard');
+            return Inertia::render('Dashboard/PatientDashboard', [
+                'token' => $token,
+                'patientinfo' => $patientinfo,
+            ]);
+        }
     }
 }

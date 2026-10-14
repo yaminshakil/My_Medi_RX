@@ -8,11 +8,11 @@ Route::post('/auth/register', [AuthController::class, 'register'])->name('regist
 Route::post('/auth/login', [AuthController::class, 'login'])->name('login');
 
 // Password Reset Endpoints (no authentication required)
-Route::post('password/email', [UserPasswordResetController::class, 'sendResetLinkEmail']);
-Route::post('password/reset', [UserPasswordResetController::class, 'reset']);
-Route::post('password/send-otp', [UserPasswordResetController::class, 'sendOtp']);
-Route::post('password/verify-otp', [UserPasswordResetController::class, 'verifyOtp']);
-Route::post('password/change', [UserPasswordResetController::class, 'changePassword']);
+Route::post('/auth/password/email', [UserPasswordResetController::class, 'sendResetLinkEmail']);
+Route::post('/auth/password/reset', [UserPasswordResetController::class, 'reset']);
+Route::post('/auth/password/send-otp', [UserPasswordResetController::class, 'sendOtp']);
+Route::post('/auth/password/verify-otp', [UserPasswordResetController::class, 'verifyOtp']);
+Route::post('/auth/password/change', [UserPasswordResetController::class, 'changePassword']);
 
 // Protected API routes using Access Token
 
