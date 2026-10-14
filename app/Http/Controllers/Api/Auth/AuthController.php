@@ -173,7 +173,8 @@ class AuthController extends Controller
     protected function generateLoginResponse($user)
     {
         // Generate Tokens using your AuthService
-        $tokens = AuthService::generateTokens($user);
+        //$tokens = AuthService::generateTokens($user);
+        $token = auth('api')->login($user);
 
         $userResource = new UserBasicResource($user);
 
@@ -181,9 +182,10 @@ class AuthController extends Controller
             'user'       => $userResource->resolve(),
             'token_type' => 'Bearer',
             'tokens'     => [
-                'accessToken'  => $tokens['accessToken'],
-                'refreshToken' => $tokens['refreshToken'],
-            ],
+                        'accessToken' => $token,
+                        'tokenType' => 'bearer',
+                        'expiresIn' => auth('api')->factory()->getTTL() * 60,
+                    ],
         ];
 
         return ApiResponseService::success($userData, 'Login successful!');
@@ -210,21 +212,17 @@ class AuthController extends Controller
 
         // Generate new tokens
         $tokens = AuthService::generateTokens($user);
+        $token = auth('api')->refresh();
 
         $userResource = new UserBasicResource($user);
-        $roles = $user->getRoleNames();
-        $permissions = $user->getPermissionsViaRoles()->pluck('name');
 
         $userData = [
             'user'   => $userResource->resolve(),
             'tokens' => [
-                'accessToken'  => $tokens['accessToken'],
-                'refreshToken' => $tokens['refreshToken'],
-            ],
-            'authorization' => [
-                'roles'       => $roles,
-                'permissions' => $permissions,
-            ],
+                'accessToken' => $token,
+                'tokenType' => 'bearer',
+                'expiresIn' => auth('api')->factory()->getTTL() * 60,
+            ]
         ];
 
         return ApiResponseService::success($userData, 'Token refreshed successfully!');
