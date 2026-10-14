@@ -51,15 +51,15 @@ class PatientProfileRepository implements PatientProfileRepositoryInterface
         $patient = $this->find($id);
         if (isset($data['profile_image'])) {
             // Delete old image if exists
-            if ($patient->profileImage) {
-                Storage::disk('public')->delete($patient->profileImage->path);
-                $patient->profileImage()->delete();
+            if ($patient->profile_image) {
+                Storage::disk('public')->delete($patient->profile_image->path);
+                $patient->profile_image()->delete();
             }
 
             // Store new
             $path = $data['profile_image']->store('profiles', 'public');
 
-            $patient->profileImage()->create([
+            $patient->profile_image()->create([
                 'path' => $path,
             ]);
         }
@@ -70,9 +70,9 @@ class PatientProfileRepository implements PatientProfileRepositoryInterface
     public function delete(int $id): bool
     {
         $patient = $this->find($id);
-        if ($patient && $patient->profileImage) {
-            Storage::disk('public')->delete($patient->profileImage->path);
-            $patient->profileImage()->delete();
+        if ($patient && $patient->profile_image) {
+            Storage::disk('public')->delete($patient->profile_image->path);
+            $patient->profile_image()->delete();
         }
         return $patient ? (bool) $patient->delete() : false;
     }

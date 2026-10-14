@@ -164,15 +164,17 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
             }
 
             DB::commit();
-
+            logger()->debug('STEP 6: Transaction committed');
             return $prescription;
-        } catch (\Throwable $th) {
+        } catch (\Throwable $e) {
             DB::rollBack();
 
-            return response()->json([
-                'message' => 'Error creating prescription',
-                'error' => $th->getMessage(),
-            ], 500);
+            logger()->error('Prescription store failed', [
+             'message' => $e->getMessage(),
+             'file' => $e->getFile(),
+             'line' => $e->getLine(),
+        ]);
+            throw $e;
         }
     }
 

@@ -186,4 +186,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(DoctorChamber::class, 'doctor_id', 'id')->where('is_active', true);
     }
+
+    public function patient()
+    {
+        return $this->hasOne(Patient::class, 'user_id');
+    }
 }

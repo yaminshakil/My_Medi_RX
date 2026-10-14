@@ -31,10 +31,14 @@ return new class () extends Migration {
             // Optional vitals snapshot
             $table->foreignId('vital_id')->nullable()->constrained('vitals')->onDelete('set null');
 
+            // Optional Appointments snapshot
+            $table->foreignId('appointment_id')->nullable()->constrained('appointments')->onDelete('set null');
+
             // Notes / instructions
             $table->text('instructions')->nullable();
             $table->text('follow_up_advice')->nullable();
             // Chamber I
+            $table->foreignId('chamber_id')->nullable()->constrained('doctor_chambers')->onDelete('set null');
             $table->string('chamber_logo')->nullable();
             $table->longText('header_left');
             $table->longText('header_right');
