@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use App\Models\Prescription;
+use App\Models\PrescriptionMedicine;
+use App\Models\PatientMedication;
+use App\Models\MedicationSchedule;
+use App\Models\MedicationLog;
 
 class Patient extends Model
 {
@@ -34,7 +39,7 @@ class Patient extends Model
 
     public function vitals()
     {
-        return $this->hasMany(Vital::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(Prescription::class, 'patient_id')->latest();
     }
 
     // Accessor: get age in years
@@ -105,5 +110,32 @@ class Patient extends Model
     {
         return $this->hasOne(Appointment::class, 'patient_id')->whereDate('appointment_date', Carbon::today())
             ->where('status', '!=', 'completed');
+    }
+
+    public function prescriptionMedicines()
+    {
+        return $this->hasManyThrough(
+            PrescriptionMedicine::class,
+            Prescription::class,
+            'patient_id',       // FK on prescriptions
+            'prescription_id',  // FK on prescription_medicines
+            'id',
+            'id'
+        );
+    }
+
+    public function medications()
+    {
+        return $this->hasMany(PatientMedication::class, 'patient_id');
+    }
+
+    public function medicationSchedules()
+    {
+        return $this->hasMany(MedicationSchedule::class, 'patient_id');
+    }
+
+    public function medicationLogs()
+    {
+        return $this->hasMany(MedicationLog::class, 'patient_id');
     }
 }

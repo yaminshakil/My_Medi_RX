@@ -20,8 +20,25 @@ class PrescriptionMedicine extends Model
         'meal_time',
     ];
 
-    public function medicines()
+
+    // public function medicines()
+    // {
+    //     return $this->belongsTo(Medicine::class, 'medicine_id');
+    // }
+
+    public function prescription()
+    {
+        return $this->belongsTo(Prescription::class, 'prescription_id');
+    }
+
+    public function medicine()
     {
         return $this->belongsTo(Medicine::class, 'medicine_id');
+    }
+
+    // Keep compatibility with your existing code.
+    public function medicines()
+    {
+        return $this->medicine();
     }
 }

@@ -74,7 +74,7 @@ class Prescription extends Model
 
     public function medications()
     {
-        return $this->hasMany(PrescriptionMedicine::class, 'prescription_id');
+        return $this->hasMany(PrescriptionMedicine::class, 'prescription_id', 'id');
     }
 
 

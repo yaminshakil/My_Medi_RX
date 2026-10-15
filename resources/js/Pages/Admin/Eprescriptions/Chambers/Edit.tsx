@@ -29,7 +29,7 @@ export default function Edit(props) {
         city: props?.doctorChamber?.city || '',
         address: props?.doctorChamber?.address || '',
         appoinment_limit: props?.doctorChamber?.appoinment_limit || 0,
-        hospital_id: props?.doctorChamber?.hospital_id || hospitals[0]?.value || '',
+        hospital_id: props?.doctorChamber?.hospital_id || hospitaloptions[0]?.value || '',
         _method: 'PUT',
     });
 
@@ -51,7 +51,7 @@ export default function Edit(props) {
                     heading="Edit Chamber"
                     submitTitle="Update"
                     initialImage={props?.doctorChamber?.chamber_logo_url}
-                    hospitals={hospitals}
+                    hospitals={hospitaloptions}
                 />
             </div>
         </AppLayout>

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class UserPasswordResetController extends Controller
 {
@@ -81,7 +82,7 @@ class UserPasswordResetController extends Controller
             $storedOtp = DB::table('password_reset_otps')
                 ->where('email', $email)
                 ->where('otp', $token)
-                ->where('expires_at', '>', now())
+                ->where('expires_at', '>', Carbon::now('UTC'))
                 ->first();
 
             if ($storedOtp) {
