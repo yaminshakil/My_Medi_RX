@@ -33,6 +33,9 @@ class CreatePatientProfileRequest extends FormRequest
             'address' => 'nullable|string',
             'marital_status' => 'nullable|string',
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'emergency_contact_name' => 'nullable|string|max:255',
+            'emergency_contact_phone' => 'nullable|string|max:20',
+            'emergency_contact_relationship' => 'nullable|string|max:255',
         ];
     }
 

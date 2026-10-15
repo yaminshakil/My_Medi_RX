@@ -17,11 +17,9 @@ class PatientDashboardController extends Controller
         // Use the existing User -> Patient relationship.
         $patient = $user->patient;
 
-        $prescriptions = $patient->prescriptions()
-    ->with('medications.medicine')
-    ->get();
+        $prescriptions = $patient?->prescriptions()->with('medications.medicine')->get();
 
-        $medications = $prescriptions->flatMap(
+        $medications = $prescriptions?->flatMap(
             fn ($prescription) => $prescription->medications
         );
 
@@ -43,7 +41,7 @@ class PatientDashboardController extends Controller
         };
 
         // Use the existing Patient -> Prescription relationship.
-        $prescriptions = $patient->prescriptions();
+        $prescriptions = $patient?->prescriptions();
 
         $activePrescriptions = (clone $prescriptions)
             ->where('status', 'active')

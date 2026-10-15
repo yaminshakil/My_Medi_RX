@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\Patients\PatientController;
 use App\Http\Controllers\Api\V1\Patient\PatientDashboardController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Patient\MedicationController;
 use App\Http\Controllers\Api\V1\Patient\MedicationScheduleController;
 use App\Http\Controllers\Api\V1\Patient\MedicationLogController;
@@ -11,17 +10,19 @@ use App\Http\Controllers\Api\V1\Patient\MedicationScanController;
 use App\Http\Controllers\Api\V1\Patient\MedicationRefillController;
 use App\Http\Controllers\Api\V1\Patient\VaccinationController;
 use App\Http\Controllers\Api\V1\Patient\MedicationReportController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api'])->group(function () {
+    Route::apiResource('/patients', PatientController::class)->except(['update']);
+    // 2. Add an explicit POST route for updating the patient
+    Route::post('/patients/{patient}', [PatientController::class, 'update']);
+    Route::get('/patient/dashboard/overview', [PatientDashboardController::class, 'index']);
 });
 
-Route::prefix('v1/patient')
+Route::prefix('/patient')
     ->middleware('auth:api')
     ->group(function () {
         // Dashboard and medication CRUD
-        Route::apiResource('/patients', PatientController::class);
-        Route::get('/patient/dashboard/overview', [PatientDashboardController::class, 'index']);
-
         Route::get('/medications/dashboard', [
             MedicationController::class, 'dashboard'
         ]);

@@ -138,4 +138,9 @@ class Patient extends Model
     {
         return $this->hasMany(MedicationLog::class, 'patient_id');
     }
+
+    public function vaccinationRecords()
+    {
+        return $this->hasMany(VaccinationRecord::class, 'patient_id');
+    }
 }

@@ -38,7 +38,7 @@ class PatientProfileRepository implements PatientProfileRepositoryInterface
 
         if (isset($data['profile_image'])) {
             $profileImagePath = $data['profile_image']->store('profiles', 'public');
-            $patient->profileImage()->create([
+            $patient->profile_image()->create([
                 'path' => $profileImagePath,
             ]);
         }
