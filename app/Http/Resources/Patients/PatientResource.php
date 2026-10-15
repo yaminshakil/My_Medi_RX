@@ -30,6 +30,9 @@ class PatientResource extends JsonResource
             'address'           => $this->address,
             'date_of_birth'     => $this->date_of_birth?->toISOString(),
             'birth_date'        => $this->date_of_birth?->format('Y-m-d'),
+            'emergency_contact_name' => $this->emergency_contact_name,
+            'emergency_contact_phone' => $this->emergency_contact_phone,
+            'emergency_contact_relationship' => $this->emergency_contact_relationship,
 
             // Computed age object matching DateInterval output
             'age'               => $this->getAgeArray(),
