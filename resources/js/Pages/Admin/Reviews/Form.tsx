@@ -81,7 +81,7 @@ export default function ReviewForm({ users, review, doctors }: Props) {
                         {isUserType ? (
                             // Show Select of Doctors
                             <Select
-                                value={data.reviewable_id}
+                                value={data.reviewable_id ? String(data.reviewable_id) : undefined}
                                 onValueChange={(v) => setData('reviewable_id', v)}
                             >
                                 <SelectTrigger>
