@@ -33,7 +33,7 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin'])-
     })->name('notifications.read');
 });
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('reviews', AdminReviewController::class);
     Route::patch('reviews/{review}/toggle-approved', [AdminReviewController::class, 'toggleApproved'])
         ->name('reviews.toggle-approved');
