@@ -18,10 +18,11 @@ interface User {
 
 interface Props {
     users: User[];
+    doctors: User[];
     review?: any; // for edit
 }
 
-export default function ReviewForm({ users, review }: Props) {
+export default function ReviewForm({ users, review, doctors }: Props) {
     const { data, setData, post, put, processing, errors } = useForm({
         reviewable_type: review?.reviewable_type || 'App\\Models\\User',
         reviewable_id: review?.reviewable_id || '',
@@ -46,6 +47,8 @@ export default function ReviewForm({ users, review }: Props) {
 
     const submitTitle = review ? 'Update Review' : 'Create Review';
 
+    const isUserType = data.reviewable_type === 'App\\Models\\User' || data.reviewable_type === 'user';
+
     return (
         <form onSubmit={submit} className="space-y-6 max-w-2xl px-4">
             <Card>
@@ -64,9 +67,7 @@ export default function ReviewForm({ users, review }: Props) {
                                 <SelectValue placeholder="Select type" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="App\\Models\\User">User</SelectItem>
-                                <SelectItem value="App\\Models\\Product">Product</SelectItem>
-                                <SelectItem value="App\\Models\\Post">Post</SelectItem>
+                                <SelectItem value="App\Models\User">User</SelectItem>
                             </SelectContent>
                         </Select>
                         {errors.reviewable_type && <p className="text-sm text-destructive">{errors.reviewable_type}</p>}
@@ -74,12 +75,35 @@ export default function ReviewForm({ users, review }: Props) {
 
                     {/* Reviewable ID */}
                     <div className="space-y-2">
-                        <Label>Reviewable ID</Label>
-                        <Input
-                            type="number"
-                            value={data.reviewable_id}
-                            onChange={(e) => setData('reviewable_id', e.target.value)}
-                        />
+                        <Label>
+                            {isUserType ? 'Select Doctor' : 'Reviewable ID'}
+                        </Label>
+                        {isUserType ? (
+                            // Show Select of Doctors
+                            <Select
+                                value={data.reviewable_id}
+                                onValueChange={(v) => setData('reviewable_id', v)}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select a doctor" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {doctors.map((doctor) => (
+                                        <SelectItem key={doctor.id} value={String(doctor.id)}>
+                                            {doctor.name} ({doctor.email})
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        ) : (
+                            // Fallback for other types (manual ID)
+                            <Input
+                                type="number"
+                                value={data.reviewable_id}
+                                onChange={(e) => setData('reviewable_id', e.target.value)}
+                                placeholder="Enter ID"
+                            />
+                        )}
                         {errors.reviewable_id && <p className="text-sm text-destructive">{errors.reviewable_id}</p>}
                     </div>
 
