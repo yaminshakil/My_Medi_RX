@@ -58,7 +58,7 @@ export default function ReviewForm({ users, review }: Props) {
                         <Label>Reviewable Type</Label>
                         <Select
                             value={data.reviewable_type}
-                            onValueChange={(v) => setData('reviewable_type', v)}
+                            onValueChange={(v) => { setData('reviewable_type', v); console.log(v) }}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="Select type" />
