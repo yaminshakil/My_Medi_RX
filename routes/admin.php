@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Auth\RoleController;
 use App\Http\Controllers\Admin\Auth\UserController;
 use App\Http\Controllers\Admin\Menu\MenuController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Review\AdminReviewController;
 
 Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin'])->group(function () {
     Route::post('/menus/update-order', [MenuController::class, 'updateOrder'])->name('menus.updateOrder');
@@ -30,4 +31,10 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin'])-
 
         return back();
     })->name('notifications.read');
+});
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('reviews', AdminReviewController::class);
+    Route::patch('reviews/{review}/toggle-approved', [AdminReviewController::class, 'toggleApproved'])
+        ->name('reviews.toggle-approved');
 });

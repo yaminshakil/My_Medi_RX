@@ -11,6 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -211,5 +212,46 @@ class User extends Authenticatable implements JWTSubject
     public function patient()
     {
         return $this->hasOne(Patient::class, 'user_id');
+    }
+
+    public function reviews()
+    {
+        return $this->morphMany(Review::class, 'reviewable');
+    }
+
+    public function averageRating(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => round($this->reviews()->avg('rating'), 1)
+        );
+    }
+
+    public function reviewCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->reviews()->count()
+        );
+    }
+
+    public function getRatingDistributionAttribute()
+    {
+        $ratingPercentages = [];
+
+        $ratingCounts = $this->reviews()
+            ->selectRaw('rating, COUNT(*) as count')
+            ->groupBy('rating')
+            ->pluck('count', 'rating')
+            ->toArray();
+
+        $totalReviews = $this->review_count;
+
+        foreach (range(1, 5) as $i) {
+            $count = $ratingCounts[$i] ?? 0;
+            $ratingPercentages[$i] = $totalReviews > 0
+                ? round(($count / $totalReviews) * 100)
+                : 0;
+        }
+
+        return $ratingPercentages;
     }
 }
