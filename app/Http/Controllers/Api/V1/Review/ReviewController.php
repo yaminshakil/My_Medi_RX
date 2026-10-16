@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\V1\Review;
 
 use App\Http\Controllers\Controller;
 use App\Models\Review;
-use Illuminate\Http\Request;
 use App\Services\ApiResponseService;
+use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
@@ -27,9 +27,9 @@ class ReviewController extends Controller
     {
         $validated = $request->validate([
             'reviewable_type' => 'required|string',
-            'reviewable_id' => 'required|integer',
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string|max:1000',
+            'reviewable_id'   => 'required|integer',
+            'rating'          => 'required|integer|min:1|max:5',
+            'comment'         => 'nullable|string|max:1000',
         ]);
 
         $validated['user_id'] = auth()->id();

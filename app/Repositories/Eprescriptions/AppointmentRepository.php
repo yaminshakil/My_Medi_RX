@@ -12,8 +12,8 @@ use App\Models\User;
 use App\Services\Eprescriptions\AppointmentNumberService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class AppointmentRepository implements AppointmentRepositoryInterface
 {
@@ -108,17 +108,17 @@ class AppointmentRepository implements AppointmentRepositoryInterface
             ->withQueryString();
 
         $appointments->getCollection()->transform(fn ($appointment) => [
-            'id' => $appointment->id,
-            'doctor' => $appointment->doctor,
-            'patient' => $appointment->patient,
-            'chamber' => $appointment->chamber,
+            'id'                 => $appointment->id,
+            'doctor'             => $appointment->doctor,
+            'patient'            => $appointment->patient,
+            'chamber'            => $appointment->chamber,
             'appointment_number' => $appointment->appointment_number,
-            'appointment_date' => $appointment->appointment_date->format('Y-m-d'),
-            'appointment_time' => $appointment->appointment_time->format('g:i A'),
-            'prescriptions' => $appointment?->patient?->prescriptions,
-            'vitals' => $appointment->patient?->vitals()->latest()->take(1)->get(),
-            'status' => $appointment->status,
-            'created_at' => $appointment->created_at->format('Y-m-d'),
+            'appointment_date'   => $appointment->appointment_date->format('Y-m-d'),
+            'appointment_time'   => $appointment->appointment_time->format('g:i A'),
+            'prescriptions'      => $appointment?->patient?->prescriptions,
+            'vitals'             => $appointment->patient?->vitals()->latest()->take(1)->get(),
+            'status'             => $appointment->status,
+            'created_at'         => $appointment->created_at->format('Y-m-d'),
         ]);
 
         return $appointments;
@@ -163,13 +163,13 @@ class AppointmentRepository implements AppointmentRepositoryInterface
         $appointmentnumber = $this->appointmentnumber->generate();
 
         return $data = [
-            'doctor_id' => $doctor->id,
-            'patient_id' => $patient_id,
-            'chamber_id' => $doctor->chamber?->id,
+            'doctor_id'          => $doctor->id,
+            'patient_id'         => $patient_id,
+            'chamber_id'         => $doctor->chamber?->id,
             'appointment_number' => $appointmentnumber,
-            'appointment_date' => Carbon::now()->format('Y-m-d'),
-            'appointment_time' => Carbon::now()->format('H:i:s'),
-            'appointment_type' => 'offline',
+            'appointment_date'   => Carbon::now()->format('Y-m-d'),
+            'appointment_time'   => Carbon::now()->format('H:i:s'),
+            'appointment_type'   => 'offline',
         ];
     }
 
@@ -185,17 +185,17 @@ class AppointmentRepository implements AppointmentRepositoryInterface
             $currency = Setting::getValue('currency');
             $currency_symbol = Setting::getValue('currency_symbol');
             $data = [
-                'booking_date' => $appointment->appointment_date->format('Y-m-d'),
-                'time_serial' => $appointment->appointment_time->format('h:i:s A'),
-                'doctor_name' => $doctor->name,
-                'doctor_fees' => $appointment->chamber->fee,
-                'site_currency' => $currency,
+                'booking_date'    => $appointment->appointment_date->format('Y-m-d'),
+                'time_serial'     => $appointment->appointment_time->format('h:i:s A'),
+                'doctor_name'     => $doctor->name,
+                'doctor_fees'     => $appointment->chamber->fee,
+                'site_currency'   => $currency,
                 'currency_symbol' => $currency_symbol,
-                'booking_status' => $appointment->status,
+                'booking_status'  => $appointment->status,
             ];
 
             $patientData = [
-                'patient_name' => $patient->name,
+                'patient_name'  => $patient->name,
                 'patient_email' => $patient->email,
             ];
 
@@ -207,14 +207,14 @@ class AppointmentRepository implements AppointmentRepositoryInterface
 
                 Log::info('Appointment email sent successfully', [
                     'appointment_id' => $appointment->id,
-                    'recipient' => $patient->email,
+                    'recipient'      => $patient->email,
                 ]);
             } catch (\Throwable $e) {
                 Log::error('Appointment email failed', [
                     'appointment_id' => $appointment->id,
-                    'error' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
+                    'error'          => $e->getMessage(),
+                    'file'           => $e->getFile(),
+                    'line'           => $e->getLine(),
                 ]);
 
                 throw $e;

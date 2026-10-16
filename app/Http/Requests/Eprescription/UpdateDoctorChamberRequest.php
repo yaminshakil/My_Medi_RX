@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Eprescription;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateDoctorChamberRequest extends FormRequest
@@ -17,28 +18,28 @@ class UpdateDoctorChamberRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
-            'city' => ['required', 'string'],
-            'address' => ['required', 'string'],
-            'header_left' => ['required', 'string', 'max:65000'],
-            'header_right' => ['required', 'string', 'max:65000'],
-            'footer_info' => ['required', 'string', 'max:65000'],
-            'schedules' => 'required|array|min:1',
-            'schedules.*.day' => 'required|string',
-            'schedules.*.start_time' => 'required|date_format:H:i',
-            'schedules.*.end_time' => 'required|date_format:H:i|after:schedules.*.start_time',
+            'name'                      => ['required', 'string'],
+            'city'                      => ['required', 'string'],
+            'address'                   => ['required', 'string'],
+            'header_left'               => ['required', 'string', 'max:65000'],
+            'header_right'              => ['required', 'string', 'max:65000'],
+            'footer_info'               => ['required', 'string', 'max:65000'],
+            'schedules'                 => 'required|array|min:1',
+            'schedules.*.day'           => 'required|string',
+            'schedules.*.start_time'    => 'required|date_format:H:i',
+            'schedules.*.end_time'      => 'required|date_format:H:i|after:schedules.*.start_time',
             'schedules.*.slot_duration' => 'required|numeric',
-            'chamber_logo' => 'nullable|max:2048',
-            'prev_chamber_logo' => 'nullable|max:2048',
-            'fee' => ['required', 'between:0,99.99'],
-            'followup_fee' => ['required', 'between:0,99.99'],
-            'appoinment_limit' => 'nullable|numeric',
-            'report_fee' => ['nullable', 'between:0,99.99'],
+            'chamber_logo'              => 'nullable|max:2048',
+            'prev_chamber_logo'         => 'nullable|max:2048',
+            'fee'                       => ['required', 'between:0,99.99'],
+            'followup_fee'              => ['required', 'between:0,99.99'],
+            'appoinment_limit'          => 'nullable|numeric',
+            'report_fee'                => ['nullable', 'between:0,99.99'],
         ];
     }
 }

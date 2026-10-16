@@ -19,7 +19,7 @@ class BloodBankSeeder extends Seeder
     {
         // Replace these coordinates with your hospital's real location: donor search starts from here.
         Hospital::firstOrCreate(['name' => 'Demo General Hospital'], [
-            'address' => '1 Hospital Road', 'phone' => '0000000000',
+            'address'  => '1 Hospital Road', 'phone' => '0000000000',
             'latitude' => 23.7808, 'longitude' => 90.4070,
         ]);
 
@@ -30,7 +30,7 @@ class BloodBankSeeder extends Seeder
             ['Plasma freezer', 'Cold room', 'freezer', -30.0, -18.0, 300],
         ] as [$name, $location, $type, $min, $max, $capacity]) {
             StorageUnit::firstOrCreate(['name' => $name], [
-                'location' => $location, 'type' => $type,
+                'location'   => $location, 'type' => $type,
                 'min_temp_c' => $min, 'max_temp_c' => $max, 'capacity' => $capacity,
             ]);
         }

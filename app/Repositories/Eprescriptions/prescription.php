@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Eprescriptions\DoctorChamberController;
 use App\Http\Controllers\Admin\Eprescriptions\InstructionController;
 use App\Http\Controllers\Admin\Eprescriptions\ManufacturerController;
 use App\Http\Controllers\Admin\Eprescriptions\MedicineController;
@@ -7,7 +8,6 @@ use App\Http\Controllers\Admin\Eprescriptions\MedicineDoseController;
 use App\Http\Controllers\Admin\Eprescriptions\MedicineDurationController;
 use App\Http\Controllers\Admin\Eprescriptions\PrescriptionController;
 use App\Http\Controllers\Admin\Eprescriptions\VitalController;
-use App\Http\Controllers\Admin\Eprescriptions\DoctorChamberController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['web', 'auth', 'profile.exists', 'role.redirect:Admin,Doctor,Assistant,Patient'])->group(function () {

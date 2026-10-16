@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\App;
+use Symfony\Component\HttpFoundation\Response;
 
 class SetLocale
 {
@@ -18,7 +18,7 @@ class SetLocale
     {
         $locale = session('locale', config('app.locale'));
 
-        if (!array_key_exists($locale, config('languages.supported'))) {
+        if (! array_key_exists($locale, config('languages.supported'))) {
             $locale = config('app.locale');
         }
 

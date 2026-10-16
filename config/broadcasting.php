@@ -31,13 +31,13 @@ return [
     'connections' => [
 
         'reverb' => [
-            'driver' => 'reverb',
-            'key' => env('REVERB_APP_KEY'),
-            'secret' => env('REVERB_APP_SECRET'),
-            'app_id' => env('REVERB_APP_ID'),
+            'driver'  => 'reverb',
+            'key'     => env('REVERB_APP_KEY'),
+            'secret'  => env('REVERB_APP_SECRET'),
+            'app_id'  => env('REVERB_APP_ID'),
             'options' => [
-                'host' => env('REVERB_HOST'),
-                'port' => env('REVERB_PORT', 443),
+                'host'   => env('REVERB_HOST'),
+                'port'   => env('REVERB_PORT', 443),
                 'scheme' => env('REVERB_SCHEME', 'https'),
                 'useTLS' => env('REVERB_SCHEME', 'https') === 'https',
             ],
@@ -47,17 +47,17 @@ return [
         ],
 
         'pusher' => [
-            'driver' => 'pusher',
-            'key' => env('PUSHER_APP_KEY'),
-            'secret' => env('PUSHER_APP_SECRET'),
-            'app_id' => env('PUSHER_APP_ID'),
+            'driver'  => 'pusher',
+            'key'     => env('PUSHER_APP_KEY'),
+            'secret'  => env('PUSHER_APP_SECRET'),
+            'app_id'  => env('PUSHER_APP_ID'),
             'options' => [
-                'cluster' => env('PUSHER_APP_CLUSTER'),
-                'host' => env('PUSHER_HOST') ?: 'api-'.env('PUSHER_APP_CLUSTER', 'mt1').'.pusher.com',
-                'port' => env('PUSHER_PORT', 443),
-                'scheme' => env('PUSHER_SCHEME', 'https'),
+                'cluster'   => env('PUSHER_APP_CLUSTER'),
+                'host'      => env('PUSHER_HOST') ?: 'api-'.env('PUSHER_APP_CLUSTER', 'mt1').'.pusher.com',
+                'port'      => env('PUSHER_PORT', 443),
+                'scheme'    => env('PUSHER_SCHEME', 'https'),
                 'encrypted' => true,
-                'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
+                'useTLS'    => env('PUSHER_SCHEME', 'https') === 'https',
             ],
             'client_options' => [
                 // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
@@ -66,20 +66,20 @@ return [
 
         'ably' => [
             'driver' => 'ably',
-            'key' => env('ABLY_KEY'),
+            'key'    => env('ABLY_KEY'),
         ],
 
         'mercure' => [
-            'driver' => 'mercure',
-            'url' => env('MERCURE_URL'),
-            'public_url' => env('MERCURE_PUBLIC_URL'),
-            'secret' => env('MERCURE_JWT_SECRET'),
+            'driver'         => 'mercure',
+            'url'            => env('MERCURE_URL'),
+            'public_url'     => env('MERCURE_PUBLIC_URL'),
+            'secret'         => env('MERCURE_JWT_SECRET'),
             'encryption_key' => env('MERCURE_ENCRYPTION_KEY'),
-            'claims' => [
-                'iss' => env('MERCURE_JWT_ISSUER'),
+            'claims'         => [
+                'iss'       => env('MERCURE_JWT_ISSUER'),
                 'client_id' => env('APP_NAME'),
             ],
-            'cookie_name' => env('MERCURE_COOKIE_NAME'),
+            'cookie_name'          => env('MERCURE_COOKIE_NAME'),
             'subscribe_expiration' => (int) env('MERCURE_SUBSCRIBE_EXPIRATION', 5),
         ],
 

@@ -5,14 +5,14 @@ namespace App\Modules\BloodBank\Enums;
 enum BloodGroup: string
 {
     // Order matters: it is the order of the rows on the stock matrix.
-    case APositive  = 'A+';
-    case BPositive  = 'B+';
+    case APositive = 'A+';
+    case BPositive = 'B+';
     case ABPositive = 'AB+';
-    case OPositive  = 'O+';
-    case ANegative  = 'A-';
-    case BNegative  = 'B-';
+    case OPositive = 'O+';
+    case ANegative = 'A-';
+    case BNegative = 'B-';
     case ABNegative = 'AB-';
-    case ONegative  = 'O-';
+    case ONegative = 'O-';
 
     /** ABO part only: A, B, AB or O. */
     public function abo(): string

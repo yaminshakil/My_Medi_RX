@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\api\Hospitals;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Hospital\HospitalStoreRequest;
 use App\Interfaces\HospitalRepositoryInterface;
 use App\Models\Setting;
 use App\Services\ApiResponseService;
-use App\Http\Requests\Hospital\HospitalStoreRequest;
+use Illuminate\Http\Request;
 
 class HospitalController extends Controller
 {
@@ -30,6 +30,7 @@ class HospitalController extends Controller
         }
         $perPage = $request->input('per_page', $recordsPerPage); // default 10
         $hospitals = $this->hospitalRepository->getAllHospital($perPage, $search);
+
         return ApiResponseService::success($hospitals, 'Hospitals retrieved successfully!');
     }
 
@@ -40,6 +41,7 @@ class HospitalController extends Controller
     {
         $data = $request->validated();
         $hospital = $this->hospitalRepository->createHospital($data);
+
         return ApiResponseService::success($hospital, 'Hospital created successfully!');
     }
 
@@ -49,6 +51,7 @@ class HospitalController extends Controller
     public function show(string $id)
     {
         $hospital = $this->hospitalRepository->getHospitalById($id);
+
         return ApiResponseService::success($hospital, 'Hospital retrieved successfully!');
     }
 
@@ -60,6 +63,7 @@ class HospitalController extends Controller
         $hospital = $this->hospitalRepository->getHospitalById($id);
         $data = $request->validated();
         $this->hospitalRepository->updateHospital($hospital, $data);
+
         return ApiResponseService::success($hospital, 'Hospital updated successfully!');
     }
 
@@ -70,6 +74,7 @@ class HospitalController extends Controller
     {
         $hospital = $this->hospitalRepository->getHospitalById($id);
         $this->hospitalRepository->deleteHospital($hospital);
+
         return ApiResponseService::success(null, 'Hospital deleted successfully!');
     }
 
@@ -79,6 +84,7 @@ class HospitalController extends Controller
     public function getAllHospitalType(Request $request)
     {
         $hospitalTypes = $this->hospitalRepository->getAllHospitalType();
+
         return ApiResponseService::success($hospitalTypes, 'Hospital types retrieved successfully!');
     }
 }

@@ -38,11 +38,11 @@ class MedicationAdherenceController extends Controller
         $total = $eligible->count();
 
         return response()->json([
-            'period_days' => $data['days'] ?? 30,
+            'period_days'          => $data['days'] ?? 30,
             'total_eligible_doses' => $total,
-            'taken' => $taken,
-            'missed' => $eligible->where('status', 'missed')->count(),
-            'skipped' => $logs->where('status', 'skipped')->count(),
+            'taken'                => $taken,
+            'missed'               => $eligible->where('status', 'missed')->count(),
+            'skipped'              => $logs->where('status', 'skipped')->count(),
             'adherence_percentage' => $total
                 ? round(($taken / $total) * 100, 2)
                 : null,
@@ -53,7 +53,7 @@ class MedicationAdherenceController extends Controller
     {
         $data = $request->validate([
             'from' => ['nullable', 'date'],
-            'to' => ['nullable', 'date', 'after_or_equal:from'],
+            'to'   => ['nullable', 'date', 'after_or_equal:from'],
         ]);
 
         $from = Carbon::parse(
@@ -84,10 +84,10 @@ class MedicationAdherenceController extends Controller
             $taken = $eligible->where('status', 'taken')->count();
 
             $days[] = [
-                'date' => $date->toDateString(),
-                'total' => $total,
-                'taken' => $taken,
-                'missed' => $eligible->where('status', 'missed')->count(),
+                'date'                 => $date->toDateString(),
+                'total'                => $total,
+                'taken'                => $taken,
+                'missed'               => $eligible->where('status', 'missed')->count(),
                 'adherence_percentage' => $total
                     ? round(($taken / $total) * 100, 2)
                     : null,
@@ -112,9 +112,10 @@ class MedicationAdherenceController extends Controller
         while (true) {
             $items = $logs->get($date->toDateString());
 
-            if (!$items) {
+            if (! $items) {
                 if ($date->isToday()) {
                     $date->subDay();
+
                     continue;
                 }
                 break;

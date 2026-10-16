@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Medicines\ManufacturerController;
 use App\Http\Controllers\Api\Medicines\MedicineController;
 use App\Http\Controllers\Api\Medicines\MedicineDoseController;
 use App\Http\Controllers\Api\Medicines\MedicineDurationController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api'])->group(function () {
     Route::apiResource('/manufacturers', ManufacturerController::class);

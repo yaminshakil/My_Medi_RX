@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api\V1\Patient;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\PatientMedication;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class MedicationController extends Controller
@@ -41,10 +40,10 @@ class MedicationController extends Controller
     {
         $data = $request->validate([
             'medicine_name' => ['required', 'string', 'max:255'],
-            'strength' => ['nullable', 'string', 'max:100'],
-            'dosage' => ['nullable', 'string', 'max:100'],
-            'dosage_unit' => ['nullable', 'string', 'max:50'],
-            'source' => [
+            'strength'      => ['nullable', 'string', 'max:100'],
+            'dosage'        => ['nullable', 'string', 'max:100'],
+            'dosage_unit'   => ['nullable', 'string', 'max:50'],
+            'source'        => [
                 'sometimes',
                 Rule::in([
                     'doctor_prescription',
@@ -59,21 +58,21 @@ class MedicationController extends Controller
                 'exists:prescription_medicines,id',
             ],
             'start_date' => ['required', 'date'],
-            'end_date' => [
-                'nullable', 'date', 'after_or_equal:start_date'
+            'end_date'   => [
+                'nullable', 'date', 'after_or_equal:start_date',
             ],
-            'total_quantity' => ['nullable', 'integer', 'min:0'],
+            'total_quantity'     => ['nullable', 'integer', 'min:0'],
             'remaining_quantity' => [
-                'nullable', 'integer', 'min:0'
+                'nullable', 'integer', 'min:0',
             ],
             'refill_threshold' => [
-                'sometimes', 'integer', 'min:0'
+                'sometimes', 'integer', 'min:0',
             ],
             'instructions' => ['nullable', 'string'],
         ]);
 
         // Do not trust a client-supplied prescription medicine ID.
-        if (!empty($data['prescription_medicine_id'])) {
+        if (! empty($data['prescription_medicine_id'])) {
             $prescription = $this->patient($request)
                 ->prescriptionMedicines()
                 ->where(
@@ -98,7 +97,7 @@ class MedicationController extends Controller
 
         return response()->json([
             'message' => 'Medication created successfully.',
-            'data' => $medication->load('schedules'),
+            'data'    => $medication->load('schedules'),
         ], 201);
     }
 
@@ -118,17 +117,17 @@ class MedicationController extends Controller
         $this->authorizeMedication($request, $medication);
 
         $data = $request->validate([
-            'medicine_name' => ['sometimes', 'required', 'string', 'max:255'],
-            'strength' => ['nullable', 'string', 'max:100'],
-            'dosage' => ['nullable', 'string', 'max:100'],
-            'dosage_unit' => ['nullable', 'string', 'max:50'],
-            'start_date' => ['sometimes', 'required', 'date'],
-            'end_date' => ['nullable', 'date'],
-            'total_quantity' => ['nullable', 'integer', 'min:0'],
+            'medicine_name'      => ['sometimes', 'required', 'string', 'max:255'],
+            'strength'           => ['nullable', 'string', 'max:100'],
+            'dosage'             => ['nullable', 'string', 'max:100'],
+            'dosage_unit'        => ['nullable', 'string', 'max:50'],
+            'start_date'         => ['sometimes', 'required', 'date'],
+            'end_date'           => ['nullable', 'date'],
+            'total_quantity'     => ['nullable', 'integer', 'min:0'],
             'remaining_quantity' => ['nullable', 'integer', 'min:0'],
-            'refill_threshold' => ['sometimes', 'integer', 'min:0'],
-            'instructions' => ['nullable', 'string'],
-            'status' => [
+            'refill_threshold'   => ['sometimes', 'integer', 'min:0'],
+            'instructions'       => ['nullable', 'string'],
+            'status'             => [
                 'sometimes',
                 Rule::in(['active', 'paused', 'completed', 'discontinued']),
             ],
@@ -138,7 +137,7 @@ class MedicationController extends Controller
 
         return response()->json([
             'message' => 'Medication updated successfully.',
-            'data' => $medication->fresh(),
+            'data'    => $medication->fresh(),
         ]);
     }
 
@@ -188,11 +187,11 @@ class MedicationController extends Controller
                 'doses' => $logs,
 
                 'summary' => [
-                    'total' => $logs->count(),
-                    'taken' => $logs->where('status', 'taken')->count(),
-                    'missed' => $logs->where('status', 'missed')->count(),
+                    'total'    => $logs->count(),
+                    'taken'    => $logs->where('status', 'taken')->count(),
+                    'missed'   => $logs->where('status', 'missed')->count(),
                     'upcoming' => $logs->where('status', 'upcoming')->count(),
-                    'snoozed' => $logs->where('status', 'snoozed')->count(),
+                    'snoozed'  => $logs->where('status', 'snoozed')->count(),
                 ],
             ],
         ]);

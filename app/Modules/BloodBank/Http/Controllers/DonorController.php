@@ -14,9 +14,7 @@ use Inertia\Response;
 
 class DonorController extends Controller
 {
-    public function __construct(private readonly DonorRepositoryInterface $donors)
-    {
-    }
+    public function __construct(private readonly DonorRepositoryInterface $donors) {}
 
     public function index(Request $request): Response
     {

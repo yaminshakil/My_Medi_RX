@@ -6,16 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Notifications\PasswordResetOtpNotification;
 use App\Services\ApiResponseService;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
 
 class UserPasswordResetController extends Controller
 {
@@ -27,8 +27,8 @@ class UserPasswordResetController extends Controller
     public function sendResetLinkEmail(Request $request)
     {
         $request->validate([
-        'email' => ['required', 'email'],
-    ]);
+            'email' => ['required', 'email'],
+        ]);
 
         $status = Password::sendResetLink(
             $request->only('email')

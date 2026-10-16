@@ -4,7 +4,6 @@ namespace App\Repositories\Eprescriptions;
 
 use App\Interfaces\Eprescriptions\GynaeHistoryRepositoryInterface;
 use App\Interfaces\Eprescriptions\PrescriptionRepositoryInterface;
-use App\Models\Appointment;
 use App\Models\Medicine;
 use App\Models\Patient;
 use App\Models\Prescription;
@@ -68,14 +67,14 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
 
         $prescriptions = $prescriptions->latest()->paginate($parPage)->withQueryString();
         $prescriptions->getCollection()->transform(fn ($prescription, $index) => [
-            'id' => $prescription->id,
-            'uuid' => $prescription->uuid,
+            'id'                  => $prescription->id,
+            'uuid'                => $prescription->uuid,
             'prescription_number' => $prescription->prescription_number,
-            'doctor' => $prescription->doctor,
-            'patient' => $prescription->patient,
-            'vitals' => $prescription->vitals,
-            'status' => $prescription->status,
-            'created_at' => $prescription->created_at->format('Y-m-d'),
+            'doctor'              => $prescription->doctor,
+            'patient'             => $prescription->patient,
+            'vitals'              => $prescription->vitals,
+            'status'              => $prescription->status,
+            'created_at'          => $prescription->created_at->format('Y-m-d'),
         ]);
 
         return $prescriptions;
@@ -110,7 +109,7 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
             )->first();
 
         return [
-            'data' => $prescription,
+            'data'   => $prescription,
             'vitals' => $vitals,
         ];
     }
@@ -138,14 +137,14 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
 
             foreach ($data['medications'] as $medicine) {
                 PrescriptionMedicine::create([
-                    'medicine_id' => $medicine['medicine_id'],
+                    'medicine_id'     => $medicine['medicine_id'],
                     'prescription_id' => $prescription->id,
-                    'type' => $medicine['type'],
-                    'strength' => $medicine['strength'],
-                    'dosage' => $medicine['dosage'],
-                    'duration' => $medicine['duration'],
-                    'advice' => $medicine['advice'],
-                    'meal_time' => $medicine['meal_time'],
+                    'type'            => $medicine['type'],
+                    'strength'        => $medicine['strength'],
+                    'dosage'          => $medicine['dosage'],
+                    'duration'        => $medicine['duration'],
+                    'advice'          => $medicine['advice'],
+                    'meal_time'       => $medicine['meal_time'],
                 ]);
             }
 
@@ -165,15 +164,16 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
 
             DB::commit();
             logger()->debug('STEP 6: Transaction committed');
+
             return $prescription;
         } catch (\Throwable $e) {
             DB::rollBack();
 
             logger()->error('Prescription store failed', [
-             'message' => $e->getMessage(),
-             'file' => $e->getFile(),
-             'line' => $e->getLine(),
-        ]);
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+            ]);
             throw $e;
         }
     }
@@ -197,8 +197,8 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
         // Dummy doctor & chamber for example
         $doctor = User::with(['medicine_doses', 'medicine_durations'])->where('id', Auth::user()->id)->first();
         $doctor = [
-            'id' => $doctor->id,
-            'name' => $doctor->name,
+            'id'             => $doctor->id,
+            'name'           => $doctor->name,
             'medicine_doses' => $doctor->medicine_doses()->active()->get()->map(function ($query) {
                 return [
                     'label' => $query->name,
@@ -229,16 +229,16 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
 
         $patients = $patients->map(function ($patient) {
             return [
-                'id' => $patient->id,
-                'name' => $patient->name,
+                'id'             => $patient->id,
+                'name'           => $patient->name,
                 'patient_number' => $patient->patient_number,
-                'mobile' => $patient->phone,
-                'vital' => $patient->vital,
-                'prescriptions' => $patient->prescriptions,
-                'appointment' => $patient->appointment,
-                'gender' => ucfirst(strtolower($patient->gender)),
-                'age' => $patient->date_of_birth->diff(Carbon::now()),
-                'current_date' => Carbon::now()->format('d-M-Y'),
+                'mobile'         => $patient->phone,
+                'vital'          => $patient->vital,
+                'prescriptions'  => $patient->prescriptions,
+                'appointment'    => $patient->appointment,
+                'gender'         => ucfirst(strtolower($patient->gender)),
+                'age'            => $patient->date_of_birth->diff(Carbon::now()),
+                'current_date'   => Carbon::now()->format('d-M-Y'),
             ];
         });
 
@@ -249,22 +249,22 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
     {
         return validator($data, [
             // Marriage
-            'marital_status' => 'nullable|string',
+            'marital_status'    => 'nullable|string',
             'marriage_duration' => 'nullable|string',
-            'consanguinity' => 'nullable|string',
+            'consanguinity'     => 'nullable|string',
 
             // Menstrual
-            'menarche_age' => 'nullable|string',
-            'lmp' => 'nullable|date',
-            'cycle' => 'nullable|string',
-            'flow' => 'nullable|string',
-            'dysmenorrhea' => 'nullable|boolean',
+            'menarche_age'      => 'nullable|string',
+            'lmp'               => 'nullable|date',
+            'cycle'             => 'nullable|string',
+            'flow'              => 'nullable|string',
+            'dysmenorrhea'      => 'nullable|boolean',
             'contraceptive_use' => 'nullable|boolean',
 
             // Obstetrical
-            'gravida' => 'nullable|integer',
-            'para' => 'nullable|integer',
-            'abortion' => 'nullable|integer',
+            'gravida'         => 'nullable|integer',
+            'para'            => 'nullable|integer',
+            'abortion'        => 'nullable|integer',
             'living_children' => 'nullable|integer',
 
             // Current Pregnancy

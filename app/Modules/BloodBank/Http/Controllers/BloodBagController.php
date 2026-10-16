@@ -22,8 +22,7 @@ class BloodBagController extends Controller
         private readonly BloodBagRepositoryInterface $bags,
         private readonly StorageUnitRepositoryInterface $units,
         private readonly BloodBagService $service,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): Response
     {

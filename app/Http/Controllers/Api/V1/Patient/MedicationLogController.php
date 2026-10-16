@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1\Patient;
 
 use App\Http\Controllers\Controller;
-use App\Models\Patient;
 use App\Models\MedicationLog;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -31,13 +31,13 @@ class MedicationLogController extends Controller
     public function index(Request $request)
     {
         $data = $request->validate([
-            'date' => ['nullable', 'date'],
-            'from' => ['nullable', 'date'],
-            'to' => ['nullable', 'date', 'after_or_equal:from'],
+            'date'   => ['nullable', 'date'],
+            'from'   => ['nullable', 'date'],
+            'to'     => ['nullable', 'date', 'after_or_equal:from'],
             'status' => [
                 'nullable',
                 Rule::in([
-                    'upcoming', 'taken', 'missed', 'skipped', 'snoozed'
+                    'upcoming', 'taken', 'missed', 'skipped', 'snoozed',
                 ]),
             ],
             'per_page' => ['nullable', 'integer', 'between:1,100'],
@@ -75,7 +75,7 @@ class MedicationLogController extends Controller
         if ($log->status === 'taken') {
             return response()->json([
                 'message' => 'Dose already recorded as taken.',
-                'data' => $log,
+                'data'    => $log,
             ]);
         }
 
@@ -86,8 +86,8 @@ class MedicationLogController extends Controller
         );
 
         $log->update([
-            'status' => 'taken',
-            'taken_at' => now(),
+            'status'        => 'taken',
+            'taken_at'      => now(),
             'snoozed_until' => null,
         ]);
 
@@ -97,7 +97,7 @@ class MedicationLogController extends Controller
 
         return response()->json([
             'message' => 'Dose marked as taken.',
-            'data' => $log->fresh(),
+            'data'    => $log->fresh(),
         ]);
     }
 
@@ -116,14 +116,14 @@ class MedicationLogController extends Controller
         ]);
 
         $log->update([
-            'status' => 'skipped',
-            'notes' => $data['notes'] ?? null,
+            'status'        => 'skipped',
+            'notes'         => $data['notes'] ?? null,
             'snoozed_until' => null,
         ]);
 
         return response()->json([
             'message' => 'Dose marked as skipped.',
-            'data' => $log->fresh(),
+            'data'    => $log->fresh(),
         ]);
     }
 
@@ -144,7 +144,7 @@ class MedicationLogController extends Controller
         $until = now()->addMinutes($data['minutes']);
 
         $log->update([
-            'status' => 'snoozed',
+            'status'        => 'snoozed',
             'snoozed_until' => $until,
         ]);
 
@@ -152,7 +152,7 @@ class MedicationLogController extends Controller
 
         return response()->json([
             'message' => 'Dose reminder snoozed.',
-            'data' => $log->fresh(),
+            'data'    => $log->fresh(),
         ]);
     }
 }

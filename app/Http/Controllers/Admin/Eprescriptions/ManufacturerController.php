@@ -34,7 +34,7 @@ class ManufacturerController extends Controller
 
         return Inertia::render('Admin/Eprescriptions/Manufacturers/Index', [
             'manufacturers' => $manufacturers,
-            'filters' => $request->only(['search', 'per_page']),
+            'filters'       => $request->only(['search', 'per_page']),
         ]);
     }
 

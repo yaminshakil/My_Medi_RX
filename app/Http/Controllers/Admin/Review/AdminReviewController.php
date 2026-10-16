@@ -20,7 +20,7 @@ class AdminReviewController extends Controller
         $reviews = Review::with(['user', 'reviewable'])
             ->when($request->search, function ($q, $search) {
                 $q->where('comment', 'like', "%{$search}%")
-                  ->orWhereHas('user', fn ($q) => $q->where('name', 'like', "%{$search}%"));
+                    ->orWhereHas('user', fn ($q) => $q->where('name', 'like', "%{$search}%"));
             })
             ->when($request->approved !== null, fn ($q) => $q->where('approved', $request->boolean('approved')))
             ->latest()
@@ -104,7 +104,7 @@ class AdminReviewController extends Controller
     // Optional: quick approve / reject
     public function toggleApproved(Review $review)
     {
-        $review->update(['approved' => !$review->approved]);
+        $review->update(['approved' => ! $review->approved]);
 
         return back()->with('success', 'Approval status updated.');
     }

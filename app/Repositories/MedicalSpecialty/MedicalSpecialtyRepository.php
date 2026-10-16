@@ -13,18 +13,18 @@ class MedicalSpecialtyRepository implements MedicalSpecialtyRepositoryInterface
 
         $medicalSpecialty = MedicalSpecialty::query();
 
-        $medicalSpecialty =  $medicalSpecialty->with([
-           'translations' => function ($query) use ($locale) {
-               $query->where('field', 'name')
-                   ->whereIn('locale', [
-                       $locale,
-                       config('languages.default', 'en'),
-                   ]);
-           }
+        $medicalSpecialty = $medicalSpecialty->with([
+            'translations' => function ($query) use ($locale) {
+                $query->where('field', 'name')
+                    ->whereIn('locale', [
+                        $locale,
+                        config('languages.default', 'en'),
+                    ]);
+            },
         ])
-        ->when($search, function ($query) use ($search) {
-            $query->where('name', 'like', "%{$search}%");
-        });
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            });
 
         $medicalSpecialty = $medicalSpecialty->with('parent')->latest()->paginate($perPage)->withQueryString();
 
@@ -47,6 +47,7 @@ class MedicalSpecialtyRepository implements MedicalSpecialtyRepositoryInterface
         foreach ($translations as $field => $locales) {
             $specialty->setTranslations($field, $locales);
         }
+
         return $specialty;
     }
 

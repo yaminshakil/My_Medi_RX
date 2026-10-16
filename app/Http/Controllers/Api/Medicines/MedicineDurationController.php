@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api\Medicines;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\Eprescription\CreateMedicineDurationRequest;
 use App\Http\Requests\Eprescription\UpdateMedicineDurationRequest;
-use App\Models\Setting;
-use App\Services\Eprescriptions\MedicineDurationService;
-use App\Services\ApiResponseService;
 use App\Http\Resources\Medicines\MedicineDurationResource;
+use App\Models\Setting;
+use App\Services\ApiResponseService;
+use App\Services\Eprescriptions\MedicineDurationService;
+use Illuminate\Http\Request;
 
 class MedicineDurationController extends Controller
 {
@@ -19,6 +19,7 @@ class MedicineDurationController extends Controller
     {
         $this->service = $service;
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -36,9 +37,10 @@ class MedicineDurationController extends Controller
         $durations = $this->service->paginate($search, $perPage);
         $durations = MedicineDurationResource::collection($durations);
         $durationdata = [
-             'durations' => $durations,
-             'filters' => $request->only(['search', 'per_page']),
-         ];
+            'durations' => $durations,
+            'filters'   => $request->only(['search', 'per_page']),
+        ];
+
         return ApiResponseService::success($durationdata, 'Medicine dose updated successfully.');
     }
 
@@ -52,6 +54,7 @@ class MedicineDurationController extends Controller
         $data['created_by'] = auth()->id();
         $duration = $this->service->store($data);
         $duration = new MedicineDurationResource($duration);
+
         return ApiResponseService::success($duration, 'Medicine dose created successfully.');
     }
 
@@ -74,6 +77,7 @@ class MedicineDurationController extends Controller
         $this->service->update($id, $data);
         $duration = $this->service->find($id);
         $duration = new MedicineDurationResource($duration);
+
         return ApiResponseService::success($duration, 'Duration updated successfully.');
     }
 
@@ -83,6 +87,7 @@ class MedicineDurationController extends Controller
     public function destroy(string $id)
     {
         $this->service->delete($id);
+
         return ApiResponseService::success([], 'Medicine duration deleted successfully.');
     }
 }

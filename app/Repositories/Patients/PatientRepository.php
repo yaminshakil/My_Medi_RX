@@ -26,11 +26,11 @@ class PatientRepository implements PatientRepositoryInterface
     {
         $patients = Patient::query()
         // Eager load relations to avoid N+1 queries
-        ->with([
-            'vitals' => fn ($query) => $query->latest()->limit(1),
-            'prescriptions',
-            'profile_image',
-        ]);
+            ->with([
+                'vitals' => fn ($query) => $query->latest()->limit(1),
+                'prescriptions',
+                'profile_image',
+            ]);
 
         if ($search) {
             $patients->where(

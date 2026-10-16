@@ -24,8 +24,6 @@ class DivisionSeeder extends Seeder
             ['id' => 8, 'bn_name' => 'ময়মনসিংহ', 'country_id' => 1, 'name' => 'Mymensingh', 'latitude' => 24.7471, 'longitude' => 90.4203, 'url' => 'mymensingh.gov.bd'],
         ];
 
-
-
         try {
             // Truncate and reset if necessary
             DB::statement('SET FOREIGN_KEY_CHECKS=0');
@@ -39,8 +37,8 @@ class DivisionSeeder extends Seeder
             $this->command->info('Divisions seeded successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Division seeder failed: ' . $e->getMessage());
-            $this->command->error('Failed to seed divisions: ' . $e->getMessage());
+            Log::error('Division seeder failed: '.$e->getMessage());
+            $this->command->error('Failed to seed divisions: '.$e->getMessage());
         }
     }
 }

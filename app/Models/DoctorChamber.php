@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class DoctorChamber extends Model
 {
@@ -26,7 +25,7 @@ class DoctorChamber extends Model
         'report_fee',
         'appoinment_limit',
         'is_active',
-        'user_id'
+        'user_id',
     ];
 
     protected $casts = [

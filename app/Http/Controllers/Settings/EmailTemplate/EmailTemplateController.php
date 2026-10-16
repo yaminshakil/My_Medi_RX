@@ -32,10 +32,10 @@ class EmailTemplateController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:email_templates,slug',
+            'name'    => 'required|string|max:255',
+            'slug'    => 'required|string|max:255|unique:email_templates,slug',
             'subject' => 'required|string',
-            'body' => 'required|string',
+            'body'    => 'required|string',
         ]);
 
         $this->service->store($data);

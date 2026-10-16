@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api\Medicines;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\Eprescription\CreateManufacturerRequest;
 use App\Http\Requests\Eprescription\UpdateManufacturerRequest;
 use App\Models\Setting;
-use App\Services\Eprescriptions\ManufacturerService;
 use App\Services\ApiResponseService;
+use App\Services\Eprescriptions\ManufacturerService;
+use Illuminate\Http\Request;
 
 class ManufacturerController extends Controller
 {
@@ -18,6 +18,7 @@ class ManufacturerController extends Controller
     {
         $this->service = $service;
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -33,6 +34,7 @@ class ManufacturerController extends Controller
         $perPage = $request->input('per_page', $recordsPerPage); // default 10
 
         $manufacturers = $this->service->getAll($perPage, $search);
+
         return response()->json($manufacturers);
     }
 
@@ -78,8 +80,10 @@ class ManufacturerController extends Controller
         $manufacturer = $this->service->find($id);
         if ($manufacturer) {
             $this->service->delete($id);
+
             return ApiResponseService::success([], 'Manufacturer deleted successfully!');
         }
+
         return ApiResponseService::success([], 'No Manufacturer found');
     }
 }

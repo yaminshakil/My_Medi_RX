@@ -15,8 +15,7 @@ class ExpiryMonitoringService
     public function __construct(
         private readonly BloodBagRepositoryInterface $bags,
         private readonly EmergencyRequestRepositoryInterface $requests,
-    ) {
-    }
+    ) {}
 
     /** @return array{expired:int, expiring_soon:int} */
     public function run(): array

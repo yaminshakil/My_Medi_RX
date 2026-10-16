@@ -142,23 +142,23 @@ class DashboardRepository implements DashboardRepositoryInterface
             });
 
         return collect([
-            'totalmedicine' => $this->getTotalMedicine(),
-            'totalpatients' => $totalpatients,
-            'totalprescription' => $totalprescription,
+            'totalmedicine'          => $this->getTotalMedicine(),
+            'totalpatients'          => $totalpatients,
+            'totalprescription'      => $totalprescription,
             'todaytotalprescription' => $todaytotalprescription,
-            'todaynewprescriptions' => $todaynewprescriptions,
-            'todayoldprescriptions' => $todayoldprescriptions,
-            'monthlyPrescribes' => response()->json($monthlyPrescribes),
-            'toptenmedicines' => $toptenmedicines,
-            'toptencompanies' => $toptencompanies,
-            'appointments' => [
-                'totalappointments' => $totalappoinments,
-                'todaysappointments' => $todayappointments,
-                'todayonlineappointments' => $todayonlineappointments,
+            'todaynewprescriptions'  => $todaynewprescriptions,
+            'todayoldprescriptions'  => $todayoldprescriptions,
+            'monthlyPrescribes'      => response()->json($monthlyPrescribes),
+            'toptenmedicines'        => $toptenmedicines,
+            'toptencompanies'        => $toptencompanies,
+            'appointments'           => [
+                'totalappointments'        => $totalappoinments,
+                'todaysappointments'       => $todayappointments,
+                'todayonlineappointments'  => $todayonlineappointments,
                 'todayofflineappointments' => $todayofflineappointments,
             ],
             'dailyPrescriptionformattedData' => collect(['dailyPrescriptionlabels' => $dailyPrescriptionlabels,
-                'dailyPrescriptiondataset' => $dailyPrescriptiondataset,
+                'dailyPrescriptiondataset'                                         => $dailyPrescriptiondataset,
             ]),
         ]);
     }
@@ -263,25 +263,25 @@ class DashboardRepository implements DashboardRepositoryInterface
         $dailychartData = $this->transformPrescriptionData($dailyrawdata);
 
         return collect([
-            'totalpatients' => $totalpatients,
-            'totalprescription' => $totalprescription,
+            'totalpatients'          => $totalpatients,
+            'totalprescription'      => $totalprescription,
             'todaytotalprescription' => $todaytotalprescription,
-            'todaynewprescriptions' => $todaynewprescriptions,
-            'todayoldprescriptions' => $todayoldprescriptions,
-            'monthlyPrescribes' => response()->json($monthlyPrescribes),
-            'toptenmedicines' => $toptenmedicines,
-            'toptencompanies' => $toptencompanies,
-            'appointments' => [
-                'totalappointments' => $totalappoinments,
-                'todaysappointments' => $todayappointments,
-                'todayonlineappointments' => $todayonlineappointments,
+            'todaynewprescriptions'  => $todaynewprescriptions,
+            'todayoldprescriptions'  => $todayoldprescriptions,
+            'monthlyPrescribes'      => response()->json($monthlyPrescribes),
+            'toptenmedicines'        => $toptenmedicines,
+            'toptencompanies'        => $toptencompanies,
+            'appointments'           => [
+                'totalappointments'        => $totalappoinments,
+                'todaysappointments'       => $todayappointments,
+                'todayonlineappointments'  => $todayonlineappointments,
                 'todayofflineappointments' => $todayofflineappointments,
             ],
             'dailyPrescriptionformattedData' => collect(['dailyPrescriptionlabels' => $dailyPrescriptionlabels,
-                'dailyPrescriptiondataset' => $dailyPrescriptiondataset,
+                'dailyPrescriptiondataset'                                         => $dailyPrescriptiondataset,
             ]),
             'dailychartData' => $dailychartData['data'],
-            'doctorsMap' => $dailychartData['doctors'],
+            'doctorsMap'     => $dailychartData['doctors'],
         ]);
     }
 
@@ -298,8 +298,8 @@ class DashboardRepository implements DashboardRepositoryInterface
         $totalprescriptions = Prescription::where('patient_id', $user_id)->count();
 
         return collect([
-            'totalappoinments' => $totalappoinments,
-            'newappointments' => $newappointments,
+            'totalappoinments'   => $totalappoinments,
+            'newappointments'    => $newappointments,
             'totalprescriptions' => $totalprescriptions,
         ]);
     }
@@ -308,7 +308,7 @@ class DashboardRepository implements DashboardRepositoryInterface
     {
         if ($raw->isEmpty()) {
             return [
-                'data' => [],
+                'data'    => [],
                 'doctors' => [],
             ];
         }
@@ -352,7 +352,7 @@ class DashboardRepository implements DashboardRepositoryInterface
         }
 
         return [
-            'data' => $result,
+            'data'    => $result,
             'doctors' => $doctorsMap,
         ];
     }

@@ -15,13 +15,13 @@ class MedicineResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'id'            => $this->id,
             'medicine_name' => $this->brand_name,
-            'generic_name' => $this->generic_name,
-            'strength' => $this->strength,
+            'generic_name'  => $this->generic_name,
+            'strength'      => $this->strength,
             'medicine_type' => $this->type,
-            'manufacturer' => [
-                'name' => $this->manufacturer?->company_name,
+            'manufacturer'  => [
+                'name'   => $this->manufacturer?->company_name,
                 'status' => $this->manufacturer?->is_active,
             ],
         ];

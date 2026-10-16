@@ -16,11 +16,26 @@ class DoctorAvailability extends Model
     protected function casts(): array
     {
         return ['day_of_week' => 'integer', 'slot_duration' => 'integer',
-            'max_patients' => 'integer', 'is_available' => 'boolean'];
+            'max_patients'    => 'integer', 'is_available' => 'boolean'];
     }
 
-    public function hospital(): BelongsTo { return $this->belongsTo(Hospital::class); }
-    public function department(): BelongsTo { return $this->belongsTo(Department::class); }
-    public function doctor(): BelongsTo { return $this->belongsTo(User::class, 'doctor_id'); }
-    public function shift(): BelongsTo { return $this->belongsTo(DoctorShift::class, 'shift_id'); }
+    public function hospital(): BelongsTo
+    {
+        return $this->belongsTo(Hospital::class);
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function doctor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'doctor_id');
+    }
+
+    public function shift(): BelongsTo
+    {
+        return $this->belongsTo(DoctorShift::class, 'shift_id');
+    }
 }

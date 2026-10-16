@@ -72,33 +72,33 @@ class RegisterRequest extends FormRequest
     {
         return [
             'first_name.required' => 'First name is required.',
-            'last_name.required' => 'Last name is required.',
+            'last_name.required'  => 'Last name is required.',
 
             'email.required' => 'Email address is required.',
-            'email.email' => 'Please provide a valid email address.',
-            'email.unique' => 'This email address is already registered.',
+            'email.email'    => 'Please provide a valid email address.',
+            'email.unique'   => 'This email address is already registered.',
 
-            'password.required' => 'Password is required.',
+            'password.required'  => 'Password is required.',
             'password.confirmed' => 'Password confirmation does not match.',
 
             'registration_type.required' => 'Registration type is required.',
-            'registration_type.in' => 'Registration type must be Doctor or Patient.',
+            'registration_type.in'       => 'Registration type must be Doctor or Patient.',
 
             'mobile.required' => 'Mobile number is required.',
-            'mobile.unique' => 'This mobile number is already registered. Please use another mobile number.',
+            'mobile.unique'   => 'This mobile number is already registered. Please use another mobile number.',
 
             'bmdc_number.required' => 'BMDC registration number is required for doctors.',
-            'bmdc_number.unique' => 'This BMDC registration number is already registered.',
+            'bmdc_number.unique'   => 'This BMDC registration number is already registered.',
         ];
     }
 
     public function attributes(): array
     {
         return [
-            'first_name' => 'first name',
-            'last_name' => 'last name',
+            'first_name'        => 'first name',
+            'last_name'         => 'last name',
             'registration_type' => 'registration type',
-            'bmdc_number' => 'BMDC number',
+            'bmdc_number'       => 'BMDC number',
         ];
     }
 }

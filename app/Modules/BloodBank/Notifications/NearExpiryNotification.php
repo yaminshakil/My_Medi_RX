@@ -13,9 +13,7 @@ class NearExpiryNotification extends Notification implements ShouldQueue
     use Queueable;
 
     /** @param string[] $lines e.g. "A+ Platelets: 3 unit(s), earliest 12 Oct 06:00" */
-    public function __construct(public array $lines, public int $expiredCount)
-    {
-    }
+    public function __construct(public array $lines, public int $expiredCount) {}
 
     public function via(object $notifiable): array
     {

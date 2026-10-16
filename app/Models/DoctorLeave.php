@@ -18,7 +18,18 @@ class DoctorLeave extends Model
         return ['start_date' => 'date', 'end_date' => 'date', 'approved_at' => 'datetime'];
     }
 
-    public function hospital(): BelongsTo { return $this->belongsTo(Hospital::class); }
-    public function doctor(): BelongsTo { return $this->belongsTo(User::class, 'doctor_id'); }
-    public function approver(): BelongsTo { return $this->belongsTo(User::class, 'approved_by'); }
+    public function hospital(): BelongsTo
+    {
+        return $this->belongsTo(Hospital::class);
+    }
+
+    public function doctor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'doctor_id');
+    }
+
+    public function approver(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
 }

@@ -581,11 +581,11 @@ class ThanaSeeder extends Seeder
 
             // new
             ['id' => '563', 'district_id' => '9', 'name' => 'Eidgaon', 'bn_name' => 'ঈদগাঁও', 'url' => 'eidgaon.coxsbazar.gov.bd', 'latitude' => '21.4729', 'longitude' => '92.0245'],
-            ['id' => '564', 'district_id' => '39', 'name' => 'Madhyanagar', 'bn_name' => 'মধ্যনগর', 'url' => 'madhyanagar.sunamganj.gov.bd','latitude' => '24.8278', 'longitude' => '90.9778'],
-            ['id' => '565', 'district_id' => '50', 'name' => 'Dasar', 'bn_name' => 'ডাসার', 'url' => 'dasar.madaripur.gov.bd','latitude' => '23.1381', 'longitude' => '90.1703'],
-            ['id' => '566', 'district_id' => '38', 'name' => 'Shayestaganj', 'bn_name' => 'শায়েস্তাগঞ্জ', 'url' => 'shayestaganj.habiganj.gov.bd','latitude' => '24.2682', 'longitude' => '91.4525'],
-            ['id' => '567', 'district_id' => '39', 'name' => 'Shantiganj', 'bn_name' => 'শান্তিগঞ্জ', 'url' => 'shantiganj.sunamganj.gov.bd','latitude' => '24.9395', 'longitude' => '91.4136'],
-            ['id' => '568', 'district_id' => '34', 'name' => 'Borhan Uddin', 'bn_name' => 'বোরহান উদ্দিন', 'url' => 'borhanuddin.bhola.gov.bd','latitude' => '22.4753', 'longitude' => '90.7153'],
+            ['id' => '564', 'district_id' => '39', 'name' => 'Madhyanagar', 'bn_name' => 'মধ্যনগর', 'url' => 'madhyanagar.sunamganj.gov.bd', 'latitude' => '24.8278', 'longitude' => '90.9778'],
+            ['id' => '565', 'district_id' => '50', 'name' => 'Dasar', 'bn_name' => 'ডাসার', 'url' => 'dasar.madaripur.gov.bd', 'latitude' => '23.1381', 'longitude' => '90.1703'],
+            ['id' => '566', 'district_id' => '38', 'name' => 'Shayestaganj', 'bn_name' => 'শায়েস্তাগঞ্জ', 'url' => 'shayestaganj.habiganj.gov.bd', 'latitude' => '24.2682', 'longitude' => '91.4525'],
+            ['id' => '567', 'district_id' => '39', 'name' => 'Shantiganj', 'bn_name' => 'শান্তিগঞ্জ', 'url' => 'shantiganj.sunamganj.gov.bd', 'latitude' => '24.9395', 'longitude' => '91.4136'],
+            ['id' => '568', 'district_id' => '34', 'name' => 'Borhan Uddin', 'bn_name' => 'বোরহান উদ্দিন', 'url' => 'borhanuddin.bhola.gov.bd', 'latitude' => '22.4753', 'longitude' => '90.7153'],
         ];
 
         try {
@@ -602,8 +602,8 @@ class ThanaSeeder extends Seeder
             $this->command->info('Districts seeded successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('ThanaSeeder failed: ' . $e->getMessage());
-            $this->command->error('Error seeding thana: ' . $e->getMessage());
+            \Log::error('ThanaSeeder failed: '.$e->getMessage());
+            $this->command->error('Error seeding thana: '.$e->getMessage());
         }
     }
 }

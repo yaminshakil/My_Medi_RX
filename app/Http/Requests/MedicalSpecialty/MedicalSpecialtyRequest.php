@@ -14,26 +14,26 @@ class MedicalSpecialtyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:medical_specialties,name,'.($this->medical_specialty->id ?? 'NULL'),
-            'icon' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'parent_id' => 'nullable|exists:medical_specialties,id',
-            'is_surgical' => 'boolean',
+            'name'         => 'required|string|max:255|unique:medical_specialties,name,'.($this->medical_specialty->id ?? 'NULL'),
+            'icon'         => 'nullable|string|max:255',
+            'description'  => 'nullable|string',
+            'parent_id'    => 'nullable|exists:medical_specialties,id',
+            'is_surgical'  => 'boolean',
             'translations' => [
-            'nullable',
-            'array',
-        ],
+                'nullable',
+                'array',
+            ],
 
-        'translations.name' => [
-            'nullable',
-            'array',
-        ],
+            'translations.name' => [
+                'nullable',
+                'array',
+            ],
 
-        'translations.name.*' => [
-            'nullable',
-            'string',
-            'max:255',
-        ],
+            'translations.name.*' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
         ];
     }
 }

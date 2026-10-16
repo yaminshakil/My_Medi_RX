@@ -37,9 +37,9 @@ class GynaeHistory extends Model
     protected $dates = ['lmp'];
 
     protected $casts = [
-        'dysmenorrhea' => 'boolean',
+        'dysmenorrhea'      => 'boolean',
         'contraceptive_use' => 'boolean',
-        'consanguinity' => 'boolean',
+        'consanguinity'     => 'boolean',
     ];
 
     public function prescription()

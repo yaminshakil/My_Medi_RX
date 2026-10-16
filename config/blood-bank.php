@@ -34,7 +34,7 @@ return [
         'request_ttl_hours'        => 24,   // how long a request stays open for donor replies
         'response_link_ttl_hours'  => 24,   // lifetime of the signed accept/decline links
         // Optional extra channel (SMS gateway). The class must call $notification->toSms($notifiable).
-        'extra_channel'            => null,
+        'extra_channel' => null,
     ],
 
     // Minimum gap between whole-blood donations before a donor is contacted again.

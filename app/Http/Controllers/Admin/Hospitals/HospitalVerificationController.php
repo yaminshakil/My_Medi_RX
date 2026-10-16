@@ -7,7 +7,6 @@ use App\Models\Hospital;
 use App\Models\HospitalVerificationDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -27,7 +26,7 @@ class HospitalVerificationController extends Controller
         return Inertia::render(
             'Admin/Hospitals/Verification',
             [
-                'hospital' => $hospital,
+                'hospital'      => $hospital,
                 'documentTypes' => config(
                     'hospital.document_types'
                 ),
@@ -43,7 +42,7 @@ class HospitalVerificationController extends Controller
             'document_type' => [
                 'required',
                 'string',
-                'in:' . implode(
+                'in:'.implode(
                     ',',
                     array_keys(config('hospital.document_types'))
                 ),
@@ -85,12 +84,12 @@ class HospitalVerificationController extends Controller
             ->store('hospitals/verification-documents', 'public');
 
         $hospital->verificationDocuments()->create([
-            'document_type' => $validated['document_type'],
-            'document_title' => $validated['document_title'] ?? null,
-            'document_number' => $validated['document_number'] ?? null,
-            'document_path' => $path,
-            'issued_at' => $validated['issued_at'] ?? null,
-            'expires_at' => $validated['expires_at'] ?? null,
+            'document_type'       => $validated['document_type'],
+            'document_title'      => $validated['document_title'] ?? null,
+            'document_number'     => $validated['document_number'] ?? null,
+            'document_path'       => $path,
+            'issued_at'           => $validated['issued_at'] ?? null,
+            'expires_at'          => $validated['expires_at'] ?? null,
             'verification_status' => 'pending',
         ]);
 
@@ -112,9 +111,9 @@ class HospitalVerificationController extends Controller
 
         $document->update([
             'verification_status' => 'approved',
-            'rejection_reason' => null,
-            'verified_by' => Auth::id(),
-            'verified_at' => now(),
+            'rejection_reason'    => null,
+            'verified_by'         => Auth::id(),
+            'verified_at'         => now(),
         ]);
 
         $this->updateHospitalVerificationStatus(
@@ -141,14 +140,14 @@ class HospitalVerificationController extends Controller
 
         $document->update([
             'verification_status' => 'rejected',
-            'rejection_reason' => $validated['rejection_reason'],
-            'verified_by' => Auth::id(),
-            'verified_at' => now(),
+            'rejection_reason'    => $validated['rejection_reason'],
+            'verified_by'         => Auth::id(),
+            'verified_at'         => now(),
         ]);
 
         $document->hospital->update([
             'verification_status' => 'rejected',
-            'status' => 0,
+            'status'              => 0,
         ]);
 
         return back()->with(
@@ -167,47 +166,42 @@ class HospitalVerificationController extends Controller
             ->verificationDocuments
             ->isNotEmpty();
 
-        if (!$hasDocuments) {
+        if (! $hasDocuments) {
             return back()->withErrors([
-                'verification' =>
-                    'At least one verification document is required.',
+                'verification' => 'At least one verification document is required.',
             ]);
         }
 
         $hasPending = $hospital
             ->verificationDocuments
             ->contains(
-                fn ($document) =>
-                    $document->verification_status === 'pending'
+                fn ($document) => $document->verification_status === 'pending'
             );
 
         $hasRejected = $hospital
             ->verificationDocuments
             ->contains(
-                fn ($document) =>
-                    $document->verification_status === 'rejected'
+                fn ($document) => $document->verification_status === 'rejected'
             );
 
         if ($hasPending) {
             return back()->withErrors([
-                'verification' =>
-                    'All submitted documents must be reviewed first.',
+                'verification' => 'All submitted documents must be reviewed first.',
             ]);
         }
 
         if ($hasRejected) {
             return back()->withErrors([
-                'verification' =>
-                    'Rejected documents must be replaced or resolved first.',
+                'verification' => 'Rejected documents must be replaced or resolved first.',
             ]);
         }
 
         $hospital->update([
             'verification_status' => 'approved',
-            'status' => 1,
-            'verified_at' => now(),
-            'verified_by' => Auth::id(),
-            'verification_note' => null,
+            'status'              => 1,
+            'verified_at'         => now(),
+            'verified_by'         => Auth::id(),
+            'verification_note'   => null,
         ]);
 
         return back()->with(
@@ -231,10 +225,10 @@ class HospitalVerificationController extends Controller
 
         $hospital->update([
             'verification_status' => 'rejected',
-            'status' => 0,
-            'verification_note' => $validated['verification_note'],
-            'verified_by' => Auth::id(),
-            'verified_at' => now(),
+            'status'              => 0,
+            'verification_note'   => $validated['verification_note'],
+            'verified_by'         => Auth::id(),
+            'verified_at'         => now(),
         ]);
 
         return back()->with(
@@ -250,9 +244,9 @@ class HospitalVerificationController extends Controller
 
         $hospital->update([
             'verification_status' => 'suspended',
-            'status' => 0,
-            'verified_by' => Auth::id(),
-            'verified_at' => now(),
+            'status'              => 0,
+            'verified_by'         => Auth::id(),
+            'verified_at'         => now(),
         ]);
 
         return back()->with(
@@ -285,12 +279,11 @@ class HospitalVerificationController extends Controller
             ->get();
 
         if ($documents->contains(
-            fn ($document) =>
-                $document->verification_status === 'rejected'
+            fn ($document) => $document->verification_status === 'rejected'
         )) {
             $hospital->update([
                 'verification_status' => 'rejected',
-                'status' => 0,
+                'status'              => 0,
             ]);
 
             return;
@@ -299,8 +292,7 @@ class HospitalVerificationController extends Controller
         if (
             $documents->isNotEmpty() &&
             $documents->every(
-                fn ($document) =>
-                    $document->verification_status === 'approved'
+                fn ($document) => $document->verification_status === 'approved'
             )
         ) {
             $hospital->update([

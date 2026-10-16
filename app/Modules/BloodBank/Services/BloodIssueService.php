@@ -24,8 +24,7 @@ class BloodIssueService
         private readonly BloodBagRepositoryInterface $bags,
         private readonly BloodIssueRepositoryInterface $issues,
         private readonly PatientRepositoryInterface $patients,
-    ) {
-    }
+    ) {}
 
     /**
      * Units the issue form may offer, soonest-expiring first, compatible ones before the rest.

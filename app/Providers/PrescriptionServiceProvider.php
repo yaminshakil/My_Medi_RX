@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Interfaces\Eprescriptions\AppointmentRepositoryInterface;
-use App\Interfaces\Eprescriptions\DoctorChamberRepositoryInterface;
 use App\Interfaces\Eprescriptions\GynaeHistoryRepositoryInterface;
 use App\Interfaces\Eprescriptions\ManufacturerRepositoryInterface;
 use App\Interfaces\Eprescriptions\MedicineDoseRepositoryInterface;
@@ -11,8 +9,6 @@ use App\Interfaces\Eprescriptions\MedicineDurationRepositoryInterface;
 use App\Interfaces\Eprescriptions\MedicineRepositoryInterface;
 use App\Interfaces\Eprescriptions\PrescriptionRepositoryInterface;
 use App\Interfaces\Eprescriptions\VitalRepositoryInterface;
-use App\Repositories\Eprescriptions\AppointmentRepository;
-use App\Repositories\Eprescriptions\DoctorChamberRepository;
 use App\Repositories\Eprescriptions\GynaeHistoryRepository;
 use App\Repositories\Eprescriptions\ManufacturerRepository;
 use App\Repositories\Eprescriptions\MedicineDoseRepository;

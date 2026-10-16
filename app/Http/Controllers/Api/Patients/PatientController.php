@@ -3,19 +3,20 @@
 namespace App\Http\Controllers\APi\Patients;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\Patients\CreatePatientProfileRequest;
 use App\Http\Requests\Patients\UpdatePatientProfileRequest;
-use App\Services\Patients\PatientProfileService;
-use App\Services\ApiResponseService;
 use App\Http\Resources\Patients\PatientCollection;
 use App\Http\Resources\Patients\PatientResource;
 use App\Models\Setting;
+use App\Services\ApiResponseService;
+use App\Services\Patients\PatientProfileService;
 use App\Services\Patients\PatientService;
+use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {
     protected $patients;
+
     protected $patientService;
 
     public function __construct(
@@ -25,6 +26,7 @@ class PatientController extends Controller
         $this->patients = $patients;
         $this->patientService = $patientService;
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -65,7 +67,7 @@ class PatientController extends Controller
     {
         $patientData = $this->patients->find($id);
 
-        if (!$patientData) {
+        if (! $patientData) {
             return ApiResponseService::error('Patient not found', 404);
         }
 
@@ -81,7 +83,7 @@ class PatientController extends Controller
 
         $patientUpdated = $this->patients->update($id, $data);
 
-        if (!$patientUpdated) {
+        if (! $patientUpdated) {
             return ApiResponseService::error('Patient Profile not found', 404);
         }
 
@@ -96,6 +98,7 @@ class PatientController extends Controller
     public function destroy(string $id)
     {
         $this->patients->delete($id);
+
         return ApiResponseService::success([], 'Patient Profile deleted successfully!');
     }
 }

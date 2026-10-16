@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LocationController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -96,7 +96,7 @@ Route::get('/districts/{division}', [LocationController::class, 'getDistricts'])
 Route::get('/thanas/{district}', [LocationController::class, 'getThanas']);
 
 Route::get('/language/{locale}', function ($locale) {
-    if (!array_key_exists($locale, config('languages.supported'))) {
+    if (! array_key_exists($locale, config('languages.supported'))) {
         abort(404);
     }
 
@@ -106,9 +106,8 @@ Route::get('/language/{locale}', function ($locale) {
 
     logger()->info('Language switched', [
         'selected' => $locale,
-        'session' => session('locale'),
+        'session'  => session('locale'),
     ]);
-
 
     return back();
 })->name('language.switch');

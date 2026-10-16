@@ -27,7 +27,7 @@ class Appointment extends Model
     protected $casts = [
         'appointment_date' => 'date',
         'appointment_time' => 'datetime:h:i A',
-        'is_paid' => 'boolean',
+        'is_paid'          => 'boolean',
     ];
 
     protected $appends = ['appointmentdatetime', 'bookingdate', 'bookingtime'];

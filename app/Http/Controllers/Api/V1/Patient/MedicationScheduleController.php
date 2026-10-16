@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\V1\Patient;
 
 use App\Http\Controllers\Controller;
+use App\Models\MedicationSchedule;
 use App\Models\Patient;
 use App\Models\PatientMedication;
-use App\Models\MedicationSchedule;
 use Illuminate\Http\Request;
 
 class MedicationScheduleController extends Controller
@@ -39,13 +39,13 @@ class MedicationScheduleController extends Controller
 
         $data = $request->validate([
             'scheduled_time' => ['required', 'date_format:H:i'],
-            'dose_amount' => ['required', 'numeric', 'gt:0'],
-            'dose_unit' => ['required', 'string', 'max:50'],
-            'start_date' => ['required', 'date'],
-            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
-            'days_of_week' => ['nullable', 'array', 'min:1'],
+            'dose_amount'    => ['required', 'numeric', 'gt:0'],
+            'dose_unit'      => ['required', 'string', 'max:50'],
+            'start_date'     => ['required', 'date'],
+            'end_date'       => ['nullable', 'date', 'after_or_equal:start_date'],
+            'days_of_week'   => ['nullable', 'array', 'min:1'],
             'days_of_week.*' => [
-                'required', 'integer', 'between:0,6'
+                'required', 'integer', 'between:0,6',
             ],
         ]);
 
@@ -59,7 +59,7 @@ class MedicationScheduleController extends Controller
 
         return response()->json([
             'message' => 'Medication schedule created.',
-            'data' => $schedule,
+            'data'    => $schedule,
         ], 201);
     }
 
@@ -71,20 +71,20 @@ class MedicationScheduleController extends Controller
 
         $data = $request->validate([
             'scheduled_time' => ['sometimes', 'date_format:H:i'],
-            'dose_amount' => ['sometimes', 'numeric', 'gt:0'],
-            'dose_unit' => ['sometimes', 'string', 'max:50'],
-            'start_date' => ['sometimes', 'date'],
-            'end_date' => ['nullable', 'date'],
-            'days_of_week' => ['nullable', 'array'],
+            'dose_amount'    => ['sometimes', 'numeric', 'gt:0'],
+            'dose_unit'      => ['sometimes', 'string', 'max:50'],
+            'start_date'     => ['sometimes', 'date'],
+            'end_date'       => ['nullable', 'date'],
+            'days_of_week'   => ['nullable', 'array'],
             'days_of_week.*' => ['integer', 'between:0,6'],
-            'is_active' => ['sometimes', 'boolean'],
+            'is_active'      => ['sometimes', 'boolean'],
         ]);
 
         $schedule->update($data);
 
         return response()->json([
             'message' => 'Schedule updated.',
-            'data' => $schedule->fresh(),
+            'data'    => $schedule->fresh(),
         ]);
     }
 

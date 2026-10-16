@@ -34,7 +34,7 @@ class MedicineController extends Controller
 
         return Inertia::render('Admin/Eprescriptions/Medicines/Index', [
             'medicines' => $medicines,
-            'filters' => $request->only(['search', 'per_page']),
+            'filters'   => $request->only(['search', 'per_page']),
         ]);
     }
 
@@ -77,7 +77,7 @@ class MedicineController extends Controller
         $medicine = $this->service->get($id);
 
         return Inertia::render('Admin/Eprescriptions/Medicines/Edit', [
-            'medicine' => $medicine,
+            'medicine'      => $medicine,
             'manufacturers' => $manufacturers,
         ]);
     }

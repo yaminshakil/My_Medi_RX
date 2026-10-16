@@ -1,13 +1,14 @@
 // resources/js/Pages/Admin/Reviews/Form.tsx (shared)
 import { useForm } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Textarea } from '@/Components/ui/textarea';
 import {
     Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+} from '@/Components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
+import FormFooter from '@/Components/Form/FormFooter';
+import { Star } from 'lucide-react';
 
 interface User {
     id: number;
@@ -39,8 +40,14 @@ export default function ReviewForm({ users, review }: Props) {
         }
     };
 
+    const handleCancel = () => {
+        window.history.back();
+    };
+
+    const submitTitle = review ? 'Update Review' : 'Create Review';
+
     return (
-        <form onSubmit={submit} className="space-y-6 max-w-2xl">
+        <form onSubmit={submit} className="space-y-6 max-w-2xl px-4">
             <Card>
                 <CardHeader>
                     <CardTitle>{review ? 'Edit Review' : 'Create Review'}</CardTitle>
@@ -109,7 +116,12 @@ export default function ReviewForm({ users, review }: Props) {
                             </SelectTrigger>
                             <SelectContent>
                                 {[1, 2, 3, 4, 5].map((r) => (
-                                    <SelectItem key={r} value={String(r)}>{r} ★</SelectItem>
+                                    <SelectItem key={r} value={String(r)}>{r}
+                                        <Star
+                                            key={r}
+                                            size={16}
+                                            className='fill-[var(--base-color)] text-[var(--base-color)]'
+                                        /></SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
@@ -140,15 +152,7 @@ export default function ReviewForm({ users, review }: Props) {
                     </div>
                 </CardContent>
             </Card>
-
-            <div className="flex gap-3">
-                <Button type="submit" disabled={processing}>
-                    {processing ? 'Saving...' : review ? 'Update Review' : 'Create Review'}
-                </Button>
-                <Button type="button" variant="outline" onClick={() => window.history.back()}>
-                    Cancel
-                </Button>
-            </div>
+            <FormFooter handleCancel={handleCancel} processing={processing} submitTitle={submitTitle} />
         </form>
     );
 }

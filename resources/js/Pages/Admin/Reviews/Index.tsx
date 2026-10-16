@@ -8,7 +8,7 @@ import {
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from '@/Components/ui/dropdown-menu';
-import { MoreHorizontal, Plus, Search } from 'lucide-react';
+import { MoreHorizontal, Plus, Search, Star } from 'lucide-react';
 import { useState } from 'react';
 import AppLayout from '@/Layouts/app-layout';
 
@@ -51,7 +51,7 @@ export default function Index({ reviews, filters }: Props) {
         <AppLayout>
             <Head title="Manage Reviews" />
 
-            <div className="space-y-6">
+            <div className="space-y-6 px-4">
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-bold tracking-tight">Reviews</h1>
@@ -112,7 +112,13 @@ export default function Index({ reviews, filters }: Props) {
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex items-center gap-1 ">
-                                                {'★'.repeat(review.rating)}
+                                                {[...Array(5)].map((_, i) => (
+                                                    <Star
+                                                        key={i}
+                                                        size={16}
+                                                        className={i < review.rating ? 'fill-[var(--base-color)] text-[var(--base-color)]' : 'text-gray-300'}
+                                                    />
+                                                ))}
                                                 <span className="text-muted-foreground text-xs ">({review.rating})</span>
                                             </div>
                                         </TableCell>

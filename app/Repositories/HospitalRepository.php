@@ -2,14 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\HospitalRepositoryInterface;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\HospitalResource;
+use App\Interfaces\HospitalRepositoryInterface;
 use App\Models\Hospital;
 use App\Models\HospitalType;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class HospitalRepository implements HospitalRepositoryInterface
 {
@@ -19,17 +19,15 @@ class HospitalRepository implements HospitalRepositoryInterface
             ->with('hospitalType')
             ->when(
                 $search,
-                fn ($query, $search) =>
-                    $query->where(function ($q) use ($search) {
-                        $q->where('hospital_name', 'like', "%{$search}%")
-                            ->orWhere('mobile_number', 'like', "%{$search}%")
-                            ->orWhere('email', 'like', "%{$search}%");
-                    })
+                fn ($query, $search) => $query->where(function ($q) use ($search) {
+                    $q->where('hospital_name', 'like', "%{$search}%")
+                        ->orWhere('mobile_number', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                })
             )
             ->when(
                 $verification_status,
-                fn ($query, $status) =>
-                    $query->where('verification_status', $status)
+                fn ($query, $status) => $query->where('verification_status', $status)
             )
             ->orderBy('sort_order')
             ->orderByDesc('id')
@@ -58,7 +56,7 @@ class HospitalRepository implements HospitalRepositoryInterface
     {
         $hospital = null;
         DB::transaction(function () use ($data, &$hospital) {
-            $hospital = new Hospital();
+            $hospital = new Hospital;
             $hospital->hospital_name = $data['hospital_name'];
             $hospital->hospital_type_id = $data['hospital_type_id'];
             $hospital->address = $data['address'];
@@ -67,10 +65,10 @@ class HospitalRepository implements HospitalRepositoryInterface
             $hospital->mobile_number = $data['mobile_number'] ?? null;
             $hospital->emergency_contact = $data['emergency_contact'] ?? null;
             $hospital->phone_number = $data['phone_number'] ?? null;
-            if (!empty($data['hospital_logo']) && $data['hospital_logo'] instanceof \Illuminate\Http\UploadedFile) {
+            if (! empty($data['hospital_logo']) && $data['hospital_logo'] instanceof UploadedFile) {
                 $hospital->hospital_logo = $data['hospital_logo']->store('hospitals', 'public');
             }
-            if (!empty($data['banner_url']) && $data['banner_url'] instanceof \Illuminate\Http\UploadedFile) {
+            if (! empty($data['banner_url']) && $data['banner_url'] instanceof UploadedFile) {
                 $hospital->banner_url = $data['banner_url']->store('hospitals', 'public');
             }
             $hospital->district_id = $data['district_id'] ?? null;
@@ -94,7 +92,7 @@ class HospitalRepository implements HospitalRepositoryInterface
     public function updateHospital($data, $id)
     {
         $hospital_logo = null;
-        if (!empty($data['hospital_logo']) && $data['hospital_logo'] instanceof \Illuminate\Http\UploadedFile) {
+        if (! empty($data['hospital_logo']) && $data['hospital_logo'] instanceof UploadedFile) {
             if ($data['prev_hospital_logo'] != null) {
                 Storage::disk('public')->delete($data['prev_hospital_logo']);
             }
@@ -103,7 +101,7 @@ class HospitalRepository implements HospitalRepositoryInterface
             $data['hospital_logo'] = $data['prev_hospital_logo'];
         }
 
-        if (($data['banner_url'] != null) && $data['banner_url'] instanceof \Illuminate\Http\UploadedFile) {
+        if (($data['banner_url'] != null) && $data['banner_url'] instanceof UploadedFile) {
             if ($data['prev_banner_url'] != null) {
                 Storage::disk('public')->delete($data['prev_banner_url']);
             }
@@ -119,6 +117,7 @@ class HospitalRepository implements HospitalRepositoryInterface
         unset($data['prev_banner_url']);
         unset($data['email']);
         $data += ['updated_by' => Auth::user()->id];
+
         return Hospital::where('id', $id)->update($data);
     }
 
@@ -129,6 +128,7 @@ class HospitalRepository implements HospitalRepositoryInterface
         if ($hospital->banner_url && Storage::disk('public')->exists($hospital->banner_url)) {
             Storage::disk('public')->delete($hospital->banner_url);
         }
+
         return Hospital::destroy($id);
     }
 

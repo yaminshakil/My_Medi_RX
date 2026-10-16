@@ -8,13 +8,10 @@ use App\Http\Requests\Eprescription\UpdateAppointmentRequest;
 use App\Models\Appointment;
 use App\Models\DoctorAssistant;
 use App\Models\Patient;
-use App\Models\Setting;
 use App\Models\User;
-use App\Services\Eprescriptions\AppointmentService;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Services\ApiResponseService;
+use App\Services\Eprescriptions\AppointmentService;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
@@ -39,6 +36,7 @@ class AppointmentController extends Controller
             $this->patient_id = $this->user->patient->id;
         }
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -46,7 +44,6 @@ class AppointmentController extends Controller
     {
         //
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -146,6 +143,7 @@ class AppointmentController extends Controller
 
             $templateSlug = 'appointment_confirmation';
             $this->appointmentService->appointmentMail($appointment, $templateSlug);
+
             return ApiResponseService::success(
                 $appointment,
                 'Appointments booked successfully!'

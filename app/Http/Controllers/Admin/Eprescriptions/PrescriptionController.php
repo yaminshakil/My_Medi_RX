@@ -44,12 +44,12 @@ class PrescriptionController extends Controller
         if ($this->user->hasRole('Patient')) {
             return Inertia::render('Admin/Eprescriptions/Prescriptions/PatientIndex', [
                 'prescriptions' => $prescriptions,
-                'filters' => $request->only(['search', 'perPage', 'sort_by', 'sort_direction']),
+                'filters'       => $request->only(['search', 'perPage', 'sort_by', 'sort_direction']),
             ]);
         } else {
             return Inertia::render('Admin/Eprescriptions/Prescriptions/Index', [
                 'prescriptions' => $prescriptions,
-                'filters' => $request->only(['search', 'perPage', 'sort_by', 'sort_direction']),
+                'filters'       => $request->only(['search', 'perPage', 'sort_by', 'sort_direction']),
             ]);
         }
     }
@@ -102,7 +102,7 @@ class PrescriptionController extends Controller
     public function followup($id, $appointment_id)
     {
         return Inertia::render('Admin/Eprescriptions/Prescriptions/EditPrescription', [
-            'prescription' => $this->prescriptionService->find($id),
+            'prescription'   => $this->prescriptionService->find($id),
             'appointment_id' => $appointment_id,
         ]);
     }

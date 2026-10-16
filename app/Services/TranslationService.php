@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Translation;
-use Illuminate\Support\Facades\Cache;
 
 class TranslationService
 {
@@ -29,8 +28,8 @@ class TranslationService
     ): Translation {
         return Translation::updateOrCreate(
             [
-                'group' => $group,
-                'key' => $key,
+                'group'  => $group,
+                'key'    => $key,
                 'locale' => $locale,
             ],
             [

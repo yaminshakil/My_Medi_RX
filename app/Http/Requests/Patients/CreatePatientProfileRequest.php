@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Patients;
 
 use App\Models\Patient;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreatePatientProfileRequest extends FormRequest
@@ -18,23 +19,23 @@ class CreatePatientProfileRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'date_of_birth' => 'required|date',
-            'gender' => 'required|in:male,female,other',
-            'phone' => 'required|string|max:20',
-            'email' => 'nullable|email',
-            'blood_group' => 'nullable|string',
-            'city' => 'nullable|string',
-            'address' => 'nullable|string',
-            'marital_status' => 'nullable|string',
-            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
-            'emergency_contact_name' => 'nullable|string|max:255',
-            'emergency_contact_phone' => 'nullable|string|max:20',
+            'name'                           => 'required|string|max:255',
+            'date_of_birth'                  => 'required|date',
+            'gender'                         => 'required|in:male,female,other',
+            'phone'                          => 'required|string|max:20',
+            'email'                          => 'nullable|email',
+            'blood_group'                    => 'nullable|string',
+            'city'                           => 'nullable|string',
+            'address'                        => 'nullable|string',
+            'marital_status'                 => 'nullable|string',
+            'profile_image'                  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'emergency_contact_name'         => 'nullable|string|max:255',
+            'emergency_contact_phone'        => 'nullable|string|max:20',
             'emergency_contact_relationship' => 'nullable|string|max:255',
         ];
     }

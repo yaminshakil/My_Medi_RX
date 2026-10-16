@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Eprescription;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAppointmentRequest extends FormRequest
@@ -17,22 +18,22 @@ class UpdateAppointmentRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'doctor_id' => ['required', 'numeric'],
-            'patient_id' => ['required', 'numeric'],
-            'chamber_id' => ['required', 'numeric'],
-            'appointment_date' => ['required', 'date'],
-            'appointment_time' => ['nullable', 'date_format:H:i:s'],
-            'status' => ['nullable', 'in:pending,confirmed,completed,cancelled'],
+            'doctor_id'         => ['required', 'numeric'],
+            'patient_id'        => ['required', 'numeric'],
+            'chamber_id'        => ['required', 'numeric'],
+            'appointment_date'  => ['required', 'date'],
+            'appointment_time'  => ['nullable', 'date_format:H:i:s'],
+            'status'            => ['nullable', 'in:pending,confirmed,completed,cancelled'],
             'consultation_type' => ['nullable', 'string'],
-            'notes' => ['nullable', 'string'],
-            'fee' => ['nullable', 'between:0,99.99'],
-            'is_paid' => ['nullable', 'boolean'],
-            'appointment_type' => ['nullable', 'string'],
+            'notes'             => ['nullable', 'string'],
+            'fee'               => ['nullable', 'between:0,99.99'],
+            'is_paid'           => ['nullable', 'boolean'],
+            'appointment_type'  => ['nullable', 'string'],
         ];
     }
 }

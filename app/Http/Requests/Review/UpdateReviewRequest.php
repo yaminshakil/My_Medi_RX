@@ -20,11 +20,11 @@ class UpdateReviewRequest extends FormRequest
                 'App\Models\Product',   // add your other models
                 'App\Models\Post',
             ])],
-            'reviewable_id'   => ['required', 'integer'],
-            'user_id'         => ['required', 'exists:users,id'],
-            'rating'          => ['required', 'integer', 'min:1', 'max:5'],
-            'comment'         => ['nullable', 'string', 'max:2000'],
-            'approved'        => ['required', 'boolean'],
+            'reviewable_id' => ['required', 'integer'],
+            'user_id'       => ['required', 'exists:users,id'],
+            'rating'        => ['required', 'integer', 'min:1', 'max:5'],
+            'comment'       => ['nullable', 'string', 'max:2000'],
+            'approved'      => ['required', 'boolean'],
         ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\Eprescriptions\AppointmentController;
+use App\Http\Controllers\Admin\Eprescriptions\DoctorChamberController;
 use App\Http\Controllers\Admin\Eprescriptions\InstructionController;
 use App\Http\Controllers\Admin\Eprescriptions\ManufacturerController;
 use App\Http\Controllers\Admin\Eprescriptions\MedicineController;
@@ -7,8 +9,6 @@ use App\Http\Controllers\Admin\Eprescriptions\MedicineDoseController;
 use App\Http\Controllers\Admin\Eprescriptions\MedicineDurationController;
 use App\Http\Controllers\Admin\Eprescriptions\PrescriptionController;
 use App\Http\Controllers\Admin\Eprescriptions\VitalController;
-use App\Http\Controllers\Admin\Eprescriptions\DoctorChamberController;
-use App\Http\Controllers\Admin\Eprescriptions\AppointmentController;
 use Illuminate\Support\Facades\Route;
 
 // Route::group(['middleware' => ['web', 'auth']], function () {
@@ -26,7 +26,6 @@ Route::prefix('admin')->middleware(['web', 'auth', 'profile.exists', 'role.redir
     Route::resource('appointments', AppointmentController::class);
     Route::post('appointments/changestatus', [AppointmentController::class, 'changeStatus'])->name('appointments.changestatus');
 });
-
 
 Route::prefix('admin')->middleware(['web', 'auth', 'profile.exists', 'role.redirect:Admin,Doctor'])->group(function () {
     Route::get('/get-medicines', [PrescriptionController::class, 'getAllMedicine'])

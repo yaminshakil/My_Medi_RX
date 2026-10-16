@@ -33,7 +33,7 @@ class MedicineDoseController extends Controller
         $doses = $this->service->getAll($perPage, $search);
 
         return Inertia::render('Admin/Eprescriptions/MedicineDoses/Index', [
-            'doses' => $doses,
+            'doses'   => $doses,
             'filters' => $request->only(['search', 'per_page']),
         ]);
     }

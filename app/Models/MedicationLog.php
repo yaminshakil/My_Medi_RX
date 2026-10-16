@@ -20,11 +20,10 @@ class MedicationLog extends Model
 
     protected $casts = [
         'scheduled_date' => 'date',
-        'scheduled_at' => 'datetime',
-        'taken_at' => 'datetime',
-        'snoozed_until' => 'datetime',
+        'scheduled_at'   => 'datetime',
+        'taken_at'       => 'datetime',
+        'snoozed_until'  => 'datetime',
     ];
-
 
     public function patient()
     {

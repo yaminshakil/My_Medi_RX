@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\Hospitals\HospitalController;
-use App\Http\Controllers\Frontend\Diagnostic\DiagnosticController;
-use App\Http\Controllers\Admin\Hospitals\HospitalVerificationController;
 use App\Http\Controllers\Admin\Hospitals\DepartmentController;
 use App\Http\Controllers\Admin\Hospitals\DoctorRosterController;
 use App\Http\Controllers\Admin\Hospitals\DoctorRosterLookupController;
+use App\Http\Controllers\Admin\Hospitals\HospitalController;
+use App\Http\Controllers\Admin\Hospitals\HospitalVerificationController;
+use App\Http\Controllers\Frontend\Diagnostic\DiagnosticController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('web')->group(function () {
     Route::get('/diagnostics', [DiagnosticController::class, 'index'])->name('diagnostics.index');
@@ -14,12 +14,12 @@ Route::middleware('web')->group(function () {
 });
 Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin'])->group(function () {
     /* Hospital CRUD */
-    Route::get('/hospitals', [HospitalController::class,'index'])->name('hospital.index');
-    Route::get('/hospitals/create', [HospitalController::class,'create'])->name('hospital.create');
-    Route::post('/hospitals/create', [HospitalController::class,'store']);
-    Route::get('/hospitals/{id}/edit', [HospitalController::class,'edit'])->name('hospital.edit');
-    Route::post('/hospitals/{id}', [HospitalController::class,'update'])->name('hospital.update');
-    Route::delete('/hospitals/{id}/delete', [HospitalController::class,'destroy'])->name('hospital.delete');
+    Route::get('/hospitals', [HospitalController::class, 'index'])->name('hospital.index');
+    Route::get('/hospitals/create', [HospitalController::class, 'create'])->name('hospital.create');
+    Route::post('/hospitals/create', [HospitalController::class, 'store']);
+    Route::get('/hospitals/{id}/edit', [HospitalController::class, 'edit'])->name('hospital.edit');
+    Route::post('/hospitals/{id}', [HospitalController::class, 'update'])->name('hospital.update');
+    Route::delete('/hospitals/{id}/delete', [HospitalController::class, 'destroy'])->name('hospital.delete');
 
     Route::get('chamberschedule/{hospital_uuid}/doctor/{doctor_uuid}', [DiagnosticController::class, 'getChamberSchedule'])->name('updatechamber.schedule');
     Route::post('chamberschedule/{id}', [DiagnosticController::class, 'updateChamberSchedule'])->name('chamberschedule.update');

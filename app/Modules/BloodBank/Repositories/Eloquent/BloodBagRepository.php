@@ -16,7 +16,7 @@ class BloodBagRepository implements BloodBagRepositoryInterface
 
     public function paginate(array $filters, int $perPage = 20): LengthAwarePaginator
     {
-        $sort      = in_array($filters['sort'] ?? null, self::SORTABLE, true) ? $filters['sort'] : 'expires_at';
+        $sort = in_array($filters['sort'] ?? null, self::SORTABLE, true) ? $filters['sort'] : 'expires_at';
         $direction = ($filters['direction'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
 
         return BloodBag::query()

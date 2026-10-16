@@ -34,24 +34,24 @@ class DashboardController extends Controller
             $chambers = $this->doctorChamberRepository->all();
 
             return Inertia::render('Dashboard/EprescriptionDashboard', [
-                'token' => $token,
-                'status' => session('status'),
+                'token'          => $token,
+                'status'         => session('status'),
                 'eprescriptions' => $eprescriptions,
-                'chambers' => $chambers,
+                'chambers'       => $chambers,
             ]);
         } elseif ($this->user->hasRole('Admin')) {
             $eprescriptions = $this->dashboardRepository->getAdminDashboardInfo();
 
             return Inertia::render('Dashboard/Dashboard', [
-                'token' => $token,
-                'status' => session('status'),
+                'token'          => $token,
+                'status'         => session('status'),
                 'eprescriptions' => $eprescriptions,
             ]);
         } elseif ($this->user->hasRole('Patient')) {
             $patientinfo = $this->dashboardRepository->patientDashboardInfo();
 
             return Inertia::render('Dashboard/PatientDashboard', [
-                'token' => $token,
+                'token'       => $token,
                 'patientinfo' => $patientinfo,
             ]);
         }

@@ -4,12 +4,15 @@ namespace App\Repositories\Eprescriptions;
 
 use App\Interfaces\Eprescriptions\DoctorChamberRepositoryInterface;
 use App\Models\DoctorChamber;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class DoctorChamberRepository implements DoctorChamberRepositoryInterface
 {
     protected $user;
+
     protected $doctor_id;
 
     public function __construct()
@@ -26,7 +29,7 @@ class DoctorChamberRepository implements DoctorChamberRepositoryInterface
         }
     }
 
-    public function all(): \Illuminate\Database\Eloquent\Collection
+    public function all(): Collection
     {
         return DoctorChamber::where('doctor_id', $this->doctor_id)->get();
     }
@@ -42,21 +45,21 @@ class DoctorChamberRepository implements DoctorChamberRepositoryInterface
         }
 
         $doctorchamber = DoctorChamber::create([
-            'name' => $data['name'],
-            'city' => $data['city'],
-            'address' => $data['address'],
+            'name'             => $data['name'],
+            'city'             => $data['city'],
+            'address'          => $data['address'],
             'appoinment_limit' => $data['appoinment_limit'],
-            'header_left' => $data['header_left'],
-            'header_right' => $data['header_right'],
-            'footer_info' => $data['footer_info'],
-            'schedules' => $data['schedules'],
-            'fee' => $data['fee'],
-            'followup_fee' => $data['followup_fee'],
-            'report_fee' => $data['report_fee'],
-            'chamber_logo' => $chamber_logo,
-            'doctor_id' => $this->doctor_id,
-            'is_active' => 0,
-            'user_id'   => $this->user->id,
+            'header_left'      => $data['header_left'],
+            'header_right'     => $data['header_right'],
+            'footer_info'      => $data['footer_info'],
+            'schedules'        => $data['schedules'],
+            'fee'              => $data['fee'],
+            'followup_fee'     => $data['followup_fee'],
+            'report_fee'       => $data['report_fee'],
+            'chamber_logo'     => $chamber_logo,
+            'doctor_id'        => $this->doctor_id,
+            'is_active'        => 0,
+            'user_id'          => $this->user->id,
         ]);
 
         return $doctorchamber;
@@ -66,7 +69,7 @@ class DoctorChamberRepository implements DoctorChamberRepositoryInterface
     {
         $doctorChamber = DoctorChamber::findOrFail($id);
 
-        if (! empty($data['chamber_logo']) && $data['chamber_logo'] instanceof \Illuminate\Http\UploadedFile) {
+        if (! empty($data['chamber_logo']) && $data['chamber_logo'] instanceof UploadedFile) {
             if ($data['prev_chamber_logo'] != null) {
                 Storage::disk('public')->delete($data['prev_chamber_logo']);
             }
@@ -75,36 +78,36 @@ class DoctorChamberRepository implements DoctorChamberRepositoryInterface
             $chamber_logo = $chamber_logo->store('chambers', 'public');
 
             $doctorchamber = $doctorChamber->update([
-                'name' => $data['name'],
-                'city' => $data['city'],
-                'address' => $data['address'],
+                'name'             => $data['name'],
+                'city'             => $data['city'],
+                'address'          => $data['address'],
                 'appoinment_limit' => $data['appoinment_limit'],
-                'header_left' => $data['header_left'],
-                'header_right' => $data['header_right'],
-                'footer_info' => $data['footer_info'],
-                'schedules' => $data['schedules'],
-                'fee' => $data['fee'],
-                'followup_fee' => $data['followup_fee'],
-                'report_fee' => $data['report_fee'],
-                'chamber_logo' => $chamber_logo,
-                'doctor_id' => $this->doctor_id,
-                'user_id'   => $this->user->id,
+                'header_left'      => $data['header_left'],
+                'header_right'     => $data['header_right'],
+                'footer_info'      => $data['footer_info'],
+                'schedules'        => $data['schedules'],
+                'fee'              => $data['fee'],
+                'followup_fee'     => $data['followup_fee'],
+                'report_fee'       => $data['report_fee'],
+                'chamber_logo'     => $chamber_logo,
+                'doctor_id'        => $this->doctor_id,
+                'user_id'          => $this->user->id,
             ]);
         } else {
             $doctorchamber = $doctorChamber->update([
-                'name' => $data['name'],
-                'city' => $data['city'],
-                'address' => $data['address'],
+                'name'             => $data['name'],
+                'city'             => $data['city'],
+                'address'          => $data['address'],
                 'appoinment_limit' => $data['appoinment_limit'],
-                'header_left' => $data['header_left'],
-                'header_right' => $data['header_right'],
-                'footer_info' => $data['footer_info'],
-                'schedules' => $data['schedules'],
-                'fee' => $data['fee'],
-                'followup_fee' => $data['followup_fee'],
-                'report_fee' => $data['report_fee'],
-                'doctor_id' => $this->doctor_id,
-                'user_id'   => $this->user->id,
+                'header_left'      => $data['header_left'],
+                'header_right'     => $data['header_right'],
+                'footer_info'      => $data['footer_info'],
+                'schedules'        => $data['schedules'],
+                'fee'              => $data['fee'],
+                'followup_fee'     => $data['followup_fee'],
+                'report_fee'       => $data['report_fee'],
+                'doctor_id'        => $this->doctor_id,
+                'user_id'          => $this->user->id,
             ]);
         }
         $doctorChamber->save();

@@ -26,9 +26,9 @@ class MenuRepository implements MenuRepositoryInterface
                     ->whereIn('locale', $locales);
             },
         ])
-        ->whereNull('parent_id')
-        ->orderBy('order_by', 'ASC')
-        ->get();
+            ->whereNull('parent_id')
+            ->orderBy('order_by', 'ASC')
+            ->get();
     }
 
     public function getAllRoles()

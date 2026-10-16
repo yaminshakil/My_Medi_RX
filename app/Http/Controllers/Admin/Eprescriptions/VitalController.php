@@ -33,14 +33,14 @@ class VitalController extends Controller
         }
         $vitals = $vitals->with('patient')->latest()->paginate(10)->withQueryString();
         $vitals->getCollection()->transform(fn ($vital) => [
-            'id' => $vital->id,
-            'name' => $vital->patient?->name,
-            'blood_pressure' => $vital->blood_pressure,
-            'heart_rate' => $vital->heart_rate,
-            'temperature' => $vital->temperature,
-            'respiratory_rate' => $vital->respiratory_rate,
+            'id'                => $vital->id,
+            'name'              => $vital->patient?->name,
+            'blood_pressure'    => $vital->blood_pressure,
+            'heart_rate'        => $vital->heart_rate,
+            'temperature'       => $vital->temperature,
+            'respiratory_rate'  => $vital->respiratory_rate,
             'oxygen_saturation' => $vital->oxygen_saturation,
-            'created_at' => $vital->created_at->format('d M Y'),
+            'created_at'        => $vital->created_at->format('d M Y'),
         ]);
 
         return Inertia::render('Admin/Eprescriptions/Vitals/Index', [

@@ -3,10 +3,11 @@
 namespace App\Interfaces\Eprescriptions;
 
 use App\Models\DoctorChamber;
+use Illuminate\Database\Eloquent\Collection;
 
 interface DoctorChamberRepositoryInterface
 {
-    public function all(): \Illuminate\Database\Eloquent\Collection;
+    public function all(): Collection;
 
     public function create(array $data): ?DoctorChamber;
 

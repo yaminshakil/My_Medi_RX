@@ -19,8 +19,7 @@ class DoctorController extends Controller
         protected DoctorService $doctorService,
         protected DoctorExperienceService $doctorExperienceService,
         protected DoctorEducationService $DoctorEducationService,
-    ) {
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.

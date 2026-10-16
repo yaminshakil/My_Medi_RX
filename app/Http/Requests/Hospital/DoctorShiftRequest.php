@@ -15,12 +15,12 @@ class DoctorShiftRequest extends FormRequest
     {
         return [
             'hospital_id' => ['required', 'integer', 'exists:hospitals,id'],
-            'name' => ['required', 'string', 'max:100'],
-            'start_time' => ['required', 'date_format:H:i'],
-            'end_time' => ['required', 'date_format:H:i', 'different:start_time'],
+            'name'        => ['required', 'string', 'max:100'],
+            'start_time'  => ['required', 'date_format:H:i'],
+            'end_time'    => ['required', 'date_format:H:i', 'different:start_time'],
             'break_start' => ['nullable', 'date_format:H:i'],
-            'break_end' => ['nullable', 'date_format:H:i', 'after:break_start'],
-            'is_active' => ['required', 'boolean'],
+            'break_end'   => ['nullable', 'date_format:H:i', 'after:break_start'],
+            'is_active'   => ['required', 'boolean'],
         ];
     }
 }

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Frontend\Diagnostic;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Hospital;
-use Inertia\Inertia;
-use App\Models\DoctorChamber;
-use App\Models\User;
-use App\Models\DiagnosticService;
 use App\Models\DiagnosticRating;
+use App\Models\DiagnosticService;
+use App\Models\DoctorChamber;
+use App\Models\Hospital;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class DiagnosticController extends Controller
 {
@@ -20,29 +20,28 @@ class DiagnosticController extends Controller
         $userLng = request('longitude');
         $division_id = request('division_id');
         $district_id = request('district_id');
-        
 
         $query = Hospital::withCount('doctors');
 
         // If user location is available, calculate distance
         if ($userLat && $userLng) {
             $query->selectRaw(
-                "hospitals.*, 
+                'hospitals.*, 
                 (6371 * acos(
                     cos(radians(?)) * cos(radians(latitude)) 
                     * cos(radians(longitude) - radians(?)) 
                     + sin(radians(?)) * sin(radians(latitude))
-                )) AS distance",
+                )) AS distance',
                 [$userLat, $userLng, $userLat]
             )
-            ->orderBy('distance', 'asc');
+                ->orderBy('distance', 'asc');
         }
 
-        if($division_id) {
+        if ($division_id) {
             $query->where('division_id', $division_id);
         }
 
-        if($district_id) {
+        if ($district_id) {
             $query->where('district_id', $district_id);
         }
 
@@ -61,26 +60,26 @@ class DiagnosticController extends Controller
 
     public function show(Hospital $hospital)
     {
-        //$hospital = Hospital::findOrFail($id);
+        // $hospital = Hospital::findOrFail($id);
         $hospital->load([
             'doctors' => fn ($q) => $q->with(['profile', 'specialties', 'specialties.parent', 'chambers']),
             'services',
             'ratings.user',
             'offers',
-            'offers.offerable'
+            'offers.offerable',
         ]);
 
         return Inertia::render('Frontend/Hospitals/Show', [
-            'hospital' => $hospital,
+            'hospital'      => $hospital,
             'averageRating' => round($hospital->ratings()->avg('stars'), 1),
-            'seo' => [
-            'title' => $hospital->hospital_name,
-            'description' => Str::limit(strip_tags($hospital->hospital_description), 160),
-            'image' => $hospital->banner_url
-                ? asset('storage/'.$hospital->banner_url)
-                : asset('images/default-banner.jpg'),
-            'url' => route('diagnostics.show', $hospital->uuid),
-        ],
+            'seo'           => [
+                'title'       => $hospital->hospital_name,
+                'description' => Str::limit(strip_tags($hospital->hospital_description), 160),
+                'image'       => $hospital->banner_url
+                    ? asset('storage/'.$hospital->banner_url)
+                    : asset('images/default-banner.jpg'),
+                'url' => route('diagnostics.show', $hospital->uuid),
+            ],
         ]);
     }
 
@@ -93,6 +92,7 @@ class DiagnosticController extends Controller
         $hospital_id = Hospital::where('uuid', $hospital_uuid)?->first()?->id;
 
         $doctorChamber = DoctorChamber::with('doctor')->where('hospital_id', $hospital_id)->where('user_id', $doctor_id)->first();
+
         return Inertia::render('Frontend/Hospitals/Chambers/Edit', [
             'doctorChamber' => $doctorChamber,
         ]);
@@ -103,7 +103,7 @@ class DiagnosticController extends Controller
     {
         $doctorChamber = DoctorChamber::findOrFail($id);
         $doctorchamber = $doctorChamber->update([
-            'schedules'   => $request->schedules
+            'schedules' => $request->schedules,
         ]);
 
     }
@@ -111,9 +111,9 @@ class DiagnosticController extends Controller
     public function addDiagnosticServices(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
             'description' => 'nullable|string|max:500',
-            'price' => 'required|between:0,99.99',
+            'price'       => 'required|between:0,99.99',
             'hospital_id' => 'required|numeric',
         ]);
 
@@ -125,9 +125,9 @@ class DiagnosticController extends Controller
     public function updateDiagnosticServices(Request $request, $id)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
             'description' => 'nullable|string|max:500',
-            'price' => 'required|between:0,99.99',
+            'price'       => 'required|between:0,99.99',
             'hospital_id' => 'required|numeric',
         ]);
 

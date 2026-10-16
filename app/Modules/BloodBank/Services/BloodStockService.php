@@ -17,8 +17,7 @@ class BloodStockService
         private readonly BloodBagRepositoryInterface $bags,
         private readonly BloodIssueRepositoryInterface $issues,
         private readonly EmergencyRequestRepositoryInterface $requests,
-    ) {
-    }
+    ) {}
 
     /** Every group x component cell, including zeros, so the grid never has holes. */
     public function overview(): array
@@ -33,7 +32,7 @@ class BloodStockService
 
         foreach (BloodGroup::cases() as $group) {
             foreach (BloodComponent::cases() as $component) {
-                $row   = $rows->get($group->value.'|'.$component->value);
+                $row = $rows->get($group->value.'|'.$component->value);
                 $units = (int) ($row->units ?? 0);
                 $limit = config("blood-bank.stock_thresholds.{$component->value}");
 
@@ -42,10 +41,10 @@ class BloodStockService
                     'volume_ml' => (int) ($row->volume_ml ?? 0),
                     'level'     => $units <= $limit['critical'] ? 'critical' : ($units <= $limit['low'] ? 'low' : 'ok'),
                     // 0..1 height of the "bag fill" bar: full at twice the low-stock threshold.
-                    'fill'      => round(min(1, $units / max(1, $limit['low'] * 2)), 2),
+                    'fill' => round(min(1, $units / max(1, $limit['low'] * 2)), 2),
                 ];
 
-                $byGroup[$group->value]         = ($byGroup[$group->value] ?? 0) + $units;
+                $byGroup[$group->value] = ($byGroup[$group->value] ?? 0) + $units;
                 $byComponent[$component->value] = ($byComponent[$component->value] ?? 0) + $units;
                 $grand += $units;
             }

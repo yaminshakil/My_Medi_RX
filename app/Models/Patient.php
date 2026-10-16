@@ -7,11 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use App\Models\Prescription;
-use App\Models\PrescriptionMedicine;
-use App\Models\PatientMedication;
-use App\Models\MedicationSchedule;
-use App\Models\MedicationLog;
 
 class Patient extends Model
 {

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\Auth\UserBasicResource;
+use App\Models\Doctor;
 use App\Models\User;
 use App\Notifications\UserRegisteredNotification;
 use App\Services\ApiResponseService;
@@ -11,14 +13,12 @@ use App\Services\AuthService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Doctor;
-use App\Http\Requests\Auth\RegisterRequest;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -69,12 +69,13 @@ class AuthController extends Controller
             return $this->generateLoginResponse($user);
         } catch (\Exception $e) {
             Log::error('Registration failed', [
-            'registration_type' => $validated['registration_type'] ?? null,
-            'email' => $validated['email'] ?? null,
-            'error' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-        ]);
+                'registration_type' => $validated['registration_type'] ?? null,
+                'email'             => $validated['email'] ?? null,
+                'error'             => $e->getMessage(),
+                'file'              => $e->getFile(),
+                'line'              => $e->getLine(),
+            ]);
+
             return ApiResponseService::error(
                 'Registration failed. Please try again.',
                 [],
@@ -91,8 +92,8 @@ class AuthController extends Controller
         }
 
         $request->validate([
-            'identifier'    => ['required', 'string'],
-            'password' => ['required', 'string'],
+            'identifier' => ['required', 'string'],
+            'password'   => ['required', 'string'],
         ]);
 
         $login = $request->identifier;
@@ -173,7 +174,7 @@ class AuthController extends Controller
     protected function generateLoginResponse($user)
     {
         // Generate Tokens using your AuthService
-        //$tokens = AuthService::generateTokens($user);
+        // $tokens = AuthService::generateTokens($user);
         $token = auth('api')->login($user);
 
         $userResource = new UserBasicResource($user);
@@ -182,10 +183,10 @@ class AuthController extends Controller
             'user'       => $userResource->resolve(),
             'token_type' => 'Bearer',
             'tokens'     => [
-                        'accessToken' => $token,
-                        'tokenType' => 'bearer',
-                        'expiresIn' => auth('api')->factory()->getTTL() * 60,
-                    ],
+                'accessToken' => $token,
+                'tokenType'   => 'bearer',
+                'expiresIn'   => auth('api')->factory()->getTTL() * 60,
+            ],
         ];
 
         return ApiResponseService::success($userData, 'Login successful!');
@@ -203,7 +204,7 @@ class AuthController extends Controller
         $user = $request->user();
 
         // Generate new tokens
-        //$tokens = AuthService::generateTokens($user);
+        // $tokens = AuthService::generateTokens($user);
         $token = auth('api')->refresh();
 
         $userResource = new UserBasicResource($user);
@@ -212,9 +213,9 @@ class AuthController extends Controller
             'user'   => $userResource->resolve(),
             'tokens' => [
                 'accessToken' => $token,
-                'tokenType' => 'bearer',
-                'expiresIn' => auth('api')->factory()->getTTL() * 60,
-            ]
+                'tokenType'   => 'bearer',
+                'expiresIn'   => auth('api')->factory()->getTTL() * 60,
+            ],
         ];
 
         return ApiResponseService::success($userData, 'Token refreshed successfully!');
@@ -231,8 +232,8 @@ class AuthController extends Controller
     {
         return ApiResponseService::success([
             'accessToken' => $token,
-            'tokenType' => 'Bearer',
-            'expiresIn' => auth('api')->factory()->getTTL() * 60,
+            'tokenType'   => 'Bearer',
+            'expiresIn'   => auth('api')->factory()->getTTL() * 60,
         ], 'Token refreshed successfully!');
     }
 }

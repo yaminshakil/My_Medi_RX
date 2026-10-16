@@ -15,11 +15,11 @@ class MedicineDoseResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
+            'id'          => $this->id,
+            'name'        => $this->name,
             'description' => $this->description,
-            'active' => $this->active,
-            'created_by' => $this->created_by,
+            'active'      => $this->active,
+            'created_by'  => $this->created_by,
         ];
     }
 }

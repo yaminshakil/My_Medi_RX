@@ -202,15 +202,15 @@ class StaticTranslationsSeeder extends Seeder
             foreach ($locales as $locale => $value) {
                 DB::table('translations')->updateOrInsert(
                     [
-                        'group' => 'common',
-                        'key' => $key,
-                        'locale' => $locale,
+                        'group'             => 'common',
+                        'key'               => $key,
+                        'locale'            => $locale,
                         'translatable_type' => null,
-                        'translatable_id' => null,
-                        'field' => null,
+                        'translatable_id'   => null,
+                        'field'             => null,
                     ],
                     [
-                        'value' => $value,
+                        'value'      => $value,
                         'updated_at' => $now,
                         'created_at' => $now,
                     ]

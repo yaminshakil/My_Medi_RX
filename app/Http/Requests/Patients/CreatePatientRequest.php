@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Patients;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreatePatientRequest extends FormRequest
@@ -17,21 +18,21 @@ class CreatePatientRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email',
-            'phone' => 'required|string|max:20',
-            'date_of_birth' => 'required|date',
-            'gender' => 'required|in:male,female,other',
-            'blood_group' => 'nullable|string',
+            'name'           => 'required|string|max:255',
+            'email'          => 'nullable|email',
+            'phone'          => 'required|string|max:20',
+            'date_of_birth'  => 'required|date',
+            'gender'         => 'required|in:male,female,other',
+            'blood_group'    => 'nullable|string',
             'marital_status' => 'required|in:single,married,divorced,widowed',
-            'address' => 'nullable|string',
-            'city' => 'nullable|string',
-            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'address'        => 'nullable|string',
+            'city'           => 'nullable|string',
+            'profile_image'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ];
     }
 }

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Division;
 use App\Models\District;
+use App\Models\Division;
 
 class LocationController extends Controller
 {

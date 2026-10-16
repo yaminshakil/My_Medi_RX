@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Contracts\Encryption\DecryptException;
 
 class MedicationScanController extends Controller
 {
@@ -37,7 +36,7 @@ class MedicationScanController extends Controller
 
         $prescriptionMedicineId = $payload['prescription_medicine_id'] ?? null;
 
-        if (!$prescriptionMedicineId) {
+        if (! $prescriptionMedicineId) {
             return response()->json([
                 'message' => 'QR code does not contain a valid prescription reference.',
             ], 422);
@@ -49,7 +48,7 @@ class MedicationScanController extends Controller
             ->where('prescription_medicines.id', $prescriptionMedicineId)
             ->first();
 
-        if (!$prescriptionMedicine) {
+        if (! $prescriptionMedicine) {
             return response()->json([
                 'message' => 'Prescription not found for this patient.',
             ], 404);
@@ -60,7 +59,7 @@ class MedicationScanController extends Controller
         // unless your workflow explicitly authorizes automatic import.
         return response()->json([
             'message' => 'Prescription verified. Confirm before importing.',
-            'data' => $prescriptionMedicine,
+            'data'    => $prescriptionMedicine,
         ]);
     }
 
@@ -83,7 +82,7 @@ class MedicationScanController extends Controller
         //     ->extract($data['prescription_image']);
 
         return response()->json([
-            'message' => 'Image validated. Configure an OCR provider to extract prescription text.',
+            'message'        => 'Image validated. Configure an OCR provider to extract prescription text.',
             'ocr_configured' => false,
         ], 501);
     }

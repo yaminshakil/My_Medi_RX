@@ -98,7 +98,6 @@ class DistrictSeeder extends Seeder
             DB::statement('ALTER TABLE districts AUTO_INCREMENT = 1');
             DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
-
             DB::beginTransaction();
             DB::table('districts')->insert($districts);
             DB::commit();
@@ -106,8 +105,8 @@ class DistrictSeeder extends Seeder
             $this->command->info('Districts seeded successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('DistrictSeeder failed: ' . $e->getMessage());
-            $this->command->error('Error seeding districts: ' . $e->getMessage());
+            \Log::error('DistrictSeeder failed: '.$e->getMessage());
+            $this->command->error('Error seeding districts: '.$e->getMessage());
         }
     }
 }

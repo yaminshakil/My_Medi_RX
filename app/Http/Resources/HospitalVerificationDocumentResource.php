@@ -15,31 +15,28 @@ class HospitalVerificationDocumentResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'id'          => $this->id,
             'hospital_id' => $this->hospital_id,
 
             'document_type' => $this->document_type,
 
-            'document_type_label' =>
-                config(
-                    'hospital.document_types.' .
-                    $this->document_type
-                ),
+            'document_type_label' => config(
+                'hospital.document_types.'.
+                $this->document_type
+            ),
 
-            'document_title' => $this->document_title,
+            'document_title'  => $this->document_title,
             'document_number' => $this->document_number,
 
             'document_path' => $this->document_path,
-            'document_url' => $this->document_url,
+            'document_url'  => $this->document_url,
 
-            'issued_at' => $this->issued_at,
+            'issued_at'  => $this->issued_at,
             'expires_at' => $this->expires_at,
 
-            'verification_status' =>
-                $this->verification_status,
+            'verification_status' => $this->verification_status,
 
-            'rejection_reason' =>
-                $this->rejection_reason,
+            'rejection_reason' => $this->rejection_reason,
 
             'verified_by' => $this->verified_by,
             'verified_at' => $this->verified_at,
@@ -47,7 +44,7 @@ class HospitalVerificationDocumentResource extends JsonResource
             'verifier' => $this->whenLoaded(
                 'verifier',
                 fn () => [
-                    'id' => $this->verifier->id,
+                    'id'   => $this->verifier->id,
                     'name' => $this->verifier->name,
                 ]
             ),

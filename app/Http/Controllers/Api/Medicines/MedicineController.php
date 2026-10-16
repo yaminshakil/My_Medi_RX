@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api\Medicines;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\Eprescription\CreateMedicineRequest;
 use App\Http\Requests\Eprescription\UpdateMedicineRequest;
-use App\Models\Setting;
-use App\Services\Eprescriptions\MedicineService;
-use App\Services\ApiResponseService;
 use App\Http\Resources\Medicines\MedicineResource;
+use App\Models\Setting;
+use App\Services\ApiResponseService;
+use App\Services\Eprescriptions\MedicineService;
+use Illuminate\Http\Request;
 
 class MedicineController extends Controller
 {
@@ -19,6 +19,7 @@ class MedicineController extends Controller
     {
         $this->service = $service;
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -35,6 +36,7 @@ class MedicineController extends Controller
 
         $medicines = $this->service->list($perPage, $search);
         $medicineData = MedicineResource::collection($medicines);
+
         return ApiResponseService::success($medicineData, 'Manufacturer retrive successfully!');
     }
 
@@ -46,6 +48,7 @@ class MedicineController extends Controller
         $data = $request->validated();
         $medicine = $this->service->store($data);
         $medicineData = new MedicineResource($medicine);
+
         return ApiResponseService::success($medicineData, 'Medicine created successfully!');
     }
 
@@ -68,6 +71,7 @@ class MedicineController extends Controller
         $medicine = $this->service->get($id);
         $medicine = $this->service->get($id);
         $medicineData = new MedicineResource($medicine);
+
         return ApiResponseService::success($medicineData, 'Medicine created successfully!');
     }
 
@@ -77,6 +81,7 @@ class MedicineController extends Controller
     public function destroy(string $id)
     {
         $this->service->destroy($id);
+
         return ApiResponseService::success([], 'Medicine deleted successfully!');
     }
 }

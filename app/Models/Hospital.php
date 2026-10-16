@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Hospital extends Model
 {
@@ -43,14 +43,14 @@ class Hospital extends Model
         'verified_by',
         'verification_note',
         'created_by',
-        'updated_by'
+        'updated_by',
     ];
 
     protected $dates = ['deleted_at'];
 
     protected $casts = [
         'banner_crop_data' => 'array',
-        'verified_at' => 'datetime',
+        'verified_at'      => 'datetime',
     ];
 
     protected $appends = ['logo_image_url'];
@@ -58,7 +58,7 @@ class Hospital extends Model
     public function doctors()
     {
         return $this->belongsToMany(User::class, 'doctor_chambers')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
     // public function services()
@@ -86,11 +86,10 @@ class Hospital extends Model
         });
     }
 
-
     public function chambers()
     {
         return $this->belongsToMany(DoctorChamber::class, 'doctor_chambers')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
     public function getLogoImageUrlAttribute()
@@ -101,8 +100,10 @@ class Hospital extends Model
     public function getBannerUrlAttribute()
     {
         $bannerUrl = $this->getRawOriginal('banner_url');
+
         return $bannerUrl ? asset('storage/'.$bannerUrl) : null;
     }
+
     public function hospitalType(): BelongsTo
     {
         return $this->belongsTo(HospitalType::class);

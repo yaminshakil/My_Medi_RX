@@ -27,11 +27,11 @@ class PatientMedication extends Model
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'total_quantity' => 'integer',
+        'start_date'         => 'date',
+        'end_date'           => 'date',
+        'total_quantity'     => 'integer',
         'remaining_quantity' => 'integer',
-        'refill_threshold' => 'integer',
+        'refill_threshold'   => 'integer',
     ];
 
     public function patient()

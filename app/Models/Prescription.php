@@ -36,8 +36,8 @@ class Prescription extends Model
     ];
 
     protected $casts = [
-        'followup_date' => 'date',
-        'symptoms' => 'array',
+        'followup_date'  => 'date',
+        'symptoms'       => 'array',
         'onexaminations' => 'array',
         'investigations' => 'array',
     ];
@@ -76,8 +76,6 @@ class Prescription extends Model
     {
         return $this->hasMany(PrescriptionMedicine::class, 'prescription_id', 'id');
     }
-
-
 
     public function gynaeHistory()
     {

@@ -63,9 +63,9 @@ class AppointmentController extends Controller
         $appointments = $this->appointmentService->paginate($search, $perPage, $sortBy, $sortDirection, $date, $status);
 
         return Inertia::render('Admin/Eprescriptions/Appointments/Index', [
-            'doctor_id' => $this->doctor_id,
+            'doctor_id'    => $this->doctor_id,
             'appointments' => $appointments,
-            'filters' => $request->only(['search', 'per_page', 'sort_by', 'sort_direction']),
+            'filters'      => $request->only(['search', 'per_page', 'sort_by', 'sort_direction']),
         ]);
     }
 
@@ -89,7 +89,7 @@ class AppointmentController extends Controller
             ->get(['chamber_id', 'appointment_date', 'appointment_time']);
         $appointments = $appointments->map(function ($appointment) {
             return [
-                'chamber_id' => $appointment->chamber_id,
+                'chamber_id'       => $appointment->chamber_id,
                 'appointment_date' => $appointment->appointment_date->format('Y-m-d'),
                 'appointment_time' => $appointment->appointment_time->format('H:i:s'),
             ];
@@ -98,13 +98,13 @@ class AppointmentController extends Controller
         $patients = Patient::all();
         $patients = $patients->map(function ($patient) {
             return [
-                'id' => $patient->id,
+                'id'             => $patient->id,
                 'patient_number' => $patient->patient_number,
-                'name' => $patient->name,
-                'mobile' => $patient->phone,
-                'email' => $patient->email,
-                'gender' => $patient->gender,
-                'blood_group' => $patient->blood_group,
+                'name'           => $patient->name,
+                'mobile'         => $patient->phone,
+                'email'          => $patient->email,
+                'gender'         => $patient->gender,
+                'blood_group'    => $patient->blood_group,
             ];
         });
 
@@ -112,7 +112,7 @@ class AppointmentController extends Controller
             return Inertia::render('Admin/Eprescriptions/Appointments/Create', [
                 'doctor' => $doctor,
                 // 'patient_id' => $patient_id,
-                'patients' => $patients,
+                'patients'     => $patients,
                 'appointments' => $appointments,
             ]);
         } elseif ($this->user->hasRole('Patient')) {
@@ -127,21 +127,21 @@ class AppointmentController extends Controller
             $patients = Patient::where('user_id', Auth::user()->id)->get();
             $patients = $patients->map(function ($patient) {
                 return [
-                    'id' => $patient->id,
+                    'id'             => $patient->id,
                     'patient_number' => $patient->patient_number,
-                    'name' => $patient->name,
-                    'mobile' => $patient->phone,
-                    'email' => $patient->email,
-                    'gender' => $patient->gender,
-                    'blood_group' => $patient->blood_group,
-                    'relationship' => $patient->relationship,
+                    'name'           => $patient->name,
+                    'mobile'         => $patient->phone,
+                    'email'          => $patient->email,
+                    'gender'         => $patient->gender,
+                    'blood_group'    => $patient->blood_group,
+                    'relationship'   => $patient->relationship,
                 ];
             });
 
             return Inertia::render('Frontend/Eprescription/Appointments/Create', [
-                'doctor' => $doctor,
-                'patient_id' => $patients->first()['id'] ?? null,
-                'patients' => $patients,
+                'doctor'       => $doctor,
+                'patient_id'   => $patients->first()['id'] ?? null,
+                'patients'     => $patients,
                 'appointments' => $appointments,
             ]);
         }
@@ -177,7 +177,7 @@ class AppointmentController extends Controller
 
         $appointments = $appointments->map(function ($appointment) {
             return [
-                'chamber_id' => $appointment->chamber_id,
+                'chamber_id'       => $appointment->chamber_id,
                 'appointment_date' => $appointment->appointment_date->format('Y-m-d'),
                 'appointment_time' => $appointment->appointment_time->format('H:i:s'),
             ];
@@ -185,12 +185,12 @@ class AppointmentController extends Controller
 
         if ($this->user->hasRole('Doctor') || $this->user->hasRole('Assistant')) {
             return Inertia::render('Admin/Eprescriptions/Appointments/Edit', [
-                'appointment' => $appointment,
+                'appointment'  => $appointment,
                 'appointments' => $appointments,
             ]);
         } elseif ($this->user->hasRole('Patient')) {
             return Inertia::render('Frontend/Eprescription/Appointments/Edit', [
-                'appointment' => $appointment,
+                'appointment'  => $appointment,
                 'appointments' => $appointments,
             ]);
         }
@@ -255,9 +255,9 @@ class AppointmentController extends Controller
         $appointments = $this->appointmentService->paginate($search, $perPage, $sortBy, $sortDirection, $date, $status);
 
         return Inertia::render('Admin/Eprescriptions/Appointments/TodayIndex', [
-            'doctor_id' => $this->doctor_id,
+            'doctor_id'    => $this->doctor_id,
             'appointments' => $appointments,
-            'filters' => $request->only(['search', 'per_page', 'sort_by', 'sort_direction']),
+            'filters'      => $request->only(['search', 'per_page', 'sort_by', 'sort_direction']),
         ]);
     }
 
@@ -282,9 +282,9 @@ class AppointmentController extends Controller
         $appointments = $this->appointmentService->paginate($search, $perPage, $sortBy, $sortDirection, $date, $status);
 
         return Inertia::render('Admin/Eprescriptions/Appointments/NewIndex', [
-            'doctor_id' => $this->doctor_id,
+            'doctor_id'    => $this->doctor_id,
             'appointments' => $appointments,
-            'filters' => $request->only(['search', 'per_page', 'sort_by', 'sort_direction']),
+            'filters'      => $request->only(['search', 'per_page', 'sort_by', 'sort_direction']),
         ]);
     }
 

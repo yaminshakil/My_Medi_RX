@@ -46,9 +46,9 @@ class EmailTemplateSeeder extends Seeder
         EmailTemplate::updateOrCreate(
             ['slug' => 'appointment_confirmation'],
             [
-                'name' => 'Appointment Confirmation',
-                'subject' => 'Your Appointment Confirmation',
-                'body' => 'We have received an appointment request for the date of {{booking_date}} and Serial/time/Slot: {{time_serial}} with Dr. {{doctor_name}}. Your request is confirmed. You have to pay {{site_currency}} {{doctor_fees}} {{currency_symbol}} after completing the appointment. Please be present there at due time. Thanks for being with us.',
+                'name'       => 'Appointment Confirmation',
+                'subject'    => 'Your Appointment Confirmation',
+                'body'       => 'We have received an appointment request for the date of {{booking_date}} and Serial/time/Slot: {{time_serial}} with Dr. {{doctor_name}}. Your request is confirmed. You have to pay {{site_currency}} {{doctor_fees}} {{currency_symbol}} after completing the appointment. Please be present there at due time. Thanks for being with us.',
                 'shortcodes' => $appointment_confirmation_shortcodes,
             ]
         );
@@ -56,9 +56,9 @@ class EmailTemplateSeeder extends Seeder
         EmailTemplate::updateOrCreate(
             ['slug' => 'appointment_status'],
             [
-                'name' => 'Appointment Update Status',
-                'subject' => 'Your Appointment Update Status',
-                'body' => 'We have {{booking_status}} your appointment request for the date of {{booking_date}} and time {{time_serial}} with Dr. {{doctor_name}}. We are suggested to try another schedule.Thanks for being with us.',
+                'name'       => 'Appointment Update Status',
+                'subject'    => 'Your Appointment Update Status',
+                'body'       => 'We have {{booking_status}} your appointment request for the date of {{booking_date}} and time {{time_serial}} with Dr. {{doctor_name}}. We are suggested to try another schedule.Thanks for being with us.',
                 'shortcodes' => $appointment_confirmation_shortcodes,
             ]
         );

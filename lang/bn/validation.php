@@ -2,7 +2,7 @@
 
 return [
     'required' => ':attribute পূরণ করা আবশ্যক।',
-    'unique' => ':attribute ইতোমধ্যে ব্যবহার করা হয়েছে।',
+    'unique'   => ':attribute ইতোমধ্যে ব্যবহার করা হয়েছে।',
 
     'custom' => [
         'text' => [

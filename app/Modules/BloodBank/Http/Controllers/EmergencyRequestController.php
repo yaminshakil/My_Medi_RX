@@ -21,8 +21,7 @@ class EmergencyRequestController extends Controller
     public function __construct(
         private readonly EmergencyRequestRepositoryInterface $requests,
         private readonly EmergencyBroadcastService $service,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): Response
     {
@@ -35,7 +34,7 @@ class EmergencyRequestController extends Controller
                 'urgencies'  => LookupOptions::urgencies(),
             ],
             'defaults' => [
-                'radius_km' => config('blood-bank.emergency.default_radius_km'),
+                'radius_km'     => config('blood-bank.emergency.default_radius_km'),
                 'max_radius_km' => config('blood-bank.emergency.max_radius_km'),
             ],
         ]);

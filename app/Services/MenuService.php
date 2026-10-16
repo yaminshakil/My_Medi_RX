@@ -31,11 +31,11 @@ class MenuService
         );
 
         $menus->getCollection()->transform(fn ($menu) => [
-            'id'          => $menu->id,
-            'name'        => $menu->translated_name,
+            'id'           => $menu->id,
+            'name'         => $menu->translated_name,
             'translations' => $menu->translations
-            ->groupBy('field')
-            ->map(fn ($items) => $items->pluck('value', 'locale')),
+                ->groupBy('field')
+                ->map(fn ($items) => $items->pluck('value', 'locale')),
             'slug'        => $menu->slug,
             'order_by'    => $menu->order_by,
             'menu_method' => $menu->menu_method,
@@ -43,9 +43,9 @@ class MenuService
             'is_admin'    => Auth::user()->hasRole('admin'),
             'submenu'     => $menu->childmenus->map(function ($child) {
                 return [
-                    'id' => $child->id,
-                    'name' => $child->translated_name,
-                    'slug' => $child->slug,
+                    'id'           => $child->id,
+                    'name'         => $child->translated_name,
+                    'slug'         => $child->slug,
                     'translations' => [
                         'name' => $child->translations
                             ->pluck('value', 'locale')

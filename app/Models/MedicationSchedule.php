@@ -18,11 +18,11 @@ class MedicationSchedule extends Model
     ];
 
     protected $casts = [
-        'dose_amount' => 'decimal:3',
-        'start_date' => 'date',
-        'end_date' => 'date',
+        'dose_amount'  => 'decimal:3',
+        'start_date'   => 'date',
+        'end_date'     => 'date',
         'days_of_week' => 'array',
-        'is_active' => 'boolean',
+        'is_active'    => 'boolean',
     ];
 
     public function medication()

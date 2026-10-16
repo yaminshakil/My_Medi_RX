@@ -2,10 +2,11 @@
 
 namespace App\Modules\BloodBank\Http\Resources;
 
+use App\Modules\BloodBank\Models\EmergencyRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Modules\BloodBank\Models\EmergencyRequest */
+/** @mixin EmergencyRequest */
 class EmergencyRequestResource extends JsonResource
 {
     public function toArray(Request $request): array

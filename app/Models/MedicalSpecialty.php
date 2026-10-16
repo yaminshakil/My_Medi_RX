@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use App\Traits\HasTranslations;
 
 class MedicalSpecialty extends Model
 {
@@ -15,9 +15,9 @@ class MedicalSpecialty extends Model
     protected $fillable = ['name', 'icon', 'description', 'parent_id', 'is_surgical'];
 
     protected $appends = [
-    'translated_name',
-    'translated_description'
-];
+        'translated_name',
+        'translated_description',
+    ];
 
     public function getTranslatedNameAttribute(): ?string
     {

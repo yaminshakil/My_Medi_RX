@@ -26,7 +26,6 @@ class CreateDistrictsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-
             // Additional indexes
             $table->index('division_id');
             $table->index('name');

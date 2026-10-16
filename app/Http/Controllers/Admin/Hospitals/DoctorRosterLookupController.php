@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Hospital;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class DoctorRosterLookupController extends Controller
 {

@@ -19,7 +19,7 @@ class MedicationReportController extends Controller
     {
         $filters = $request->validate([
             'from' => ['nullable', 'date'],
-            'to' => ['nullable', 'date', 'after_or_equal:from'],
+            'to'   => ['nullable', 'date', 'after_or_equal:from'],
         ]);
 
         return $patient->medicationLogs()
@@ -43,14 +43,14 @@ class MedicationReportController extends Controller
 
         return response()->json([
             'patient' => [
-                'name' => $patient->name,
+                'name'           => $patient->name,
                 'patient_number' => $patient->patient_number,
             ],
             'total_doses' => $logs->count(),
-            'taken' => $logs->where('status', 'taken')->count(),
-            'missed' => $logs->where('status', 'missed')->count(),
-            'skipped' => $logs->where('status', 'skipped')->count(),
-            'logs' => $logs,
+            'taken'       => $logs->where('status', 'taken')->count(),
+            'missed'      => $logs->where('status', 'missed')->count(),
+            'skipped'     => $logs->where('status', 'skipped')->count(),
+            'logs'        => $logs,
         ]);
     }
 

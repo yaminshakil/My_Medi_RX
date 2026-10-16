@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\Settings\EmailTemplate\EmailTemplateController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SystemSettngsController;
-use App\Http\Controllers\Settings\EmailTemplate\EmailTemplateController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 

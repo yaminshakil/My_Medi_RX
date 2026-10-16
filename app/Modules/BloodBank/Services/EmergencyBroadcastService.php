@@ -2,6 +2,7 @@
 
 namespace App\Modules\BloodBank\Services;
 
+use App\Models\Hospital;
 use App\Models\User;
 use App\Modules\BloodBank\Enums\BloodComponent;
 use App\Modules\BloodBank\Enums\BloodGroup;
@@ -16,7 +17,6 @@ use App\Modules\BloodBank\Repositories\Contracts\HospitalRepositoryInterface;
 use App\Modules\BloodBank\Support\BloodCompatibility;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use App\Models\Hospital;
 
 /** One-click emergency request: find compatible verified donors near the hospital and alert them. */
 class EmergencyBroadcastService
@@ -25,14 +25,13 @@ class EmergencyBroadcastService
         private readonly EmergencyRequestRepositoryInterface $requests,
         private readonly DonorRepositoryInterface $donors,
         private readonly HospitalRepositoryInterface $hospitals,
-    ) {
-    }
+    ) {}
 
     public function broadcast(User $user, array $data): EmergencyRequest
     {
-        $hospital_id =  DB::table('hospitals')
-                    ->where('created_by', $user->id)
-                    ->value('id');
+        $hospital_id = DB::table('hospitals')
+            ->where('created_by', $user->id)
+            ->value('id');
         $hospital = Hospital::find($hospital_id);
 
         if (! $hospital) {
@@ -43,9 +42,9 @@ class EmergencyBroadcastService
             throw new BloodBankException("Add latitude and longitude to {$hospital->name} before broadcasting requests.");
         }
 
-        $group     = BloodGroup::from($data['blood_group']);
+        $group = BloodGroup::from($data['blood_group']);
         $component = BloodComponent::from($data['component']);
-        $radius    = min((float) ($data['radius_km'] ?? config('blood-bank.emergency.default_radius_km')), (float) config('blood-bank.emergency.max_radius_km'));
+        $radius = min((float) ($data['radius_km'] ?? config('blood-bank.emergency.default_radius_km')), (float) config('blood-bank.emergency.max_radius_km'));
 
         // Donors whose blood (or plasma/platelets) is compatible with the patient's group.
         $eligibleGroups = BloodCompatibility::donorGroupsFor($group, $component);

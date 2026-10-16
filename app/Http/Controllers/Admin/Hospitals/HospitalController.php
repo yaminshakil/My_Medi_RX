@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin\Hospitals;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Hospital\HospitalStoreRequest;
+use App\Interfaces\HospitalRepositoryInterface;
+use App\Models\HospitalType;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Interfaces\HospitalRepositoryInterface;
-use App\Models\Setting;
-use App\Http\Requests\Hospital\HospitalStoreRequest;
-use App\Models\HospitalType;
 
 class HospitalController extends Controller
 {
@@ -31,9 +31,10 @@ class HospitalController extends Controller
         }
         $perPage = $request->input('per_page', $recordsPerPage); // default 10
         $hospital = $this->hospitalRepository->getAllHospital($perPage, $search);
+
         return Inertia::render('Admin/Hospitals/Main', [
             'hospital' => $hospital,
-            'status' => session('status'),
+            'status'   => session('status'),
         ]);
     }
 
@@ -45,6 +46,7 @@ class HospitalController extends Controller
         $hospitalTypes = HospitalType::where('status', true)
             ->orderBy('sort_order')
             ->get(['id', 'name']);
+
         return Inertia::render('Admin/Hospitals/Create', [
             'hospitalTypes' => $hospitalTypes,
         ]);
@@ -57,6 +59,7 @@ class HospitalController extends Controller
     {
         $data = $request->validated();
         $this->hospitalRepository->createHospital($data);
+
         return redirect()->intended('/admin/hospitals')->with('success', 'Your Hospital has been created successfully!');
     }
 
@@ -83,10 +86,10 @@ class HospitalController extends Controller
             ->get(['id', 'name']);
 
         return Inertia::render('Admin/Hospitals/Edit', [
-                'hospital' => $hospital,
-                'hospitalTypes' => $hospitalTypes,
-                'status' => session('status'),
-            ]);
+            'hospital'      => $hospital,
+            'hospitalTypes' => $hospitalTypes,
+            'status'        => session('status'),
+        ]);
     }
 
     /**
@@ -95,6 +98,7 @@ class HospitalController extends Controller
     public function update(HospitalStoreRequest $request, string $id)
     {
         $this->hospitalRepository->updateHospital($request->validated(), $id);
+
         return redirect()->intended('/admin/hospitals')->with('success', 'Your Hospital has been updated successfully!');
     }
 
@@ -104,6 +108,7 @@ class HospitalController extends Controller
     public function destroy(string $id)
     {
         $this->hospitalRepository->deleteHospital($id);
+
         return redirect()->back()->with('success', 'Your category has been deleted successfully!');
     }
 }

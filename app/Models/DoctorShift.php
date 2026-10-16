@@ -18,7 +18,18 @@ class DoctorShift extends Model
         return ['is_active' => 'boolean'];
     }
 
-    public function hospital(): BelongsTo { return $this->belongsTo(Hospital::class); }
-    public function availabilities(): HasMany { return $this->hasMany(DoctorAvailability::class, 'shift_id'); }
-    public function rosters(): HasMany { return $this->hasMany(DoctorRoster::class, 'shift_id'); }
+    public function hospital(): BelongsTo
+    {
+        return $this->belongsTo(Hospital::class);
+    }
+
+    public function availabilities(): HasMany
+    {
+        return $this->hasMany(DoctorAvailability::class, 'shift_id');
+    }
+
+    public function rosters(): HasMany
+    {
+        return $this->hasMany(DoctorRoster::class, 'shift_id');
+    }
 }

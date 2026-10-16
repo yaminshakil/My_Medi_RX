@@ -74,6 +74,7 @@ class PatientProfileRepository implements PatientProfileRepositoryInterface
             Storage::disk('public')->delete($patient->profile_image->path);
             $patient->profile_image()->delete();
         }
+
         return $patient ? (bool) $patient->delete() : false;
     }
 }

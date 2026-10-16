@@ -48,8 +48,8 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|string|max:255',
-            'translations' => 'nullable|array',
+            'name'              => 'required|string|max:255',
+            'translations'      => 'nullable|array',
             'translations.name' => 'nullable|array',
         ];
 
@@ -78,20 +78,20 @@ class MenuController extends Controller
         ]);
 
         return Inertia::render('Admin/Menus/Edit', [
-            'roles'       => $roles,
+            'roles'    => $roles,
             'editmenu' => [
-            'id' => $menu->id,
-            'name' => $menu->name,
-            'slug' => $menu->slug,
-            'order_by' => $menu->order_by,
-            'menu_method' => $menu->menu_method,
-            'menu_icon' => $menu->menu_icon,
-            'parent_id' => $menu->parent_id,
-            'translations' => [
-                'name' => $menu->translations
-                    ->where('field', 'name')
-                    ->pluck('value', 'locale')
-                    ->toArray(),
+                'id'           => $menu->id,
+                'name'         => $menu->name,
+                'slug'         => $menu->slug,
+                'order_by'     => $menu->order_by,
+                'menu_method'  => $menu->menu_method,
+                'menu_icon'    => $menu->menu_icon,
+                'parent_id'    => $menu->parent_id,
+                'translations' => [
+                    'name' => $menu->translations
+                        ->where('field', 'name')
+                        ->pluck('value', 'locale')
+                        ->toArray(),
                 ],
             ],
             'role'        => $menu->roles->pluck('id')->toArray(),
@@ -104,8 +104,8 @@ class MenuController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => 'required|string|max:255',
-            'translations' => 'nullable|array',
+            'name'              => 'required|string|max:255',
+            'translations'      => 'nullable|array',
             'translations.name' => 'nullable|array',
         ];
 

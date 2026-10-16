@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Traits\HasTranslations;
 
 class Menu extends Model
 {
@@ -28,8 +28,8 @@ class Menu extends Model
     ];
 
     protected $appends = [
-          'translated_name',
-       ];
+        'translated_name',
+    ];
 
     public function getTranslatedNameAttribute(): ?string
     {

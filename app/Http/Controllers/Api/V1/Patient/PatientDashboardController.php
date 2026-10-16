@@ -25,10 +25,10 @@ class PatientDashboardController extends Controller
 
         if (! $patient) {
             return response()->json([
-                'success' => false,
+                'success'    => false,
                 'statusCode' => 404,
-                'message' => 'Patient profile not found',
-                'data' => null,
+                'message'    => 'Patient profile not found',
+                'data'       => null,
             ], 404);
         }
 
@@ -37,7 +37,7 @@ class PatientDashboardController extends Controller
         $greeting = match (true) {
             $now->hour < 12 => 'Good morning',
             $now->hour < 17 => 'Good afternoon',
-            default => 'Good evening',
+            default         => 'Good evening',
         };
 
         // Use the existing Patient -> Prescription relationship.
@@ -61,17 +61,17 @@ class PatientDashboardController extends Controller
         $total = $medications->count();
 
         return response()->json([
-            'success' => true,
+            'success'    => true,
             'statusCode' => 200,
-            'message' => 'Dashboard data retrieved',
+            'message'    => 'Dashboard data retrieved',
 
             'data' => [
                 'patient' => [
-                    'id' => (string) $patient->id,
-                    'name' => $user->name ?? $patient->name,
+                    'id'       => (string) $patient->id,
+                    'name'     => $user->name ?? $patient->name,
                     'healthId' => $patient->patient_number,
-                    'greeting' => $greeting . ', '
-                        . ($user->name ?? $patient->name),
+                    'greeting' => $greeting.', '
+                        .($user->name ?? $patient->name),
                 ],
 
                 // Dose-level adherence tracking is not present
@@ -79,8 +79,8 @@ class PatientDashboardController extends Controller
                 'adherenceRate' => 0.0,
 
                 'todayMedsSummary' => [
-                    'total' => $total,
-                    'taken' => 0,
+                    'total'   => $total,
+                    'taken'   => 0,
                     'pending' => 0,
                 ],
 
@@ -88,24 +88,24 @@ class PatientDashboardController extends Controller
                 // and PrescriptionMedicine fields.
                 'todayMedications' => $medications->map(function ($item) {
                     return [
-                        'id' => (string) $item->id,
-                        'name' => $item->medicine?->brand_name ?? 'Medication',
+                        'id'     => (string) $item->id,
+                        'name'   => $item->medicine?->brand_name ?? 'Medication',
                         'dosage' => trim(
-                            ($item->dosage ?? '') . ' ' . ($item->strength ?? '')
+                            ($item->dosage ?? '').' '.($item->strength ?? '')
                         ),
-                        'time' => $item->meal_time,
-                        'isTaken' => null,
+                        'time'         => $item->meal_time,
+                        'isTaken'      => null,
                         'instructions' => $item->advice,
                     ];
                 })->values(),
 
                 'quickStats' => [
-                                    'activePrescriptions' => $activePrescriptions,
-                                    'upcomingAppointments' => $upcomingAppointments,
+                    'activePrescriptions'  => $activePrescriptions,
+                    'upcomingAppointments' => $upcomingAppointments,
 
-                                    // Connect your vaccination module here.
-                                    'pendingVaccinations' => 0,
-                                ],
+                    // Connect your vaccination module here.
+                    'pendingVaccinations' => 0,
+                ],
             ],
         ]);
     }

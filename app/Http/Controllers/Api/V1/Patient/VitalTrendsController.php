@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\V1\Patient;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Vital;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class VitalTrendsController extends Controller
 {
@@ -55,46 +55,47 @@ class VitalTrendsController extends Controller
 
         // 5. Return JSON response
         return response()->json([
-            'success' => true,
+            'success'    => true,
             'statusCode' => 200,
-            'message' => "Vitals trends for the last {$daysCount} days retrieved successfully",
-            'data' => [
-                'dates' => $dates,
+            'message'    => "Vitals trends for the last {$daysCount} days retrieved successfully",
+            'data'       => [
+                'dates'   => $dates,
                 'metrics' => [
                     'heartRate' => [
-                        'unit' => 'bpm',
+                        'unit'     => 'bpm',
                         'colorHex' => '#F44336',
-                        'values' => $heartRates,
+                        'values'   => $heartRates,
                     ],
                     'bloodPressureSystolic' => [
-                        'unit' => 'mmHg',
+                        'unit'     => 'mmHg',
                         'colorHex' => '#2196F3',
-                        'values' => $systolicValues,
+                        'values'   => $systolicValues,
                     ],
                     'bloodPressureDiastolic' => [
-                        'unit' => 'mmHg',
+                        'unit'     => 'mmHg',
                         'colorHex' => '#64B5F6',
-                        'values' => $diastolicValues,
+                        'values'   => $diastolicValues,
                     ],
                     'spo2' => [
-                        'unit' => '%',
+                        'unit'     => '%',
                         'colorHex' => '#00BCD4',
-                        'values' => $spo2Values,
+                        'values'   => $spo2Values,
                     ],
                     'glucose' => [
-                        'unit' => 'mg/dL',
+                        'unit'     => 'mg/dL',
                         'colorHex' => '#9C27B0',
-                        'values' => $glucoseValues,
+                        'values'   => $glucoseValues,
                     ],
                     'temperature' => [
-                        'unit' => '°F',
+                        'unit'     => '°F',
                         'colorHex' => '#FF9800',
-                        'values' => $temperatureValues,
+                        'values'   => $temperatureValues,
                     ],
-                ]
-            ]
+                ],
+            ],
         ], 200);
     }
+
     /**
      * Display a listing of the resource.
      */

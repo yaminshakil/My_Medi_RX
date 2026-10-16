@@ -61,7 +61,7 @@ class MedicationRefillController extends Controller
 
         return response()->json([
             'message' => 'Medication inventory updated.',
-            'data' => $medication->fresh(),
+            'data'    => $medication->fresh(),
         ]);
     }
 }

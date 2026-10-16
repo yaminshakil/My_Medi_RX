@@ -25,8 +25,7 @@ class BloodIssueController extends Controller
         private readonly PatientRepositoryInterface $patients,
         private readonly PhysicianRepositoryInterface $physicians,
         private readonly BloodIssueService $service,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): Response
     {
@@ -46,7 +45,7 @@ class BloodIssueController extends Controller
      */
     public function create(Request $request): Response
     {
-        $patient   = $request->filled('patient_id') ? $this->patients->find((int) $request->input('patient_id')) : null;
+        $patient = $request->filled('patient_id') ? $this->patients->find((int) $request->input('patient_id')) : null;
         $component = BloodComponent::tryFrom((string) $request->input('component'));
 
         return Inertia::render('Admin/BloodBank/Issues/Create', [

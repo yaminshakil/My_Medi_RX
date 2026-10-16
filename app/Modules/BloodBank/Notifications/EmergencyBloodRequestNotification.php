@@ -20,8 +20,7 @@ class EmergencyBloodRequestNotification extends Notification implements ShouldQu
         public EmergencyRequest $request,
         public BloodDonor $donor,
         public float $distanceKm,
-    ) {
-    }
+    ) {}
 
     public function via(object $notifiable): array
     {

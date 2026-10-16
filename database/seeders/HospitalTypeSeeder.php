@@ -24,9 +24,9 @@ class HospitalTypeSeeder extends Seeder
             HospitalType::updateOrCreate(
                 ['slug' => Str::slug($name)],
                 [
-                    'name' => $name,
+                    'name'       => $name,
                     'sort_order' => $index + 1,
-                    'status' => true,
+                    'status'     => true,
                 ]
             );
         }

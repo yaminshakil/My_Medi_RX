@@ -85,11 +85,11 @@ class MedicalSpecialtiesSeeder extends Seeder
                 'translatable_id'   => $specialtyId,
                 'group'             => null,
                 'key'               => null,
-                'field'              => 'description',
-                'locale'             => 'en',
-                'value'              => $description,
-                'created_at'         => now(),
-                'updated_at'         => now(),
+                'field'             => 'description',
+                'locale'            => 'en',
+                'value'             => $description,
+                'created_at'        => now(),
+                'updated_at'        => now(),
             ]);
 
             /*
@@ -104,11 +104,11 @@ class MedicalSpecialtiesSeeder extends Seeder
                     'translatable_id'   => $specialtyId,
                     'group'             => null,
                     'key'               => null,
-                    'field'              => 'description',
+                    'field'             => 'description',
                     'locale'            => 'bn',
                     'value'             => $banglaDescription,
-                    'created_at'         => now(),
-                    'updated_at'         => now(),
+                    'created_at'        => now(),
+                    'updated_at'        => now(),
                 ]);
             }
 
@@ -269,47 +269,47 @@ class MedicalSpecialtiesSeeder extends Seeder
 
         $medicineSpecialties = [
             'Internal Medicine (General)' => [
-                'name' => 'সাধারণ অভ্যন্তরীণ মেডিসিন',
+                'name'        => 'সাধারণ অভ্যন্তরীণ মেডিসিন',
                 'description' => 'অভ্যন্তরীণ রোগের সাধারণ চিকিৎসা ও ব্যবস্থাপনা',
             ],
             'Cardiology' => [
-                'name' => 'কার্ডিওলজি',
+                'name'        => 'কার্ডিওলজি',
                 'description' => 'হৃদপিণ্ড ও রক্তনালীর রোগের চিকিৎসা',
             ],
             'Neurology' => [
-                'name' => 'নিউরোলজি',
+                'name'        => 'নিউরোলজি',
                 'description' => 'মস্তিষ্ক, স্নায়ু ও স্নায়ুতন্ত্রের রোগের চিকিৎসা',
             ],
             'Endocrinology' => [
-                'name' => 'এন্ডোক্রাইনোলজি',
+                'name'        => 'এন্ডোক্রাইনোলজি',
                 'description' => 'হরমোন ও অন্তঃক্ষরা গ্রন্থির রোগের চিকিৎসা',
             ],
             'Gastroenterology' => [
-                'name' => 'গ্যাস্ট্রোএন্টারোলজি',
+                'name'        => 'গ্যাস্ট্রোএন্টারোলজি',
                 'description' => 'পরিপাকতন্ত্র ও সংশ্লিষ্ট অঙ্গের রোগের চিকিৎসা',
             ],
             'Nephrology' => [
-                'name' => 'নেফ্রোলজি',
+                'name'        => 'নেফ্রোলজি',
                 'description' => 'কিডনি ও কিডনি-সংক্রান্ত রোগের চিকিৎসা',
             ],
             'Hematology' => [
-                'name' => 'হেমাটোলজি',
+                'name'        => 'হেমাটোলজি',
                 'description' => 'রক্ত ও রক্তসংক্রান্ত রোগের চিকিৎসা',
             ],
             'Dermatology' => [
-                'name' => 'ডার্মাটোলজি',
+                'name'        => 'ডার্মাটোলজি',
                 'description' => 'ত্বক, চুল ও নখের রোগের চিকিৎসা',
             ],
             'Infectious Diseases' => [
-                'name' => 'সংক্রামক রোগ',
+                'name'        => 'সংক্রামক রোগ',
                 'description' => 'সংক্রমণজনিত রোগের নির্ণয় ও চিকিৎসা',
             ],
             'Oncology (Medical)' => [
-                'name' => 'মেডিকেল অনকোলজি',
+                'name'        => 'মেডিকেল অনকোলজি',
                 'description' => 'ক্যান্সার ও টিউমার সম্পর্কিত চিকিৎসা',
             ],
             'Pulmonology' => [
-                'name' => 'পালমোনোলজি',
+                'name'        => 'পালমোনোলজি',
                 'description' => 'ফুসফুস ও শ্বাসতন্ত্রের রোগের চিকিৎসা',
             ],
         ];
@@ -334,31 +334,31 @@ class MedicalSpecialtiesSeeder extends Seeder
 
         $surgicalSpecialties = [
             'General Surgery' => [
-                'name' => 'জেনারেল সার্জারি',
+                'name'        => 'জেনারেল সার্জারি',
                 'description' => 'বিভিন্ন সাধারণ রোগের সার্জিক্যাল চিকিৎসা',
             ],
             'Neurosurgery' => [
-                'name' => 'নিউরোসার্জারি',
+                'name'        => 'নিউরোসার্জারি',
                 'description' => 'মস্তিষ্ক, মেরুদণ্ড ও স্নায়ুতন্ত্রের সার্জারি',
             ],
             'Orthopedic Surgery' => [
-                'name' => 'অর্থোপেডিক সার্জারি',
+                'name'        => 'অর্থোপেডিক সার্জারি',
                 'description' => 'হাড়, জয়েন্ট ও মাংসপেশির সার্জিক্যাল চিকিৎসা',
             ],
             'Urology' => [
-                'name' => 'ইউরোলজি',
+                'name'        => 'ইউরোলজি',
                 'description' => 'মূত্রনালী ও পুরুষ প্রজননতন্ত্রের রোগের চিকিৎসা',
             ],
             'Plastic & Reconstructive' => [
-                'name' => 'প্লাস্টিক ও পুনর্গঠনমূলক সার্জারি',
+                'name'        => 'প্লাস্টিক ও পুনর্গঠনমূলক সার্জারি',
                 'description' => 'দেহের গঠন ও ক্ষত পুনর্গঠনের সার্জারি',
             ],
             'Pediatric Surgery' => [
-                'name' => 'পেডিয়াট্রিক সার্জারি',
+                'name'        => 'পেডিয়াট্রিক সার্জারি',
                 'description' => 'শিশুদের বিভিন্ন রোগের সার্জিক্যাল চিকিৎসা',
             ],
             'Surgical Oncology' => [
-                'name' => 'সার্জিক্যাল অনকোলজি',
+                'name'        => 'সার্জিক্যাল অনকোলজি',
                 'description' => 'ক্যান্সারের সার্জিক্যাল চিকিৎসা',
             ],
         ];
@@ -419,19 +419,19 @@ class MedicalSpecialtiesSeeder extends Seeder
 
         $pediatricSpecialties = [
             'Pediatrics (General)' => [
-                'name' => 'সাধারণ শিশু রোগবিদ্যা',
+                'name'        => 'সাধারণ শিশু রোগবিদ্যা',
                 'description' => 'শিশুদের সাধারণ রোগের চিকিৎসা ও ব্যবস্থাপনা',
             ],
             'Pediatric Cardiology' => [
-                'name' => 'পেডিয়াট্রিক কার্ডিওলজি',
+                'name'        => 'পেডিয়াট্রিক কার্ডিওলজি',
                 'description' => 'শিশুদের হৃদরোগের বিশেষায়িত চিকিৎসা',
             ],
             'Neonatology' => [
-                'name' => 'নিওনেটোলজি',
+                'name'        => 'নিওনেটোলজি',
                 'description' => 'নবজাতক শিশুদের বিশেষায়িত চিকিৎসা',
             ],
             'Pediatric Hematology/Oncology' => [
-                'name' => 'পেডিয়াট্রিক হেমাটোলজি/অনকোলজি',
+                'name'        => 'পেডিয়াট্রিক হেমাটোলজি/অনকোলজি',
                 'description' => 'শিশুদের রক্তরোগ ও ক্যান্সারের চিকিৎসা',
             ],
         ];

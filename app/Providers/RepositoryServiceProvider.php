@@ -7,26 +7,26 @@ use App\Interfaces\Auth\RoleRepositoryInterface;
 use App\Interfaces\Auth\UserRepositoryInterface;
 use App\Interfaces\DashboardRepositoryInterface;
 use App\Interfaces\EmailTemplate\EmailTemplateRepositoryInterface;
+use App\Interfaces\Eprescriptions\AppointmentRepositoryInterface;
+use App\Interfaces\Eprescriptions\DoctorChamberRepositoryInterface;
+use App\Interfaces\HospitalRepositoryInterface;
 use App\Interfaces\MenuRepositoryInterface;
+use App\Interfaces\Patients\PatientProfileRepositoryInterface;
+use App\Interfaces\Patients\PatientRepositoryInterface;
 use App\Interfaces\Profile\ProfileRepositoryInterface;
 use App\Repositories\Auth\PermissionRepository;
 use App\Repositories\Auth\RoleRepository;
 use App\Repositories\Auth\UserRepository;
 use App\Repositories\DashboardRepository;
 use App\Repositories\EmailTemplate\EmailTemplateRepository;
+use App\Repositories\Eprescriptions\AppointmentRepository;
+use App\Repositories\Eprescriptions\DoctorChamberRepository;
+use App\Repositories\HospitalRepository;
 use App\Repositories\MenuRepository;
-use App\Repositories\Profile\ProfileRepository;
-use Illuminate\Support\ServiceProvider;
-use App\Interfaces\Patients\PatientProfileRepositoryInterface;
-use App\Interfaces\Patients\PatientRepositoryInterface;
 use App\Repositories\Patients\PatientProfileRepository;
 use App\Repositories\Patients\PatientRepository;
-use App\Interfaces\HospitalRepositoryInterface;
-use App\Repositories\HospitalRepository;
-use App\Repositories\Eprescriptions\DoctorChamberRepository;
-use App\Interfaces\Eprescriptions\DoctorChamberRepositoryInterface;
-use App\Repositories\Eprescriptions\AppointmentRepository;
-use App\Interfaces\Eprescriptions\AppointmentRepositoryInterface;
+use App\Repositories\Profile\ProfileRepository;
+use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {

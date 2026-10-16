@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api\V1\Patient;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 
 class VaccinationController extends Controller
 {
@@ -29,12 +27,12 @@ class VaccinationController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'vaccine_name' => ['required', 'string', 'max:255'],
-            'dose_number' => ['required', 'integer', 'min:1'],
-            'due_date' => ['nullable', 'date'],
+            'vaccine_name'    => ['required', 'string', 'max:255'],
+            'dose_number'     => ['required', 'integer', 'min:1'],
+            'due_date'        => ['nullable', 'date'],
             'administered_at' => ['nullable', 'date'],
-            'provider' => ['nullable', 'string', 'max:255'],
-            'notes' => ['nullable', 'string'],
+            'provider'        => ['nullable', 'string', 'max:255'],
+            'notes'           => ['nullable', 'string'],
         ]);
 
         $record = $this->patient($request)
@@ -43,7 +41,7 @@ class VaccinationController extends Controller
 
         return response()->json([
             'message' => 'Vaccination record created.',
-            'data' => $record,
+            'data'    => $record,
         ], 201);
     }
 
@@ -59,19 +57,19 @@ class VaccinationController extends Controller
         $record = $this->ownedRecord($request, $record);
 
         $data = $request->validate([
-            'vaccine_name' => ['sometimes', 'required', 'string', 'max:255'],
-            'dose_number' => ['sometimes', 'required', 'integer', 'min:1'],
-            'due_date' => ['nullable', 'date'],
+            'vaccine_name'    => ['sometimes', 'required', 'string', 'max:255'],
+            'dose_number'     => ['sometimes', 'required', 'integer', 'min:1'],
+            'due_date'        => ['nullable', 'date'],
             'administered_at' => ['nullable', 'date'],
-            'provider' => ['nullable', 'string', 'max:255'],
-            'notes' => ['nullable', 'string'],
+            'provider'        => ['nullable', 'string', 'max:255'],
+            'notes'           => ['nullable', 'string'],
         ]);
 
         $record->update($data);
 
         return response()->json([
             'message' => 'Vaccination record updated.',
-            'data' => $record->fresh(),
+            'data'    => $record->fresh(),
         ]);
     }
 

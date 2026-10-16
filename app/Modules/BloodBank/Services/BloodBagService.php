@@ -14,9 +14,7 @@ use Illuminate\Support\Carbon;
 /** Write-side logic for blood units: register, release from quarantine, discard. */
 class BloodBagService
 {
-    public function __construct(private readonly BloodBagRepositoryInterface $bags)
-    {
-    }
+    public function __construct(private readonly BloodBagRepositoryInterface $bags) {}
 
     public function register(User $user, array $data): BloodBag
     {
@@ -39,8 +37,8 @@ class BloodBagService
             'expires_at'      => $expires,
             'storage_unit_id' => $data['storage_unit_id'],
             // Quarantined units do not count as stock until screening clears them.
-            'status'          => ! empty($data['quarantine']) ? BagStatus::Quarantined->value : BagStatus::Available->value,
-            'registered_by'   => $user->id,
+            'status'        => ! empty($data['quarantine']) ? BagStatus::Quarantined->value : BagStatus::Available->value,
+            'registered_by' => $user->id,
         ]);
 
         BloodStockUpdated::fire();

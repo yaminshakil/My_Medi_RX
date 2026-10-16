@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api\Medicines;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\Eprescription\CreateMedicineDosesRequest;
 use App\Http\Requests\Eprescription\UpdateMedicineDosesRequest;
-use App\Models\Setting;
-use App\Services\Eprescriptions\MedicineDoseService;
-use App\Services\ApiResponseService;
 use App\Http\Resources\Medicines\MedicineDoseResource;
+use App\Models\Setting;
+use App\Services\ApiResponseService;
+use App\Services\Eprescriptions\MedicineDoseService;
+use Illuminate\Http\Request;
 
 class MedicineDoseController extends Controller
 {
@@ -19,6 +19,7 @@ class MedicineDoseController extends Controller
     {
         $this->service = $service;
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -37,9 +38,9 @@ class MedicineDoseController extends Controller
         $doses = MedicineDoseResource::collection($doses);
 
         $dosesdata = [
-             'doses' => $doses,
-             'filters' => $request->only(['search', 'per_page']),
-         ];
+            'doses'   => $doses,
+            'filters' => $request->only(['search', 'per_page']),
+        ];
 
         return ApiResponseService::success($dosesdata, 'Medicine dose updated successfully.');
     }
@@ -54,6 +55,7 @@ class MedicineDoseController extends Controller
         $data['created_by'] = auth()->id();
         $doses = $this->service->create($data);
         $doses = new MedicineDoseResource($doses);
+
         return ApiResponseService::success($doses, 'Medicine dose created successfully.');
     }
 
@@ -76,6 +78,7 @@ class MedicineDoseController extends Controller
         $this->service->update($id, $data);
         $doses = $this->service->getById($id);
         $doses = new MedicineDoseResource($doses);
+
         return ApiResponseService::success($doses, 'Medicine dose created successfully.');
     }
 
@@ -85,6 +88,7 @@ class MedicineDoseController extends Controller
     public function destroy(string $id)
     {
         $this->service->delete($id);
+
         return ApiResponseService::success([], 'Medicine dose deleted successfully.');
     }
 }

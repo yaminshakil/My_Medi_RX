@@ -53,18 +53,18 @@ class DoctorChamberController extends Controller
 
         $doctorChambers = $doctorChambers->latest()->paginate($perPage)->withQueryString();
         $doctorChambers->getCollection()->transform(fn ($doctorChamber) => [
-            'id' => $doctorChamber->id,
-            'name' => $doctorChamber->name,
-            'header_left' => $doctorChamber->header_left,
+            'id'           => $doctorChamber->id,
+            'name'         => $doctorChamber->name,
+            'header_left'  => $doctorChamber->header_left,
             'header_right' => $doctorChamber->header_right,
-            'footer_info' => $doctorChamber->footer_info,
-            'is_active' => $doctorChamber->is_active,
+            'footer_info'  => $doctorChamber->footer_info,
+            'is_active'    => $doctorChamber->is_active,
         ]);
 
         return Inertia::render('Admin/Eprescriptions/Chambers/Index', [
             'doctorChambers' => $doctorChambers,
-            'filters' => $request->only(['search', 'per_page']),
-            'status' => session('status'),
+            'filters'        => $request->only(['search', 'per_page']),
+            'status'         => session('status'),
         ]);
     }
 
@@ -77,11 +77,12 @@ class DoctorChamberController extends Controller
         $hospitaloptions = $hospitals->map(function ($hospital) {
             return [
                 'value' => $hospital->id,
-                'label' => $hospital->hospital_name
+                'label' => $hospital->hospital_name,
             ];
         });
+
         return Inertia::render('Admin/Eprescriptions/Chambers/Create', [
-            'hospitaloptions' => $hospitaloptions
+            'hospitaloptions' => $hospitaloptions,
         ]);
     }
 
@@ -107,29 +108,29 @@ class DoctorChamberController extends Controller
         $hospitaloptions = $hospitals->map(function ($hospital) {
             return [
                 'value' => $hospital->id,
-                'label' => $hospital->hospital_name
+                'label' => $hospital->hospital_name,
             ];
         });
 
         return Inertia::render('Admin/Eprescriptions/Chambers/Edit', [
             'doctorChamber' => [
-                'id' => $doctorChamber->id,
-                'name' => $doctorChamber->name,
-                'header_left' => $doctorChamber->header_left,
-                'header_right' => $doctorChamber->header_right,
-                'footer_info' => $doctorChamber->footer_info,
-                'schedules' => $doctorChamber->schedules,
-                'fee' => $doctorChamber->fee,
-                'followup_fee' => $doctorChamber->followup_fee,
-                'report_fee' => $doctorChamber->report_fee,
-                'chamber_logo' => $doctorChamber->chamber_logo,
+                'id'               => $doctorChamber->id,
+                'name'             => $doctorChamber->name,
+                'header_left'      => $doctorChamber->header_left,
+                'header_right'     => $doctorChamber->header_right,
+                'footer_info'      => $doctorChamber->footer_info,
+                'schedules'        => $doctorChamber->schedules,
+                'fee'              => $doctorChamber->fee,
+                'followup_fee'     => $doctorChamber->followup_fee,
+                'report_fee'       => $doctorChamber->report_fee,
+                'chamber_logo'     => $doctorChamber->chamber_logo,
                 'chamber_logo_url' => $doctorChamber->chamber_logo_url,
-                'city' => $doctorChamber->city,
-                'address' => $doctorChamber->address,
+                'city'             => $doctorChamber->city,
+                'address'          => $doctorChamber->address,
                 'appoinment_limit' => $doctorChamber->appoinment_limit,
-                'hospital_id' => $doctorChamber->hospital_id,
+                'hospital_id'      => $doctorChamber->hospital_id,
             ],
-            'hospitaloptions' => $hospitaloptions
+            'hospitaloptions' => $hospitaloptions,
         ]);
     }
 

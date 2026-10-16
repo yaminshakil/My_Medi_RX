@@ -34,7 +34,7 @@ class MedicineDurationController extends Controller
 
         return Inertia::render('Admin/Eprescriptions/MedicineDurations/Index', [
             'durations' => $durations,
-            'filters' => $request->only(['search', 'per_page']),
+            'filters'   => $request->only(['search', 'per_page']),
         ]);
     }
 

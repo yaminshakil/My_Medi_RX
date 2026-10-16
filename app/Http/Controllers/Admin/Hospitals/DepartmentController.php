@@ -12,7 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -47,24 +46,24 @@ class DepartmentController extends Controller
 
         // Keep the shared UI convention: items.links.map(...)
         $items = [
-            'data' => $departments->items(),
-            'links' => $departments->linkCollection()->toArray(),
+            'data'         => $departments->items(),
+            'links'        => $departments->linkCollection()->toArray(),
             'current_page' => $departments->currentPage(),
-            'last_page' => $departments->lastPage(),
-            'per_page' => $departments->perPage(),
-            'total' => $departments->total(),
-            'from' => $departments->firstItem(),
-            'to' => $departments->lastItem(),
+            'last_page'    => $departments->lastPage(),
+            'per_page'     => $departments->perPage(),
+            'total'        => $departments->total(),
+            'from'         => $departments->firstItem(),
+            'to'           => $departments->lastItem(),
         ];
 
         return Inertia::render('Admin/Departments/Index', [
-            'items' => $items,
-            'filters' => $request->only(['search', 'hospital_id', 'status', 'per_page']),
+            'items'     => $items,
+            'filters'   => $request->only(['search', 'hospital_id', 'status', 'per_page']),
             'hospitals' => Hospital::query()->select('id', 'hospital_name')->orderBy('hospital_name')->get(),
-            'can' => [
-                'create' => $request->user()?->can('create departments') ?? false,
-                'edit' => $request->user()?->can('edit departments') ?? false,
-                'delete' => $request->user()?->can('delete departments') ?? false,
+            'can'       => [
+                'create'        => $request->user()?->can('create departments') ?? false,
+                'edit'          => $request->user()?->can('edit departments') ?? false,
+                'delete'        => $request->user()?->can('delete departments') ?? false,
                 'assignDoctors' => $request->user()?->can('assign department doctors') ?? false,
             ],
         ]);
@@ -104,7 +103,7 @@ class DepartmentController extends Controller
             ->orderBy('name')->limit(500)->get();
 
         return Inertia::render('Admin/Departments/Show', [
-            'department' => $department,
+            'department'       => $department,
             'availableDoctors' => $availableDoctors,
             'canAssignDoctors' => $request->user()?->can('assign department doctors') ?? false,
         ]);
@@ -116,7 +115,7 @@ class DepartmentController extends Controller
 
         return Inertia::render('Admin/Departments/Edit', [
             'department' => $department,
-            'hospitals' => Hospital::query()->select('id', 'hospital_name')->orderBy('hospital_name')->get(),
+            'hospitals'  => Hospital::query()->select('id', 'hospital_name')->orderBy('hospital_name')->get(),
         ]);
     }
 
@@ -147,11 +146,11 @@ class DepartmentController extends Controller
         $this->authorizeHospital($request, (int) $department->hospital_id);
 
         $data = $request->validate([
-            'user_id' => ['required', 'integer', 'exists:users,id'],
-            'room_number' => ['nullable', 'string', 'max:50'],
-            'extension_number' => ['nullable', 'string', 'max:50'],
+            'user_id'            => ['required', 'integer', 'exists:users,id'],
+            'room_number'        => ['nullable', 'string', 'max:50'],
+            'extension_number'   => ['nullable', 'string', 'max:50'],
             'is_department_head' => ['required', 'boolean'],
-            'status' => ['required', 'boolean'],
+            'status'             => ['required', 'boolean'],
         ]);
 
         DB::transaction(function () use ($department, $data) {
@@ -163,10 +162,10 @@ class DepartmentController extends Controller
 
             $department->doctors()->syncWithoutDetaching([
                 $data['user_id'] => [
-                    'room_number' => $data['room_number'] ?? null,
-                    'extension_number' => $data['extension_number'] ?? null,
+                    'room_number'        => $data['room_number'] ?? null,
+                    'extension_number'   => $data['extension_number'] ?? null,
                     'is_department_head' => $data['is_department_head'],
-                    'status' => $data['status'],
+                    'status'             => $data['status'],
                 ],
             ]);
         });
@@ -180,10 +179,10 @@ class DepartmentController extends Controller
         $this->authorizeHospital($request, (int) $department->hospital_id);
 
         $data = $request->validate([
-            'room_number' => ['nullable', 'string', 'max:50'],
-            'extension_number' => ['nullable', 'string', 'max:50'],
+            'room_number'        => ['nullable', 'string', 'max:50'],
+            'extension_number'   => ['nullable', 'string', 'max:50'],
             'is_department_head' => ['required', 'boolean'],
-            'status' => ['required', 'boolean'],
+            'status'             => ['required', 'boolean'],
         ]);
 
         abort_unless($department->doctors()->whereKey($user->id)->exists(), 404);

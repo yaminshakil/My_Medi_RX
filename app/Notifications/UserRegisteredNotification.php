@@ -7,7 +7,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Broadcasting\PrivateChannel;
 
 class UserRegisteredNotification extends Notification implements ShouldBroadcastNow
 {
@@ -15,8 +14,7 @@ class UserRegisteredNotification extends Notification implements ShouldBroadcast
 
     public function __construct(
         public User $user
-    ) {
-    }
+    ) {}
 
     /**
      * Notification channels.
@@ -43,7 +41,7 @@ class UserRegisteredNotification extends Notification implements ShouldBroadcast
     public function toBroadcast(object $notifiable): BroadcastMessage
     {
         \Log::info('🔥 Broadcasting user registration notification', [
-            'admin_id' => $notifiable->id,
+            'admin_id'           => $notifiable->id,
             'registered_user_id' => $this->user->id,
         ]);
 
@@ -60,17 +58,17 @@ class UserRegisteredNotification extends Notification implements ShouldBroadcast
         $role = $this->user->getRoleNames()->first() ?? 'User';
 
         return [
-            'type' => 'user_registered',
-            'title' => 'New Registration',
+            'type'    => 'user_registered',
+            'title'   => 'New Registration',
             'message' => $this->user->first_name
-                . ' '
-                . $this->user->last_name
-                . ' registered as a '
-                . $role
-                . '.',
-            'user_id' => $this->user->id,
+                .' '
+                .$this->user->last_name
+                .' registered as a '
+                .$role
+                .'.',
+            'user_id'           => $this->user->id,
             'registration_type' => $role,
-            'url' => $this->user->id
+            'url'               => $this->user->id
             ? route('users.show', ['user' => $this->user->id])
             : '#',
         ];

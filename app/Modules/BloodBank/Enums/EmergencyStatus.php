@@ -4,10 +4,10 @@ namespace App\Modules\BloodBank\Enums;
 
 enum EmergencyStatus: string
 {
-    case Open      = 'open';
+    case Open = 'open';
     case Fulfilled = 'fulfilled';
     case Cancelled = 'cancelled';
-    case Expired   = 'expired';
+    case Expired = 'expired';
 
     public function label(): string
     {

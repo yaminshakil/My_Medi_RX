@@ -4,10 +4,10 @@ namespace App\Modules\BloodBank\Enums;
 
 enum BloodComponent: string
 {
-    case WholeBlood     = 'whole_blood';
+    case WholeBlood = 'whole_blood';
     case PackedRedCells = 'packed_red_cells';
-    case Platelets      = 'platelets';
-    case Plasma         = 'plasma';
+    case Platelets = 'platelets';
+    case Plasma = 'plasma';
 
     public function label(): string
     {

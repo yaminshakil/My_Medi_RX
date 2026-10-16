@@ -25,7 +25,7 @@ trait HasTranslations
     ): Translation {
         return $this->translations()->updateOrCreate(
             [
-                'field' => $field,
+                'field'  => $field,
                 'locale' => $locale,
             ],
             [
@@ -54,7 +54,7 @@ trait HasTranslations
         );
 
         foreach ($translations as $locale => $value) {
-            if (!in_array(
+            if (! in_array(
                 $locale,
                 $supportedLocales,
                 true

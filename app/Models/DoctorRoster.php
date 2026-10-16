@@ -13,11 +13,33 @@ class DoctorRoster extends Model
         'status', 'notes', 'created_by',
     ];
 
-    protected function casts(): array { return ['roster_date' => 'date']; }
+    protected function casts(): array
+    {
+        return ['roster_date' => 'date'];
+    }
 
-    public function hospital(): BelongsTo { return $this->belongsTo(Hospital::class); }
-    public function department(): BelongsTo { return $this->belongsTo(Department::class); }
-    public function doctor(): BelongsTo { return $this->belongsTo(User::class, 'doctor_id'); }
-    public function shift(): BelongsTo { return $this->belongsTo(DoctorShift::class, 'shift_id'); }
-    public function creator(): BelongsTo { return $this->belongsTo(User::class, 'created_by'); }
+    public function hospital(): BelongsTo
+    {
+        return $this->belongsTo(Hospital::class);
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function doctor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'doctor_id');
+    }
+
+    public function shift(): BelongsTo
+    {
+        return $this->belongsTo(DoctorShift::class, 'shift_id');
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

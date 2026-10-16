@@ -16,7 +16,6 @@ use App\Models\Hospital;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -37,10 +36,10 @@ class DoctorRosterController extends Controller
         // Otherwise replace it with your existing hospital membership check.
         if (isset($user->hospital_id)) {
             abort_unless((int) $user->hospital_id === $hospitalId, 403);
-        } elseif (!$user->can('manage doctor shifts')
-            && !$user->can('manage doctor availability')
-            && !$user->can('manage doctor rosters')
-            && !$user->can('approve doctor leaves')) {
+        } elseif (! $user->can('manage doctor shifts')
+            && ! $user->can('manage doctor availability')
+            && ! $user->can('manage doctor rosters')
+            && ! $user->can('approve doctor leaves')) {
             abort(403);
         }
     }
@@ -85,8 +84,8 @@ class DoctorRosterController extends Controller
             'leaves' => DoctorLeave::query()->with(['doctor:id,name', 'approver:id,name'])
                 ->when($hospitalId, fn ($q) => $q->where('hospital_id', $hospitalId))
                 ->orderByDesc('start_date')->paginate(15, ['*'], 'leave_page')->withQueryString(),
-            'filters' => ['hospital_id' => $hospitalId ?: null],
-            'days' => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            'filters'   => ['hospital_id' => $hospitalId ?: null],
+            'days'      => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
             'hospitals' => Hospital::query()->select('id', 'hospital_name')->orderBy('hospital_name')->get(),
         ]);
     }
@@ -96,6 +95,7 @@ class DoctorRosterController extends Controller
         $data = $request->validated();
         $this->assertHospitalAccess($request, (int) $data['hospital_id']);
         DoctorShift::create($data);
+
         return back()->with('success', 'Shift created successfully.');
     }
 
@@ -104,6 +104,7 @@ class DoctorRosterController extends Controller
         $this->assertHospitalAccess($request, (int) $shift->hospital_id);
         abort_unless((int) $request->validated()['hospital_id'] === (int) $shift->hospital_id, 422, 'Hospital cannot be changed.');
         $shift->update($request->validated());
+
         return back()->with('success', 'Shift updated successfully.');
     }
 
@@ -113,6 +114,7 @@ class DoctorRosterController extends Controller
         $this->assertHospitalAccess($request, (int) $shift->hospital_id);
         abort_if($shift->availabilities()->exists() || $shift->rosters()->exists(), 422, 'Remove shift assignments before deleting this shift.');
         $shift->delete();
+
         return back()->with('success', 'Shift deleted.');
     }
 
@@ -124,6 +126,7 @@ class DoctorRosterController extends Controller
         $this->assertShiftHospital($data['shift_id'] ?? null, (int) $data['hospital_id']);
         $this->assertAvailabilityNoOverlap($data);
         DoctorAvailability::create($data);
+
         return back()->with('success', 'Weekly availability saved.');
     }
 
@@ -136,6 +139,7 @@ class DoctorRosterController extends Controller
         $this->assertShiftHospital($data['shift_id'] ?? null, (int) $data['hospital_id']);
         $this->assertAvailabilityNoOverlap($data, $availability->id);
         $availability->update($data);
+
         return back()->with('success', 'Weekly availability updated.');
     }
 
@@ -144,6 +148,7 @@ class DoctorRosterController extends Controller
         abort_unless($request->user()?->can('manage doctor availability'), 403);
         $this->assertHospitalAccess($request, (int) $availability->hospital_id);
         $availability->delete();
+
         return back()->with('success', 'Availability deleted.');
     }
 
@@ -155,6 +160,7 @@ class DoctorRosterController extends Controller
         $this->assertShiftHospital($data['shift_id'] ?? null, (int) $data['hospital_id']);
         $this->assertRosterAvailable($data);
         DoctorRoster::create($data + ['created_by' => $request->user()->id]);
+
         return back()->with('success', 'Roster duty assigned.');
     }
 
@@ -167,6 +173,7 @@ class DoctorRosterController extends Controller
         $this->assertShiftHospital($data['shift_id'] ?? null, (int) $data['hospital_id']);
         $this->assertRosterAvailable($data, $roster->id);
         $roster->update($data);
+
         return back()->with('success', 'Roster updated.');
     }
 
@@ -175,6 +182,7 @@ class DoctorRosterController extends Controller
         abort_unless($request->user()?->can('manage doctor rosters'), 403);
         $this->assertHospitalAccess($request, (int) $roster->hospital_id);
         $roster->delete();
+
         return back()->with('success', 'Roster deleted.');
     }
 
@@ -185,6 +193,7 @@ class DoctorRosterController extends Controller
         abort_unless(User::whereKey($data['doctor_id'])->exists(), 422);
         $data['status'] = 'pending';
         DoctorLeave::create($data);
+
         return back()->with('success', 'Leave request submitted for approval.');
     }
 
@@ -208,10 +217,11 @@ class DoctorRosterController extends Controller
         }
 
         $leave->update([
-            'status' => 'approved',
+            'status'      => 'approved',
             'approved_by' => $request->user()->id,
             'approved_at' => now(),
         ]);
+
         return back()->with('success', 'Leave approved.');
     }
 
@@ -221,17 +231,18 @@ class DoctorRosterController extends Controller
         $this->assertHospitalAccess($request, (int) $leave->hospital_id);
         abort_unless($leave->status === 'pending', 422, 'Only pending leave requests can be rejected.');
         $leave->update([
-            'status' => 'rejected',
+            'status'      => 'rejected',
             'approved_by' => $request->user()->id,
             'approved_at' => now(),
             'review_note' => $request->string('review_note')->toString(),
         ]);
+
         return back()->with('success', 'Leave rejected.');
     }
 
     private function assertShiftHospital(?int $shiftId, int $hospitalId): void
     {
-        if (!$shiftId) {
+        if (! $shiftId) {
             return;
         }
         abort_unless(DoctorShift::whereKey($shiftId)->where('hospital_id', $hospitalId)->exists(), 422, 'Shift does not belong to this hospital.');

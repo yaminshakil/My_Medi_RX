@@ -2,10 +2,11 @@
 
 namespace App\Modules\BloodBank\Http\Resources;
 
+use App\Modules\BloodBank\Models\BloodIssue;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Modules\BloodBank\Models\BloodIssue */
+/** @mixin BloodIssue */
 class BloodIssueResource extends JsonResource
 {
     public function toArray(Request $request): array
@@ -14,7 +15,7 @@ class BloodIssueResource extends JsonResource
             'id'           => $this->id,
             'issue_number' => $this->issue_number,
             'issued_at'    => $this->issued_at->toIso8601String(),
-            'bag' => [
+            'bag'          => [
                 'id'              => $this->bag->id,
                 'bag_number'      => $this->bag->bag_number,
                 'batch_number'    => $this->bag->batch_number,

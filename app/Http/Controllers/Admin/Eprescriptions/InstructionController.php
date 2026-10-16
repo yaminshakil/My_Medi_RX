@@ -44,10 +44,11 @@ class InstructionController extends Controller
             return response()->json($instruction, 201);
         } catch (\Exception $e) {
             \Log::error('Failed to send password reset OTP', [
-                'text' => $request->text,
+                'text'  => $request->text,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
+
             return response()->json('Failed to send email. Please try again later.', 201);
         }
     }

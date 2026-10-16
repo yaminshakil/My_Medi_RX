@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 
 class DoctorRosterPermissionSeeder extends Seeder
 {
@@ -20,12 +21,12 @@ class DoctorRosterPermissionSeeder extends Seeder
 
         foreach ($permissions as $name) {
             Permission::firstOrCreate([
-                'name' => $name,
+                'name'       => $name,
                 'guard_name' => 'web',
             ]);
         }
 
-        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         // Assign these permissions to your existing roles in your role seeder.
         // Avoid hard-coding a role name here because role names differ between installations.
