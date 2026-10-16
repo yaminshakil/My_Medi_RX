@@ -1,15 +1,16 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Badge } from '@/Components/ui/badge';
 import {
     Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from '@/components/ui/table';
+} from '@/Components/ui/table';
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/Components/ui/dropdown-menu';
 import { MoreHorizontal, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
+import AppLayout from '@/Layouts/app-layout';
 
 interface Review {
     id: number;
@@ -47,7 +48,7 @@ export default function Index({ reviews, filters }: Props) {
     };
 
     return (
-        <>
+        <AppLayout>
             <Head title="Manage Reviews" />
 
             <div className="space-y-6">
@@ -110,16 +111,17 @@ export default function Index({ reviews, filters }: Props) {
                                             </div>
                                         </TableCell>
                                         <TableCell>
-                                            <div className="flex items-center gap-1">
+                                            <div className="flex items-center gap-1 ">
                                                 {'★'.repeat(review.rating)}
-                                                <span className="text-muted-foreground text-xs">({review.rating})</span>
+                                                <span className="text-muted-foreground text-xs ">({review.rating})</span>
                                             </div>
                                         </TableCell>
                                         <TableCell className="max-w-xs truncate">
                                             {review.comment || <span className="text-muted-foreground">—</span>}
                                         </TableCell>
                                         <TableCell>
-                                            <Badge variant={review.approved ? 'default' : 'secondary'}>
+                                            <Badge variant={review.approved ? 'default' : 'secondary'}
+                                                className={review.approved ? 'bg-green-600 hover:bg-green-700' : 'bg-yellow-500 hover:bg-yellow-600 text-black'}>
                                                 {review.approved ? 'Approved' : 'Pending'}
                                             </Badge>
                                         </TableCell>
@@ -172,6 +174,6 @@ export default function Index({ reviews, filters }: Props) {
                     ))}
                 </div>
             </div>
-        </>
+        </AppLayout>
     );
 }
