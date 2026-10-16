@@ -82,7 +82,7 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    protected $appends = ['profile_image_url', 'avatar'];
+    protected $appends = ['profile_image_url', 'avatar', 'average_rating', 'review_count', 'rating_distribution'];
 
     // ✅ Tell Laravel to use uuid instead of id for route binding
     public function getRouteKeyName()

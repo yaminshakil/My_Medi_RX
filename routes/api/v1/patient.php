@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\Patient\MedicationScanController;
 use App\Http\Controllers\Api\V1\Patient\MedicationRefillController;
 use App\Http\Controllers\Api\V1\Patient\VaccinationController;
 use App\Http\Controllers\Api\V1\Patient\MedicationReportController;
+use App\Http\Controllers\Api\V1\Patient\VitalTrendsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api'])->group(function () {
@@ -107,4 +108,7 @@ Route::prefix('/patient')
         Route::get('/medications/reports/pdf', [
             MedicationReportController::class, 'pdf'
         ]);
+
+        //Vital Trands
+        Route::get('dashboard/{id}/vitals-trends', [VitalTrendsController::class, 'getVitalsTrends']);
     });
