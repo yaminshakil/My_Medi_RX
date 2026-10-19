@@ -60,4 +60,9 @@ class PrescriptionService
     {
         return $this->prescriptionRepo->saveAndNewPrescription();
     }
+
+    public function getPrescriMedication($id)
+    {
+        return $this->prescriptionRepo->getPrescriMedication($id);
+    }
 }

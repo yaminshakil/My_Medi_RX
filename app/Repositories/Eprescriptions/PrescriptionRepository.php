@@ -276,4 +276,11 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
             'other_history' => 'nullable|string',
         ])->validate();
     }
+
+    public function getPrescriMedication($id)
+    {
+        $medicines = PrescriptionMedicine::with(['medicines'])->where('prescription_id', $id)->get();
+
+        return $medicines;
+    }
 }

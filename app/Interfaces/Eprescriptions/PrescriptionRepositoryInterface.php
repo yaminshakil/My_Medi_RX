@@ -17,4 +17,6 @@ interface PrescriptionRepositoryInterface
     public function getAllPatient();
 
     public function saveAndNewPrescription();
+
+    public function getPrescriMedication($id);
 }

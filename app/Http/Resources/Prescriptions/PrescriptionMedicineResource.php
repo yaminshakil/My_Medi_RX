@@ -28,7 +28,6 @@ class PrescriptionMedicineResource extends JsonResource
 
             // Relationships (loaded conditionally)
             'medicine' => new MedicineResource($this->whenLoaded('medicines')),
-            'prescription' => new PrescriptionResource($this->whenLoaded('prescription')),
         ];
     }
 }
