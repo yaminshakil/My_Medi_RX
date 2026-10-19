@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Patient;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\PatientMedication;
 
 class PatientDashboardController extends Controller
 {
@@ -61,6 +62,26 @@ class PatientDashboardController extends Controller
          */
         $total = $medications->count();
 
+        $patientMedications = PatientMedication::where('patient_id', $patient->id)
+    ->where('status', 'active')
+    ->whereDate('start_date', '<=', $now->toDateString())
+    ->where(function ($query) use ($now) {
+        $query->whereNull('end_date')
+            ->orWhereDate('end_date', '>=', $now->toDateString());
+    })
+    ->with('logs')
+    ->get();
+
+        $total = $patientMedications->count();
+
+        $taken = $patientMedications->filter(
+            fn ($medication) => $medication->logs->contains(
+                fn ($log) => $log->created_at?->isSameDay($now)
+            )
+        )->count();
+
+        $pending = max(0, $total - $taken);
+
         $adherenceRate = $total > 0
             ? round(($taken / $total) * 100, 1)
             : 0.0;
@@ -86,8 +107,8 @@ class PatientDashboardController extends Controller
 
                 'todayMedsSummary' => [
                     'total'   => $total,
-                    'taken'   => 0,
-                    'pending' => 0,
+                    'taken'   => $taken,
+                    'pending' => $pending,
                 ],
 
                 // Populate after confirming medication schedule

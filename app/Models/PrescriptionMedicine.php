@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PatientMedication;
 
 class PrescriptionMedicine extends Model
 {
@@ -39,5 +40,14 @@ class PrescriptionMedicine extends Model
     public function medicines()
     {
         return $this->medicine();
+    }
+
+    public function patientMedications()
+    {
+        return $this->hasMany(
+            PatientMedication::class,
+            'prescription_medicine_id',
+            'id'
+        );
     }
 }
