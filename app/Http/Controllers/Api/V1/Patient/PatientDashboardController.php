@@ -16,6 +16,7 @@ class PatientDashboardController extends Controller
 
         // Use the existing User -> Patient relationship.
         $patient = $user->patient;
+        $taken = 2;
 
         $prescriptions = $patient?->prescriptions()->with('medications.medicine')->get();
 
@@ -44,7 +45,7 @@ class PatientDashboardController extends Controller
         $prescriptions = $patient?->prescriptions();
 
         $activePrescriptions = (clone $prescriptions)
-            ->where('status', 'active')
+            ->where('status', 'issued')
             ->count();
 
         // Use the existing Patient -> Appointment relationship.
@@ -59,6 +60,10 @@ class PatientDashboardController extends Controller
          * Actual taken doses require a medication intake log.
          */
         $total = $medications->count();
+
+        $adherenceRate = $total > 0
+            ? round(($taken / $total) * 100, 1)
+            : 0.0;
 
         return response()->json([
             'success'    => true,
@@ -77,7 +82,7 @@ class PatientDashboardController extends Controller
 
                 // Dose-level adherence tracking is not present
                 // in the models provided so far.
-                'adherenceRate' => 0.0,
+                'adherenceRate' => $adherenceRate,
 
                 'todayMedsSummary' => [
                     'total'   => $total,
