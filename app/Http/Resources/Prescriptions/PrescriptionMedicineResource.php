@@ -27,7 +27,7 @@ class PrescriptionMedicineResource extends JsonResource
             'meal_time' => $this->meal_time,
 
             // Relationships (loaded conditionally)
-            'medicine' => new MedicineResource($this->whenLoaded('medicine')),
+            'medicine' => new MedicineResource($this->whenLoaded('medicines')),
             'prescription' => new PrescriptionResource($this->whenLoaded('prescription')),
         ];
     }
