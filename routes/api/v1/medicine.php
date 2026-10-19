@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\Medicines\MedicineDoseController;
 use App\Http\Controllers\Api\Medicines\MedicineDurationController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['auth:api', 'profile.exists'])->group(function () {
     Route::apiResource('/manufacturers', ManufacturerController::class);
     Route::apiResource('/medicines', MedicineController::class);
     Route::apiResource('/medicines-doses', MedicineDoseController::class);

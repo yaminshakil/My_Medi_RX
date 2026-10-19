@@ -86,7 +86,7 @@ Route::get('/clear', function () {
     }
 });
 
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'verified', 'profile.exists'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('user/profile', [ProfileController::class, 'index'])->name('user.profile');
 });

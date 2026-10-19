@@ -157,7 +157,11 @@ class MedicationController extends Controller
 
     public function dashboard(Request $request)
     {
-        $patient = $this->patient($request);
+        $patient = Patient::where(
+            'user_id',
+            $request->user()->id
+        )->firstOrFail();
+
         $today = now()->toDateString();
 
         $logs = $patient->medicationLogs()
@@ -166,32 +170,43 @@ class MedicationController extends Controller
             ->orderBy('scheduled_at')
             ->get();
 
-        // Only classify overdue doses here; a scheduler should
-        // persist missed statuses in production.
         $logs->each(function ($log) {
             if (
                 $log->status === 'upcoming' &&
                 $log->scheduled_at->isPast()
             ) {
                 $log->status = 'missed';
+                $log->save();
             }
         });
 
         return response()->json([
+            'success' => true,
             'data' => [
                 'medications' => $patient->medications()
                     ->where('status', 'active')
-                    ->with('schedules')
                     ->get(),
 
-                'doses' => $logs,
+                'today' => $logs,
 
                 'summary' => [
-                    'total'    => $logs->count(),
-                    'taken'    => $logs->where('status', 'taken')->count(),
-                    'missed'   => $logs->where('status', 'missed')->count(),
-                    'upcoming' => $logs->where('status', 'upcoming')->count(),
-                    'snoozed'  => $logs->where('status', 'snoozed')->count(),
+                    'total' => $logs->count(),
+                    'taken' => $logs->where(
+                        'status',
+                        'taken'
+                    )->count(),
+                    'missed' => $logs->where(
+                        'status',
+                        'missed'
+                    )->count(),
+                    'upcoming' => $logs->where(
+                        'status',
+                        'upcoming'
+                    )->count(),
+                    'snoozed' => $logs->where(
+                        'status',
+                        'snoozed'
+                    )->count(),
                 ],
             ],
         ]);

@@ -17,10 +17,10 @@ class DoctorResource extends JsonResource
         return [
             'id'                  => $this->id,
             'uuid'                => $this->uuid,
-            'name'                => $this->user->name,
-            'FirstName'           => $this->user->first_name,
-            'LastName'            => $this->user->last_name,
-            'email'               => $this->user->email,
+            'name'                => $this->user?->name,
+            'FirstName'           => $this->user?->first_name,
+            'LastName'            => $this->user?->last_name,
+            'email'               => $this->user?->email,
             'status'              => $this->active,
             'mobile'              => $this->phone,
             'isActive'            => $this->isActive,
@@ -37,11 +37,11 @@ class DoctorResource extends JsonResource
             'featured'            => $this->featured,
             'educations'          => $this->educations,
             'experiences'         => $this->experiences,
-            'profile_image'       => $this->user->profileImage ? $this->user->profileImage->path : null,
-            'doctorreviews'       => $this->user->reviews,
-            'average_rating'      => $this->user->average_rating,
-            'review_count'        => $this->user->review_count,
-            'rating_distribution' => $this->user->rating_distribution,
+            'profile_image'       => $this->user?->profileImage ? $this->user?->profileImage?->path : null,
+            'doctorreviews'       => $this->user?->reviews,
+            'average_rating'      => $this->user?->average_rating,
+            'review_count'        => $this->user?->review_count,
+            'rating_distribution' => $this->user?->rating_distribution,
         ];
     }
 }

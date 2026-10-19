@@ -11,4 +11,5 @@ Route::middleware('auth:api')
         require base_path('routes/api/v1/medicine.php');
         require base_path('routes/api/v1/hospital.php');
         require base_path('routes/api/v1/appointment.php');
+        require base_path('routes/api/v1/prescription.php');
     });

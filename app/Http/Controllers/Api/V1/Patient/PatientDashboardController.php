@@ -69,6 +69,7 @@ class PatientDashboardController extends Controller
                 'patient' => [
                     'id'       => (string) $patient->id,
                     'name'     => $user->name ?? $patient->name,
+                    'eamil'    => $user->email ?? $patient->email,
                     'healthId' => $patient->patient_number,
                     'greeting' => $greeting.', '
                         .($user->name ?? $patient->name),

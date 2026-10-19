@@ -13,7 +13,7 @@ use App\Http\Controllers\Api\V1\Patient\VaccinationController;
 use App\Http\Controllers\Api\V1\Patient\VitalTrendsController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['auth:api', 'profile.exists'])->group(function () {
     Route::apiResource('/patients', PatientController::class)->except(['update']);
     // 2. Add an explicit POST route for updating the patient
     Route::post('/patients/{patient}', [PatientController::class, 'update']);
@@ -21,8 +21,11 @@ Route::middleware(['auth:api'])->group(function () {
 });
 
 Route::prefix('/patient')
-    ->middleware('auth:api')
+    ->middleware(['auth:api', 'profile.exists'])
     ->group(function () {
+        Route::get('/dashboard', [
+            PatientDashboardController::class, 'index',
+        ]);
         // Dashboard and medication CRUD
         Route::get('/medications/dashboard', [
             MedicationController::class, 'dashboard',

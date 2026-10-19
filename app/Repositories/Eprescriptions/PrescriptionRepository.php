@@ -14,6 +14,7 @@ use App\Services\Eprescriptions\PrescriptionNumberService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\Prescriptions\PrescriptionResource;
 
 class PrescriptionRepository implements PrescriptionRepositoryInterface
 {
@@ -40,7 +41,7 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
         } elseif ($this->user->hasRole('Assistant')) {
             $this->doctor_id = $this->user->doctor_assistant->doctor_id;
         } elseif ($this->user->hasRole('Patient')) {
-            $this->patient_id = $this->user->patient->id;
+            $this->patient_id = $this->user->patient?->id;
         } else {
             $this->doctor_id = $this->user->id;
         }
@@ -59,10 +60,11 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
 
         if ($this->doctor_id) {
             $prescriptions = $prescriptions->where('doctor_id', $this->doctor_id);
-        }
-
-        if ($this->patient_id) {
+        } elseif ($this->patient_id) {
             $prescriptions = $prescriptions->where('patient_id', $this->patient_id);
+        } else {
+            // Fallback: If unauthorized or role cannot be determined, return empty results
+            $prescriptions->whereRaw('1 = 0');
         }
 
         $prescriptions = $prescriptions->latest()->paginate($parPage)->withQueryString();
@@ -93,7 +95,7 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
             'gynaeHistory',
         ])->findOrFail($id);
         // dd($prescription->patient->id);
-        $vitals = Vital::where('patient_id', $prescription->patient->id)
+        $vitals = Vital::where('patient_id', $prescription->patient?->id)
             ->latest()
             ->select(
                 'id',
@@ -109,7 +111,7 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
             )->first();
 
         return [
-            'data'   => $prescription,
+            'data'   => new PrescriptionResource($prescription),
             'vitals' => $vitals,
         ];
     }

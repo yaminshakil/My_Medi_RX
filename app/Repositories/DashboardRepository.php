@@ -33,7 +33,7 @@ class DashboardRepository implements DashboardRepositoryInterface
             $this->doctor_id = DoctorAssistant::where('user_id', $this->user->id)
                 ->value('doctor_id');
         } elseif ($this->user->hasRole('Patient')) {
-            $this->patient_id = $this->user->patient->id;
+            $this->patient_id = $this->user->patient?->id;
         }
     }
 
