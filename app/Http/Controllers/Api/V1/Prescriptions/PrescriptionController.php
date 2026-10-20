@@ -70,9 +70,9 @@ class PrescriptionController extends Controller
 
     public function getPrescriMedication($id)
     {
-        $medication = $this->prescriptionService->getPrescriMedication($id);
+        $medications = $this->prescriptionService->getPrescriMedication($id);
         return ApiResponseService::success(
-            $medication,
+            $medications,
             'Prescription retrieved successfully!'
         );
     }

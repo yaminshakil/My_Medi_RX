@@ -105,11 +105,12 @@ class MedicationLogController extends Controller
     {
         $log = $this->ownedLog($request, $log);
 
-        abort_unless(
-            in_array($log->status, ['upcoming', 'snoozed'], true),
-            422,
-            'This dose cannot be skipped in its current state.'
-        );
+        if (!in_array($log->status, ['upcoming', 'snoozed'], true)) {
+            return response()->json([
+                'message' => 'This dose cannot be skipped in its current state.',
+                'status' => $log->status, // Optional: helpful for debugging
+            ], 422);
+        }
 
         $data = $request->validate([
             'notes' => ['nullable', 'string', 'max:1000'],
@@ -131,11 +132,12 @@ class MedicationLogController extends Controller
     {
         $log = $this->ownedLog($request, $log);
 
-        abort_unless(
-            in_array($log->status, ['upcoming', 'snoozed'], true),
-            422,
-            'Only pending doses can be snoozed.'
-        );
+        if (!in_array($log->status, ['upcoming', 'snoozed'], true)) {
+            return response()->json([
+                'message' => 'Only pending doses can be snoozed.',
+                'status' => $log->status, // Optional: helpful for debugging
+            ], 422);
+        }
 
         $data = $request->validate([
             'minutes' => ['required', 'integer', 'between:5,120'],

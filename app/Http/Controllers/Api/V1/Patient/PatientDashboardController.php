@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\PatientMedication;
 use App\Services\Patients\MedicationHeatmapService;
 use Illuminate\Http\JsonResponse;
+use App\Services\Patients\MedicationDayDetailsService;
+use Illuminate\Support\Facades\Validator;
 
 class PatientDashboardController extends Controller
 {
@@ -203,6 +205,48 @@ class PatientDashboardController extends Controller
             'success' => true,
             'statusCode' => 200,
             'message' => 'Monthly heatmap retrieved',
+            'data' => $data,
+        ]);
+    }
+
+    public function dayDetails(
+        Request $request,
+        MedicationDayDetailsService $service
+    ) {
+        $validator = Validator::make($request->all(), [
+            'date' => ['required', 'date_format:Y-m-d'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'statusCode' => 422,
+                'message' => 'Invalid date. Use YYYY-MM-DD format.',
+                'errors' => $validator->errors(),
+                'data' => null,
+            ], 422);
+        }
+
+        $patient = $request->user()?->patient;
+
+        if (!$patient) {
+            return response()->json([
+                'success' => false,
+                'statusCode' => 404,
+                'message' => 'Patient profile not found',
+                'data' => null,
+            ], 404);
+        }
+
+        $data = $service->getDayDetails(
+            $patient->id,
+            $request->input('date')
+        );
+
+        return response()->json([
+            'success' => true,
+            'statusCode' => 200,
+            'message' => 'Day log details retrieved',
             'data' => $data,
         ]);
     }

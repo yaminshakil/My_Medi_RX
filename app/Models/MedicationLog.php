@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MedicationLog extends Model
 {
@@ -43,6 +44,14 @@ class MedicationLog extends Model
         return $this->belongsTo(
             MedicationSchedule::class,
             'medication_schedule_id'
+        );
+    }
+
+    public function patientMedication(): BelongsTo
+    {
+        return $this->belongsTo(
+            PatientMedication::class,
+            'patient_medication_id'
         );
     }
 }

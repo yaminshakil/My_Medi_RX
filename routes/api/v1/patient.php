@@ -32,6 +32,11 @@ Route::prefix('/patient')
             [PatientDashboardController::class, 'heatmap']
         );
 
+        Route::get('/dashboard/day-details', [
+        PatientDashboardController::class,
+        'dayDetails',
+    ]);
+
         // Dashboard and medication CRUD
         Route::get('/medications/dashboard', [
             MedicationController::class, 'dashboard',
