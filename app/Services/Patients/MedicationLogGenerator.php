@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Patients;
 
 use App\Models\MedicationSchedule;
 use App\Models\MedicationLog;

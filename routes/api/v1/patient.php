@@ -26,6 +26,12 @@ Route::prefix('/patient')
         Route::get('/dashboard', [
             PatientDashboardController::class, 'index',
         ]);
+
+        Route::get(
+            '/dashboard/heatmap',
+            [PatientDashboardController::class, 'heatmap']
+        );
+
         // Dashboard and medication CRUD
         Route::get('/medications/dashboard', [
             MedicationController::class, 'dashboard',

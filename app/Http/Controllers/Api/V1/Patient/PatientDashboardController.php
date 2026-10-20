@@ -5,9 +5,15 @@ namespace App\Http\Controllers\Api\V1\Patient;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PatientMedication;
+use App\Services\Patients\MedicationHeatmapService;
+use Illuminate\Http\JsonResponse;
 
 class PatientDashboardController extends Controller
 {
+    public function __construct(
+        protected MedicationHeatmapService $heatmapService
+    ) {
+    }
     /**
      * Display a listing of the resource.
      */
@@ -167,5 +173,37 @@ class PatientDashboardController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function heatmap(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'month' => ['required', 'integer', 'between:1,12'],
+            'year' => ['required', 'integer', 'between:2000,2100'],
+        ]);
+
+        $patient = $request->user()?->patient;
+
+        if (!$patient) {
+            return response()->json([
+                'success' => false,
+                'statusCode' => 404,
+                'message' => 'Patient profile not found',
+                'data' => null,
+            ], 404);
+        }
+
+        $data = $this->heatmapService->getMonthlyHeatmap(
+            $patient,
+            (int) $validated['month'],
+            (int) $validated['year']
+        );
+
+        return response()->json([
+            'success' => true,
+            'statusCode' => 200,
+            'message' => 'Monthly heatmap retrieved',
+            'data' => $data,
+        ]);
     }
 }

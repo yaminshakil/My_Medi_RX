@@ -54,7 +54,7 @@ class MedicationScheduleController extends Controller
             'is_active' => true,
         ]);
 
-        app(\App\Services\MedicationLogGenerator::class)->generate(
+        app(\App\Services\Patients\MedicationLogGenerator::class)->generate(
             $schedule,
             now()->toDateString(),
             now()->addDays(6)->toDateString()
