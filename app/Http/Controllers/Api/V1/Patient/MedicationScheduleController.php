@@ -54,12 +54,18 @@ class MedicationScheduleController extends Controller
             'is_active' => true,
         ]);
 
+        app(\App\Services\MedicationLogGenerator::class)->generate(
+            $schedule,
+            now()->toDateString(),
+            now()->addDays(6)->toDateString()
+        );
+
         // Generate dose logs through a dedicated service/job.
         // Do not create duplicate logs when schedules are edited.
 
         return response()->json([
             'message' => 'Medication schedule created.',
-            'data'    => $schedule,
+            'data'    => $schedule->load('medication'),
         ], 201);
     }
 
