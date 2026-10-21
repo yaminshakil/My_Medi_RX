@@ -175,10 +175,9 @@ class VaccinationScheduleController extends Controller
     /**
      * DELETE /api/v1/vaccination-schedules/{schedule}
      */
-    public function destroy(
-        VaccinationSchedule $schedule
-    ): JsonResponse {
-        $this->service->delete($schedule);
+    public function destroy($id): JsonResponse
+    {
+        $this->service->delete($id);
 
         return response()->json([
             'success' => true,

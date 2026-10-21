@@ -42,7 +42,7 @@ class VaccinationScheduleService
     public function find(int $id): VaccinationSchedule
     {
         return VaccinationSchedule::query()
-            ->with('vaccine')
+            ->with('vaccine', 'vaccine.manufacturer')
             ->findOrFail($id);
     }
 
@@ -53,7 +53,7 @@ class VaccinationScheduleService
 
             $schedule = VaccinationSchedule::create($data);
 
-            return $schedule->load('vaccine');
+            return $schedule->load('vaccine', 'vaccine.manufacturer');
         });
     }
 
@@ -69,12 +69,13 @@ class VaccinationScheduleService
 
             $schedule->update($data);
 
-            return $schedule->fresh()->load('vaccine');
+            return $schedule->fresh()->load('vaccine', 'vaccine.manufacturer');
         });
     }
 
-    public function delete(VaccinationSchedule $schedule): void
+    public function delete($id): void
     {
+        $schedule = VaccinationSchedule::findOrFail($id);
         if ($schedule->records()->exists()) {
             throw ValidationException::withMessages([
                 'schedule' => [
