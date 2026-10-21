@@ -5,9 +5,20 @@ namespace App\Http\Controllers\Api\V1\Patient;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use Illuminate\Http\Request;
+use App\Models\Vaccine;
 
 class VaccinationController extends Controller
 {
+    public function vaccines()
+    {
+        $vaccines = Vaccine::query()
+            ->where('is_active', true)
+            ->orderBy('created_at')
+            ->get();
+
+        return response()->json($vaccines);
+    }
+
     private function patient(Request $request): Patient
     {
         return Patient::where('user_id', $request->user()->id)
@@ -18,7 +29,7 @@ class VaccinationController extends Controller
     {
         $records = $this->patient($request)
             ->vaccinationRecords()
-            ->orderBy('due_date')
+            ->orderBy('scheduled_date')
             ->paginate(20);
 
         return response()->json($records);

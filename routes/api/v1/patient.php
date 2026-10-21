@@ -99,6 +99,10 @@ Route::prefix('/patient')
         ]);
 
         // Vaccinations
+        Route::get('/vaccines', [
+            VaccinationController::class, 'vaccines',
+        ]);
+
         Route::get('/vaccinations', [
             VaccinationController::class, 'index',
         ]);
