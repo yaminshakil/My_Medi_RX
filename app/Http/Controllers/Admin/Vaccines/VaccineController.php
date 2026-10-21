@@ -9,9 +9,17 @@ use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
+use App\Services\Eprescriptions\MedicineService;
 
 class VaccineController extends Controller
 {
+    protected MedicineService $medicineService;
+
+    public function __construct(MedicineService $medicineService)
+    {
+        $this->medicineService = $medicineService;
+    }
+
     public function index(Request $request): Response
     {
         $filters = $request->validate([
@@ -38,8 +46,18 @@ class VaccineController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $manufacturers = $this->medicineService->getManufacturer();
+
+        $manufacturers = $manufacturers->map(function ($manufacturer) {
+            return [
+                'name' => $manufacturer->company_name,
+                'id' => $manufacturer->id,
+            ];
+        });
+
         return Inertia::render('Admin/Vaccines/Index', [
             'vaccines' => $vaccines,
+            'manufacturers' => $manufacturers,
             'filters' => [
                 'search' => $filters['search'] ?? '',
                 'status' => $filters['status'] ?? 'all',

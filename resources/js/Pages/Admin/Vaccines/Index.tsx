@@ -57,6 +57,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/Components/ui/select';
+import AppLayout from '@/Layouts/app-layout';
 
 interface Vaccine {
     id: number;
@@ -68,6 +69,11 @@ interface Vaccine {
     is_active: boolean;
 }
 
+interface Manufacturers {
+    id: number;
+    name: string;
+}
+
 interface PaginatedVaccines {
     data: Vaccine[];
     current_page: number;
@@ -77,6 +83,7 @@ interface PaginatedVaccines {
 
 interface Props {
     vaccines: PaginatedVaccines;
+    manufacturers: Manufacturers;
     filters: {
         search: string;
         status: string;
@@ -99,7 +106,7 @@ const emptyForm: VaccineForm = {
     is_active: true,
 };
 
-export default function Index({ vaccines, filters }: Props) {
+export default function Index({ vaccines, filters, manufacturers }: Props) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [editingVaccine, setEditingVaccine] = useState<Vaccine | null>(null);
     const [deletingVaccine, setDeletingVaccine] = useState<Vaccine | null>(null);
@@ -192,8 +199,19 @@ export default function Index({ vaccines, filters }: Props) {
         );
     }
 
+    const [loadingManufacturers, setLoadingManufacturers] = useState(false);
+
+    /**
+  * Manufacturer change
+  */
+    const handleManufacturerChange = (value: string) => {
+        const manufacturerId = value;
+
+        form.setData('manufacturer_id', manufacturerId);
+    };
+
     return (
-        <>
+        <AppLayout>
             <Head title="Vaccine Management" />
 
             <div className="space-y-6 p-4 md:p-6">
@@ -449,24 +467,37 @@ export default function Index({ vaccines, filters }: Props) {
                                     </p>
                                 )}
                             </div>
-
                             <div className="space-y-2">
-                                <Label htmlFor="manufacturer_id">
-                                    Manufacturer ID
-                                </Label>
-                                <Input
-                                    id="manufacturer_id"
-                                    value={form.data.manufacturer_id}
-                                    onChange={(event) =>
-                                        form.setData(
-                                            'manufacturer_id',
-                                            event.target.value,
-                                        )
-                                    }
-                                    placeholder="Manufacturer identifier"
-                                />
+                                <Label htmlFor="manufacturer_id">Manufacturer</Label>
+
+                                <Select
+                                    value={form.data.manufacturer_id?.toString() ?? ''}
+                                    onValueChange={handleManufacturerChange}
+                                >
+                                    <SelectTrigger id="manufacturer_id" className="w-full">
+                                        <SelectValue
+                                            placeholder={
+                                                loadingManufacturers
+                                                    ? 'Loading Manufacturer...'
+                                                    : 'Select Manufacturer'
+                                            }
+                                        />
+                                    </SelectTrigger>
+
+                                    <SelectContent>
+                                        {manufacturers.map((manufacturer) => (
+                                            <SelectItem
+                                                key={manufacturer.id}
+                                                value={manufacturer.id.toString()}
+                                            >
+                                                {manufacturer.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+
                                 {form.errors.manufacturer_id && (
-                                    <p className="text-sm text-destructive">
+                                    <p className="text-sm font-medium text-destructive">
                                         {form.errors.manufacturer_id}
                                     </p>
                                 )}
@@ -556,6 +587,6 @@ export default function Index({ vaccines, filters }: Props) {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </>
+        </AppLayout>
     );
 }
