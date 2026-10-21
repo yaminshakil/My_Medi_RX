@@ -103,13 +103,12 @@ class VaccinationScheduleController extends Controller
     /**
      * GET /api/v1/vaccination-schedules/{schedule}
      */
-    public function show(
-        VaccinationSchedule $schedule
-    ): JsonResponse {
+    public function show($id): JsonResponse
+    {
         return response()->json([
             'success' => true,
             'message' => 'Vaccination schedule retrieved successfully.',
-            'data' => $this->service->find($schedule->id),
+            'data' => $this->service->find($id),
         ]);
     }
 
