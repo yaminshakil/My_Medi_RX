@@ -39,6 +39,9 @@ Route::middleware(['auth', 'role.redirect:Admin'])->prefix('admin')->name('admin
     Route::patch('reviews/{review}/toggle-approved', [AdminReviewController::class, 'toggleApproved'])
         ->name('reviews.toggle-approved');
 
+
+    Route::post('vaccines/import', [VaccineController::class,'import',])->name('vaccines.import');
+    Route::get('vaccines/template', [VaccineController::class,'template',])->name('vaccines.template');
     Route::resource('vaccines', VaccineController::class)
             ->only(['index', 'store', 'update', 'destroy']);
 });

@@ -58,6 +58,7 @@ import {
     SelectValue,
 } from '@/Components/ui/select';
 import AppLayout from '@/Layouts/app-layout';
+import { Upload, FileSpreadsheet, Download } from 'lucide-react';
 
 interface Vaccine {
     id: number;
@@ -74,6 +75,13 @@ interface Manufacturers {
     name: string;
 }
 
+interface ImportResult {
+    imported: number;
+    skipped: number;
+    errors: string[];
+    additional_errors: number;
+}
+
 interface PaginatedVaccines {
     data: Vaccine[];
     current_page: number;
@@ -88,6 +96,7 @@ interface Props {
         search: string;
         status: string;
     };
+    import_result?: ImportResult | null;
 }
 
 interface VaccineForm {
@@ -106,12 +115,14 @@ const emptyForm: VaccineForm = {
     is_active: true,
 };
 
-export default function Index({ vaccines, filters, manufacturers }: Props) {
+export default function Index({ vaccines, filters, manufacturers, import_result }: Props) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [editingVaccine, setEditingVaccine] = useState<Vaccine | null>(null);
     const [deletingVaccine, setDeletingVaccine] = useState<Vaccine | null>(null);
     const [search, setSearch] = useState(filters.search ?? '');
     const [status, setStatus] = useState(filters.status ?? 'all');
+    const [importDialogOpen, setImportDialogOpen] = useState(false);
+    const [loadingManufacturers, setLoadingManufacturers] = useState(false);
 
     const form = useForm<VaccineForm>(emptyForm);
 
@@ -199,8 +210,6 @@ export default function Index({ vaccines, filters, manufacturers }: Props) {
         );
     }
 
-    const [loadingManufacturers, setLoadingManufacturers] = useState(false);
-
     /**
   * Manufacturer change
   */
@@ -209,6 +218,23 @@ export default function Index({ vaccines, filters, manufacturers }: Props) {
 
         form.setData('manufacturer_id', manufacturerId);
     };
+
+    const importForm = useForm<{ file: File | null }>({
+        file: null,
+    });
+
+    function submitImport(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        importForm.post(route('admin.vaccines.import'), {
+            forceFormData: true,
+            preserveScroll: true,
+            onSuccess: () => {
+                setImportDialogOpen(false);
+                importForm.reset();
+            },
+        });
+    }
 
     return (
         <AppLayout>
@@ -228,11 +254,70 @@ export default function Index({ vaccines, filters, manufacturers }: Props) {
                         </p>
                     </div>
 
-                    <Button onClick={openCreateDialog}>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add Vaccine
-                    </Button>
+                    <div className="flex flex-wrap gap-2">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setImportDialogOpen(true)}
+                        >
+                            <Upload className="mr-2 h-4 w-4" />
+                            Import CSV
+                        </Button>
+
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() =>
+                                window.location.assign(route('admin.vaccines.template'))
+                            }
+                        >
+                            <Download className="mr-2 h-4 w-4" />
+                            CSV Template
+                        </Button>
+
+                        <Button onClick={openCreateDialog}>
+                            <Plus className="mr-2 h-4 w-4" />
+                            Add Vaccine
+                        </Button>
+                    </div>
                 </div>
+
+                {import_result && (
+                    <Card>
+                        <CardContent className="space-y-3 pt-6">
+                            <div className="flex flex-wrap gap-3">
+                                <Badge variant="default">
+                                    Imported: {import_result.imported}
+                                </Badge>
+
+                                <Badge variant="secondary">
+                                    Skipped: {import_result.skipped}
+                                </Badge>
+                            </div>
+
+                            {import_result.errors.length > 0 && (
+                                <div className="rounded-md border p-3">
+                                    <p className="mb-2 font-medium">
+                                        Import warnings
+                                    </p>
+
+                                    <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
+                                        {import_result.errors.map((error, index) => (
+                                            <li key={`${index}-${error}`}>{error}</li>
+                                        ))}
+                                    </ul>
+
+                                    {import_result.additional_errors > 0 && (
+                                        <p className="mt-2 text-sm text-muted-foreground">
+                                            {import_result.additional_errors} more warnings
+                                            were omitted.
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                )}
 
                 <Card>
                     <CardHeader>
@@ -296,7 +381,7 @@ export default function Index({ vaccines, filters, manufacturers }: Props) {
                                     <TableRow>
                                         <TableHead>Vaccine</TableHead>
                                         <TableHead>Code</TableHead>
-                                        <TableHead>Manufacturer ID</TableHead>
+                                        <TableHead>Manufacturer</TableHead>
                                         <TableHead>Status</TableHead>
                                         <TableHead className="text-right">
                                             Actions
@@ -324,7 +409,7 @@ export default function Index({ vaccines, filters, manufacturers }: Props) {
                                                 </TableCell>
 
                                                 <TableCell>
-                                                    {vaccine.manufacturer_id || '—'}
+                                                    {vaccine.manufacturer.name || '—'}
                                                 </TableCell>
 
                                                 <TableCell>
@@ -563,6 +648,82 @@ export default function Index({ vaccines, filters, manufacturers }: Props) {
                     </form>
                 </DialogContent>
             </Dialog>
+
+
+            <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
+                <DialogContent className="sm:max-w-lg">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            <FileSpreadsheet className="h-5 w-5" />
+                            Import Vaccines from CSV
+                        </DialogTitle>
+                        <DialogDescription>
+                            Upload a CSV file using the vaccine import template.
+                            Existing vaccine codes will be skipped.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <form onSubmit={submitImport} className="space-y-5">
+                        <div className="space-y-2">
+                            <Label htmlFor="vaccine-csv">CSV File *</Label>
+
+                            <Input
+                                id="vaccine-csv"
+                                type="file"
+                                accept=".csv,text/csv"
+                                onChange={(event) => {
+                                    importForm.setData(
+                                        'file',
+                                        event.target.files?.[0] ?? null,
+                                    );
+                                }}
+                                required
+                            />
+
+                            {importForm.errors.file && (
+                                <p className="text-sm text-destructive">
+                                    {importForm.errors.file}
+                                </p>
+                            )}
+
+                            <p className="text-xs text-muted-foreground">
+                                Maximum file size: 5 MB. Maximum rows: 5,000.
+                            </p>
+                        </div>
+
+                        <div className="rounded-md border bg-muted/30 p-3 text-sm">
+                            <p className="font-medium">Required column</p>
+                            <p className="mt-1 text-muted-foreground">
+                                name
+                            </p>
+
+                            <p className="mt-3 font-medium">Optional columns</p>
+                            <p className="mt-1 text-muted-foreground">
+                                code, manufacturer_id, description, is_active
+                            </p>
+                        </div>
+
+                        <DialogFooter>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setImportDialogOpen(false)}
+                            >
+                                Cancel
+                            </Button>
+
+                            <Button
+                                type="submit"
+                                disabled={importForm.processing || !importForm.data.file}
+                            >
+                                <Upload className="mr-2 h-4 w-4" />
+                                {importForm.processing ? 'Importing...' : 'Upload & Import'}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+
 
             <AlertDialog
                 open={Boolean(deletingVaccine)}

@@ -13,7 +13,7 @@ class Vaccine extends Model
     protected $fillable = [
         'name',
         'code',
-        'manufacturer',
+        'manufacturer_id',
         'description',
         'is_active',
     ];
@@ -45,5 +45,11 @@ class Vaccine extends Model
     public function records()
     {
         return $this->hasMany(VaccinationRecord::class);
+    }
+
+    public function manufacturer()
+    {
+        return $this->belongsTo(Manufacturer::class, 'manufacturer_id', 'id')
+                ->select('id', 'company_name as name');
     }
 }
