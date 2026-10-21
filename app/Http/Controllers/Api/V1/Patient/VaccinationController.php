@@ -30,9 +30,9 @@ class VaccinationController extends Controller
     {
         $records = $this->patient($request)
             ->vaccinationRecords()
+            ->with(['vaccine', 'schedule'])
             ->orderBy('scheduled_date')
             ->paginate(20);
-
         return response()->json($records);
     }
 
@@ -137,8 +137,19 @@ class VaccinationController extends Controller
 
     public function show(Request $request, string $record)
     {
+        $record = $this->ownedRecord($request, $record);
+
+        // If the record is deleted or not found, return 404 gracefully
+        if (!$record) {
+            return response()->json([
+                'message' => 'Vaccination record not found or already deleted.',
+            ], 404);
+        }
+
+        $record->load('vaccine');
+
         return response()->json([
-            'data' => $this->ownedRecord($request, $record),
+            'data' => $record,
         ]);
     }
 
@@ -230,6 +241,7 @@ class VaccinationController extends Controller
     {
         return $this->patient($request)
             ->vaccinationRecords()
-            ->first($id);
+            ->with('vaccine')
+            ->find($id);
     }
 }

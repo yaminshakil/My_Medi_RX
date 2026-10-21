@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\Patient\MedicationScheduleController;
 use App\Http\Controllers\Api\V1\Patient\PatientDashboardController;
 use App\Http\Controllers\Api\V1\Patient\VaccinationController;
 use App\Http\Controllers\Api\V1\Patient\VitalTrendsController;
+use App\Http\Controllers\Api\V1\Patient\VaccinationScheduleController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api', 'profile.exists'])->group(function () {
@@ -118,6 +119,11 @@ Route::prefix('/patient')
         Route::delete('/vaccinations/{record}', [
             VaccinationController::class, 'destroy',
         ]);
+
+        Route::apiResource(
+            'vaccination-schedules',
+            VaccinationScheduleController::class
+        );
 
         // Reports
         Route::get('/medications/reports', [
