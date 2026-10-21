@@ -33,7 +33,7 @@ class AppointmentController extends Controller
         } elseif ($this->user->hasRole('Assistant')) {
             $this->doctor_id = $this->user->doctor_assistant->doctor_id;
         } elseif ($this->user->hasRole('Patient')) {
-            $this->patient_id = $this->user->patient->id;
+            $this->patient_id = $this->user?->patient?->id;
         }
     }
 

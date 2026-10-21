@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Auth\RoleController;
 use App\Http\Controllers\Admin\Auth\UserController;
 use App\Http\Controllers\Admin\Menu\MenuController;
 use App\Http\Controllers\Admin\Review\AdminReviewController;
+use App\Http\Controllers\Admin\Vaccines\VaccineController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin'])->group(function () {
@@ -37,4 +38,7 @@ Route::middleware(['auth', 'role.redirect:Admin'])->prefix('admin')->name('admin
     Route::resource('reviews', AdminReviewController::class);
     Route::patch('reviews/{review}/toggle-approved', [AdminReviewController::class, 'toggleApproved'])
         ->name('reviews.toggle-approved');
+
+    Route::resource('vaccines', VaccineController::class)
+            ->only(['index', 'store', 'update', 'destroy']);
 });
