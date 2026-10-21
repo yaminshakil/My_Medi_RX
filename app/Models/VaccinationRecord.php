@@ -27,7 +27,7 @@ class VaccinationRecord extends Model
     protected function casts(): array
     {
         return [
-            'scheduled_date' => 'date',
+            'scheduled_date' => 'date:Y-m-d',
             'administered_at' => 'datetime',
             'dose_number' => 'integer',
         ];

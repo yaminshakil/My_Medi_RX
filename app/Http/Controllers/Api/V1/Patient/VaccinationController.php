@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Models\Vaccine;
+use Illuminate\Database\QueryException;
 
 class VaccinationController extends Controller
 {
@@ -146,12 +147,53 @@ class VaccinationController extends Controller
         $record = $this->ownedRecord($request, $record);
 
         $data = $request->validate([
-            'vaccine_name'    => ['sometimes', 'required', 'string', 'max:255'],
-            'dose_number'     => ['sometimes', 'required', 'integer', 'min:1'],
-            'due_date'        => ['nullable', 'date'],
-            'administered_at' => ['nullable', 'date'],
-            'provider'        => ['nullable', 'string', 'max:255'],
-            'notes'           => ['nullable', 'string'],
+            'vaccine_id' => [
+                'required',
+                'integer',
+                'exists:vaccines,id',
+            ],
+            'vaccination_schedule_id' => [
+                'nullable',
+                'integer',
+                'exists:vaccination_schedules,id',
+            ],
+            'dose_number' => [
+                'required',
+                'integer',
+                'min:1',
+            ],
+            'scheduled_date' => [
+                'nullable',
+                'date',
+            ],
+            'administered_at' => [
+                'nullable',
+                'date',
+            ],
+            'status' => [
+                'sometimes',
+                'required',
+                'in:scheduled,completed,missed,cancelled',
+            ],
+            'provider_name' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+            'facility_name' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+            'batch_number' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+            'notes' => [
+                'nullable',
+                'string',
+            ],
         ]);
 
         $record->update($data);
@@ -162,20 +204,32 @@ class VaccinationController extends Controller
         ]);
     }
 
-    public function destroy(Request $request, string $record)
+    public function destroy(Request $request, string $specId)
     {
-        $record = $this->ownedRecord($request, $record);
-        $record->delete();
+        try {
+            $record = $this->ownedRecord($request, $specId);
 
-        return response()->json([
-            'message' => 'Vaccination record deleted.',
-        ]);
+            if (!$record) {
+                return response()->json(['message' => 'Record not found.'], 404);
+            }
+
+            $record->delete();
+
+            return response()->json([
+                'message' => 'Vaccination record deleted.',
+            ]);
+        } catch (QueryException $e) {
+            return response()->json([
+                'message' => 'Unable to delete record. It may have already been removed or has dependent data.',
+                'error' => config('app.debug') ? $e->getMessage() : null
+            ], 422);
+        }
     }
 
     private function ownedRecord(Request $request, string $id)
     {
         return $this->patient($request)
             ->vaccinationRecords()
-            ->findOrFail($id);
+            ->first($id);
     }
 }
