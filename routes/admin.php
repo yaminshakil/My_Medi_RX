@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Auth\UserController;
 use App\Http\Controllers\Admin\Menu\MenuController;
 use App\Http\Controllers\Admin\Review\AdminReviewController;
 use App\Http\Controllers\Admin\Vaccines\VaccineController;
+use App\Http\Controllers\Admin\Pediatric\PediatricDoseRuleController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin'])->group(function () {
@@ -45,3 +46,41 @@ Route::middleware(['auth', 'role.redirect:Admin'])->prefix('admin')->name('admin
     Route::resource('vaccines', VaccineController::class)
             ->only(['index', 'store', 'update', 'destroy']);
 });
+
+Route::middleware(['auth', 'role.redirect:Admin'])
+    ->prefix('admin/pediatric-dose-rules')
+    ->name('admin.pediatric-dose-rules.')
+    ->group(function () {
+        Route::get('/', [PediatricDoseRuleController::class, 'index'])
+            ->name('index');
+
+        Route::get('/create', [PediatricDoseRuleController::class, 'create'])
+            ->name('create');
+
+        Route::post('/', [PediatricDoseRuleController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{pediatricDoseRule}', [PediatricDoseRuleController::class, 'show'])
+            ->name('show');
+
+        Route::get('/{pediatricDoseRule}/edit', [PediatricDoseRuleController::class, 'edit'])
+            ->name('edit');
+
+        Route::put('/{pediatricDoseRule}', [PediatricDoseRuleController::class, 'update'])
+            ->name('update');
+
+        Route::post('/{pediatricDoseRule}/submit', [PediatricDoseRuleController::class, 'submit'])
+            ->name('submit');
+
+        Route::post('/{pediatricDoseRule}/approve', [PediatricDoseRuleController::class, 'approve'])
+            ->name('approve');
+
+        Route::post('/{pediatricDoseRule}/reject', [PediatricDoseRuleController::class, 'reject'])
+            ->name('reject');
+
+        Route::post('/{pediatricDoseRule}/activate', [PediatricDoseRuleController::class, 'activate'])
+            ->name('activate');
+
+        Route::post('/{pediatricDoseRule}/deactivate', [PediatricDoseRuleController::class, 'deactivate'])
+            ->name('deactivate');
+    });

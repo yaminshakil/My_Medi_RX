@@ -12,9 +12,12 @@ use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PediatricDoseRuleController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(
         private readonly PediatricDoseRuleWorkflowService $workflow
     ) {
@@ -94,11 +97,11 @@ class PediatricDoseRuleController extends Controller
 
         return Inertia::render('Admin/PediatricDoseRules/Create', [
             'medicines' => Medicine::query()
-                ->orderBy('name')
-                ->get(['id', 'name'])
+                ->orderBy('brand_name')
+                ->get(['id', 'brand_name'])
                 ->map(fn ($medicine) => [
                     'value' => (string) $medicine->id,
-                    'label' => $medicine->name,
+                    'label' => $medicine->brand_name,
                 ]),
         ]);
     }

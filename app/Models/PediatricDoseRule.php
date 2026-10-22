@@ -32,6 +32,15 @@ class PediatricDoseRule extends Model
         'approved_by',
         'approved_at',
         'is_active',
+        // Workflow fields
+        'status',
+        'created_by',
+        'submitted_at',
+        'reviewed_by',
+        'reviewed_at',
+        'rejection_reason',
+        'version',
+        'supersedes_rule_id',
     ];
 
     protected function casts(): array
@@ -47,6 +56,8 @@ class PediatricDoseRule extends Model
             'max_weight_kg' => 'decimal:3',
             'is_active' => 'boolean',
             'approved_at' => 'datetime',
+            'submitted_at' => 'datetime',
+            'reviewed_at' => 'datetime',
         ];
     }
 
@@ -74,5 +85,28 @@ class PediatricDoseRule extends Model
             ->where('is_active', true)
             ->whereNotNull('approved_by')
             ->whereNotNull('approved_at');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
+    }
+
+    public function supersedes()
+    {
+        return $this->belongsTo(self::class, 'supersedes_rule_id');
+    }
+
+    public function audits()
+    {
+        return $this->hasMany(
+            PediatricDoseRuleAudit::class,
+            'pediatric_dose_rule_id'
+        )->latest();
     }
 }
