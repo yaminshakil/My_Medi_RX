@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\Patient\PatientDashboardController;
 use App\Http\Controllers\Api\V1\Patient\VaccinationController;
 use App\Http\Controllers\Api\V1\Patient\VitalTrendsController;
 use App\Http\Controllers\Api\V1\Patient\VaccinationScheduleController;
+use App\Http\Controllers\Api\V1\PediatricDoseController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api', 'profile.exists'])->group(function () {
@@ -136,3 +137,22 @@ Route::prefix('/patient')
         // Vital Trands
         Route::get('dashboard/{id}/vitals-trends', [VitalTrendsController::class, 'getVitalsTrends']);
     });
+
+Route::prefix('pediatric-dose')
+->middleware('auth:api')
+->group(function () {
+    Route::get(
+        '/medicines',
+        [PediatricDoseController::class, 'medicines']
+    );
+
+    Route::post(
+        '/calculate',
+        [PediatricDoseController::class, 'calculate']
+    );
+
+    Route::get(
+        '/recent',
+        [PediatricDoseController::class, 'recent']
+    );
+});
