@@ -159,11 +159,11 @@ class PediatricDoseRuleController extends Controller
         return Inertia::render('Admin/PediatricDoseRules/Edit', [
             'rule' => $pediatricDoseRule,
             'medicines' => Medicine::query()
-                ->orderBy('name')
-                ->get(['id', 'name'])
+                ->orderBy('brand_name')
+                ->get(['id', 'brand_name'])
                 ->map(fn ($medicine) => [
                     'value' => (string) $medicine->id,
-                    'label' => $medicine->name,
+                    'label' => $medicine->brand_name,
                 ]),
         ]);
     }

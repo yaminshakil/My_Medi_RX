@@ -55,7 +55,7 @@ export default function Edit({ rule, medicines }: Props) {
         <AppLayout>
             <Head title="Edit Pediatric Dose Rule" />
 
-            <div className="mx-auto max-w-6xl space-y-6 p-4 md:p-6">
+            <div className="mx-auto w-full space-y-6 p-4 md:p-6">
                 <div className="flex items-center justify-between gap-4">
                     <div>
                         <h1 className="text-2xl font-semibold">
