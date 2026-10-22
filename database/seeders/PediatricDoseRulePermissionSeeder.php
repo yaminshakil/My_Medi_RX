@@ -26,33 +26,42 @@ class PediatricDoseRulePermissionSeeder extends Seeder
             'pediatric-dose-rules.audit-all',
         ];
 
-        foreach ($permissions as $permission) {
-            Permission::findOrCreate($permission, 'api');
+        $guards = ['web', 'api'];
+
+        // 1. Create permissions for both guards
+        foreach ($guards as $guard) {
+            foreach ($permissions as $permission) {
+                Permission::findOrCreate($permission, $guard);
+            }
         }
 
-        $doctor = Role::findByName('Doctor', 'api');
-        $admin = Role::findByName('Admin', 'api');
+        // 2. Assign permissions to roles for each guard
+        foreach ($guards as $guard) {
+            // Ensure roles exist for the guard before finding them (or use firstOrCreate)
+            $doctor = Role::firstOrCreate(['name' => 'Doctor', 'guard_name' => $guard]);
+            $admin = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => $guard]);
 
-        $doctor->givePermissionTo([
-            'pediatric-dose-rules.view',
-            'pediatric-dose-rules.create',
-            'pediatric-dose-rules.edit-own',
-            'pediatric-dose-rules.submit',
-            'pediatric-dose-rules.audit-own',
-        ]);
+            $doctor->givePermissionTo([
+                'pediatric-dose-rules.view',
+                'pediatric-dose-rules.create',
+                'pediatric-dose-rules.edit-own',
+                'pediatric-dose-rules.submit',
+                'pediatric-dose-rules.audit-own',
+            ]);
 
-        $admin->givePermissionTo([
-            'pediatric-dose-rules.view',
-            'pediatric-dose-rules.view-all',
-            'pediatric-dose-rules.create',
-            'pediatric-dose-rules.edit-own',
-            'pediatric-dose-rules.edit-all',
-            'pediatric-dose-rules.submit',
-            'pediatric-dose-rules.approve',
-            'pediatric-dose-rules.activate',
-            'pediatric-dose-rules.audit-own',
-            'pediatric-dose-rules.audit-all',
-        ]);
+            $admin->givePermissionTo([
+                'pediatric-dose-rules.view',
+                'pediatric-dose-rules.view-all',
+                'pediatric-dose-rules.create',
+                'pediatric-dose-rules.edit-own',
+                'pediatric-dose-rules.edit-all',
+                'pediatric-dose-rules.submit',
+                'pediatric-dose-rules.approve',
+                'pediatric-dose-rules.activate',
+                'pediatric-dose-rules.audit-own',
+                'pediatric-dose-rules.audit-all',
+            ]);
+        }
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
     }

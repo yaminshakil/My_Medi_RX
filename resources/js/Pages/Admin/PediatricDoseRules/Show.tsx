@@ -86,16 +86,27 @@ export default function Show({ rule, audits }: Props) {
         auth?: { user?: { permissions?: string[] } };
     };
 
-    const permissions = auth?.user?.permissions ?? [];
+    const permissions = auth?.permissions ?? [];
     const canApprove = permissions.includes("pediatric-dose-rules.approve");
     const canActivate = permissions.includes("pediatric-dose-rules.activate");
     const canEdit = ["draft", "rejected"].includes(rule.status);
 
     function postAction(
         action: "submit" | "approve" | "activate" | "deactivate",
+        data: Record<string, string> = {},
     ) {
         router.post(
             route(`admin.pediatric-dose-rules.${action}`, rule.id),
+            data,
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    // Inertia refreshes the page props after a successful redirect.
+                },
+                onError: (errors) => {
+                    console.error(`${action} failed:`, errors);
+                },
+            },
         );
     }
 

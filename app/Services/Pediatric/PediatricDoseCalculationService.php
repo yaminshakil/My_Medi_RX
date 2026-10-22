@@ -245,7 +245,7 @@ class PediatricDoseCalculationService
             ->values()
             ->map(fn (PediatricDoseRule $rule) => [
                 'medicineId' => $rule->medicine_id,
-                'medicineName' => $rule->medicine?->name,
+                'medicineName' => $rule->medicine?->brand_name,
                 'formulation' => $rule->formulation,
                 'indication' => $rule->indication,
                 'route' => $rule->route,
