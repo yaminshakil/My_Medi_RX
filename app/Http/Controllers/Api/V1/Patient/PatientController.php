@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\APi\Patients;
+namespace App\Http\Controllers\APi\V1\Patient;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Patients\CreatePatientProfileRequest;

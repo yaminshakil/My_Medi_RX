@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\Patients\PatientController;
+use App\Http\Controllers\Api\V1\Patient\PatientController;
 use App\Http\Controllers\Api\V1\Patient\MedicationAdherenceController;
 use App\Http\Controllers\Api\V1\Patient\MedicationController;
 use App\Http\Controllers\Api\V1\Patient\MedicationLogController;
