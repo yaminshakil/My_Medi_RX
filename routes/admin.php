@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\Vaccines\VaccineController;
 use App\Http\Controllers\Admin\Pediatric\PediatricDoseRuleController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin,Doctor'])->group(function () {
     Route::post('/menus/update-order', [MenuController::class, 'updateOrder'])->name('menus.updateOrder');
     Route::get('/menus', [MenuController::class, 'index'])->name('menus.index');
     Route::get('/menus/create', [MenuController::class, 'create'])->name('menus.create');
@@ -39,15 +39,16 @@ Route::middleware(['auth', 'role.redirect:Admin'])->prefix('admin')->name('admin
     Route::resource('reviews', AdminReviewController::class);
     Route::patch('reviews/{review}/toggle-approved', [AdminReviewController::class, 'toggleApproved'])
         ->name('reviews.toggle-approved');
+});
 
-
+Route::middleware(['auth', 'role.redirect:Admin,Doctor'])->prefix('admin')->name('admin.')->group(function () {
     Route::post('vaccines/import', [VaccineController::class,'import',])->name('vaccines.import');
     Route::get('vaccines/template', [VaccineController::class,'template',])->name('vaccines.template');
     Route::resource('vaccines', VaccineController::class)
             ->only(['index', 'store', 'update', 'destroy']);
 });
 
-Route::middleware(['auth', 'role.redirect:Admin'])
+Route::middleware(['auth', 'role.redirect:Admin,Doctor'])
     ->prefix('admin/pediatric-dose-rules')
     ->name('admin.pediatric-dose-rules.')
     ->group(function () {
