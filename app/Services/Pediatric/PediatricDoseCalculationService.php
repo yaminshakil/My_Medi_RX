@@ -51,6 +51,13 @@ class PediatricDoseCalculationService
                 ->get();
 
             if ($rules->isEmpty()) {
+                \Log::warning('Pediatric dose rule not found', [
+        'medicine_id' => $data['medicineId'],
+        'formulation' => $data['formulation'],
+        'indication' => $data['indication'],
+        'age_months' => $data['childAgeMonths'],
+        'weight_kg' => $data['childWeightKg'],
+    ]);
                 throw ValidationException::withMessages([
                     'dose_rule' => [
                         'No approved dose rule matches this medicine, '
