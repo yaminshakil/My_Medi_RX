@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\Sms\SmsInterface;
 
 class AuthController extends Controller
 {
@@ -235,5 +236,18 @@ class AuthController extends Controller
             'tokenType'   => 'Bearer',
             'expiresIn'   => auth('api')->factory()->getTTL() * 60,
         ], 'Token refreshed successfully!');
+    }
+
+    public function sendOtp(Request $request, SmsInterface $sms)
+    {
+        $request->validate([
+            'phone' => ['required', 'regex:/^(\+88)?01[3-9]\d{8}$/'],
+        ]);
+
+        $otp = rand(1000, 9999);
+
+        $sms->send($request->phone, "Your OTP code is: {$otp}");
+
+        return response()->json(['success' => true, 'message' => 'OTP sent successfully.']);
     }
 }
