@@ -28,6 +28,18 @@ class PregnancyProfileController extends Controller
             ->paginate(15)
             ->withQueryString();
 
+        $profiles->getCollection()->transform(fn ($profile) => [
+            'id' => $profile->id,
+            'user_id' => $profile->user_id,
+            'name' => $profile->user?->name ?? 'Unknown User',
+            'email' => $profile->user?->email,
+            'last_menstrual_period' => $profile->last_menstrual_period?->format('Y-m-d'),
+            'due_date' => $profile->due_date?->format('Y-m-d'),
+            'dating_confirmed_date' => $profile->dating_confirmed_date?->format('Y-m-d'),
+            'is_active' => (bool) $profile->is_active,
+            'created_at' => $profile->created_at?->format('Y-m-d'),
+        ]);
+
         return Inertia::render('Admin/Pregnancy/Profiles/Index', [
             'profiles' => $profiles,
             'filters' => $request->only('search'),

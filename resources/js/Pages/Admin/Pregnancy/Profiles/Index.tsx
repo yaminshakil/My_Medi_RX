@@ -21,10 +21,8 @@ type Profile = {
     due_date: string;
     dating_confirmed_date: string | null;
     is_active: boolean;
-    user?: {
-        name: string;
-        email: string;
-    } | null;
+    name: string;
+    email: string;
 };
 
 type PaginationLink = {
@@ -120,11 +118,11 @@ export default function Index({ profiles, filters }: Props) {
                                     <TableRow key={profile.id}>
                                         <TableCell>
                                             <div className="font-medium">
-                                                {profile.user?.name ??
+                                                {profile?.name ??
                                                     `User #${profile.user_id}`}
                                             </div>
                                             <div className="text-sm text-muted-foreground">
-                                                {profile.user?.email ?? ""}
+                                                {profile?.email ?? ""}
                                             </div>
                                         </TableCell>
 
