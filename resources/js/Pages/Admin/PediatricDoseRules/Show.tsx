@@ -21,7 +21,7 @@ import AppLayout from '@/Layouts/app-layout';
 
 type Rule = {
     id: number;
-    medicine?: { name: string } | null;
+    medicine?: { brand_name: string } | null;
     formulation: string;
     indication: string;
     concentration_mg: string | number;
@@ -124,7 +124,7 @@ export default function Show({ rule, audits }: Props) {
             { reason },
         );
     }
-
+    console.log(rule.medicine);
     return (
         <AppLayout>
             <Head title={`Pediatric Dose Rule #${rule.id}`} />
@@ -134,7 +134,7 @@ export default function Show({ rule, audits }: Props) {
                     <div className="space-y-2">
                         <div className="flex flex-wrap items-center gap-3">
                             <h1 className="text-2xl font-semibold">
-                                {rule.medicine?.name ?? "Pediatric Dose Rule"}
+                                {rule.medicine?.brand_name ?? "Pediatric Dose Rule"}
                             </h1>
                             <RuleStatusBadge status={rule.status} />
                         </div>
@@ -220,7 +220,7 @@ export default function Show({ rule, audits }: Props) {
                         <CardTitle>Medicine and Eligibility</CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        <Detail label="Medicine" value={rule.medicine?.name} />
+                        <Detail label="Medicine" value={rule.medicine?.brand_name} />
                         <Detail label="Formulation" value={rule.formulation} />
                         <Detail label="Indication" value={rule.indication} />
                         <Detail label="Route" value={rule.route} />

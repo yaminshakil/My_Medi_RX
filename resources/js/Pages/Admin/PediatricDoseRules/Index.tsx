@@ -29,7 +29,7 @@ const breadcrumbs: BreadcrumbItem[] = [{ title: 'Pediatric Dose Rules', href: '/
 
 type Medicine = {
     id: number;
-    name: string;
+    brand_name: string;
 };
 
 type Rule = {
@@ -220,7 +220,7 @@ export default function Index({
                                         rules.data.map((rule) => (
                                             <TableRow key={rule.id}>
                                                 <TableCell className="font-medium">
-                                                    {rule.medicine?.name ??
+                                                    {rule.medicine?.brand_name ??
                                                         `Medicine #${rule.medicine_id}`}
                                                 </TableCell>
                                                 <TableCell>{rule.formulation}</TableCell>
