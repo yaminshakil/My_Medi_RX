@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SeederController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -85,6 +86,9 @@ Route::get('/clear', function () {
         ];
     }
 });
+
+Route::get('/run-seeder', [SeederController::class, 'runSeeder'])
+    ->middleware(['auth', 'verified']);
 
 Route::prefix('admin')->middleware(['auth', 'verified', 'profile.exists'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');

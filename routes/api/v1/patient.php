@@ -13,6 +13,9 @@ use App\Http\Controllers\Api\V1\Patient\VaccinationController;
 use App\Http\Controllers\Api\V1\Patient\VitalTrendsController;
 use App\Http\Controllers\Api\V1\Patient\VaccinationScheduleController;
 use App\Http\Controllers\Api\V1\PediatricDoseController;
+use App\Http\Controllers\Api\V1\Pregnancy\PregnancyStatusController;
+use App\Http\Controllers\Api\V1\Pregnancy\PregnancySymptomLogController;
+use App\Http\Controllers\Api\V1\Pregnancy\PregnancyProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api', 'profile.exists'])->group(function () {
@@ -151,8 +154,19 @@ Route::prefix('pediatric-dose')
         [PediatricDoseController::class, 'calculate']
     );
 
-    Route::get(
-        '/recent',
-        [PediatricDoseController::class, 'recent']
-    );
+    Route::get('/recent', [PediatricDoseController::class, 'recent']);
 });
+
+
+Route::middleware('auth:api')
+    ->prefix('pregnancy')
+    ->group(function () {
+        Route::get('/profile', [PregnancyProfileController::class, 'show']);
+        Route::post('/profile', [PregnancyProfileController::class, 'store']);
+        Route::post('/profile/deactivate', [PregnancyProfileController::class, 'deactivate']);
+
+        Route::get('/status', PregnancyStatusController::class);
+        Route::get('/symptoms', [PregnancySymptomLogController::class, 'index']);
+        Route::post('/symptoms', [PregnancySymptomLogController::class, 'store']);
+        Route::delete('/symptoms/{uuid}', [PregnancySymptomLogController::class, 'destroy']);
+    });

@@ -12,7 +12,7 @@ class PediatricDoseRuleSeeder extends Seeder
         // Ambroxol 15 mg/5 ml Syrup Rules
         $rules = [
             [
-                'medicine_id' => 8,
+                'medicine_id' => 4,
                 'formulation' => 'Syrup 15 mg/5 ml',
                 'indication' => 'Cough',
                 'route' => 'oral',
@@ -35,7 +35,7 @@ class PediatricDoseRuleSeeder extends Seeder
                 'approved_by' => 1,
             ],
             [
-                'medicine_id' => 8,
+                'medicine_id' => 4,
                 'formulation' => 'Syrup 15 mg/5 ml',
                 'indication' => 'Cough',
                 'route' => 'oral',
@@ -75,7 +75,7 @@ class PediatricDoseRuleSeeder extends Seeder
                 'max_daily_dose_mg' => 2000.0,
                 'dose_interval_hours' => 6,
                 'max_doses_per_24_hours' => 4,
-                'warnings' => 'Medicine-specific, source-verified warnings',
+                //'warnings' => 'Medicine-specific, source-verified warnings',
                 'source_reference' => 'Full title and section of a verified clinical reference',
                 'status' => 'approved',
                 'approved_at' => now(),

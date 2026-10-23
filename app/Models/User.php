@@ -254,4 +254,9 @@ class User extends Authenticatable implements JWTSubject
 
         return $ratingPercentages;
     }
+
+    public function pregnancyProfile()
+    {
+        return $this->hasOne(PregnancyProfile::class);
+    }
 }
