@@ -10,6 +10,7 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
+import { type BreadcrumbItem } from '@/types';
 
 type Highlight = {
     id: number;
@@ -36,6 +37,7 @@ type Props = {
 };
 
 export default function Index({ highlights }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Pregnancy Weekly Highlights', href: '/admin/pregnancy/highlights' }];
     function remove(id: number) {
         if (!window.confirm("Delete this weekly highlight?")) return;
 
@@ -45,7 +47,7 @@ export default function Index({ highlights }: Props) {
     }
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Pregnancy Weekly Highlights" />
 
             <div className="space-y-6 p-6">
@@ -145,33 +147,39 @@ export default function Index({ highlights }: Props) {
                     </Table>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
-                    {highlights.links.map((link, index) => (
-                        <Button
-                            key={`${index}-${link.label}`}
-                            variant={link.active ? "default" : "outline"}
-                            size="sm"
-                            disabled={!link.url}
-                            onClick={() => {
-                                if (link.url) {
-                                    router.get(
-                                        link.url,
-                                        {},
-                                        {
-                                            preserveScroll: true,
-                                            preserveState: true,
-                                        },
-                                    );
-                                }
-                            }}
-                        >
-                            <span
-                                dangerouslySetInnerHTML={{
-                                    __html: link.label,
+                <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+                    <span>
+                        Showing {highlights.from} to {highlights.to} {" "} from total {" "}
+                        {highlights.total} Highlights
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                        {highlights.links.map((link, index) => (
+                            <Button
+                                key={`${index}-${link.label}`}
+                                variant={link.active ? "default" : "outline"}
+                                size="sm"
+                                disabled={!link.url}
+                                onClick={() => {
+                                    if (link.url) {
+                                        router.get(
+                                            link.url,
+                                            {},
+                                            {
+                                                preserveScroll: true,
+                                                preserveState: true,
+                                            },
+                                        );
+                                    }
                                 }}
-                            />
-                        </Button>
-                    ))}
+                            >
+                                <span
+                                    dangerouslySetInnerHTML={{
+                                        __html: link.label,
+                                    }}
+                                />
+                            </Button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </AppLayout>

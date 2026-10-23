@@ -1,9 +1,7 @@
 import { Head, Link, router } from "@inertiajs/react";
 import { Search, Plus, Eye, Pencil, ShieldCheck } from "lucide-react";
 import { useState } from "react";
-
 import RuleStatusBadge from "./components/RuleStatusBadge";
-
 import { Button } from "@/Components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Input } from "@/Components/ui/input";

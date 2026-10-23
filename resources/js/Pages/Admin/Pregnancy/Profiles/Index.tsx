@@ -12,6 +12,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
+import { type BreadcrumbItem } from '@/types';
 
 type Profile = {
     id: number;
@@ -45,6 +46,7 @@ type Props = {
 };
 
 export default function Index({ profiles, filters }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Pregnancy Profiles', href: '/admin/pregnancy/profiles' }];
     function search(value: string) {
         router.get(
             route("admin.pregnancy.profiles.index"),
@@ -60,7 +62,7 @@ export default function Index({ profiles, filters }: Props) {
     }
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Pregnancy Profiles" />
 
             <div className="space-y-6 p-6">
@@ -182,27 +184,32 @@ export default function Index({ profiles, filters }: Props) {
                         </TableBody>
                     </Table>
                 </div>
-
-                <div className="flex flex-wrap gap-2">
-                    {profiles.links.map((link, index) => (
-                        <Button
-                            key={index}
-                            variant={link.active ? "default" : "outline"}
-                            size="sm"
-                            disabled={!link.url}
-                            onClick={() => {
-                                if (link.url) {
-                                    router.visit(link.url);
-                                }
-                            }}
-                        >
-                            <span
-                                dangerouslySetInnerHTML={{
-                                    __html: link.label,
+                <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+                    <span>
+                        Showing {profiles.from} to {profiles.to} {" "} from total {" "}
+                        {profiles.total} Highlights
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                        {profiles.links.map((link, index) => (
+                            <Button
+                                key={index}
+                                variant={link.active ? "default" : "outline"}
+                                size="sm"
+                                disabled={!link.url}
+                                onClick={() => {
+                                    if (link.url) {
+                                        router.visit(link.url);
+                                    }
                                 }}
-                            />
-                        </Button>
-                    ))}
+                            >
+                                <span
+                                    dangerouslySetInnerHTML={{
+                                        __html: link.label,
+                                    }}
+                                />
+                            </Button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </AppLayout>

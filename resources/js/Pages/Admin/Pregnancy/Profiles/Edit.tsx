@@ -3,6 +3,7 @@ import { Head, Link } from "@inertiajs/react";
 import AppLayout from '@/Layouts/app-layout';
 import { Button } from "@/Components/ui/button";
 import ProfileForm from "./Form";
+import { type BreadcrumbItem } from '@/types';
 
 type Profile = {
     id: number;
@@ -22,8 +23,9 @@ type Props = {
 };
 
 export default function Edit({ profile, patients }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Edit Pregnancy Profile', href: '/admin/pregnancy/profiles' }];
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Edit Pregnancy Profile" />
 
             <div className="space-y-6 p-6">
