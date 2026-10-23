@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
+use App\Services\Sms\SmsInterface;
+use App\Services\Sms\SmsManager;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(SmsInterface::class, SmsManager::class);
     }
 
     /**
