@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\V1\PediatricDoseController;
 use App\Http\Controllers\Api\V1\Pregnancy\PregnancyProfileController;
 use App\Http\Controllers\Api\V1\Pregnancy\PregnancyStatusController;
 use App\Http\Controllers\Api\V1\Pregnancy\PregnancySymptomLogController;
+use App\Http\Controllers\Api\V1\MenstrualCycle\MenstrualCycleController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api', 'profile.exists'])->group(function () {
@@ -169,3 +170,14 @@ Route::middleware('auth:api')
         Route::post('/symptoms', [PregnancySymptomLogController::class, 'store']);
         Route::delete('/symptoms/{uuid}', [PregnancySymptomLogController::class, 'destroy']);
     });
+
+Route::middleware('auth:api')
+->group(function () {
+    Route::prefix('menstrual-cycle')
+        ->name('api.v1.menstrual-cycle.')
+        ->controller(MenstrualCycleController::class)
+        ->group(function () {
+            Route::get('/status', 'status')->name('status');
+            Route::post('/log', 'log')->name('log');
+        });
+});

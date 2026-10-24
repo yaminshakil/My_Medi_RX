@@ -22,6 +22,7 @@ class StoreMenstrualCycleLogRequest extends FormRequest
             'symptoms'     => ['nullable', 'array', 'max:30'],
             'symptoms.*'   => ['string', 'max:100'],
             'notes'        => ['nullable', 'string', 'max:2000'],
+            'periodStarted' => ['sometimes', 'boolean'],
         ];
     }
 }

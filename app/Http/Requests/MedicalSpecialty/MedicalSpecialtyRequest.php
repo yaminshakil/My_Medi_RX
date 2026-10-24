@@ -34,6 +34,7 @@ class MedicalSpecialtyRequest extends FormRequest
                 'string',
                 'max:255',
             ],
+            'periodStarted' => ['sometimes', 'boolean'],
         ];
     }
 }
