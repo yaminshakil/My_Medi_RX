@@ -13,6 +13,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/Components/ui/table';
+import { type BreadcrumbItem } from '@/types';
 
 type CycleLog = {
     id: number;
@@ -37,6 +38,7 @@ type Props = {
 };
 
 export default function Index({ logs, filters }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Daily Cycle Logs', href: '/admin/menstrual-cycle/logs' }];
     const [search, setSearch] = useState(filters.search ?? '');
     const [date, setDate] = useState(filters.date ?? '');
 
@@ -49,7 +51,7 @@ export default function Index({ logs, filters }: Props) {
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Menstrual Cycle Logs" />
 
             <div className="space-y-6 p-4 md:p-6">
@@ -143,24 +145,30 @@ export default function Index({ logs, filters }: Props) {
                     </Table>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
-                    {logs.links.map((link, index) => (
-                        <Button
-                            key={`${index}-${link.label}`}
-                            size="sm"
-                            variant={link.active ? 'default' : 'outline'}
-                            disabled={!link.url}
-                            onClick={() => link.url && router.get(
-                                link.url,
-                                {},
-                                { preserveState: true }
-                            )}
-                        >
-                            {link.label
-                                .replace('&laquo;', '«')
-                                .replace('&raquo;', '»')}
-                        </Button>
-                    ))}
+                <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+                    <span>
+                        Showing {logs.from} to {logs.to} {" "} from total {" "}
+                        {logs.total} Logs
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                        {logs.links.map((link, index) => (
+                            <Button
+                                key={`${index}-${link.label}`}
+                                size="sm"
+                                variant={link.active ? 'default' : 'outline'}
+                                disabled={!link.url}
+                                onClick={() => link.url && router.get(
+                                    link.url,
+                                    {},
+                                    { preserveState: true }
+                                )}
+                            >
+                                {link.label
+                                    .replace('&laquo;', '«')
+                                    .replace('&raquo;', '»')}
+                            </Button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </AppLayout>

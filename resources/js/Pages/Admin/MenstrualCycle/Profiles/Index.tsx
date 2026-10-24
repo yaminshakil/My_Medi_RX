@@ -13,6 +13,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/Components/ui/table';
+import { type BreadcrumbItem } from '@/types';
 
 type Profile = {
     id: number;
@@ -45,6 +46,7 @@ type Props = {
 };
 
 export default function Index({ profiles, filters }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Menstrual Cycle Profiles', href: '/admin/menstrual-cycle/profiles' }];
     const [search, setSearch] = useState(filters.search ?? '');
 
     const searchProfiles = () => {
@@ -68,7 +70,7 @@ export default function Index({ profiles, filters }: Props) {
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Menstrual Cycle Profiles" />
 
             <div className="space-y-6 p-4 md:p-6">
@@ -183,25 +185,31 @@ export default function Index({ profiles, filters }: Props) {
                         </TableBody>
                     </Table>
                 </div>
+                <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+                    <span>
+                        Showing {profiles.from} to {profiles.to} {" "} from total {" "}
+                        {profiles.total} Profiles
+                    </span>
 
-                <div className="flex flex-wrap gap-2">
-                    {profiles.links.map((link, index) => (
-                        <Button
-                            key={`${index}-${link.label}`}
-                            size="sm"
-                            variant={link.active ? 'default' : 'outline'}
-                            disabled={!link.url}
-                            onClick={() => link.url && router.get(
-                                link.url,
-                                {},
-                                { preserveState: true }
-                            )}
-                        >
-                            {link.label
-                                .replace('&laquo;', '«')
-                                .replace('&raquo;', '»')}
-                        </Button>
-                    ))}
+                    <div className="flex flex-wrap gap-2">
+                        {profiles.links.map((link, index) => (
+                            <Button
+                                key={`${index}-${link.label}`}
+                                size="sm"
+                                variant={link.active ? 'default' : 'outline'}
+                                disabled={!link.url}
+                                onClick={() => link.url && router.get(
+                                    link.url,
+                                    {},
+                                    { preserveState: true }
+                                )}
+                            >
+                                {link.label
+                                    .replace('&laquo;', '«')
+                                    .replace('&raquo;', '»')}
+                            </Button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </AppLayout>

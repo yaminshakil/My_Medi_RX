@@ -3,6 +3,7 @@ import AppLayout from '@/Layouts/app-layout';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
+import { type BreadcrumbItem } from '@/types';
 
 type Profile = {
     id: number;
@@ -15,6 +16,7 @@ type Profile = {
 };
 
 export default function Edit({ profile }: { profile: Profile }) {
+    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Edit Cycle Profile', href: '/admin/menstrual-cycle/profiles' }];
     const form = useForm({
         last_period_start: profile.last_period_start ?? '',
         cycle_length: String(profile.cycle_length),
@@ -38,7 +40,7 @@ export default function Edit({ profile }: { profile: Profile }) {
     };
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Edit Cycle Profile - ${profile.name}`} />
 
             <div className="mx-auto max-w-2xl space-y-6 p-4 md:p-6">
