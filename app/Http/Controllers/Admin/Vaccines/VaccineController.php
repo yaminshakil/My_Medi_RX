@@ -4,16 +4,17 @@ namespace App\Http\Controllers\Admin\Vaccines;
 
 use App\Http\Controllers\Controller;
 use App\Models\Vaccine;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Inertia\Inertia;
-use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
 use App\Services\Eprescriptions\MedicineService;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class VaccineController extends Controller
 {
@@ -55,14 +56,14 @@ class VaccineController extends Controller
         $manufacturers = $manufacturers->map(function ($manufacturer) {
             return [
                 'name' => $manufacturer->company_name,
-                'id' => $manufacturer->id,
+                'id'   => $manufacturer->id,
             ];
         });
 
         return Inertia::render('Admin/Vaccines/Index', [
-            'vaccines' => $vaccines,
+            'vaccines'      => $vaccines,
             'manufacturers' => $manufacturers,
-            'filters' => [
+            'filters'       => [
                 'search' => $filters['search'] ?? '',
                 'status' => $filters['status'] ?? 'all',
             ],
@@ -80,8 +81,8 @@ class VaccineController extends Controller
                 Rule::unique('vaccines', 'code'),
             ],
             'manufacturer_id' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'is_active' => ['required', 'boolean'],
+            'description'     => ['nullable', 'string'],
+            'is_active'       => ['required', 'boolean'],
         ]);
 
         Vaccine::create($data);
@@ -100,8 +101,8 @@ class VaccineController extends Controller
                 Rule::unique('vaccines', 'code')->ignore($vaccine->id),
             ],
             'manufacturer_id' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'is_active' => ['required', 'boolean'],
+            'description'     => ['nullable', 'string'],
+            'is_active'       => ['required', 'boolean'],
         ]);
 
         $vaccine->update($data);
@@ -170,7 +171,7 @@ class VaccineController extends Controller
                 ]);
             }
 
-            if (!in_array('name', $headers, true)) {
+            if (! in_array('name', $headers, true)) {
                 throw ValidationException::withMessages([
                     'file' => 'The CSV must contain a name column.',
                 ]);
@@ -179,7 +180,7 @@ class VaccineController extends Controller
             $allowedHeaders = $requiredHeaders;
 
             foreach ($headers as $header) {
-                if (!in_array($header, $allowedHeaders, true)) {
+                if (! in_array($header, $allowedHeaders, true)) {
                     throw ValidationException::withMessages([
                         'file' => "Unsupported CSV column: {$header}.",
                     ]);
@@ -201,7 +202,8 @@ class VaccineController extends Controller
 
                 if (count($values) !== count($headers)) {
                     $skipped++;
-                    $errors[] = "Row " . ($rowNumber + 1) . ": Column count does not match the header.";
+                    $errors[] = 'Row '.($rowNumber + 1).': Column count does not match the header.';
+
                     continue;
                 }
 
@@ -220,13 +222,14 @@ class VaccineController extends Controller
                     $isActive = false;
                 } else {
                     $skipped++;
-                    $errors[] = "Row " . ($rowNumber + 1) . ": is_active must be 1/0, true/false, or yes/no.";
+                    $errors[] = 'Row '.($rowNumber + 1).': is_active must be 1/0, true/false, or yes/no.';
+
                     continue;
                 }
 
                 $data = [
-                    'name' => $row['name'] ?? '',
-                    'code' => ($row['code'] ?? '') !== '' ? $row['code'] : null,
+                    'name'            => $row['name'] ?? '',
+                    'code'            => ($row['code'] ?? '') !== '' ? $row['code'] : null,
                     'manufacturer_id' => ($row['manufacturer_id'] ?? '') !== ''
                         ? $row['manufacturer_id']
                         : null,
@@ -237,17 +240,18 @@ class VaccineController extends Controller
                 ];
 
                 $validator = Validator::make($data, [
-                    'name' => ['required', 'string', 'max:255'],
-                    'code' => ['nullable', 'string', 'max:255'],
+                    'name'            => ['required', 'string', 'max:255'],
+                    'code'            => ['nullable', 'string', 'max:255'],
                     'manufacturer_id' => ['nullable', 'string', 'max:255'],
-                    'description' => ['nullable', 'string'],
-                    'is_active' => ['required', 'boolean'],
+                    'description'     => ['nullable', 'string'],
+                    'is_active'       => ['required', 'boolean'],
                 ]);
 
                 if ($validator->fails()) {
                     $skipped++;
-                    $errors[] = "Row " . ($rowNumber + 1) . ': ' .
+                    $errors[] = 'Row '.($rowNumber + 1).': '.
                         implode(' ', $validator->errors()->all());
+
                     continue;
                 }
 
@@ -258,8 +262,9 @@ class VaccineController extends Controller
 
                     if (isset($seenCodes[$normalizedCode])) {
                         $skipped++;
-                        $errors[] = "Row " . ($rowNumber + 1) .
+                        $errors[] = 'Row '.($rowNumber + 1).
                             ": Duplicate code '{$code}' in this file.";
+
                         continue;
                     }
 
@@ -267,23 +272,24 @@ class VaccineController extends Controller
 
                     if (DB::table('vaccines')->where('code', $code)->exists()) {
                         $skipped++;
-                        $errors[] = "Row " . ($rowNumber + 1) .
+                        $errors[] = 'Row '.($rowNumber + 1).
                             ": Vaccine code '{$code}' already exists.";
+
                         continue;
                     }
                 }
 
                 try {
-                    \App\Models\Vaccine::create([
+                    Vaccine::create([
                         ...$data,
                         'uuid' => (string) Str::uuid(),
                     ]);
 
                     $imported++;
-                } catch (\Illuminate\Database\QueryException $exception) {
+                } catch (QueryException $exception) {
                     // Protect against concurrent imports and database unique constraints.
                     $skipped++;
-                    $errors[] = "Row " . ($rowNumber + 1) .
+                    $errors[] = 'Row '.($rowNumber + 1).
                         ': Database rejected the row, possibly because a code already exists.';
                 }
             }
@@ -292,13 +298,12 @@ class VaccineController extends Controller
         }
 
         return back()->with('import_result', [
-            'imported' => $imported,
-            'skipped' => $skipped,
-            'errors' => array_slice($errors, 0, 100),
+            'imported'          => $imported,
+            'skipped'           => $skipped,
+            'errors'            => array_slice($errors, 0, 100),
             'additional_errors' => max(0, count($errors) - 100),
         ]);
     }
-
 
     public function template()
     {

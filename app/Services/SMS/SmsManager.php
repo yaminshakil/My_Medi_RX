@@ -2,9 +2,9 @@
 
 namespace App\Services\Sms;
 
-use App\Services\Sms\Drivers\SandboxSmsDriver;
-use App\Services\Sms\Drivers\GreenwebSmsDriver;
 use App\Services\Sms\Drivers\BulkSmsBdDriver;
+use App\Services\Sms\Drivers\GreenwebSmsDriver;
+use App\Services\Sms\Drivers\SandboxSmsDriver;
 use InvalidArgumentException;
 
 class SmsManager implements SmsInterface
@@ -19,10 +19,10 @@ class SmsManager implements SmsInterface
     protected function resolve(string $driver): SmsInterface
     {
         return match ($driver) {
-            'sandbox' => new SandboxSmsDriver(),
-            'greenweb' => new GreenwebSmsDriver(),
-            'bulksmsbd' => new BulkSmsBdDriver(),
-            default => throw new InvalidArgumentException("Unsupported SMS driver [{$driver}]."),
+            'sandbox'   => new SandboxSmsDriver,
+            'greenweb'  => new GreenwebSmsDriver,
+            'bulksmsbd' => new BulkSmsBdDriver,
+            default     => throw new InvalidArgumentException("Unsupported SMS driver [{$driver}]."),
         };
     }
 

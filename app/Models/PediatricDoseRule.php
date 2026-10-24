@@ -46,18 +46,18 @@ class PediatricDoseRule extends Model
     protected function casts(): array
     {
         return [
-            'concentration_mg' => 'decimal:3',
-            'concentration_ml' => 'decimal:3',
+            'concentration_mg'        => 'decimal:3',
+            'concentration_ml'        => 'decimal:3',
             'dose_mg_per_kg_per_dose' => 'decimal:4',
-            'max_single_dose_mg' => 'decimal:3',
-            'max_daily_mg_per_kg' => 'decimal:4',
-            'max_daily_dose_mg' => 'decimal:3',
-            'min_weight_kg' => 'decimal:3',
-            'max_weight_kg' => 'decimal:3',
-            'is_active' => 'boolean',
-            'approved_at' => 'datetime',
-            'submitted_at' => 'datetime',
-            'reviewed_at' => 'datetime',
+            'max_single_dose_mg'      => 'decimal:3',
+            'max_daily_mg_per_kg'     => 'decimal:4',
+            'max_daily_dose_mg'       => 'decimal:3',
+            'min_weight_kg'           => 'decimal:3',
+            'max_weight_kg'           => 'decimal:3',
+            'is_active'               => 'boolean',
+            'approved_at'             => 'datetime',
+            'submitted_at'            => 'datetime',
+            'reviewed_at'             => 'datetime',
         ];
     }
 

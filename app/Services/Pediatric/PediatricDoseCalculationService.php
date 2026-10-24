@@ -52,16 +52,16 @@ class PediatricDoseCalculationService
 
             if ($rules->isEmpty()) {
                 \Log::warning('Pediatric dose rule not found', [
-        'medicine_id' => $data['medicineId'],
-        'formulation' => $data['formulation'],
-        'indication' => $data['indication'],
-        'age_months' => $data['childAgeMonths'],
-        'weight_kg' => $data['childWeightKg'],
-    ]);
+                    'medicine_id' => $data['medicineId'],
+                    'formulation' => $data['formulation'],
+                    'indication'  => $data['indication'],
+                    'age_months'  => $data['childAgeMonths'],
+                    'weight_kg'   => $data['childWeightKg'],
+                ]);
                 throw ValidationException::withMessages([
                     'dose_rule' => [
                         'No approved dose rule matches this medicine, '
-                        . 'formulation, indication, age and weight.',
+                        .'formulation, indication, age and weight.',
                     ],
                 ]);
             }
@@ -70,7 +70,7 @@ class PediatricDoseCalculationService
                 throw ValidationException::withMessages([
                     'dose_rule' => [
                         'Multiple approved rules match these inputs. '
-                        . 'A clinician must resolve the ambiguity.',
+                        .'A clinician must resolve the ambiguity.',
                     ],
                 ]);
             }
@@ -105,7 +105,7 @@ class PediatricDoseCalculationService
                 throw ValidationException::withMessages([
                     'dose' => [
                         'The calculated dose exceeds the approved single-dose limit. '
-                        . 'No dose result was issued.',
+                        .'No dose result was issued.',
                     ],
                 ]);
             }
@@ -121,7 +121,7 @@ class PediatricDoseCalculationService
                 throw ValidationException::withMessages([
                     'dose' => [
                         'The configured dose and frequency exceed the '
-                        . 'approved daily mg/kg limit.',
+                        .'approved daily mg/kg limit.',
                     ],
                 ]);
             }
@@ -135,7 +135,7 @@ class PediatricDoseCalculationService
                 throw ValidationException::withMessages([
                     'dose' => [
                         'The configured dose and frequency exceed the '
-                        . 'approved maximum daily dose.',
+                        .'approved maximum daily dose.',
                     ],
                 ]);
             }
@@ -159,50 +159,50 @@ class PediatricDoseCalculationService
             }
 
             $calculation = PediatricDoseCalculation::create([
-                'user_id' => $userId,
-                'medicine_id' => $rule->medicine_id,
+                'user_id'                => $userId,
+                'medicine_id'            => $rule->medicine_id,
                 'pediatric_dose_rule_id' => $rule->id,
-                'child_weight_kg' => $weight,
-                'child_age_months' => $data['childAgeMonths'],
-                'indication' => $rule->indication,
-                'formulation' => $rule->formulation,
-                'calculated_dose_mg' => $roundedDoseMg,
-                'calculated_volume_ml' => $roundedVolumeMl,
-                'concentration_mg' => $rule->concentration_mg,
-                'concentration_ml' => $rule->concentration_ml,
-                'rule_dose_mg_per_kg' => $rule->dose_mg_per_kg_per_dose,
-                'max_single_dose_mg' => $rule->max_single_dose_mg,
-                'route' => $rule->route,
-                'dose_interval_hours' => $rule->dose_interval_hours,
+                'child_weight_kg'        => $weight,
+                'child_age_months'       => $data['childAgeMonths'],
+                'indication'             => $rule->indication,
+                'formulation'            => $rule->formulation,
+                'calculated_dose_mg'     => $roundedDoseMg,
+                'calculated_volume_ml'   => $roundedVolumeMl,
+                'concentration_mg'       => $rule->concentration_mg,
+                'concentration_ml'       => $rule->concentration_ml,
+                'rule_dose_mg_per_kg'    => $rule->dose_mg_per_kg_per_dose,
+                'max_single_dose_mg'     => $rule->max_single_dose_mg,
+                'route'                  => $rule->route,
+                'dose_interval_hours'    => $rule->dose_interval_hours,
                 'max_doses_per_24_hours' => $rule->max_doses_per_24_hours,
-                'source_reference' => $rule->source_reference,
-                'status' => 'calculated',
-                'safety_checks' => [
-                    'approved_rule_matched' => true,
-                    'age_range_matched' => true,
-                    'weight_range_matched' => true,
+                'source_reference'       => $rule->source_reference,
+                'status'                 => 'calculated',
+                'safety_checks'          => [
+                    'approved_rule_matched'     => true,
+                    'age_range_matched'         => true,
+                    'weight_range_matched'      => true,
                     'single_dose_limit_checked' => true,
-                    'daily_limit_checked' => true,
+                    'daily_limit_checked'       => true,
                 ],
                 'calculated_at' => now(),
             ]);
 
             return [
-                'calculationId' => $calculation->uuid,
-                'medicineId' => $calculation->medicine_id,
-                'formulation' => $calculation->formulation,
-                'indication' => $calculation->indication,
-                'childWeightKg' => (float) $calculation->child_weight_kg,
-                'childAgeMonths' => $calculation->child_age_months,
-                'doseMg' => (float) $calculation->calculated_dose_mg,
-                'volumeMl' => (float) $calculation->calculated_volume_ml,
-                'route' => $calculation->route,
-                'doseIntervalHours' => $calculation->dose_interval_hours,
+                'calculationId'      => $calculation->uuid,
+                'medicineId'         => $calculation->medicine_id,
+                'formulation'        => $calculation->formulation,
+                'indication'         => $calculation->indication,
+                'childWeightKg'      => (float) $calculation->child_weight_kg,
+                'childAgeMonths'     => $calculation->child_age_months,
+                'doseMg'             => (float) $calculation->calculated_dose_mg,
+                'volumeMl'           => (float) $calculation->calculated_volume_ml,
+                'route'              => $calculation->route,
+                'doseIntervalHours'  => $calculation->dose_interval_hours,
                 'maxDosesPer24Hours' => $calculation->max_doses_per_24_hours,
-                'sourceReference' => $calculation->source_reference,
-                'status' => $calculation->status,
-                'calculatedAt' => $calculation->calculated_at?->toISOString(),
-                'safetyChecks' => $calculation->safety_checks,
+                'sourceReference'    => $calculation->source_reference,
+                'status'             => $calculation->status,
+                'calculatedAt'       => $calculation->calculated_at?->toISOString(),
+                'safetyChecks'       => $calculation->safety_checks,
             ];
         });
     }
@@ -218,20 +218,20 @@ class PediatricDoseCalculationService
             ->limit(min(max($limit, 1), 50))
             ->get()
             ->map(fn (PediatricDoseCalculation $item) => [
-                'calculationId' => $item->uuid,
-                'medicineId' => $item->medicine_id,
-                'medicineName' => $item->medicine?->name,
-                'formulation' => $item->formulation,
-                'indication' => $item->indication,
-                'childWeightKg' => (float) $item->child_weight_kg,
+                'calculationId'  => $item->uuid,
+                'medicineId'     => $item->medicine_id,
+                'medicineName'   => $item->medicine?->name,
+                'formulation'    => $item->formulation,
+                'indication'     => $item->indication,
+                'childWeightKg'  => (float) $item->child_weight_kg,
                 'childAgeMonths' => $item->child_age_months,
-                'doseMg' => $item->calculated_dose_mg !== null
+                'doseMg'         => $item->calculated_dose_mg !== null
                     ? (float) $item->calculated_dose_mg
                     : null,
                 'volumeMl' => $item->calculated_volume_ml !== null
                     ? (float) $item->calculated_volume_ml
                     : null,
-                'status' => $item->status,
+                'status'       => $item->status,
                 'calculatedAt' => $item->calculated_at?->toISOString(),
             ])
             ->all();
@@ -251,11 +251,11 @@ class PediatricDoseCalculationService
             ]))
             ->values()
             ->map(fn (PediatricDoseRule $rule) => [
-                'medicineId' => $rule->medicine_id,
+                'medicineId'   => $rule->medicine_id,
                 'medicineName' => $rule->medicine?->brand_name,
-                'formulation' => $rule->formulation,
-                'indication' => $rule->indication,
-                'route' => $rule->route,
+                'formulation'  => $rule->formulation,
+                'indication'   => $rule->indication,
+                'route'        => $rule->route,
             ])
             ->all();
     }

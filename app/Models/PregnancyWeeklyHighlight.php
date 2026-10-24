@@ -20,9 +20,9 @@ class PregnancyWeeklyHighlight extends Model
     protected function casts(): array
     {
         return [
-            'approx_length_cm' => 'decimal:2',
+            'approx_length_cm'    => 'decimal:2',
             'approx_weight_grams' => 'integer',
-            'is_published' => 'boolean',
+            'is_published'        => 'boolean',
         ];
     }
 }

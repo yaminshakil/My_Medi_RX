@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\MedicationSchedule;
 use App\Models\Patient;
 use App\Models\PatientMedication;
+use App\Services\Patients\MedicationLogGenerator;
 use Illuminate\Http\Request;
 
 class MedicationScheduleController extends Controller
@@ -54,7 +55,7 @@ class MedicationScheduleController extends Controller
             'is_active' => true,
         ]);
 
-        app(\App\Services\Patients\MedicationLogGenerator::class)->generate(
+        app(MedicationLogGenerator::class)->generate(
             $schedule,
             now()->toDateString(),
             now()->addDays(6)->toDateString()

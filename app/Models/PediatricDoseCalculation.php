@@ -35,11 +35,11 @@ class PediatricDoseCalculation extends Model
     protected function casts(): array
     {
         return [
-            'child_weight_kg' => 'decimal:3',
-            'calculated_dose_mg' => 'decimal:3',
+            'child_weight_kg'      => 'decimal:3',
+            'calculated_dose_mg'   => 'decimal:3',
             'calculated_volume_ml' => 'decimal:3',
-            'safety_checks' => 'array',
-            'calculated_at' => 'datetime',
+            'safety_checks'        => 'array',
+            'calculated_at'        => 'datetime',
         ];
     }
 

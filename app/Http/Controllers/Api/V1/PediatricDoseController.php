@@ -12,26 +12,25 @@ class PediatricDoseController extends Controller
 {
     public function __construct(
         private readonly PediatricDoseCalculationService $doseService
-    ) {
-    }
+    ) {}
 
     public function calculate(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'medicineId' => ['required', 'integer', 'exists:medicines,id'],
-            'formulation' => ['required', 'string', 'max:150'],
-            'indication' => ['required', 'string', 'max:150'],
-            'childWeightKg' => ['required', 'numeric', 'gt:0', 'lte:300'],
+            'medicineId'     => ['required', 'integer', 'exists:medicines,id'],
+            'formulation'    => ['required', 'string', 'max:150'],
+            'indication'     => ['required', 'string', 'max:150'],
+            'childWeightKg'  => ['required', 'numeric', 'gt:0', 'lte:300'],
             'childAgeMonths' => ['required', 'integer', 'min:0', 'max:2400'],
         ]);
 
         $user = $request->user();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthenticated.',
-                'data' => null,
+                'data'    => null,
             ], 401);
         }
 
@@ -44,14 +43,14 @@ class PediatricDoseController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Calculation completed using an approved rule.',
-                'data' => $result,
+                'data'    => $result,
             ]);
         } catch (ValidationException $exception) {
             return response()->json([
                 'success' => false,
                 'message' => 'A safe calculation could not be completed.',
-                'errors' => $exception->errors(),
-                'data' => null,
+                'errors'  => $exception->errors(),
+                'data'    => null,
             ], 422);
         }
     }
@@ -70,7 +69,7 @@ class PediatricDoseController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Recent calculations retrieved successfully.',
-            'data' => $data,
+            'data'    => $data,
         ]);
     }
 
@@ -79,7 +78,7 @@ class PediatricDoseController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Available pediatric dose rules retrieved successfully.',
-            'data' => $this->doseService->getAvailableMedicines(),
+            'data'    => $this->doseService->getAvailableMedicines(),
         ]);
     }
 }

@@ -15,26 +15,26 @@ class GynaeHistoryResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'id'              => $this->id,
             'prescription_id' => $this->prescription_id,
 
             // Marriage Details
-            'marital_status' => $this->marital_status,
+            'marital_status'    => $this->marital_status,
             'marriage_duration' => $this->marriage_duration,
-            'consanguinity' => (bool) $this->consanguinity,
+            'consanguinity'     => (bool) $this->consanguinity,
 
             // Menstrual History
-            'menarche_age' => $this->menarche_age,
-            'lmp' => $this->lmp?->format('Y-m-d'),
-            'cycle' => $this->cycle,
-            'flow' => $this->flow,
-            'dysmenorrhea' => (bool) $this->dysmenorrhea,
+            'menarche_age'      => $this->menarche_age,
+            'lmp'               => $this->lmp?->format('Y-m-d'),
+            'cycle'             => $this->cycle,
+            'flow'              => $this->flow,
+            'dysmenorrhea'      => (bool) $this->dysmenorrhea,
             'contraceptive_use' => (bool) $this->contraceptive_use,
 
             // Obstetrical History
-            'gravida' => $this->gravida,
-            'para' => $this->para,
-            'abortion' => $this->abortion,
+            'gravida'         => $this->gravida,
+            'para'            => $this->para,
+            'abortion'        => $this->abortion,
             'living_children' => $this->living_children,
 
             // Current Pregnancy

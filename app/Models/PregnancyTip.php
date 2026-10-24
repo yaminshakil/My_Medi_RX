@@ -23,9 +23,9 @@ class PregnancyTip extends Model
     {
         return [
             'is_published' => 'boolean',
-            'trimester' => 'integer',
-            'week_start' => 'integer',
-            'week_end' => 'integer',
+            'trimester'    => 'integer',
+            'week_start'   => 'integer',
+            'week_end'     => 'integer',
         ];
     }
 }

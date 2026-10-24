@@ -105,10 +105,10 @@ class MedicationLogController extends Controller
     {
         $log = $this->ownedLog($request, $log);
 
-        if (!in_array($log->status, ['upcoming', 'snoozed'], true)) {
+        if (! in_array($log->status, ['upcoming', 'snoozed'], true)) {
             return response()->json([
                 'message' => 'This dose cannot be skipped in its current state.',
-                'status' => $log->status, // Optional: helpful for debugging
+                'status'  => $log->status, // Optional: helpful for debugging
             ], 422);
         }
 
@@ -132,10 +132,10 @@ class MedicationLogController extends Controller
     {
         $log = $this->ownedLog($request, $log);
 
-        if (!in_array($log->status, ['upcoming', 'snoozed'], true)) {
+        if (! in_array($log->status, ['upcoming', 'snoozed'], true)) {
             return response()->json([
                 'message' => 'Only pending doses can be snoozed.',
-                'status' => $log->status, // Optional: helpful for debugging
+                'status'  => $log->status, // Optional: helpful for debugging
             ], 422);
         }
 

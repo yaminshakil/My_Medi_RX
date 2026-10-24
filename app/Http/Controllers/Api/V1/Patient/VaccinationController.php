@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api\V1\Patient;
 
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
-use Illuminate\Http\Request;
+use App\Models\VaccinationSchedule;
 use App\Models\Vaccine;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 
 class VaccinationController extends Controller
 {
@@ -33,9 +34,9 @@ class VaccinationController extends Controller
             ->with(['vaccine', 'schedule'])
             ->orderBy('scheduled_date')
             ->paginate(20);
+
         return response()->json($records);
     }
-
 
     public function store(Request $request)
     {
@@ -92,13 +93,13 @@ class VaccinationController extends Controller
         ]);
 
         // Ensure the selected schedule belongs to the selected vaccine.
-        if (!empty($data['vaccination_schedule_id'])) {
-            $scheduleMatches = \App\Models\VaccinationSchedule::query()
+        if (! empty($data['vaccination_schedule_id'])) {
+            $scheduleMatches = VaccinationSchedule::query()
                 ->whereKey($data['vaccination_schedule_id'])
                 ->where('vaccine_id', $data['vaccine_id'])
                 ->exists();
 
-            if (!$scheduleMatches) {
+            if (! $scheduleMatches) {
                 return response()->json([
                     'success' => false,
                     'message' => 'The selected schedule does not belong to this vaccine.',
@@ -107,19 +108,19 @@ class VaccinationController extends Controller
         }
 
         // Do not allow an inactive vaccine to be assigned.
-        $vaccineExists = \App\Models\Vaccine::query()
+        $vaccineExists = Vaccine::query()
             ->whereKey($data['vaccine_id'])
             ->where('is_active', true)
             ->exists();
 
-        if (!$vaccineExists) {
+        if (! $vaccineExists) {
             return response()->json([
                 'success' => false,
                 'message' => 'The selected vaccine is unavailable.',
             ], 422);
         }
 
-        if (!empty($data['administered_at'])) {
+        if (! empty($data['administered_at'])) {
             $data['status'] = 'completed';
         } else {
             $data['status'] ??= 'scheduled';
@@ -130,17 +131,16 @@ class VaccinationController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Vaccination record created successfully.',
-            'data' => $record->load(['vaccine', 'schedule']),
+            'data'    => $record->load(['vaccine', 'schedule']),
         ], 201);
     }
-
 
     public function show(Request $request, string $record)
     {
         $record = $this->ownedRecord($request, $record);
 
         // If the record is deleted or not found, return 404 gracefully
-        if (!$record) {
+        if (! $record) {
             return response()->json([
                 'message' => 'Vaccination record not found or already deleted.',
             ], 404);
@@ -220,7 +220,7 @@ class VaccinationController extends Controller
         try {
             $record = $this->ownedRecord($request, $specId);
 
-            if (!$record) {
+            if (! $record) {
                 return response()->json(['message' => 'Record not found.'], 404);
             }
 
@@ -232,7 +232,7 @@ class VaccinationController extends Controller
         } catch (QueryException $e) {
             return response()->json([
                 'message' => 'Unable to delete record. It may have already been removed or has dependent data.',
-                'error' => config('app.debug') ? $e->getMessage() : null
+                'error'   => config('app.debug') ? $e->getMessage() : null,
             ], 422);
         }
     }

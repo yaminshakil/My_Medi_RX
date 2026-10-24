@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Setting;
+use App\Services\Sms\SmsInterface;
+use App\Services\Sms\SmsManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
@@ -10,8 +12,6 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
-use App\Services\Sms\SmsInterface;
-use App\Services\Sms\SmsManager;
 
 class AppServiceProvider extends ServiceProvider
 {

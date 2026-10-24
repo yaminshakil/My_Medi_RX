@@ -10,8 +10,8 @@ class GreenwebSmsDriver implements SmsInterface
     public function send(string $to, string $message): bool
     {
         $response = Http::asForm()->post(config('sms.drivers.greenweb.url'), [
-            'token' => config('sms.drivers.greenweb.token'),
-            'to' => $to,
+            'token'   => config('sms.drivers.greenweb.token'),
+            'to'      => $to,
             'message' => $message,
         ]);
 

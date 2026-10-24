@@ -10,6 +10,7 @@ class SandboxSmsDriver implements SmsInterface
     public function send(string $to, string $message): bool
     {
         Log::info("[SANDBOX SMS] To: {$to} | Message: {$message}");
+
         return true;
     }
 }

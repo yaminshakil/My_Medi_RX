@@ -46,10 +46,10 @@ class MedicationHeatmapService
             // Do not count future calendar dates as missed.
             if ($date->isFuture()) {
                 $heatmap[] = [
-                    'day' => $day,
-                    'date' => $dateString,
+                    'day'         => $day,
+                    'date'        => $dateString,
                     'consistency' => null,
-                    'status' => 'no_doses',
+                    'status'      => 'no_doses',
                 ];
 
                 continue;
@@ -84,20 +84,20 @@ class MedicationHeatmapService
             }
 
             $heatmap[] = [
-                'day' => $day,
-                'date' => $dateString,
+                'day'         => $day,
+                'date'        => $dateString,
                 'consistency' => $consistency,
-                'status' => $status,
+                'status'      => $status,
             ];
         }
 
         return [
-            'month' => $month,
-            'year' => $year,
+            'month'     => $month,
+            'year'      => $year,
             'monthName' => $startDate->format('F Y'),
             'totalDays' => $startDate->daysInMonth,
-            'heatmap' => $heatmap,
-            'total' => $total
+            'heatmap'   => $heatmap,
+            'total'     => $total,
         ];
     }
 }

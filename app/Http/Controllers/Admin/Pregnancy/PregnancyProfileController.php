@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin\Pregnancy;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\PregnancyProfile;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -29,20 +28,20 @@ class PregnancyProfileController extends Controller
             ->withQueryString();
 
         $profiles->getCollection()->transform(fn ($profile) => [
-            'id' => $profile->id,
-            'user_id' => $profile->user_id,
-            'name' => $profile->user?->name ?? 'Unknown User',
-            'email' => $profile->user?->email,
+            'id'                    => $profile->id,
+            'user_id'               => $profile->user_id,
+            'name'                  => $profile->user?->name ?? 'Unknown User',
+            'email'                 => $profile->user?->email,
             'last_menstrual_period' => $profile->last_menstrual_period?->format('Y-m-d'),
-            'due_date' => $profile->due_date?->format('Y-m-d'),
+            'due_date'              => $profile->due_date?->format('Y-m-d'),
             'dating_confirmed_date' => $profile->dating_confirmed_date?->format('Y-m-d'),
-            'is_active' => (bool) $profile->is_active,
-            'created_at' => $profile->created_at?->format('Y-m-d'),
+            'is_active'             => (bool) $profile->is_active,
+            'created_at'            => $profile->created_at?->format('Y-m-d'),
         ]);
 
         return Inertia::render('Admin/Pregnancy/Profiles/Index', [
             'profiles' => $profiles,
-            'filters' => $request->only('search'),
+            'filters'  => $request->only('search'),
         ]);
     }
 
@@ -72,7 +71,7 @@ class PregnancyProfileController extends Controller
     public function edit(PregnancyProfile $profile)
     {
         return Inertia::render('Admin/Pregnancy/Profiles/Edit', [
-            'profile' => $profile->load('user:id,name,email'),
+            'profile'  => $profile->load('user:id,name,email'),
             'patients' => $this->patientOptions(),
         ]);
     }
@@ -135,9 +134,9 @@ class PregnancyProfileController extends Controller
             ->get(['id', 'user_id', 'name'])
             ->map(fn (Patient $patient) => [
                 'user_id' => $patient->user_id,
-                'name' => $patient->name
+                'name'    => $patient->name
                     ?: $patient->user?->name
-                    ?: 'Patient #' . $patient->id,
+                    ?: 'Patient #'.$patient->id,
                 'email' => $patient->user?->email,
             ]);
     }

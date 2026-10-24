@@ -2,8 +2,8 @@
 
 namespace App\Services\Patients;
 
-use App\Models\MedicationSchedule;
 use App\Models\MedicationLog;
+use App\Models\MedicationSchedule;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
@@ -43,8 +43,8 @@ class MedicationLogGenerator
             // If days_of_week is configured, use ISO weekdays:
             // Monday = 1 ... Sunday = 7.
             if (
-                !empty($daysOfWeek) &&
-                !in_array($date->dayOfWeekIso, $daysOfWeek)
+                ! empty($daysOfWeek) &&
+                ! in_array($date->dayOfWeekIso, $daysOfWeek)
             ) {
                 continue;
             }
@@ -56,14 +56,13 @@ class MedicationLogGenerator
             MedicationLog::firstOrCreate(
                 [
                     'medication_schedule_id' => $schedule->id,
-                    'scheduled_at' => $scheduledAt,
+                    'scheduled_at'           => $scheduledAt,
                 ],
                 [
-                    'patient_id' => $schedule->medication->patient_id,
-                    'patient_medication_id' =>
-                        $schedule->patient_medication_id,
-                    'scheduled_date' => $date->toDateString(),
-                    'status' => 'upcoming',
+                    'patient_id'            => $schedule->medication->patient_id,
+                    'patient_medication_id' => $schedule->patient_medication_id,
+                    'scheduled_date'        => $date->toDateString(),
+                    'status'                => 'upcoming',
                 ]
             );
         }

@@ -3,10 +3,10 @@
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SeederController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SeederController;
 
 Route::get('/', function () {
     return redirect('/login');

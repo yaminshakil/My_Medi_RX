@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Notifications\UserRegisteredNotification;
 use App\Services\ApiResponseService;
 use App\Services\AuthService;
+use App\Services\Sms\SmsInterface;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\Sms\SmsInterface;
 
 class AuthController extends Controller
 {

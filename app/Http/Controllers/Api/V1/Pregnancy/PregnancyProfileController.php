@@ -19,29 +19,29 @@ class PregnancyProfileController extends Controller
             $request->user()->id
         )->first();
 
-        if (!$profile) {
+        if (! $profile) {
             return response()->json([
-                'success' => false,
+                'success'    => false,
                 'statusCode' => 404,
-                'message' => 'Pregnancy profile not found.',
-                'data' => null,
+                'message'    => 'Pregnancy profile not found.',
+                'data'       => null,
             ], 404);
         }
 
         return response()->json([
-            'success' => true,
+            'success'    => true,
             'statusCode' => 200,
-            'message' => 'Pregnancy profile retrieved successfully.',
-            'data' => [
-            'id' => $profile->id,
-            'userId' => $profile->user_id,
-            'lastMenstrualPeriod' => $profile->last_menstrual_period?->format('Y-m-d'),
-            'dueDate' => $profile->due_date?->format('Y-m-d'),
-            'datingConfirmedDate' => $profile->dating_confirmed_date?->format('Y-m-d'),
-            'isActive' => (bool) $profile->is_active,
-            'createdAt' => $profile->created_at?->toISOString(),
-            'updatedAt' => $profile->updated_at?->toISOString(),
-        ],
+            'message'    => 'Pregnancy profile retrieved successfully.',
+            'data'       => [
+                'id'                  => $profile->id,
+                'userId'              => $profile->user_id,
+                'lastMenstrualPeriod' => $profile->last_menstrual_period?->format('Y-m-d'),
+                'dueDate'             => $profile->due_date?->format('Y-m-d'),
+                'datingConfirmedDate' => $profile->dating_confirmed_date?->format('Y-m-d'),
+                'isActive'            => (bool) $profile->is_active,
+                'createdAt'           => $profile->created_at?->toISOString(),
+                'updatedAt'           => $profile->updated_at?->toISOString(),
+            ],
         ]);
     }
 
@@ -76,25 +76,22 @@ class PregnancyProfileController extends Controller
             ],
             [
                 'last_menstrual_period' => $lmp->toDateString(),
-                'due_date' => $dueDate->toDateString(),
-                'dating_confirmed_date' =>
-                    $validated['dating_confirmed_date'] ?? null,
-                'is_active' => true,
+                'due_date'              => $dueDate->toDateString(),
+                'dating_confirmed_date' => $validated['dating_confirmed_date'] ?? null,
+                'is_active'             => true,
             ]
         );
 
         return response()->json([
-            'success' => true,
+            'success'    => true,
             'statusCode' => 201,
-            'message' => 'Pregnancy profile saved successfully.',
-            'data' => [
-                'id' => $profile->id,
-                'lastMenstrualPeriod' =>
-                    $profile->last_menstrual_period?->toDateString(),
-                'dueDate' => $profile->due_date?->toDateString(),
-                'datingConfirmedDate' =>
-                    $profile->dating_confirmed_date?->toDateString(),
-                'isActive' => $profile->is_active,
+            'message'    => 'Pregnancy profile saved successfully.',
+            'data'       => [
+                'id'                  => $profile->id,
+                'lastMenstrualPeriod' => $profile->last_menstrual_period?->toDateString(),
+                'dueDate'             => $profile->due_date?->toDateString(),
+                'datingConfirmedDate' => $profile->dating_confirmed_date?->toDateString(),
+                'isActive'            => $profile->is_active,
             ],
         ], 201);
     }
@@ -109,22 +106,22 @@ class PregnancyProfileController extends Controller
             $request->user()->id
         )->first();
 
-        if (!$profile) {
+        if (! $profile) {
             return response()->json([
-                'success' => false,
+                'success'    => false,
                 'statusCode' => 404,
-                'message' => 'Pregnancy profile not found.',
-                'data' => null,
+                'message'    => 'Pregnancy profile not found.',
+                'data'       => null,
             ], 404);
         }
 
         $profile->update(['is_active' => false]);
 
         return response()->json([
-            'success' => true,
+            'success'    => true,
             'statusCode' => 200,
-            'message' => 'Pregnancy tracking deactivated.',
-            'data' => null,
+            'message'    => 'Pregnancy tracking deactivated.',
+            'data'       => null,
         ]);
     }
 }

@@ -182,7 +182,7 @@ class MedicationController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => [
+            'data'    => [
                 'medications' => $patient->medications()
                     ->where('status', 'active')
                     ->get(),

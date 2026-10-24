@@ -20,9 +20,9 @@ class PregnancyProfile extends Model
     {
         return [
             'last_menstrual_period' => 'date',
-            'due_date' => 'date',
+            'due_date'              => 'date',
             'dating_confirmed_date' => 'date',
-            'is_active' => 'boolean',
+            'is_active'             => 'boolean',
         ];
     }
 

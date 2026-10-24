@@ -10,7 +10,7 @@ class SeederController extends Controller
     public function runSeeder(): JsonResponse
     {
         // Safety check: Restrict to local/development environment unless authorized
-        if (!app()->environment('local')) {
+        if (! app()->environment('local')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Action restricted to local development environment.',
@@ -20,28 +20,20 @@ class SeederController extends Controller
         try {
             // Run a specific seeder class
             Artisan::call('db:seed', [
-                '--class' => 'RoleSeeder', // Replace with your target seeder class name
-                '--force' => true, // Bypass production warnings if needed
-            ]);
-            Artisan::call('db:seed', [
-                '--class' => 'PediatricDoseRulePermissionSeeder', // Replace with your target seeder class name
-                '--force' => true, // Bypass production warnings if needed
-            ]);
-            Artisan::call('db:seed', [
-                '--class' => 'PediatricDoseRuleSeeder', // Replace with your target seeder class name
+                '--class' => 'PregnancyContentSeeder', // Replace with your target seeder class name
                 '--force' => true, // Bypass production warnings if needed
             ]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Seeder executed successfully.',
-                'output' => Artisan::output(),
+                'output'  => Artisan::output(),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Seeder execution failed.',
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }

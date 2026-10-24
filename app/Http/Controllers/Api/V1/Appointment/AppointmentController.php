@@ -65,7 +65,7 @@ class AppointmentController extends Controller
             ->get(['chamber_id', 'appointment_date', 'appointment_time']);
         $appointments = $appointments->map(function ($appointment) {
             return [
-                'chamber_id' => $appointment->chamber_id,
+                'chamber_id'       => $appointment->chamber_id,
                 'appointment_date' => $appointment->appointment_date->format('Y-m-d'),
                 'appointment_time' => $appointment->appointment_time->format('H:i:s'),
             ];
@@ -74,13 +74,13 @@ class AppointmentController extends Controller
         $patients = Patient::all();
         $patients = $patients->map(function ($patient) {
             return [
-                'id' => $patient->id,
+                'id'             => $patient->id,
                 'patient_number' => $patient->patient_number,
-                'name' => $patient->name,
-                'mobile' => $patient->phone,
-                'email' => $patient->email,
-                'gender' => $patient->gender,
-                'blood_group' => $patient->blood_group,
+                'name'           => $patient->name,
+                'mobile'         => $patient->phone,
+                'email'          => $patient->email,
+                'gender'         => $patient->gender,
+                'blood_group'    => $patient->blood_group,
             ];
         });
 
@@ -91,20 +91,21 @@ class AppointmentController extends Controller
 
             $chamber = $doctor->chamber
                         ? [
-                            'id' => $doctor->chamber->id,
-                            'name' => $doctor->chamber->name,
+                            'id'      => $doctor->chamber->id,
+                            'name'    => $doctor->chamber->name,
                             'address' => $doctor->chamber->address,
-                            'city'  => $doctor->chamber->city
+                            'city'    => $doctor->chamber->city,
                         ]
                         : null;
             $doctor->makeHidden('chamber');
             $appointmentData = [
-                'doctor' => $doctor,
-                'schedules' => $schedules,
-                'chamber' => $chamber,
-                'patients' => $patients,
+                'doctor'       => $doctor,
+                'schedules'    => $schedules,
+                'chamber'      => $chamber,
+                'patients'     => $patients,
                 'appointments' => $appointments,
             ];
+
             return ApiResponseService::success(
                 $appointmentData,
                 'Patients retrieved successfully!'
@@ -121,14 +122,14 @@ class AppointmentController extends Controller
             $patients = Patient::where('user_id', Auth::user()->id)->get();
             $patients = $patients->map(function ($patient) {
                 return [
-                    'id' => $patient->id,
+                    'id'             => $patient->id,
                     'patient_number' => $patient->patient_number,
-                    'name' => $patient->name,
-                    'mobile' => $patient->phone,
-                    'email' => $patient->email,
-                    'gender' => $patient->gender,
-                    'blood_group' => $patient->blood_group,
-                    'relationship' => $patient->relationship,
+                    'name'           => $patient->name,
+                    'mobile'         => $patient->phone,
+                    'email'          => $patient->email,
+                    'gender'         => $patient->gender,
+                    'blood_group'    => $patient->blood_group,
+                    'relationship'   => $patient->relationship,
                 ];
             });
 
@@ -136,22 +137,23 @@ class AppointmentController extends Controller
 
             $chamber = $doctor->chamber
                         ? [
-                            'id' => $doctor->chamber->id,
-                            'name' => $doctor->chamber->name,
+                            'id'      => $doctor->chamber->id,
+                            'name'    => $doctor->chamber->name,
                             'address' => $doctor->chamber->address,
-                            'city'  => $doctor->chamber->city
+                            'city'    => $doctor->chamber->city,
                         ]
                         : null;
             $doctor->makeHidden('chamber');
 
             $appointmentData = [
-                'doctor' => $doctor,
-                'chamber' => $chamber,
-                'schedules' => $schedules,
-                'patient_id' => $patients->first()['id'] ?? null,
-                'patients' => $patients,
+                'doctor'       => $doctor,
+                'chamber'      => $chamber,
+                'schedules'    => $schedules,
+                'patient_id'   => $patients->first()['id'] ?? null,
+                'patients'     => $patients,
                 'appointments' => $appointments,
             ];
+
             return ApiResponseService::success(
                 $appointmentData,
                 'Patients retrieved successfully!'

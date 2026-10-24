@@ -13,8 +13,7 @@ class VaccinationScheduleController extends Controller
 {
     public function __construct(
         private readonly VaccinationScheduleService $service
-    ) {
-    }
+    ) {}
 
     /**
      * GET /api/v1/vaccination-schedules
@@ -44,7 +43,7 @@ class VaccinationScheduleController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Vaccination schedules retrieved successfully.',
-            'data' => $schedules,
+            'data'    => $schedules,
         ]);
     }
 
@@ -96,7 +95,7 @@ class VaccinationScheduleController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Vaccination schedule created successfully.',
-            'data' => $schedule,
+            'data'    => $schedule,
         ], 201);
     }
 
@@ -108,7 +107,7 @@ class VaccinationScheduleController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Vaccination schedule retrieved successfully.',
-            'data' => $this->service->find($id),
+            'data'    => $this->service->find($id),
         ]);
     }
 
@@ -168,7 +167,7 @@ class VaccinationScheduleController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Vaccination schedule updated successfully.',
-            'data' => $updated,
+            'data'    => $updated,
         ]);
     }
 
@@ -182,7 +181,7 @@ class VaccinationScheduleController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Vaccination schedule deleted successfully.',
-            'data' => null,
+            'data'    => null,
         ]);
     }
 }

@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Medicine;
 use App\Models\PediatricDoseRule;
 use App\Services\Pediatric\PediatricDoseRuleWorkflowService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PediatricDoseRuleController extends Controller
 {
@@ -20,8 +20,7 @@ class PediatricDoseRuleController extends Controller
 
     public function __construct(
         private readonly PediatricDoseRuleWorkflowService $workflow
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): Response
     {
@@ -31,7 +30,7 @@ class PediatricDoseRuleController extends Controller
             ->with(['medicine', 'creator', 'reviewer'])
             ->latest();
 
-        if (!$request->user()->can('pediatric-dose-rules.view-all')) {
+        if (! $request->user()->can('pediatric-dose-rules.view-all')) {
             $query->where('created_by', $request->user()->id);
         }
 
@@ -68,24 +67,24 @@ class PediatricDoseRuleController extends Controller
 
         $base = PediatricDoseRule::query();
 
-        if (!$request->user()->can('pediatric-dose-rules.view-all')) {
+        if (! $request->user()->can('pediatric-dose-rules.view-all')) {
             $base->where('created_by', $request->user()->id);
         }
 
         return Inertia::render('Admin/PediatricDoseRules/Index', [
-            'rules' => $rules,
+            'rules'   => $rules,
             'filters' => $request->only(['status', 'search']),
-            'stats' => [
-                'total' => (clone $base)->count(),
-                'draft' => (clone $base)->where('status', 'draft')->count(),
-                'pending' => (clone $base)->where('status', 'pending_review')->count(),
+            'stats'   => [
+                'total'    => (clone $base)->count(),
+                'draft'    => (clone $base)->where('status', 'draft')->count(),
+                'pending'  => (clone $base)->where('status', 'pending_review')->count(),
                 'approved' => (clone $base)->where('status', 'approved')->count(),
                 'rejected' => (clone $base)->where('status', 'rejected')->count(),
             ],
             'permissions' => [
-                'create' => $request->user()->can('pediatric-dose-rules.create'),
-                'viewAll' => $request->user()->can('pediatric-dose-rules.view-all'),
-                'approve' => $request->user()->can('pediatric-dose-rules.approve'),
+                'create'   => $request->user()->can('pediatric-dose-rules.create'),
+                'viewAll'  => $request->user()->can('pediatric-dose-rules.view-all'),
+                'approve'  => $request->user()->can('pediatric-dose-rules.approve'),
                 'activate' => $request->user()->can('pediatric-dose-rules.activate'),
             ],
         ]);
@@ -115,15 +114,15 @@ class PediatricDoseRuleController extends Controller
         DB::transaction(function () use ($request, $data) {
             $rule = PediatricDoseRule::create([
                 ...$data,
-                'created_by' => $request->user()->id,
-                'status' => 'draft',
-                'approved_by' => null,
-                'approved_at' => null,
-                'reviewed_by' => null,
-                'reviewed_at' => null,
+                'created_by'       => $request->user()->id,
+                'status'           => 'draft',
+                'approved_by'      => null,
+                'approved_at'      => null,
+                'reviewed_by'      => null,
+                'reviewed_at'      => null,
                 'rejection_reason' => null,
-                'is_active' => false,
-                'version' => 1,
+                'is_active'        => false,
+                'version'          => 1,
             ]);
 
             $this->workflow->recordChange(
@@ -145,7 +144,7 @@ class PediatricDoseRuleController extends Controller
         $pediatricDoseRule->load(['medicine', 'creator', 'reviewer', 'approver']);
 
         return Inertia::render('Admin/PediatricDoseRules/Show', [
-            'rule' => $pediatricDoseRule,
+            'rule'   => $pediatricDoseRule,
             'audits' => $pediatricDoseRule->audits()
                 ->with('user:id,name')
                 ->paginate(20),
@@ -157,7 +156,7 @@ class PediatricDoseRuleController extends Controller
         $this->authorize('update', $pediatricDoseRule);
 
         return Inertia::render('Admin/PediatricDoseRules/Edit', [
-            'rule' => $pediatricDoseRule,
+            'rule'      => $pediatricDoseRule,
             'medicines' => Medicine::query()
                 ->orderBy('brand_name')
                 ->get(['id', 'brand_name'])
@@ -283,26 +282,26 @@ class PediatricDoseRuleController extends Controller
     private function validatedRule(Request $request): array
     {
         return $request->validate([
-            'medicine_id' => ['required', 'integer', 'exists:medicines,id'],
-            'formulation' => ['required', 'string', 'max:150'],
-            'indication' => ['required', 'string', 'max:150'],
-            'concentration_mg' => ['required', 'numeric', 'gt:0'],
-            'concentration_ml' => ['required', 'numeric', 'gt:0'],
+            'medicine_id'             => ['required', 'integer', 'exists:medicines,id'],
+            'formulation'             => ['required', 'string', 'max:150'],
+            'indication'              => ['required', 'string', 'max:150'],
+            'concentration_mg'        => ['required', 'numeric', 'gt:0'],
+            'concentration_ml'        => ['required', 'numeric', 'gt:0'],
             'dose_mg_per_kg_per_dose' => ['required', 'numeric', 'gt:0'],
-            'max_single_dose_mg' => ['nullable', 'numeric', 'gt:0'],
-            'max_daily_mg_per_kg' => ['nullable', 'numeric', 'gt:0'],
-            'max_daily_dose_mg' => ['nullable', 'numeric', 'gt:0'],
-            'dose_interval_hours' => ['nullable', 'integer', 'min:1'],
-            'max_doses_per_24_hours' => ['nullable', 'integer', 'min:1', 'max:24'],
-            'min_age_months' => ['required', 'integer', 'min:0'],
-            'max_age_months' => ['nullable', 'integer', 'gte:min_age_months'],
-            'min_weight_kg' => ['nullable', 'numeric', 'gt:0'],
-            'max_weight_kg' => ['nullable', 'numeric', 'gt:min_weight_kg'],
-            'route' => ['required', 'string', 'max:50'],
-            'contraindications' => ['nullable', 'string', 'max:10000'],
-            'notes' => ['nullable', 'string', 'max:10000'],
-            'source_reference' => ['required', 'string', 'max:1000'],
-            'source_version' => ['nullable', 'string', 'max:100'],
+            'max_single_dose_mg'      => ['nullable', 'numeric', 'gt:0'],
+            'max_daily_mg_per_kg'     => ['nullable', 'numeric', 'gt:0'],
+            'max_daily_dose_mg'       => ['nullable', 'numeric', 'gt:0'],
+            'dose_interval_hours'     => ['nullable', 'integer', 'min:1'],
+            'max_doses_per_24_hours'  => ['nullable', 'integer', 'min:1', 'max:24'],
+            'min_age_months'          => ['required', 'integer', 'min:0'],
+            'max_age_months'          => ['nullable', 'integer', 'gte:min_age_months'],
+            'min_weight_kg'           => ['nullable', 'numeric', 'gt:0'],
+            'max_weight_kg'           => ['nullable', 'numeric', 'gt:min_weight_kg'],
+            'route'                   => ['required', 'string', 'max:50'],
+            'contraindications'       => ['nullable', 'string', 'max:10000'],
+            'notes'                   => ['nullable', 'string', 'max:10000'],
+            'source_reference'        => ['required', 'string', 'max:1000'],
+            'source_version'          => ['nullable', 'string', 'max:100'],
         ]);
     }
 }

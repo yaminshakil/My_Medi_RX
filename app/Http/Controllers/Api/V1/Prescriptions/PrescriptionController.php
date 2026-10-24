@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\V1\Prescriptions;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Services\Eprescriptions\PrescriptionService;
 use App\Models\Setting;
 use App\Services\ApiResponseService;
+use App\Services\Eprescriptions\PrescriptionService;
+use Illuminate\Http\Request;
 
 class PrescriptionController extends Controller
 {
@@ -16,6 +16,7 @@ class PrescriptionController extends Controller
     {
         $this->prescriptionService = $prescriptionService;
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -46,6 +47,7 @@ class PrescriptionController extends Controller
     public function show(string $id)
     {
         $prescription = $this->prescriptionService->find($id);
+
         return ApiResponseService::success(
             $prescription,
             'Prescription retrieved successfully!'
@@ -71,6 +73,7 @@ class PrescriptionController extends Controller
     public function getPrescriMedication($id)
     {
         $medications = $this->prescriptionService->getPrescriMedication($id);
+
         return ApiResponseService::success(
             $medications,
             'Prescription retrieved successfully!'

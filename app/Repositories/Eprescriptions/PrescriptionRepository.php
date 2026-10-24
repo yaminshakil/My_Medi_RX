@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eprescriptions;
 
+use App\Http\Resources\Prescriptions\PrescriptionResource;
 use App\Interfaces\Eprescriptions\GynaeHistoryRepositoryInterface;
 use App\Interfaces\Eprescriptions\PrescriptionRepositoryInterface;
 use App\Models\Medicine;
@@ -14,7 +15,6 @@ use App\Services\Eprescriptions\PrescriptionNumberService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Http\Resources\Prescriptions\PrescriptionResource;
 
 class PrescriptionRepository implements PrescriptionRepositoryInterface
 {

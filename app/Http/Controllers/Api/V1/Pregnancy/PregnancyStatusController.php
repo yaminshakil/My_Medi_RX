@@ -18,22 +18,22 @@ class PregnancyStatusController extends Controller
             ->where('user_id', $request->user()->id)
             ->first();
 
-        if (!$profile) {
+        if (! $profile) {
             return response()->json([
-                'success' => false,
+                'success'    => false,
                 'statusCode' => 404,
-                'message' => 'Pregnancy profile not found.',
-                'data' => null,
+                'message'    => 'Pregnancy profile not found.',
+                'data'       => null,
             ], 404);
         }
 
         $data = $service->getStatus($profile);
 
         return response()->json([
-            'success' => true,
+            'success'    => true,
             'statusCode' => 200,
-            'message' => 'Pregnancy details retrieved',
-            'data' => $data,
+            'message'    => 'Pregnancy details retrieved',
+            'data'       => $data,
         ]);
     }
 }

@@ -39,11 +39,12 @@ class AdminReviewController extends Controller
     public function create()
     {
         $doctors = User::role('Doctor')   // Spatie helper
-        ->select('id', 'name', 'email')
-        ->orderBy('name')
-        ->get();
+            ->select('id', 'name', 'email')
+            ->orderBy('name')
+            ->get();
+
         return Inertia::render('Admin/Reviews/Create', [
-            'users' => User::select('id', 'name', 'email')->orderBy('name')->get(),
+            'users'   => User::select('id', 'name', 'email')->orderBy('name')->get(),
             'doctors' => $doctors,
         ]);
     }
@@ -76,13 +77,13 @@ class AdminReviewController extends Controller
         $review->load(['user', 'reviewable']);
 
         $doctors = User::role('Doctor')
-        ->select('id', 'name', 'email')
-        ->orderBy('name')
-        ->get();
+            ->select('id', 'name', 'email')
+            ->orderBy('name')
+            ->get();
 
         return Inertia::render('Admin/Reviews/Edit', [
-            'review' => $review,
-            'users'  => User::select('id', 'name', 'email')->orderBy('name')->get(),
+            'review'  => $review,
+            'users'   => User::select('id', 'name', 'email')->orderBy('name')->get(),
             'doctors' => $doctors,
         ]);
     }

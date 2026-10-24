@@ -19,10 +19,10 @@ class VaccinationSchedule extends Model
     protected function casts(): array
     {
         return [
-            'is_active' => 'boolean',
-            'dose_number' => 'integer',
+            'is_active'            => 'boolean',
+            'dose_number'          => 'integer',
             'recommended_age_days' => 'integer',
-            'interval_days' => 'integer',
+            'interval_days'        => 'integer',
         ];
     }
 

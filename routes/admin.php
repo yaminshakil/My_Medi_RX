@@ -4,12 +4,12 @@ use App\Http\Controllers\Admin\Auth\PermissionController;
 use App\Http\Controllers\Admin\Auth\RoleController;
 use App\Http\Controllers\Admin\Auth\UserController;
 use App\Http\Controllers\Admin\Menu\MenuController;
-use App\Http\Controllers\Admin\Review\AdminReviewController;
-use App\Http\Controllers\Admin\Vaccines\VaccineController;
 use App\Http\Controllers\Admin\Pediatric\PediatricDoseRuleController;
+use App\Http\Controllers\Admin\Pregnancy\PregnancyProfileController;
 use App\Http\Controllers\Admin\Pregnancy\PregnancyTipController;
 use App\Http\Controllers\Admin\Pregnancy\PregnancyWeeklyHighlightController;
-use App\Http\Controllers\Admin\Pregnancy\PregnancyProfileController;
+use App\Http\Controllers\Admin\Review\AdminReviewController;
+use App\Http\Controllers\Admin\Vaccines\VaccineController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin,Doctor'])->group(function () {
@@ -45,10 +45,10 @@ Route::middleware(['auth', 'role.redirect:Admin'])->prefix('admin')->name('admin
 });
 
 Route::middleware(['auth', 'role.redirect:Admin,Doctor'])->prefix('admin')->name('admin.')->group(function () {
-    Route::post('vaccines/import', [VaccineController::class,'import',])->name('vaccines.import');
-    Route::get('vaccines/template', [VaccineController::class,'template',])->name('vaccines.template');
+    Route::post('vaccines/import', [VaccineController::class, 'import'])->name('vaccines.import');
+    Route::get('vaccines/template', [VaccineController::class, 'template'])->name('vaccines.template');
     Route::resource('vaccines', VaccineController::class)
-            ->only(['index', 'store', 'update', 'destroy']);
+        ->only(['index', 'store', 'update', 'destroy']);
 });
 
 Route::middleware(['auth', 'role.redirect:Admin,Doctor'])
@@ -90,15 +90,15 @@ Route::middleware(['auth', 'role.redirect:Admin,Doctor'])
     });
 
 Route::prefix('admin/pregnancy')
-->name('admin.pregnancy.')
-->middleware(['auth', 'role.redirect:Admin,Doctor']) // Add your existing admin/permission middleware here.
-->group(function () {
-    Route::resource('profiles', PregnancyProfileController::class)
+    ->name('admin.pregnancy.')
+    ->middleware(['auth', 'role.redirect:Admin,Doctor']) // Add your existing admin/permission middleware here.
+    ->group(function () {
+        Route::resource('profiles', PregnancyProfileController::class)
             ->except(['show']);
 
-    Route::resource('highlights', PregnancyWeeklyHighlightController::class)
-        ->except(['show']);
+        Route::resource('highlights', PregnancyWeeklyHighlightController::class)
+            ->except(['show']);
 
-    Route::resource('tips', PregnancyTipController::class)
-        ->except(['show']);
-});
+        Route::resource('tips', PregnancyTipController::class)
+            ->except(['show']);
+    });

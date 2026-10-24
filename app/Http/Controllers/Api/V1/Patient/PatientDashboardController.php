@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Api\V1\Patient;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\PatientMedication;
+use App\Services\Patients\MedicationDayDetailsService;
 use App\Services\Patients\MedicationHeatmapService;
 use Illuminate\Http\JsonResponse;
-use App\Services\Patients\MedicationDayDetailsService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class PatientDashboardController extends Controller
 {
     public function __construct(
         protected MedicationHeatmapService $heatmapService
-    ) {
-    }
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -71,14 +71,14 @@ class PatientDashboardController extends Controller
         $total = $medications->count();
 
         $patientMedications = PatientMedication::where('patient_id', $patient->id)
-    ->where('status', 'active')
-    ->whereDate('start_date', '<=', $now->toDateString())
-    ->where(function ($query) use ($now) {
-        $query->whereNull('end_date')
-            ->orWhereDate('end_date', '>=', $now->toDateString());
-    })
-    ->with('logs')
-    ->get();
+            ->where('status', 'active')
+            ->whereDate('start_date', '<=', $now->toDateString())
+            ->where(function ($query) use ($now) {
+                $query->whereNull('end_date')
+                    ->orWhereDate('end_date', '>=', $now->toDateString());
+            })
+            ->with('logs')
+            ->get();
 
         $total = $patientMedications->count();
 
@@ -181,17 +181,17 @@ class PatientDashboardController extends Controller
     {
         $validated = $request->validate([
             'month' => ['required', 'integer', 'between:1,12'],
-            'year' => ['required', 'integer', 'between:2000,2100'],
+            'year'  => ['required', 'integer', 'between:2000,2100'],
         ]);
 
         $patient = $request->user()?->patient;
 
-        if (!$patient) {
+        if (! $patient) {
             return response()->json([
-                'success' => false,
+                'success'    => false,
                 'statusCode' => 404,
-                'message' => 'Patient profile not found',
-                'data' => null,
+                'message'    => 'Patient profile not found',
+                'data'       => null,
             ], 404);
         }
 
@@ -202,10 +202,10 @@ class PatientDashboardController extends Controller
         );
 
         return response()->json([
-            'success' => true,
+            'success'    => true,
             'statusCode' => 200,
-            'message' => 'Monthly heatmap retrieved',
-            'data' => $data,
+            'message'    => 'Monthly heatmap retrieved',
+            'data'       => $data,
         ]);
     }
 
@@ -219,22 +219,22 @@ class PatientDashboardController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'success' => false,
+                'success'    => false,
                 'statusCode' => 422,
-                'message' => 'Invalid date. Use YYYY-MM-DD format.',
-                'errors' => $validator->errors(),
-                'data' => null,
+                'message'    => 'Invalid date. Use YYYY-MM-DD format.',
+                'errors'     => $validator->errors(),
+                'data'       => null,
             ], 422);
         }
 
         $patient = $request->user()?->patient;
 
-        if (!$patient) {
+        if (! $patient) {
             return response()->json([
-                'success' => false,
+                'success'    => false,
                 'statusCode' => 404,
-                'message' => 'Patient profile not found',
-                'data' => null,
+                'message'    => 'Patient profile not found',
+                'data'       => null,
             ], 404);
         }
 
@@ -244,10 +244,10 @@ class PatientDashboardController extends Controller
         );
 
         return response()->json([
-            'success' => true,
+            'success'    => true,
             'statusCode' => 200,
-            'message' => 'Day log details retrieved',
-            'data' => $data,
+            'message'    => 'Day log details retrieved',
+            'data'       => $data,
         ]);
     }
 }

@@ -20,8 +20,8 @@ class PregnancyContentSeeder extends Seeder
                     [
                         ...$item,
                         'source_reference' => self::SOURCE,
-                        'source_version' => '1.0',
-                        'is_published' => true,
+                        'source_version'   => '1.0',
+                        'is_published'     => true,
                     ]
                 );
             }
@@ -32,18 +32,18 @@ class PregnancyContentSeeder extends Seeder
                 PregnancyTip::updateOrCreate(
                     [
                         'source_reference' => self::SOURCE,
-                        'week_start' => $weekNumber,
-                        'week_end' => $weekNumber,
+                        'week_start'       => $weekNumber,
+                        'week_end'         => $weekNumber,
                     ],
                     [
-                        'title' => $tip['title'],
-                        'description' => $tip['description'],
-                        'icon' => $tip['icon'],
-                        'color_hex' => $tip['color_hex'],
-                        'trimester' => $this->trimester($weekNumber),
-                        'week_start' => $weekNumber,
-                        'week_end' => $weekNumber,
-                        'sort_order' => 1,
+                        'title'        => $tip['title'],
+                        'description'  => $tip['description'],
+                        'icon'         => $tip['icon'],
+                        'color_hex'    => $tip['color_hex'],
+                        'trimester'    => $this->trimester($weekNumber),
+                        'week_start'   => $weekNumber,
+                        'week_end'     => $weekNumber,
+                        'sort_order'   => 1,
                         'is_published' => true,
                     ]
                 );
@@ -60,7 +60,7 @@ class PregnancyContentSeeder extends Seeder
         return match (true) {
             $week <= 13 => 1,
             $week <= 27 => 2,
-            default => 3,
+            default     => 3,
         };
     }
 
@@ -118,11 +118,11 @@ class PregnancyContentSeeder extends Seeder
 
         return array_map(
             fn (array $row) => [
-                'week' => $row[0],
-                'fruit_name' => $row[1],
-                'approx_length_cm' => $row[2],
+                'week'                => $row[0],
+                'fruit_name'          => $row[1],
+                'approx_length_cm'    => $row[2],
                 'approx_weight_grams' => $row[3],
-                'description' => $row[4],
+                'description'         => $row[4],
             ],
             $rows
         );

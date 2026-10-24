@@ -50,6 +50,6 @@ class Vaccine extends Model
     public function manufacturer()
     {
         return $this->belongsTo(Manufacturer::class, 'manufacturer_id', 'id')
-                ->select('id', 'company_name as name');
+            ->select('id', 'company_name as name');
     }
 }

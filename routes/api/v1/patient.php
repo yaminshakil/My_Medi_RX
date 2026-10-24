@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Patient\PatientController;
 use App\Http\Controllers\Api\V1\Patient\MedicationAdherenceController;
 use App\Http\Controllers\Api\V1\Patient\MedicationController;
 use App\Http\Controllers\Api\V1\Patient\MedicationLogController;
@@ -8,14 +7,15 @@ use App\Http\Controllers\Api\V1\Patient\MedicationRefillController;
 use App\Http\Controllers\Api\V1\Patient\MedicationReportController;
 use App\Http\Controllers\Api\V1\Patient\MedicationScanController;
 use App\Http\Controllers\Api\V1\Patient\MedicationScheduleController;
+use App\Http\Controllers\Api\V1\Patient\PatientController;
 use App\Http\Controllers\Api\V1\Patient\PatientDashboardController;
 use App\Http\Controllers\Api\V1\Patient\VaccinationController;
-use App\Http\Controllers\Api\V1\Patient\VitalTrendsController;
 use App\Http\Controllers\Api\V1\Patient\VaccinationScheduleController;
+use App\Http\Controllers\Api\V1\Patient\VitalTrendsController;
 use App\Http\Controllers\Api\V1\PediatricDoseController;
+use App\Http\Controllers\Api\V1\Pregnancy\PregnancyProfileController;
 use App\Http\Controllers\Api\V1\Pregnancy\PregnancyStatusController;
 use App\Http\Controllers\Api\V1\Pregnancy\PregnancySymptomLogController;
-use App\Http\Controllers\Api\V1\Pregnancy\PregnancyProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api', 'profile.exists'])->group(function () {
@@ -38,9 +38,9 @@ Route::prefix('/patient')
         );
 
         Route::get('/dashboard/day-details', [
-        PatientDashboardController::class,
-        'dayDetails',
-    ]);
+            PatientDashboardController::class,
+            'dayDetails',
+        ]);
 
         // Dashboard and medication CRUD
         Route::get('/medications/dashboard', [
@@ -142,21 +142,20 @@ Route::prefix('/patient')
     });
 
 Route::prefix('pediatric-dose')
-->middleware('auth:api')
-->group(function () {
-    Route::get(
-        '/medicines',
-        [PediatricDoseController::class, 'medicines']
-    );
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get(
+            '/medicines',
+            [PediatricDoseController::class, 'medicines']
+        );
 
-    Route::post(
-        '/calculate',
-        [PediatricDoseController::class, 'calculate']
-    );
+        Route::post(
+            '/calculate',
+            [PediatricDoseController::class, 'calculate']
+        );
 
-    Route::get('/recent', [PediatricDoseController::class, 'recent']);
-});
-
+        Route::get('/recent', [PediatricDoseController::class, 'recent']);
+    });
 
 Route::middleware('auth:api')
     ->prefix('pregnancy')

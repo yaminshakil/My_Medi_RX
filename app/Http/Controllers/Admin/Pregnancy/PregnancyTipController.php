@@ -60,15 +60,15 @@ class PregnancyTipController extends Controller
     private function validated(Request $request): array
     {
         return $request->validate([
-            'title' => ['required', 'string', 'max:150'],
-            'description' => ['required', 'string', 'max:5000'],
-            'icon' => ['required', 'string', 'max:60'],
-            'color_hex' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
-            'trimester' => ['nullable', 'integer', 'between:1,3'],
-            'week_start' => ['required', 'integer', 'between:1,42'],
-            'week_end' => ['required', 'integer', 'gte:week_start', 'between:1,42'],
-            'sort_order' => ['required', 'integer', 'min:0'],
-            'is_published' => ['required', 'boolean'],
+            'title'            => ['required', 'string', 'max:150'],
+            'description'      => ['required', 'string', 'max:5000'],
+            'icon'             => ['required', 'string', 'max:60'],
+            'color_hex'        => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'trimester'        => ['nullable', 'integer', 'between:1,3'],
+            'week_start'       => ['required', 'integer', 'between:1,42'],
+            'week_end'         => ['required', 'integer', 'gte:week_start', 'between:1,42'],
+            'sort_order'       => ['required', 'integer', 'min:0'],
+            'is_published'     => ['required', 'boolean'],
             'source_reference' => ['nullable', 'string', 'max:1000'],
         ]);
     }

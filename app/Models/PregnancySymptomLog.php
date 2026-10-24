@@ -21,9 +21,9 @@ class PregnancySymptomLog extends Model
     protected function casts(): array
     {
         return [
-            'date' => 'date',
-            'symptoms' => 'array',
-            'fetal_kick_count' => 'integer',
+            'date'                => 'date',
+            'symptoms'            => 'array',
+            'fetal_kick_count'    => 'integer',
             'water_intake_liters' => 'decimal:2',
         ];
     }

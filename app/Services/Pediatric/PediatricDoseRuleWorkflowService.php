@@ -19,7 +19,7 @@ class PediatricDoseRuleWorkflowService
                 ->lockForUpdate()
                 ->findOrFail($rule->id);
 
-            if (!in_array($rule->status, ['draft', 'rejected'], true)) {
+            if (! in_array($rule->status, ['draft', 'rejected'], true)) {
                 $this->fail('Only draft or rejected rules can be submitted.');
             }
 
@@ -28,14 +28,14 @@ class PediatricDoseRuleWorkflowService
             $from = $rule->status;
 
             $rule->update([
-                'status' => 'pending_review',
-                'submitted_at' => now(),
-                'reviewed_by' => null,
-                'reviewed_at' => null,
+                'status'           => 'pending_review',
+                'submitted_at'     => now(),
+                'reviewed_by'      => null,
+                'reviewed_at'      => null,
                 'rejection_reason' => null,
-                'approved_by' => null,
-                'approved_at' => null,
-                'is_active' => false,
+                'approved_by'      => null,
+                'approved_at'      => null,
+                'is_active'        => false,
             ]);
 
             $this->audit(
@@ -73,11 +73,11 @@ class PediatricDoseRuleWorkflowService
             $this->validateClinicalFields($rule);
 
             $rule->update([
-                'status' => 'approved',
-                'approved_by' => $userId,
-                'approved_at' => now(),
-                'reviewed_by' => $userId,
-                'reviewed_at' => now(),
+                'status'           => 'approved',
+                'approved_by'      => $userId,
+                'approved_at'      => now(),
+                'reviewed_by'      => $userId,
+                'reviewed_at'      => now(),
                 'rejection_reason' => null,
 
                 // Activation is a separate permission/action.
@@ -123,13 +123,13 @@ class PediatricDoseRuleWorkflowService
             }
 
             $rule->update([
-                'status' => 'rejected',
-                'reviewed_by' => $userId,
-                'reviewed_at' => now(),
+                'status'           => 'rejected',
+                'reviewed_by'      => $userId,
+                'reviewed_at'      => now(),
                 'rejection_reason' => $reason,
-                'approved_by' => null,
-                'approved_at' => null,
-                'is_active' => false,
+                'approved_by'      => null,
+                'approved_at'      => null,
+                'is_active'        => false,
             ]);
 
             $this->audit(
@@ -284,13 +284,13 @@ class PediatricDoseRuleWorkflowService
     ): void {
         PediatricDoseRuleAudit::create([
             'pediatric_dose_rule_id' => $rule->id,
-            'user_id' => $userId,
-            'action' => $action,
-            'from_status' => $from,
-            'to_status' => $to,
-            'reason' => $reason,
-            'changes' => $changes ?: null,
-            'ip_address' => $ip,
+            'user_id'                => $userId,
+            'action'                 => $action,
+            'from_status'            => $from,
+            'to_status'              => $to,
+            'reason'                 => $reason,
+            'changes'                => $changes ?: null,
+            'ip_address'             => $ip,
         ]);
     }
 

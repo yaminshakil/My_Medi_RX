@@ -69,15 +69,15 @@ class PregnancyWeeklyHighlightController extends Controller
                 'required',
                 'integer',
                 'between:1,42',
-                'unique:pregnancy_weekly_highlights,week,' . ($highlight?->id ?? 'NULL'),
+                'unique:pregnancy_weekly_highlights,week,'.($highlight?->id ?? 'NULL'),
             ],
-            'fruit_name' => ['required', 'string', 'max:100'],
-            'approx_length_cm' => ['nullable', 'numeric', 'gt:0', 'max:300'],
+            'fruit_name'          => ['required', 'string', 'max:100'],
+            'approx_length_cm'    => ['nullable', 'numeric', 'gt:0', 'max:300'],
             'approx_weight_grams' => ['nullable', 'integer', 'min:1', 'max:10000'],
-            'description' => ['required', 'string', 'max:1000'],
-            'source_reference' => ['nullable', 'string', 'max:1000'],
-            'source_version' => ['nullable', 'string', 'max:100'],
-            'is_published' => ['required', 'boolean'],
+            'description'         => ['required', 'string', 'max:1000'],
+            'source_reference'    => ['nullable', 'string', 'max:1000'],
+            'source_version'      => ['nullable', 'string', 'max:100'],
+            'is_published'        => ['required', 'boolean'],
         ]);
     }
 }

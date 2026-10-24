@@ -12,7 +12,7 @@ class PregnancyStatusService
 {
     public function getStatus(PregnancyProfile $profile): array
     {
-        if (!$profile->is_active) {
+        if (! $profile->is_active) {
             throw ValidationException::withMessages([
                 'pregnancy' => ['This pregnancy profile is inactive.'],
             ]);
@@ -20,7 +20,7 @@ class PregnancyStatusService
 
         $startDate = $profile->last_menstrual_period;
 
-        if (!$startDate) {
+        if (! $startDate) {
             throw ValidationException::withMessages([
                 'last_menstrual_period' => [
                     'A last menstrual period date is required to calculate gestational age.',
@@ -69,7 +69,7 @@ class PregnancyStatusService
         $trimester = match (true) {
             $currentWeek <= 13 => 1,
             $currentWeek <= 27 => 2,
-            default => 3,
+            default            => 3,
         };
 
         $tips = PregnancyTip::query()
@@ -83,26 +83,26 @@ class PregnancyStatusService
             ->orderBy('sort_order')
             ->get()
             ->map(fn (PregnancyTip $tip) => [
-                'id' => (string) $tip->id,
-                'title' => $tip->title,
-                'desc' => $tip->description,
-                'icon' => $tip->icon,
+                'id'       => (string) $tip->id,
+                'title'    => $tip->title,
+                'desc'     => $tip->description,
+                'icon'     => $tip->icon,
                 'colorHex' => $tip->color_hex,
             ])
             ->values();
 
         return [
-            'currentWeek' => $currentWeek,
-            'currentDay' => $currentDay,
-            'daysToGo' => $daysToGo,
-            'progressPercent' => $progressPercent,
-            'estimatedDueDate' => $start->copy()->addDays(280)->toDateString(),
+            'currentWeek'        => $currentWeek,
+            'currentDay'         => $currentDay,
+            'daysToGo'           => $daysToGo,
+            'progressPercent'    => $progressPercent,
+            'estimatedDueDate'   => $start->copy()->addDays(280)->toDateString(),
             'babySizeComparison' => $highlight ? [
-                'fruitName' => $highlight->fruit_name,
+                'fruitName'      => $highlight->fruit_name,
                 'approxLengthCm' => $highlight->approx_length_cm === null
                     ? null : (float) $highlight->approx_length_cm,
                 'approxWeightGrams' => $highlight->approx_weight_grams,
-                'description' => $highlight->description,
+                'description'       => $highlight->description,
             ] : null,
             'weeklyTips' => $tips,
         ];

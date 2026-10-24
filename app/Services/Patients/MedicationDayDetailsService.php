@@ -4,7 +4,6 @@ namespace App\Services\Patients;
 
 use App\Models\MedicationLog;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 
 class MedicationDayDetailsService
 {
@@ -35,19 +34,19 @@ class MedicationDayDetailsService
             );
 
             return [
-                'name' => $medicine?->brand_name ?? 'Unknown medication',
+                'name'   => $medicine?->brand_name ?? 'Unknown medication',
                 'dosage' => $prescriptionMedicine?->strength ?? '',
-                'time' => Carbon::parse($log->scheduled_at)
+                'time'   => Carbon::parse($log->scheduled_at)
                     ->format('h:i A'),
                 'isTaken' => strtolower($log->status) === 'taken',
-                'status' => $status,
+                'status'  => $status,
             ];
         });
 
         return [
-            'date' => $selectedDate->toDateString(),
+            'date'          => $selectedDate->toDateString(),
             'formattedDate' => $selectedDate->format('F d, Y'),
-            'items' => $items->values()->all(),
+            'items'         => $items->values()->all(),
         ];
     }
 
