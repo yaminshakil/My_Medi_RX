@@ -5,7 +5,8 @@ use App\Http\Controllers\Api\V1\Medical\NearestMedicalFacilityController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api'])->group(function () {
-    Route::apiResource('/hospitals', HospitalController::class);
+    Route::apiResource('/hospitals', HospitalController::class)
+        ->middlewareFor(['store', 'update'], 'role:Hospital,api');
     Route::get('/hospitals-types', [HospitalController::class, 'getAllHospitalType']);
 });
 Route::prefix('nearest-medical')->group(function () {

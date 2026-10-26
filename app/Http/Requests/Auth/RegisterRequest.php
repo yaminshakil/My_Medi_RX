@@ -46,7 +46,7 @@ class RegisterRequest extends FormRequest
             'registration_type' => [
                 'required',
                 'string',
-                Rule::in(['Doctor', 'Patient']),
+                Rule::in(['Doctor', 'Patient', 'Hospital', 'Pharmacy']),
             ],
 
             'mobile' => [
@@ -82,7 +82,7 @@ class RegisterRequest extends FormRequest
             'password.confirmed' => 'Password confirmation does not match.',
 
             'registration_type.required' => 'Registration type is required.',
-            'registration_type.in'       => 'Registration type must be Doctor or Patient.',
+            'registration_type.in'       => 'Registration type must be Doctor, Patient, Hospital, or Pharmacy.',
 
             'mobile.required' => 'Mobile number is required.',
             'mobile.unique'   => 'This mobile number is already registered. Please use another mobile number.',
