@@ -34,5 +34,8 @@ return [
             'channel'              => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'ai_assistant' => [
+    'model' => env('OPENAI_MODEL', 'gpt-5.4-mini'),
+],
 
 ];
