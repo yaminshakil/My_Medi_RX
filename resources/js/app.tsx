@@ -4,6 +4,7 @@ import './bootstrap';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
+import GlobalPostNotifications from './Components/GlobalPostNotifications';
 
 // React Toastify CSS (if used)
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,7 +28,12 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+            <>
+                <App {...props} />
+                <GlobalPostNotifications />
+            </>,
+        );
     },
     progress: {
         color: '#4B5563',

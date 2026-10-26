@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureProfileExists;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\NotifyAdminsOfSuccessfulPost;
 use App\Http\Middleware\RoleRedirectMiddleware;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
@@ -22,6 +23,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->append(NotifyAdminsOfSuccessfulPost::class);
+
         $middleware->alias([
             'role'               => RoleMiddleware::class,
             'permission'         => PermissionMiddleware::class,

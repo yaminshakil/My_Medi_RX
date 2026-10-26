@@ -47,9 +47,16 @@ class AiAssistantController extends Controller
                 'message' => 'AI assistant is temporarily unavailable.',
             ], 503);
         } catch (Throwable $exception) {
-            Log::error('AI assistant request failed.', [
-                'exception' => $exception::class,
-            ]);
+            Log::error('AI Assistant provider error', [
+        'exception' => $exception::class,
+        'message' => $exception->getMessage(),
+        'code' => $exception->getCode(),
+        'status' => method_exists($exception, 'getStatusCode')
+            ? $exception->getStatusCode()
+            : null,
+        'file' => $exception->getFile(),
+        'line' => $exception->getLine(),
+    ]);
 
             return response()->json([
                 'success' => false,
