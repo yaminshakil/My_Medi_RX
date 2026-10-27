@@ -35,7 +35,12 @@ return [
         ],
     ],
     'ai_assistant' => [
-    'model' => env('OPENAI_MODEL', 'gpt-5.4-mini'),
-],
+        'model' => env('OPENAI_MODEL', 'gpt-5.4-mini'),
+    ],
+
+    'firebase' => [
+        'project_id'  => env('FIREBASE_PROJECT_ID'),
+        'credentials' => env('FIREBASE_CREDENTIALS'),
+    ],
 
 ];

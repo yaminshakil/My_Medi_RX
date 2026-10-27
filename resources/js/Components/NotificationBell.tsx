@@ -1,4 +1,5 @@
 import { Bell } from 'lucide-react';
+import type { PageProps } from '@inertiajs/core';
 import { router, usePage } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 import echo from '@/echo';
@@ -7,16 +8,11 @@ interface NotificationItem {
     id: string;
     title: string;
     message: string;
-    url: string;
+    url: string | null;
     created_at: string;
 }
 
 interface NotificationProps {
-    auth: {
-        user: {
-            id: number;
-        };
-    };
     notifications: {
         unread_count: number;
         items: NotificationItem[];
@@ -24,7 +20,7 @@ interface NotificationProps {
 }
 
 export default function NotificationBell() {
-    const { auth, notifications } = usePage<NotificationProps>().props;
+    const { auth, notifications } = usePage<PageProps & NotificationProps>().props;
 
     const [isOpen, setIsOpen] = useState(false);
     const [items, setItems] = useState<NotificationItem[]>(notifications?.items ?? []);
@@ -99,7 +95,7 @@ export default function NotificationBell() {
     /*
      * Handle clicking an item in the dropdown
      */
-    const handleNotificationClick = (id: string, url: string) => {
+    const handleNotificationClick = (id: string, url: string | null) => {
         router.post(
             route('notifications.read', id),
             {},

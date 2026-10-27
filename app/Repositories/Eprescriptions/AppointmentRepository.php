@@ -4,16 +4,20 @@ namespace App\Repositories\Eprescriptions;
 
 use App\Helpers\ShortcodeHelper;
 use App\Interfaces\Eprescriptions\AppointmentRepositoryInterface;
+use App\Jobs\SendFirebasePushNotification;
 use App\Mail\AppointmentMail;
 use App\Models\Appointment;
 use App\Models\EmailTemplate;
 use App\Models\Setting;
 use App\Models\User;
+use App\Notifications\AppointmentBookedNotification;
 use App\Services\Eprescriptions\AppointmentNumberService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use Throwable;
 
 class AppointmentRepository implements AppointmentRepositoryInterface
 {
@@ -129,9 +133,51 @@ class AppointmentRepository implements AppointmentRepositoryInterface
         $appointmentnumber = $this->appointmentnumber->generate();
         $data += ['appointment_number' => $appointmentnumber];
 
+        if ($this->doctor_id !== null) {
+            $data['doctor_id'] = $this->doctor_id;
+        }
+
         $appointment = Appointment::create($data);
+        $this->notifyDoctorOfAppointment($appointment);
 
         return $appointment;
+    }
+
+    private function notifyDoctorOfAppointment(Appointment $appointment): void
+    {
+        $appointment->loadMissing(['doctor', 'patient']);
+        $doctor = $appointment->doctor;
+
+        if ($doctor === null) {
+            return;
+        }
+
+        Notification::send($doctor, new AppointmentBookedNotification($appointment));
+
+        $patientName = $appointment->patient?->name ?? 'A patient';
+        $appointmentDate = $appointment->appointment_date->format('M j, Y');
+        $appointmentTime = $appointment->appointment_time->format('g:i A');
+
+        try {
+            foreach ($doctor->firebaseDeviceTokens()->pluck('id') as $deviceTokenId) {
+                SendFirebasePushNotification::dispatch(
+                    (int) $deviceTokenId,
+                    'New Appointment',
+                    "{$patientName} booked an appointment for {$appointmentDate} at {$appointmentTime}.",
+                    [
+                        'type'           => 'appointment_booked',
+                        'appointment_id' => (string) $appointment->getKey(),
+                        'actionRoute'    => '/admin/appointments',
+                    ],
+                );
+            }
+        } catch (Throwable $exception) {
+            Log::error('Unable to queue Firebase appointment notification.', [
+                'appointment_id' => $appointment->getKey(),
+                'doctor_id'      => $doctor->getKey(),
+                'error'          => $exception->getMessage(),
+            ]);
+        }
     }
 
     public function update(array $data, int $id): int
@@ -209,7 +255,7 @@ class AppointmentRepository implements AppointmentRepositoryInterface
                     'appointment_id' => $appointment->id,
                     'recipient'      => $patient->email,
                 ]);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 Log::error('Appointment email failed', [
                     'appointment_id' => $appointment->id,
                     'error'          => $e->getMessage(),

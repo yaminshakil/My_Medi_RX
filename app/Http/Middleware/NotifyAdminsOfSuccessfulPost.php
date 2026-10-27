@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\User;
+use App\Notifications\ApiPostActionNotification;
 use App\Notifications\PostActionNotification;
 use Closure;
 use Illuminate\Http\Request;
@@ -15,6 +16,16 @@ class NotifyAdminsOfSuccessfulPost
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
+
+        if ($this->shouldNotifyActor($request, $response)) {
+            $actor = $request->user();
+            $routeAction = $request->route()?->getName() ?? $request->route()?->uri() ?? $request->path();
+            $action = Str::headline(str_replace(['api.v1.', 'api/v1/', '.', '/', '{', '}'], ' ', $routeAction));
+
+            if ($actor instanceof User) {
+                Notification::send($actor, new ApiPostActionNotification($action));
+            }
+        }
 
         if (! $this->shouldNotifyAdmins($request, $response)) {
             return $response;
@@ -36,6 +47,14 @@ class NotifyAdminsOfSuccessfulPost
         return $response;
     }
 
+    private function shouldNotifyActor(Request $request, Response $response): bool
+    {
+        return $request->isMethod('post')
+            && $response->isSuccessful()
+            && ! $request->routeIs('notifications.read', 'api.v1.register', 'api.v1.device-token.store', 'boost.*')
+            && ! $request->is('_boost', '_boost/*', 'broadcasting/auth');
+    }
+
     private function shouldNotifyAdmins(Request $request, Response $response): bool
     {
         if (! $request->isMethod('post') || (! $response->isSuccessful() && ! $response->isRedirection())) {
@@ -43,7 +62,7 @@ class NotifyAdminsOfSuccessfulPost
         }
 
         if (
-            $request->routeIs('notifications.read', 'api.v1.register', 'boost.*')
+            $request->routeIs('notifications.read', 'api.v1.register', 'api.v1.device-token.store', 'boost.*')
             || $request->is('_boost', '_boost/*', 'broadcasting/auth')
         ) {
             return false;

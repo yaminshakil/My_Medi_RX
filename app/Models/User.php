@@ -6,6 +6,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -113,6 +114,11 @@ class User extends Authenticatable implements JWTSubject
     public function profileImage()
     {
         return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function firebaseDeviceTokens(): HasMany
+    {
+        return $this->hasMany(FirebaseDeviceToken::class);
     }
 
     public function getProfileImageUrlAttribute()

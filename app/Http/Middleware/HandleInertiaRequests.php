@@ -90,7 +90,7 @@ class HandleInertiaRequests extends Middleware
                     ? Auth::user()->unreadNotifications()->count()
                     : 0,
 
-                'items' => Auth::check() && Auth::user()->hasRole('Admin')
+                'items' => Auth::check()
                     ? Auth::user()
                         ->unreadNotifications()
                         ->latest()
@@ -98,9 +98,9 @@ class HandleInertiaRequests extends Middleware
                         ->get()
                         ->map(fn ($notification) => [
                             'id'         => $notification->id,
-                            'title'      => $notification->data['title'],
-                            'message'    => $notification->data['message'],
-                            'url'        => $notification->data['url'],
+                            'title'      => $notification->data['title'] ?? 'Notification',
+                            'message'    => $notification->data['message'] ?? '',
+                            'url'        => $notification->data['url'] ?? $notification->data['actionRoute'] ?? null,
                             'created_at' => $notification->created_at,
                         ])
                     : [],

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\UserPasswordResetController;
+use App\Http\Controllers\Api\FirebaseDeviceTokenController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/register', [AuthController::class, 'register'])->name('register');
@@ -18,6 +19,8 @@ Route::post('/auth/password/change', [UserPasswordResetController::class, 'chang
 
 Route::middleware(['auth:api'])->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::post('/auth/device-token', [FirebaseDeviceTokenController::class, 'store'])
+        ->name('device-token.store');
     Route::get('/user', [AuthController::class, 'user']);
 });
 

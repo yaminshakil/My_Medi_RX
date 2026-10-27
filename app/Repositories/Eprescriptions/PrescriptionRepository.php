@@ -5,16 +5,19 @@ namespace App\Repositories\Eprescriptions;
 use App\Http\Resources\Prescriptions\PrescriptionResource;
 use App\Interfaces\Eprescriptions\GynaeHistoryRepositoryInterface;
 use App\Interfaces\Eprescriptions\PrescriptionRepositoryInterface;
+use App\Jobs\SendFirebasePushNotification;
 use App\Models\Medicine;
 use App\Models\Patient;
 use App\Models\Prescription;
 use App\Models\PrescriptionMedicine;
 use App\Models\User;
 use App\Models\Vital;
+use App\Notifications\PrescriptionIssuedNotification;
 use App\Services\Eprescriptions\PrescriptionNumberService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class PrescriptionRepository implements PrescriptionRepositoryInterface
 {
@@ -164,6 +167,8 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
                 $this->gynaeHistoryRepo->create($cleaned);
             }
 
+            $this->notifyPatientOfIssuedPrescription($prescription);
+
             DB::commit();
             logger()->debug('STEP 6: Transaction committed');
 
@@ -177,6 +182,47 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
                 'line'    => $e->getLine(),
             ]);
             throw $e;
+        }
+    }
+
+    private function notifyPatientOfIssuedPrescription(Prescription $prescription): void
+    {
+        if ($prescription->status !== 'issued') {
+            return;
+        }
+
+        $prescription->loadMissing(['patient.user', 'doctor']);
+        $patientUser = $prescription->patient?->user;
+
+        if ($patientUser === null) {
+            return;
+        }
+
+        $actionRoute = route('api.v1.prescriptions.show', [
+            'prescription' => $prescription->id,
+        ], absolute: false);
+        $doctorName = $prescription->doctor?->name ?? 'your doctor';
+        $notification = new PrescriptionIssuedNotification(
+            prescriptionId: (string) $prescription->id,
+            prescriptionNumber: (string) $prescription->prescription_number,
+            doctorName: $doctorName,
+            actionRoute: $actionRoute,
+        );
+
+        Notification::send($patientUser, $notification);
+
+        foreach ($patientUser->firebaseDeviceTokens()->pluck('id') as $deviceTokenId) {
+            SendFirebasePushNotification::dispatch(
+                (int) $deviceTokenId,
+                'New Prescription',
+                "Dr. {$doctorName} issued your prescription {$prescription->prescription_number}.",
+                [
+                    'type'                => 'prescription_issued',
+                    'prescription_id'     => (string) $prescription->id,
+                    'prescription_number' => (string) $prescription->prescription_number,
+                    'actionRoute'         => $actionRoute,
+                ],
+            );
         }
     }
 
