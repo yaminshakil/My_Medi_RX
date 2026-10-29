@@ -8,7 +8,7 @@ class StorePharmacyLicenseRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->hasRole('Pharmacy', 'api') ?? false;
+        return true;
     }
 
     /**
