@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\MenstrualCycle\MenstrualCycleController;
 use App\Http\Controllers\Api\V1\Patient\MedicationAdherenceController;
 use App\Http\Controllers\Api\V1\Patient\MedicationController;
 use App\Http\Controllers\Api\V1\Patient\MedicationLogController;
@@ -9,6 +10,8 @@ use App\Http\Controllers\Api\V1\Patient\MedicationScanController;
 use App\Http\Controllers\Api\V1\Patient\MedicationScheduleController;
 use App\Http\Controllers\Api\V1\Patient\PatientController;
 use App\Http\Controllers\Api\V1\Patient\PatientDashboardController;
+use App\Http\Controllers\Api\V1\Patient\PharmacyDirectoryController;
+use App\Http\Controllers\Api\V1\Patient\PrescriptionPharmacyController;
 use App\Http\Controllers\Api\V1\Patient\VaccinationController;
 use App\Http\Controllers\Api\V1\Patient\VaccinationScheduleController;
 use App\Http\Controllers\Api\V1\Patient\VitalTrendsController;
@@ -16,7 +19,6 @@ use App\Http\Controllers\Api\V1\PediatricDoseController;
 use App\Http\Controllers\Api\V1\Pregnancy\PregnancyProfileController;
 use App\Http\Controllers\Api\V1\Pregnancy\PregnancyStatusController;
 use App\Http\Controllers\Api\V1\Pregnancy\PregnancySymptomLogController;
-use App\Http\Controllers\Api\V1\MenstrualCycle\MenstrualCycleController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api', 'profile.exists'])->group(function () {
@@ -29,9 +31,16 @@ Route::middleware(['auth:api', 'profile.exists'])->group(function () {
 Route::prefix('/patient')
     ->middleware(['auth:api', 'profile.exists'])
     ->group(function () {
+        Route::get('/pharmacies', [PharmacyDirectoryController::class, 'index'])
+            ->middleware('role:Patient,api')
+            ->name('pharmacies.index');
         Route::get('/dashboard', [
             PatientDashboardController::class, 'index',
         ]);
+        Route::post('/prescriptions/{prescription}/pharmacy', [
+            PrescriptionPharmacyController::class,
+            'store',
+        ])->name('prescriptions.pharmacy.store');
 
         Route::get(
             '/dashboard/heatmap',
@@ -172,12 +181,12 @@ Route::middleware('auth:api')
     });
 
 Route::middleware('auth:api')
-->group(function () {
-    Route::prefix('menstrual-cycle')
-        ->name('api.v1.menstrual-cycle.')
-        ->controller(MenstrualCycleController::class)
-        ->group(function () {
-            Route::get('/status', 'status')->name('status');
-            Route::post('/log', 'log')->name('log');
-        });
-});
+    ->group(function () {
+        Route::prefix('menstrual-cycle')
+            ->name('api.v1.menstrual-cycle.')
+            ->controller(MenstrualCycleController::class)
+            ->group(function () {
+                Route::get('/status', 'status')->name('status');
+                Route::post('/log', 'log')->name('log');
+            });
+    });

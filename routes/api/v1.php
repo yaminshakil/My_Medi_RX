@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\V1\NotificationController;
+use App\Http\Controllers\Api\V1\Pharmacy\PharmacyInventoryController;
 use App\Http\Controllers\Api\V1\Pharmacy\PharmacyLicenseController;
+use App\Http\Controllers\Api\V1\Pharmacy\PharmacyPrescriptionOrderController;
 use App\Http\Controllers\Api\V1\Pharmacy\PharmacyRegistrationController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,12 +15,7 @@ Route::middleware('auth:api')
             ->name('notifications.index');
         Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])
             ->name('notifications.read');
-        Route::post('/pharmacies', [PharmacyRegistrationController::class, 'store'])
-            ->middleware('role:Pharmacy,api')
-            ->name('pharmacies.store');
-        Route::post('/pharmacies/licenses', [PharmacyLicenseController::class, 'store'])
-            ->middleware('role:Pharmacy,api')
-            ->name('pharmacies.licenses.store');
+
 
         require base_path('routes/api/v1/doctor.php');
         require base_path('routes/api/v1/patient.php');
@@ -27,4 +24,5 @@ Route::middleware('auth:api')
         require base_path('routes/api/v1/appointment.php');
         require base_path('routes/api/v1/prescription.php');
         require base_path('routes/api/v1/users.php');
+        require base_path('routes/api/v1/pharmacies.php');
     });

@@ -5,6 +5,7 @@ namespace Tests\Feature\Admin;
 use App\Models\Pharmacist;
 use App\Models\Pharmacy;
 use App\Models\PharmacyAddress;
+use App\Models\PharmacyInventoryItem;
 use App\Models\PharmacyLicense;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -82,6 +83,40 @@ class PharmacyAnalyticsControllerTest extends TestCase
         $this->actingAs($user)
             ->get(route('admin.pharmacies.analytics'))
             ->assertRedirect(route('dashboard'));
+    }
+
+    public function test_pharmacy_dashboard_renders_owner_scoped_operations_analytics(): void
+    {
+        $owner = $this->userWithRole('Pharmacy');
+        $otherOwner = $this->userWithRole('Pharmacy');
+        $pharmacy = $this->createPharmacy($owner, 'approved', '2026-10-12 10:00:00');
+        $otherPharmacy = $this->createPharmacy($otherOwner, 'approved', '2026-10-12 10:00:00');
+        PharmacyInventoryItem::query()->create([
+            'pharmacy_id'    => $pharmacy->id,
+            'medicine_name'  => 'Owner low-stock medicine',
+            'stock_quantity' => 2,
+            'reorder_level'  => 5,
+            'expiry_date'    => today()->addDays(20),
+        ]);
+        PharmacyInventoryItem::query()->create([
+            'pharmacy_id'    => $otherPharmacy->id,
+            'medicine_name'  => 'Other pharmacy medicine',
+            'stock_quantity' => 0,
+            'reorder_level'  => 5,
+            'expiry_date'    => today()->addDays(10),
+        ]);
+
+        $this->actingAs($owner)
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('Admin/Pharmacies/Analytics')
+                ->where('audience', 'pharmacy')
+                ->where('summary.pharmacies.total', 1)
+                ->where('operations.lowStockDrugs', 1)
+                ->where('operations.expiringSoon', 1)
+                ->where('operations.lowStockItems.0.medicine_name', 'Owner low-stock medicine')
+                ->where('operations.expiringSoonItems.0.medicine_name', 'Owner low-stock medicine'));
     }
 
     private function userWithRole(string $roleName): User

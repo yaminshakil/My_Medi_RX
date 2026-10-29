@@ -13,7 +13,19 @@ return new class extends Migration
     {
         Schema::create('pharmacy_dispenses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('pharmacy_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('pharmacy_prescription_order_id')
+                ->constrained()
+                ->restrictOnDelete();
+            $table->foreignId('pharmacy_inventory_item_id')
+                ->constrained()
+                ->restrictOnDelete();
+            $table->foreignId('dispensed_by')->constrained('users')->restrictOnDelete();
+            $table->unsignedInteger('quantity');
+            $table->timestamp('dispensed_at');
             $table->timestamps();
+
+            $table->index(['pharmacy_id', 'dispensed_at']);
         });
     }
 

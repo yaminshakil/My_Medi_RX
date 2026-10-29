@@ -7,14 +7,18 @@ import {
     CardTitle,
 } from "@/Components/ui/card";
 import AppLayout from "@/Layouts/app-layout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, usePoll } from "@inertiajs/react";
 import {
     Activity,
     Building2,
     ChartNoAxesCombined,
     ClipboardCheck,
+    Clock3,
     FileCheck2,
     MapPin,
+    PackageCheck,
+    Pill,
+    TriangleAlert,
     UserRoundCheck,
 } from "lucide-react";
 import {
@@ -28,6 +32,34 @@ import {
 } from "recharts";
 
 type StatusTotal = { status: string; total: number };
+
+type Operations = {
+    todayPrescriptions: number;
+    pendingPrescriptions: number;
+    medicinesDispensedToday: number;
+    lowStockDrugs: number;
+    expiringSoon: number;
+    lowStockItems: {
+        id: number;
+        medicine_name: string;
+        strength: string | null;
+        stock_quantity: number;
+        reorder_level: number;
+    }[];
+    expiringSoonItems: {
+        id: number;
+        medicine_name: string;
+        strength: string | null;
+        stock_quantity: number;
+        expiry_date: string | null;
+    }[];
+    recentPrescriptions: {
+        id: number;
+        prescription_number: string | null;
+        status: string;
+        received_at: string | null;
+    }[];
+};
 
 type AnalyticsProps = {
     summary: {
@@ -67,6 +99,8 @@ type AnalyticsProps = {
         district: string | null;
         division: string | null;
     }[];
+    audience: "admin" | "pharmacy";
+    operations: Operations | null;
 };
 
 const statusClass: Record<string, string> = {
@@ -149,7 +183,15 @@ export default function Analytics({
     pharmacistStatuses,
     locations,
     recentPharmacies,
+    audience,
+    operations,
 }: AnalyticsProps) {
+    usePoll(
+        30000,
+        { only: ["operations"], preserveScroll: true },
+        { autoStart: audience === "pharmacy" },
+    );
+
     const metrics = [
         {
             label: "Total pharmacies",
@@ -176,19 +218,57 @@ export default function Analytics({
             icon: UserRoundCheck,
         },
     ];
+    const operationMetrics = operations
+        ? [
+              {
+                  label: "Prescriptions received today",
+                  value: operations.todayPrescriptions,
+                  icon: ClipboardCheck,
+                  tone: "text-sky-700",
+              },
+              {
+                  label: "Waiting to be fulfilled",
+                  value: operations.pendingPrescriptions,
+                  icon: Clock3,
+                  tone: "text-amber-700",
+              },
+              {
+                  label: "Medicines dispensed today",
+                  value: operations.medicinesDispensedToday,
+                  icon: PackageCheck,
+                  tone: "text-emerald-700",
+              },
+              {
+                  label: "Low-stock drugs",
+                  value: operations.lowStockDrugs,
+                  icon: Pill,
+                  tone: "text-rose-700",
+              },
+              {
+                  label: "Expiring within 30 days",
+                  value: operations.expiringSoon,
+                  icon: TriangleAlert,
+                  tone: "text-orange-700",
+              },
+          ]
+        : [];
 
     return (
         <AppLayout
-            breadcrumbs={[
-                {
-                    title: "Pharmacies",
-                    href: route("admin.pharmacies.index"),
-                },
-                {
-                    title: "Analytics",
-                    href: route("admin.pharmacies.analytics"),
-                },
-            ]}
+            breadcrumbs={
+                audience === "pharmacy"
+                    ? [{ title: "Pharmacy dashboard", href: route("dashboard") }]
+                    : [
+                          {
+                              title: "Pharmacies",
+                              href: route("admin.pharmacies.index"),
+                          },
+                          {
+                              title: "Analytics",
+                              href: route("admin.pharmacies.analytics"),
+                          },
+                      ]
+            }
         >
             <Head title="Pharmacy analytics" />
             <div className="flex flex-col gap-6 p-4 md:p-6">
@@ -199,20 +279,212 @@ export default function Analytics({
                             Healthcare directory
                         </p>
                         <h1 className="mt-1 text-2xl font-semibold tracking-tight">
-                            Pharmacy analytics
+                            {audience === "pharmacy"
+                                ? "Pharmacy operations"
+                                : "Pharmacy analytics"}
                         </h1>
                         <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-                            Monitor registrations, credential reviews, and
-                            pharmacy coverage across locations.
+                            {audience === "pharmacy"
+                                ? "Track prescription fulfillment, dispensing activity, and stock alerts for your pharmacy."
+                                : "Monitor registrations, credential reviews, and pharmacy coverage across locations."}
                         </p>
                     </div>
-                    <Link
-                        href={route("admin.pharmacies.index")}
-                        className="inline-flex h-9 items-center rounded-md border bg-background px-4 text-sm font-medium transition-colors hover:bg-muted"
-                    >
-                        View pharmacy registry
-                    </Link>
+                    {audience === "admin" && (
+                        <Link
+                            href={route("admin.pharmacies.index")}
+                            className="inline-flex h-9 items-center rounded-md border bg-background px-4 text-sm font-medium transition-colors hover:bg-muted"
+                        >
+                            View pharmacy registry
+                        </Link>
+                    )}
                 </div>
+
+                {audience === "pharmacy" && operations && (
+                    <>
+                        <section
+                            aria-label="Pharmacy operations summary"
+                            className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5"
+                        >
+                            {operationMetrics.map(
+                                ({ label, value, icon: Icon, tone }) => (
+                                    <Card key={label}>
+                                        <CardContent className="flex items-center justify-between gap-4 p-5">
+                                            <div>
+                                                <p className="text-sm text-muted-foreground">
+                                                    {label}
+                                                </p>
+                                                <p className="mt-2 text-3xl font-semibold tabular-nums">
+                                                    {value.toLocaleString()}
+                                                </p>
+                                            </div>
+                                            <span
+                                                className={`rounded-lg bg-muted p-3 ${tone}`}
+                                            >
+                                                <Icon className="size-5" />
+                                            </span>
+                                        </CardContent>
+                                    </Card>
+                                ),
+                            )}
+                        </section>
+
+                        <div className="grid gap-4 xl:grid-cols-3">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Prescription queue</CardTitle>
+                                    <CardDescription>
+                                        Most recently received prescriptions.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    {operations.recentPrescriptions.length ===
+                                    0 ? (
+                                        <p className="py-6 text-center text-sm text-muted-foreground">
+                                            No prescriptions in the queue.
+                                        </p>
+                                    ) : (
+                                        <div className="flex flex-col divide-y">
+                                            {operations.recentPrescriptions.map(
+                                                (prescription) => (
+                                                    <div
+                                                        key={prescription.id}
+                                                        className="flex items-center justify-between gap-3 py-3"
+                                                    >
+                                                        <div>
+                                                            <p className="font-medium">
+                                                                {prescription.prescription_number ??
+                                                                    `Prescription #${prescription.id}`}
+                                                            </p>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                {formatDate(
+                                                                    prescription.received_at,
+                                                                )}
+                                                            </p>
+                                                        </div>
+                                                        <Badge
+                                                            variant="outline"
+                                                            className={
+                                                                statusClass[
+                                                                    prescription
+                                                                        .status
+                                                                ] ?? ""
+                                                            }
+                                                        >
+                                                            {
+                                                                prescription.status
+                                                            }
+                                                        </Badge>
+                                                    </div>
+                                                ),
+                                            )}
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
+
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Low-stock alerts</CardTitle>
+                                    <CardDescription>
+                                        Stock at or below its reorder level.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    {operations.lowStockItems.length === 0 ? (
+                                        <p className="py-6 text-center text-sm text-muted-foreground">
+                                            No low-stock items.
+                                        </p>
+                                    ) : (
+                                        <div className="flex flex-col divide-y">
+                                            {operations.lowStockItems.map(
+                                                (item) => (
+                                                    <div
+                                                        key={item.id}
+                                                        className="flex items-center justify-between gap-3 py-3"
+                                                    >
+                                                        <div>
+                                                            <p className="font-medium">
+                                                                {
+                                                                    item.medicine_name
+                                                                }
+                                                            </p>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                {item.strength ??
+                                                                    "Strength not provided"}
+                                                            </p>
+                                                        </div>
+                                                        <Badge variant="outline">
+                                                            {
+                                                                item.stock_quantity
+                                                            }{" "}
+                                                            /{" "}
+                                                            {
+                                                                item.reorder_level
+                                                            }
+                                                        </Badge>
+                                                    </div>
+                                                ),
+                                            )}
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
+
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Near-expiry stock</CardTitle>
+                                    <CardDescription>
+                                        In-stock items expiring within 30 days.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    {operations.expiringSoonItems.length ===
+                                    0 ? (
+                                        <p className="py-6 text-center text-sm text-muted-foreground">
+                                            No items nearing expiration.
+                                        </p>
+                                    ) : (
+                                        <div className="flex flex-col divide-y">
+                                            {operations.expiringSoonItems.map(
+                                                (item) => (
+                                                    <div
+                                                        key={item.id}
+                                                        className="flex items-center justify-between gap-3 py-3"
+                                                    >
+                                                        <div>
+                                                            <p className="font-medium">
+                                                                {
+                                                                    item.medicine_name
+                                                                }
+                                                            </p>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                {item.strength ??
+                                                                    "Strength not provided"}
+                                                            </p>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="font-medium tabular-nums">
+                                                                {
+                                                                    item.stock_quantity
+                                                                }{" "}
+                                                                units
+                                                            </p>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                {formatDate(
+                                                                    item.expiry_date,
+                                                                )}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                ),
+                                            )}
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </>
+                )}
 
                 <section
                     aria-label="Pharmacy summary"

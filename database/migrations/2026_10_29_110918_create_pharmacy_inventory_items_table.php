@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('pharmacy_inventory_items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('pharmacy_id')->constrained()->cascadeOnDelete();
+            $table->string('medicine_name');
+            $table->string('generic_name')->nullable();
+            $table->string('strength')->nullable();
+            $table->unsignedInteger('stock_quantity')->default(0);
+            $table->unsignedInteger('reorder_level')->default(0);
+            $table->date('expiry_date')->nullable();
             $table->timestamps();
+
+            $table->index(['pharmacy_id', 'stock_quantity']);
+            $table->index(['pharmacy_id', 'expiry_date']);
         });
     }
 

@@ -42,7 +42,7 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin,Doc
     })->name('notifications.read');
 });
 
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'role.redirect:Admin, Pharmacy'])->scopeBindings()->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'role.redirect:Admin,Pharmacy'])->scopeBindings()->group(function () {
     Route::get('pharmacies/analytics', PharmacyAnalyticsController::class)
         ->name('pharmacies.analytics');
     Route::resource('pharmacies', PharmacyController::class);

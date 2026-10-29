@@ -2,28 +2,29 @@
 
 namespace App\Http\Requests\Api\V1;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePharmacyInventoryItemRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()?->hasRole('Pharmacy', 'api') ?? false;
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * @return array<string, array<int, mixed>>
      */
     public function rules(): array
     {
+        $required = $this->isMethod('POST') ? 'required' : 'sometimes';
+
         return [
-            //
+            'medicine_name'  => [$required, 'string', 'max:255'],
+            'generic_name'   => ['sometimes', 'nullable', 'string', 'max:255'],
+            'strength'       => ['sometimes', 'nullable', 'string', 'max:100'],
+            'stock_quantity' => [$required, 'integer', 'min:0', 'max:10000000'],
+            'reorder_level'  => [$required, 'integer', 'min:0', 'max:10000000'],
+            'expiry_date'    => ['sometimes', 'nullable', 'date', 'after_or_equal:today'],
         ];
     }
 }

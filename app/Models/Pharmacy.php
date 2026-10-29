@@ -60,6 +60,21 @@ class Pharmacy extends Model
         return $this->hasMany(Pharmacist::class);
     }
 
+    public function inventoryItems(): HasMany
+    {
+        return $this->hasMany(PharmacyInventoryItem::class);
+    }
+
+    public function prescriptionOrders(): HasMany
+    {
+        return $this->hasMany(PharmacyPrescriptionOrder::class);
+    }
+
+    public function dispenses(): HasMany
+    {
+        return $this->hasMany(PharmacyDispense::class);
+    }
+
     public function verifier(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');
