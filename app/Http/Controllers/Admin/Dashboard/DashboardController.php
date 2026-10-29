@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\DashboardRepositoryInterface;
 use App\Interfaces\Eprescriptions\DoctorChamberRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Pharmacy\PharmacyAnalyticsService;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -15,13 +16,16 @@ class DashboardController extends Controller
     private DoctorChamberRepositoryInterface $doctorChamberRepository;
 
     protected $user;
+    protected $analytics;
 
     public function __construct(
         DashboardRepositoryInterface $dashboardRepository,
-        DoctorChamberRepositoryInterface $doctorChamberRepository
+        DoctorChamberRepositoryInterface $doctorChamberRepository,
+        PharmacyAnalyticsService $analytics
     ) {
         $this->dashboardRepository = $dashboardRepository;
         $this->doctorChamberRepository = $doctorChamberRepository;
+        $this->analytics = $analytics;
         $this->user = Auth::user();
     }
 
@@ -54,6 +58,9 @@ class DashboardController extends Controller
                 'token'       => $token,
                 'patientinfo' => $patientinfo,
             ]);
+        } elseif ($this->user->hasRole('Pharmacy')) {
+            dd('test');
+            return Inertia::render('Admin/Pharmacies/Analytics', $this->analytics->dashboard());
         }
     }
 }

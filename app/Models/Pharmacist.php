@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pharmacist extends Model
 {
+    /** @use HasFactory<Pharmacist> */
     use HasFactory;
 
     protected $fillable = [

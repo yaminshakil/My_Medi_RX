@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionSeeder::class,
             AdminMenuSeeder::class,
+            PharmacyMenuSeeder::class,
             CountriesTableSeeder::class,
             SettingSeeder::class,
             MedicalSpecialtiesSeeder::class,

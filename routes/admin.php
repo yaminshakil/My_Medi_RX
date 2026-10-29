@@ -5,6 +5,10 @@ use App\Http\Controllers\Admin\Auth\RoleController;
 use App\Http\Controllers\Admin\Auth\UserController;
 use App\Http\Controllers\Admin\Menu\MenuController;
 use App\Http\Controllers\Admin\Pediatric\PediatricDoseRuleController;
+use App\Http\Controllers\Admin\PharmacistController;
+use App\Http\Controllers\Admin\PharmacyAnalyticsController;
+use App\Http\Controllers\Admin\PharmacyController;
+use App\Http\Controllers\Admin\PharmacyLicenseController;
 use App\Http\Controllers\Admin\Pregnancy\PregnancyProfileController;
 use App\Http\Controllers\Admin\Pregnancy\PregnancyTipController;
 use App\Http\Controllers\Admin\Pregnancy\PregnancyWeeklyHighlightController;
@@ -36,6 +40,36 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin,Doc
 
         return back();
     })->name('notifications.read');
+});
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'role.redirect:Admin, Pharmacy'])->scopeBindings()->group(function () {
+    Route::get('pharmacies/analytics', PharmacyAnalyticsController::class)
+        ->name('pharmacies.analytics');
+    Route::resource('pharmacies', PharmacyController::class);
+    Route::patch('pharmacies/{pharmacy}/status', [PharmacyController::class, 'updateStatus'])
+        ->name('pharmacies.status');
+
+    Route::post('pharmacies/{pharmacy}/licenses', [PharmacyLicenseController::class, 'store'])
+        ->name('pharmacies.licenses.store');
+    Route::put('pharmacies/{pharmacy}/licenses/{license}', [PharmacyLicenseController::class, 'update'])
+        ->name('pharmacies.licenses.update');
+    Route::delete('pharmacies/{pharmacy}/licenses/{license}', [PharmacyLicenseController::class, 'destroy'])
+        ->name('pharmacies.licenses.destroy');
+    Route::get('pharmacies/{pharmacy}/licenses/{license}/document', [PharmacyLicenseController::class, 'download'])
+        ->name('pharmacies.licenses.document');
+    Route::patch('pharmacies/{pharmacy}/licenses/{license}/review', [PharmacyLicenseController::class, 'review'])
+        ->name('pharmacies.licenses.review');
+
+    Route::post('pharmacies/{pharmacy}/pharmacists', [PharmacistController::class, 'store'])
+        ->name('pharmacies.pharmacists.store');
+    Route::put('pharmacies/{pharmacy}/pharmacists/{pharmacist}', [PharmacistController::class, 'update'])
+        ->name('pharmacies.pharmacists.update');
+    Route::delete('pharmacies/{pharmacy}/pharmacists/{pharmacist}', [PharmacistController::class, 'destroy'])
+        ->name('pharmacies.pharmacists.destroy');
+    Route::get('pharmacies/{pharmacy}/pharmacists/{pharmacist}/document', [PharmacistController::class, 'download'])
+        ->name('pharmacies.pharmacists.document');
+    Route::patch('pharmacies/{pharmacy}/pharmacists/{pharmacist}/review', [PharmacistController::class, 'review'])
+        ->name('pharmacies.pharmacists.review');
 });
 
 Route::middleware(['auth', 'role.redirect:Admin'])->prefix('admin')->name('admin.')->group(function () {
