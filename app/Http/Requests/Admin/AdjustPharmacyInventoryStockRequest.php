@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\PharmacyInventoryItem;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -9,7 +10,13 @@ class AdjustPharmacyInventoryStockRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->hasRole('Admin') ?? false;
+        $user = $this->user();
+        $inventoryItem = $this->route('inventoryItem');
+
+        return $user?->hasRole('Admin')
+            || ($user?->hasRole('Pharmacy')
+                && $inventoryItem instanceof PharmacyInventoryItem
+                && $inventoryItem->pharmacy_id === $user->pharmacy?->id);
     }
 
     /**

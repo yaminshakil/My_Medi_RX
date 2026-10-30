@@ -67,7 +67,7 @@ type InventoryItem = {
 };
 
 type InventoryForm = {
-    pharmacy_id: string;
+    pharmacy_id?: string;
     medicine_name: string;
     generic_name: string;
     strength: string;
@@ -90,6 +90,7 @@ interface InventoryIndexProps {
         to: number | null;
         total: number;
     };
+    isAdmin: boolean;
     pharmacies: Pharmacy[];
     stats: {
         totalItems: number;
@@ -144,6 +145,7 @@ function stockBadge(item: InventoryItem) {
 
 export default function Index({
     inventory,
+    isAdmin,
     pharmacies,
     stats,
     filters,
@@ -186,7 +188,8 @@ export default function Index({
         form.clearErrors();
         form.setData({
             ...emptyForm,
-            pharmacy_id: pharmacies[0] ? String(pharmacies[0].id) : "",
+            pharmacy_id:
+                isAdmin && pharmacies[0] ? String(pharmacies[0].id) : "",
         });
         setItemDialogOpen(true);
     }
@@ -233,8 +236,19 @@ export default function Index({
             return;
         }
 
-        form.transform((data) => data);
-        form.post(route("admin.inventory.store"), options);
+        form.transform((data) => {
+            const payload = { ...data };
+
+            if (!isAdmin) {
+                delete payload.pharmacy_id;
+            }
+
+            return payload;
+        });
+        form.post(route("admin.inventory.store"), {
+            ...options,
+            onFinish: () => form.transform((data) => data),
+        });
     }
 
     function openStockDialog(item: InventoryItem) {
@@ -314,8 +328,9 @@ export default function Index({
                             Inventory &amp; stock
                         </h1>
                         <p className="mt-1 text-sm text-muted-foreground">
-                            Monitor medicine levels across pharmacies and adjust
-                            stock safely.
+                            {isAdmin
+                                ? "Monitor medicine levels across pharmacies and adjust stock safely."
+                                : "Manage your pharmacy's medicine levels and stock safely."}
                         </p>
                     </div>
                     <Button
@@ -373,42 +388,49 @@ export default function Index({
                                     onChange={(event) =>
                                         setSearch(event.target.value)
                                     }
-                                    placeholder="Search medicine or pharmacy"
+                                    placeholder={
+                                        isAdmin
+                                            ? "Search medicine or pharmacy"
+                                            : "Search medicines"
+                                    }
                                 />
                             </div>
-                            <select
-                                aria-label="Filter by pharmacy"
-                                className="h-9 rounded-md border bg-background px-3 text-sm"
-                                value={pharmacyId}
-                                onChange={(event) => {
-                                    setPharmacyId(event.target.value);
-                                    router.get(
-                                        route("admin.inventory.index"),
-                                        {
-                                            search: search || undefined,
-                                            pharmacy_id:
-                                                event.target.value || undefined,
-                                            stock_status: stockStatus,
-                                            per_page: filters.per_page,
-                                        },
-                                        {
-                                            preserveState: true,
-                                            preserveScroll: true,
-                                            replace: true,
-                                        },
-                                    );
-                                }}
-                            >
-                                <option value="">All pharmacies</option>
-                                {pharmacies.map((pharmacy) => (
-                                    <option
-                                        key={pharmacy.id}
-                                        value={pharmacy.id}
-                                    >
-                                        {pharmacy.name}
-                                    </option>
-                                ))}
-                            </select>
+                            {isAdmin && (
+                                <select
+                                    aria-label="Filter by pharmacy"
+                                    className="h-9 rounded-md border bg-background px-3 text-sm"
+                                    value={pharmacyId}
+                                    onChange={(event) => {
+                                        setPharmacyId(event.target.value);
+                                        router.get(
+                                            route("admin.inventory.index"),
+                                            {
+                                                search: search || undefined,
+                                                pharmacy_id:
+                                                    event.target.value ||
+                                                    undefined,
+                                                stock_status: stockStatus,
+                                                per_page: filters.per_page,
+                                            },
+                                            {
+                                                preserveState: true,
+                                                preserveScroll: true,
+                                                replace: true,
+                                            },
+                                        );
+                                    }}
+                                >
+                                    <option value="">All pharmacies</option>
+                                    {pharmacies.map((pharmacy) => (
+                                        <option
+                                            key={pharmacy.id}
+                                            value={pharmacy.id}
+                                        >
+                                            {pharmacy.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
                             <select
                                 aria-label="Filter by stock or expiry"
                                 className="h-9 rounded-md border bg-background px-3 text-sm"
@@ -632,17 +654,19 @@ export default function Index({
                         <DialogDescription>
                             {editingItem
                                 ? "Update medicine details and reorder information. Use stock adjustment to change quantity."
-                                : "Add a medicine to a pharmacy and enter its current quantity."}
+                                : isAdmin
+                                  ? "Add a medicine to a pharmacy and enter its current quantity."
+                                  : "Add a medicine to your pharmacy and enter its current quantity."}
                         </DialogDescription>
                     </DialogHeader>
                     <form onSubmit={submitItem} className="grid gap-4">
-                        {!editingItem && (
+                        {!editingItem && isAdmin && (
                             <div className="grid gap-2">
                                 <Label htmlFor="pharmacy_id">Pharmacy</Label>
                                 <select
                                     id="pharmacy_id"
                                     className="h-9 rounded-md border bg-background px-3 text-sm"
-                                    value={form.data.pharmacy_id}
+                                    value={form.data.pharmacy_id ?? ""}
                                     onChange={(event) =>
                                         form.setData(
                                             "pharmacy_id",

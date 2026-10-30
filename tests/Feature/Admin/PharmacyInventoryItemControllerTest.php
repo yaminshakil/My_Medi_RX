@@ -53,13 +53,164 @@ class PharmacyInventoryItemControllerTest extends TestCase
                 ->where('filters.stock_status', 'low'));
     }
 
-    public function test_pharmacy_user_is_redirected_from_admin_inventory(): void
+    public function test_pharmacy_user_only_sees_their_own_inventory_and_metrics(): void
     {
         $pharmacyUser = $this->userWithRole('Pharmacy');
+        $pharmacy = $this->createPharmacy($pharmacyUser, 'Central Care');
+        $otherPharmacy = $this->createPharmacy($this->userWithRole('Pharmacy'), 'Health Point');
+        $this->createInventoryItem($pharmacy, [
+            'medicine_name'  => 'Owned medicine',
+            'stock_quantity' => 7,
+        ]);
+        $this->createInventoryItem($otherPharmacy, [
+            'medicine_name'  => 'Other pharmacy medicine',
+            'stock_quantity' => 0,
+            'reorder_level'  => 2,
+            'expiry_date'    => today()->subDay(),
+        ]);
+        $this->createInventoryItem($otherPharmacy, [
+            'medicine_name'  => 'Other expiring medicine',
+            'stock_quantity' => 3,
+            'reorder_level'  => 4,
+            'expiry_date'    => today()->addDays(10),
+        ]);
 
         $this->actingAs($pharmacyUser)
             ->get(route('admin.inventory.index'))
-            ->assertRedirect(route('dashboard'));
+            ->assertOk()
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('Admin/Inventory/Index')
+                ->where('isAdmin', false)
+                ->where('inventory.total', 1)
+                ->where('inventory.data.0.medicine_name', 'Owned medicine')
+                ->where('stats.totalItems', 1)
+                ->where('stats.totalUnits', 7)
+                ->where('stats.lowStockItems', 0)
+                ->where('stats.outOfStockItems', 0)
+                ->where('stats.expiringSoonItems', 0)
+                ->where('stats.expiredItems', 0)
+                ->where('pharmacies', [
+                    ['id' => $pharmacy->id, 'name' => 'Central Care'],
+                ]));
+    }
+
+    public function test_pharmacy_user_cannot_filter_inventory_by_another_pharmacy(): void
+    {
+        $pharmacyUser = $this->userWithRole('Pharmacy');
+        $this->createPharmacy($pharmacyUser, 'Central Care');
+        $otherPharmacy = $this->createPharmacy($this->userWithRole('Pharmacy'), 'Health Point');
+
+        $this->actingAs($pharmacyUser)
+            ->get(route('admin.inventory.index', ['pharmacy_id' => $otherPharmacy->id]))
+            ->assertRedirect()
+            ->assertSessionHasErrors('pharmacy_id');
+    }
+
+    public function test_pharmacy_user_can_create_inventory_for_their_own_pharmacy(): void
+    {
+        $pharmacyUser = $this->userWithRole('Pharmacy');
+        $pharmacy = $this->createPharmacy($pharmacyUser, 'Central Care');
+
+        $this->actingAs($pharmacyUser)
+            ->post(route('admin.inventory.store'), [
+                'medicine_name'  => 'Paracetamol',
+                'generic_name'   => 'Acetaminophen',
+                'strength'       => '500 mg',
+                'stock_quantity' => 25,
+                'reorder_level'  => 8,
+                'expiry_date'    => today()->addMonths(6)->toDateString(),
+            ])
+            ->assertRedirect(route('admin.inventory.index'));
+
+        $this->assertDatabaseHas('pharmacy_inventory_items', [
+            'pharmacy_id'    => $pharmacy->id,
+            'medicine_name'  => 'Paracetamol',
+            'stock_quantity' => 25,
+        ]);
+    }
+
+    public function test_pharmacy_user_cannot_create_inventory_for_another_pharmacy(): void
+    {
+        $pharmacyUser = $this->userWithRole('Pharmacy');
+        $this->createPharmacy($pharmacyUser, 'Central Care');
+        $otherPharmacy = $this->createPharmacy($this->userWithRole('Pharmacy'), 'Health Point');
+
+        $this->actingAs($pharmacyUser)
+            ->from(route('admin.inventory.index'))
+            ->post(route('admin.inventory.store'), [
+                'pharmacy_id'    => $otherPharmacy->id,
+                'medicine_name'  => 'Paracetamol',
+                'stock_quantity' => 25,
+                'reorder_level'  => 8,
+            ])
+            ->assertRedirect(route('admin.inventory.index'))
+            ->assertSessionHasErrors('pharmacy_id');
+
+        $this->assertDatabaseMissing('pharmacy_inventory_items', [
+            'pharmacy_id'   => $otherPharmacy->id,
+            'medicine_name' => 'Paracetamol',
+        ]);
+    }
+
+    public function test_pharmacy_user_can_update_and_adjust_their_own_inventory(): void
+    {
+        $pharmacyUser = $this->userWithRole('Pharmacy');
+        $pharmacy = $this->createPharmacy($pharmacyUser, 'Central Care');
+        $item = $this->createInventoryItem($pharmacy, ['stock_quantity' => 10]);
+
+        $this->actingAs($pharmacyUser)
+            ->put(route('admin.inventory.update', $item), [
+                'medicine_name' => 'Updated medicine',
+                'reorder_level' => 4,
+            ])
+            ->assertRedirect(route('admin.inventory.index'));
+
+        $this->actingAs($pharmacyUser)
+            ->patch(route('admin.inventory.stock', $item), [
+                'direction' => 'increase',
+                'quantity'  => 5,
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('pharmacy_inventory_items', [
+            'id'             => $item->id,
+            'pharmacy_id'    => $pharmacy->id,
+            'medicine_name'  => 'Updated medicine',
+            'stock_quantity' => 15,
+        ]);
+    }
+
+    public function test_pharmacy_user_cannot_change_or_delete_another_pharmacys_inventory(): void
+    {
+        $pharmacyUser = $this->userWithRole('Pharmacy');
+        $this->createPharmacy($pharmacyUser, 'Central Care');
+        $otherPharmacy = $this->createPharmacy($this->userWithRole('Pharmacy'), 'Health Point');
+        $item = $this->createInventoryItem($otherPharmacy);
+
+        $this->actingAs($pharmacyUser)
+            ->put(route('admin.inventory.update', $item), [
+                'medicine_name' => 'Tampered medicine',
+                'reorder_level' => 0,
+            ])
+            ->assertForbidden();
+
+        $this->actingAs($pharmacyUser)
+            ->patch(route('admin.inventory.stock', $item), [
+                'direction' => 'increase',
+                'quantity'  => 1,
+            ])
+            ->assertForbidden();
+
+        $this->actingAs($pharmacyUser)
+            ->delete(route('admin.inventory.destroy', $item))
+            ->assertForbidden();
+
+        $this->assertDatabaseHas('pharmacy_inventory_items', [
+            'id'             => $item->id,
+            'pharmacy_id'    => $otherPharmacy->id,
+            'medicine_name'  => 'Sample medicine',
+            'stock_quantity' => 10,
+        ]);
     }
 
     public function test_admin_can_create_an_inventory_item_with_initial_stock(): void

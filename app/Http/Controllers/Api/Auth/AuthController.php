@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -44,6 +45,13 @@ class AuthController extends Controller
 
                 // Assign role
                 $user->syncRoles($validated['registration_type']);
+
+                $role = Role::findByName(
+                    $validated['registration_type'],
+                    'api'
+                );
+
+                $user->syncRoles([$role]);
 
                 // Doctor registration
                 if ($validated['registration_type'] === 'Doctor') {

@@ -73,7 +73,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'role.re
         ->name('pharmacies.pharmacists.review');
 });
 
-Route::middleware(['auth', 'verified', 'role.redirect:Admin'])
+Route::middleware(['auth', 'verified', 'role.redirect:Admin,Pharmacy'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {

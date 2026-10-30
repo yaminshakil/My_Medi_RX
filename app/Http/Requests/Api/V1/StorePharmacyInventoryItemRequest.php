@@ -8,7 +8,9 @@ class StorePharmacyInventoryItemRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->hasRole('Pharmacy', 'api') ?? false;
+        $user = $this->user();
+
+        return $user?->hasRole('Pharmacy', 'api') ?? false;
     }
 
     /**

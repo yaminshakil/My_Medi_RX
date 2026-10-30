@@ -32,7 +32,6 @@ Route::prefix('/patient')
     ->middleware(['auth:api', 'profile.exists'])
     ->group(function () {
         Route::get('/pharmacies', [PharmacyDirectoryController::class, 'index'])
-            ->middleware('role:Patient,api')
             ->name('pharmacies.index');
         Route::get('/dashboard', [
             PatientDashboardController::class, 'index',

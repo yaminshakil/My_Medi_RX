@@ -1,10 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\V1\NotificationController;
-use App\Http\Controllers\Api\V1\Pharmacy\PharmacyInventoryController;
-use App\Http\Controllers\Api\V1\Pharmacy\PharmacyLicenseController;
-use App\Http\Controllers\Api\V1\Pharmacy\PharmacyPrescriptionOrderController;
-use App\Http\Controllers\Api\V1\Pharmacy\PharmacyRegistrationController;
 use App\Http\Controllers\Api\V1\SiteSettingsController;
 use Illuminate\Support\Facades\Route;
 

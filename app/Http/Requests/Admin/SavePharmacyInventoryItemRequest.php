@@ -2,13 +2,27 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\PharmacyInventoryItem;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SavePharmacyInventoryItemRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->hasRole('Admin') ?? false;
+        $user = $this->user();
+
+        if ($user?->hasRole('Admin')) {
+            return true;
+        }
+
+        if (! $user?->hasRole('Pharmacy') || ! $user->pharmacy) {
+            return false;
+        }
+
+        $inventoryItem = $this->route('inventoryItem');
+
+        return ! ($inventoryItem instanceof PharmacyInventoryItem)
+            || $inventoryItem->pharmacy_id === $user->pharmacy->id;
     }
 
     /**
@@ -17,9 +31,10 @@ class SavePharmacyInventoryItemRequest extends FormRequest
     public function rules(): array
     {
         $isCreating = $this->isMethod('POST');
+        $isAdmin = $this->user()?->hasRole('Admin') ?? false;
 
         return [
-            'pharmacy_id' => $isCreating
+            'pharmacy_id' => $isCreating && $isAdmin
                 ? ['required', 'integer', 'exists:pharmacies,id']
                 : ['prohibited'],
             'medicine_name'  => ['required', 'string', 'max:255'],

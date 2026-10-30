@@ -21,9 +21,19 @@ class PharmacyInventoryItemController extends Controller
 {
     public function index(Request $request): Response
     {
+        $user = $request->user();
+        $isAdmin = $user->hasRole('Admin');
+        $userPharmacy = $user->pharmacy;
+
+        if (! $isAdmin && (! $user->hasRole('Pharmacy') || ! $userPharmacy)) {
+            abort(403, 'You are not associated with a pharmacy.');
+        }
+
         $filters = $request->validate([
-            'search'       => ['nullable', 'string', 'max:100'],
-            'pharmacy_id'  => ['nullable', 'integer', 'exists:pharmacies,id'],
+            'search'      => ['nullable', 'string', 'max:100'],
+            'pharmacy_id' => $isAdmin
+                ? ['nullable', 'integer', 'exists:pharmacies,id']
+                : ['prohibited'],
             'stock_status' => ['nullable', Rule::in(['all', 'low', 'out', 'expiring', 'expired'])],
             'per_page'     => ['nullable', 'integer', Rule::in([10, 15, 25, 50])],
         ]);
@@ -33,8 +43,18 @@ class PharmacyInventoryItemController extends Controller
         $stockStatus = $filters['stock_status'] ?? 'all';
         $perPage = $filters['per_page'] ?? 15;
 
-        $items = PharmacyInventoryItem::query()
+        $inventoryQuery = PharmacyInventoryItem::query()
+            ->when(
+                ! $isAdmin,
+                fn (Builder $query) => $query->where('pharmacy_id', $userPharmacy->id)
+            );
+
+        $items = (clone $inventoryQuery)
             ->with('pharmacy:id,name')
+            ->when(
+                $isAdmin && $pharmacyId !== '',
+                fn (Builder $query) => $query->where('pharmacy_id', $filters['pharmacy_id'])
+            )
             ->when($search !== '', function (Builder $query) use ($search): void {
                 $query->where(function (Builder $query) use ($search): void {
                     $query->where('medicine_name', 'like', "%{$search}%")
@@ -44,7 +64,6 @@ class PharmacyInventoryItemController extends Controller
                             ->where('name', 'like', "%{$search}%"));
                 });
             })
-            ->when($pharmacyId !== '', fn (Builder $query) => $query->where('pharmacy_id', $pharmacyId))
             ->when($stockStatus === 'low', fn (Builder $query) => $query->whereColumn('stock_quantity', '<=', 'reorder_level'))
             ->when($stockStatus === 'out', fn (Builder $query) => $query->where('stock_quantity', 0))
             ->when($stockStatus === 'expiring', fn (Builder $query) => $query
@@ -73,8 +92,13 @@ class PharmacyInventoryItemController extends Controller
 
         return Inertia::render('Admin/Inventory/Index', [
             'inventory'  => $items,
+            'isAdmin'    => $isAdmin,
             'pharmacies' => Pharmacy::query()
                 ->select(['id', 'name'])
+                ->when(
+                    ! $isAdmin,
+                    fn (Builder $query) => $query->whereKey($userPharmacy->id)
+                )
                 ->orderBy('name')
                 ->orderBy('id')
                 ->get(),
@@ -85,14 +109,14 @@ class PharmacyInventoryItemController extends Controller
                 'per_page'     => $perPage,
             ],
             'stats' => [
-                'totalItems'        => PharmacyInventoryItem::query()->count(),
-                'totalUnits'        => PharmacyInventoryItem::query()->sum('stock_quantity'),
-                'lowStockItems'     => PharmacyInventoryItem::query()->whereColumn('stock_quantity', '<=', 'reorder_level')->count(),
-                'outOfStockItems'   => PharmacyInventoryItem::query()->where('stock_quantity', 0)->count(),
-                'expiringSoonItems' => PharmacyInventoryItem::query()
+                'totalItems'        => (clone $inventoryQuery)->count(),
+                'totalUnits'        => (clone $inventoryQuery)->sum('stock_quantity'),
+                'lowStockItems'     => (clone $inventoryQuery)->whereColumn('stock_quantity', '<=', 'reorder_level')->count(),
+                'outOfStockItems'   => (clone $inventoryQuery)->where('stock_quantity', 0)->count(),
+                'expiringSoonItems' => (clone $inventoryQuery)
                     ->whereBetween('expiry_date', [today()->toDateString(), today()->addDays(30)->toDateString()])
                     ->count(),
-                'expiredItems' => PharmacyInventoryItem::query()
+                'expiredItems' => (clone $inventoryQuery)
                     ->whereNotNull('expiry_date')
                     ->whereDate('expiry_date', '<', today()->toDateString())
                     ->count(),
@@ -103,7 +127,14 @@ class PharmacyInventoryItemController extends Controller
     public function store(SavePharmacyInventoryItemRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        $pharmacy = Pharmacy::query()->findOrFail($data['pharmacy_id']);
+        $pharmacy = $request->user()->hasRole('Admin')
+            ? Pharmacy::query()->findOrFail($data['pharmacy_id'])
+            : $request->user()->pharmacy;
+
+        if (! $pharmacy) {
+            abort(403, 'You are not associated with a pharmacy.');
+        }
+
         $pharmacy->inventoryItems()->create([
             'medicine_name'  => $data['medicine_name'],
             'generic_name'   => $data['generic_name'] ?? null,
@@ -146,8 +177,16 @@ class PharmacyInventoryItemController extends Controller
         return back()->with('success', 'Stock quantity adjusted.');
     }
 
-    public function destroy(PharmacyInventoryItem $inventoryItem): RedirectResponse
+    public function destroy(Request $request, PharmacyInventoryItem $inventoryItem): RedirectResponse
     {
+        $user = $request->user();
+
+        abort_unless(
+            $user->hasRole('Admin')
+                || ($user->hasRole('Pharmacy') && $inventoryItem->pharmacy_id === $user->pharmacy?->id),
+            403,
+        );
+
         DB::transaction(function () use ($inventoryItem): void {
             $lockedItem = PharmacyInventoryItem::query()
                 ->lockForUpdate()
