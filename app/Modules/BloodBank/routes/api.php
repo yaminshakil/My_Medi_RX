@@ -8,8 +8,7 @@ use App\Modules\BloodBank\Http\Controllers\Api\EmergencyRequestApiController;
 use App\Modules\BloodBank\Http\Controllers\Api\LookupApiController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('can:manage-blood-bank')
-    ->prefix('blood-bank')
+Route::prefix('blood-bank')
     ->name('blood-bank.')
     ->group(function (): void {
         Route::get('dashboard', DashboardApiController::class)->name('dashboard');

@@ -13,8 +13,8 @@ class PatientRepository implements PatientRepositoryInterface
         return Patient::query()
             ->where(fn ($q) => $q
                 ->where('name', 'like', "%{$term}%")
-                ->orWhere('mrn', 'like', "%{$term}%")
-                ->orWhere('clinical_file_no', 'like', "%{$term}%"))
+                ->orWhere('email', 'like', "%{$term}%")
+                ->orWhere('phone', 'like', "%{$term}%"))
             ->orderBy('name')
             ->limit($limit)
             ->get();
