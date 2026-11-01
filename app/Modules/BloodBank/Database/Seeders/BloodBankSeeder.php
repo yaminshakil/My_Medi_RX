@@ -2,7 +2,6 @@
 
 namespace App\Modules\BloodBank\Database\Seeders;
 
-use App\Modules\BloodBank\Models\Hospital;
 use App\Modules\BloodBank\Models\Patient;
 use App\Modules\BloodBank\Models\Physician;
 use App\Modules\BloodBank\Models\StorageUnit;
@@ -11,18 +10,12 @@ use Illuminate\Database\Seeder;
 /**
  * Starter data so the screens work on a fresh install:
  *   php artisan db:seed --class="App\Modules\BloodBank\Database\Seeders\BloodBankSeeder"
- * Then attach your admin user:  User::find(1)->update(['hospital_id' => 1]);
+ * Emergency broadcasts use the existing hospital linked through hospitals.created_by.
  */
 class BloodBankSeeder extends Seeder
 {
     public function run(): void
     {
-        // Replace these coordinates with your hospital's real location: donor search starts from here.
-        Hospital::firstOrCreate(['name' => 'Demo General Hospital'], [
-            'address'  => '1 Hospital Road', 'phone' => '0000000000',
-            'latitude' => 23.7808, 'longitude' => 90.4070,
-        ]);
-
         foreach ([
             ['Fridge A', 'Main blood bank', 'refrigerator', 2.0, 6.0, 200],
             ['Fridge B', 'Main blood bank', 'refrigerator', 2.0, 6.0, 200],

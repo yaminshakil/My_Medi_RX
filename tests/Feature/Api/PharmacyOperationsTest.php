@@ -10,6 +10,7 @@ use App\Models\PharmacyPrescriptionOrder;
 use App\Models\Prescription;
 use App\Models\User;
 use App\Services\Pharmacy\PharmacyAnalyticsService;
+use App\Services\Pharmacy\PharmacyInvoiceService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -236,6 +237,84 @@ class PharmacyOperationsTest extends TestCase
         ]);
     }
 
+    public function test_pharmacy_can_download_a_bill_using_prices_saved_when_the_items_were_dispensed(): void
+    {
+        $patientUser = $this->userWithRole('Patient');
+        $pharmacyOwner = $this->userWithRole('Pharmacy');
+        $pharmacy = $this->createPharmacy($pharmacyOwner);
+        $pharmacy->update(['phone' => '555-0100', 'email' => 'billing@example.test']);
+        $pharmacy->address()->create([
+            'address_line_1' => '10 Main Street',
+            'district'       => 'Central District',
+        ]);
+        $prescription = $this->createPrescription($patientUser);
+        $order = $this->sharePrescription($patientUser, $prescription, $pharmacy);
+
+        $inventoryResponse = $this->actingAs($pharmacyOwner, 'api')
+            ->postJson('/api/v1/pharmacies/inventory', [
+                'medicine_name'       => 'Price test medicine',
+                'regular_price'       => '12.50',
+                'discount_percentage' => '10.00',
+                'stock_quantity'      => 5,
+                'reorder_level'       => 1,
+            ]);
+
+        $inventoryResponse->assertCreated()
+            ->assertJsonPath('data.regular_price', '12.50')
+            ->assertJsonPath('data.discount_percentage', '10.00');
+        $inventoryItemId = $inventoryResponse->json('data.id');
+
+        $dispenseResponse = $this->actingAs($pharmacyOwner, 'api')
+            ->patchJson("/api/v1/pharmacies/prescriptions/{$order->id}/dispense", [
+                'items' => [
+                    ['inventory_item_id' => $inventoryItemId, 'quantity' => 2],
+                ],
+            ]);
+
+        $dispenseResponse->assertOk()
+            ->assertJsonPath(
+                'data.bill_url',
+                route('api.v1.pharmacies.prescriptions.bill', $order->id),
+            );
+        $this->assertDatabaseHas('pharmacy_dispenses', [
+            'pharmacy_prescription_order_id' => $order->id,
+            'unit_regular_price'             => '12.50',
+            'discount_percentage'            => '10.00',
+            'quantity'                       => 2,
+        ]);
+
+        $this->actingAs($pharmacyOwner, 'api')
+            ->patchJson("/api/v1/pharmacies/inventory/{$inventoryItemId}", [
+                'regular_price'       => '25.00',
+                'discount_percentage' => '50.00',
+            ])
+            ->assertOk();
+
+        $billData = app(PharmacyInvoiceService::class)->present(
+            PharmacyPrescriptionOrder::query()
+                ->with(['dispenses.inventoryItem'])
+                ->findOrFail($order->id),
+        );
+
+        $this->assertSame('25.00', $billData['subtotal']);
+        $this->assertSame('2.50', $billData['discountTotal']);
+        $this->assertSame('22.50', $billData['total']);
+
+        $billResponse = $this->actingAs($pharmacyOwner, 'api')
+            ->get("/api/v1/pharmacies/prescriptions/{$order->id}/bill");
+
+        $billResponse->assertOk()
+            ->assertDownload("pharmacy-bill-{$order->id}.pdf");
+        $this->assertStringStartsWith('%PDF', $billResponse->getContent());
+
+        $otherPharmacyOwner = $this->userWithRole('Pharmacy');
+        $this->createPharmacy($otherPharmacyOwner);
+
+        $this->actingAs($otherPharmacyOwner, 'api')
+            ->get("/api/v1/pharmacies/prescriptions/{$order->id}/bill")
+            ->assertNotFound();
+    }
+
     public function test_pharmacy_user_can_move_a_received_prescription_to_processing(): void
     {
         $patientUser = $this->userWithRole('Patient');
@@ -392,11 +471,18 @@ class PharmacyOperationsTest extends TestCase
 
     private function userWithRole(string $roleName): User
     {
+        Role::firstOrCreate([
+            'name'       => 'Admin',
+            'guard_name' => 'api',
+        ]);
         $role = Role::firstOrCreate([
             'name'       => $roleName,
             'guard_name' => 'api',
         ]);
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'first_name' => 'Test',
+            'last_name'  => 'User',
+        ]);
         $user->roles()->attach($role);
 
         return $user;

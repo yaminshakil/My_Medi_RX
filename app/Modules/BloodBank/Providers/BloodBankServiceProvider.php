@@ -40,8 +40,8 @@ class BloodBankServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../Database/migrations');
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
-        // Who may use the module: anyone attached to a hospital, or an app admin (is_admin column, if you have one).
-        Gate::define('manage-blood-bank', fn (User $user) => ! is_null($user->hospital_id) || (bool) ($user->is_admin ?? false));
+        // Who may use the module: a hospital owner or an application administrator.
+        Gate::define('manage-blood-bank', fn (User $user): bool => $user->hospital()->exists() || (bool) ($user->is_admin ?? false));
 
         // Private channel for live stock updates. Skipped when broadcasting is not configured at all.
         if (config('broadcasting.default')) {

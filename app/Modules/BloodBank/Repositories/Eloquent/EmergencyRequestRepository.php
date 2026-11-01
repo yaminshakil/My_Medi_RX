@@ -12,7 +12,7 @@ class EmergencyRequestRepository implements EmergencyRequestRepositoryInterface
     public function paginate(array $filters, int $perPage = 15): LengthAwarePaginator
     {
         return EmergencyRequest::query()
-            ->with('hospital:id,name')
+            ->with('hospital:id,hospital_name')
             ->withCount(['donors as accepted_count' => fn ($q) => $q->where('bb_emergency_request_donor.response', 'accepted')])
             ->when($filters['status'] ?? null, fn ($q, $v) => $q->where('status', $v))
             ->latest('broadcast_at')

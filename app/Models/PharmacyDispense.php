@@ -13,14 +13,18 @@ class PharmacyDispense extends Model
         'pharmacy_inventory_item_id',
         'dispensed_by',
         'quantity',
+        'unit_regular_price',
+        'discount_percentage',
         'dispensed_at',
     ];
 
     protected function casts(): array
     {
         return [
-            'quantity'     => 'integer',
-            'dispensed_at' => 'datetime',
+            'quantity'            => 'integer',
+            'unit_regular_price'  => 'decimal:2',
+            'discount_percentage' => 'decimal:2',
+            'dispensed_at'        => 'datetime',
         ];
     }
 

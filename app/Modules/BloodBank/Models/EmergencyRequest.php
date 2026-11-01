@@ -2,6 +2,7 @@
 
 namespace App\Modules\BloodBank\Models;
 
+use App\Models\Hospital;
 use App\Models\User;
 use App\Modules\BloodBank\Enums\BloodComponent;
 use App\Modules\BloodBank\Enums\BloodGroup;

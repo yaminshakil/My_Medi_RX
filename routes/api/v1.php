@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Controllers\Api\V1\NotificationController;
-use App\Http\Controllers\Api\V1\Pharmacy\PharmacyInventoryController;
-use App\Http\Controllers\Api\V1\Pharmacy\PharmacyLicenseController;
-use App\Http\Controllers\Api\V1\Pharmacy\PharmacyPrescriptionOrderController;
-use App\Http\Controllers\Api\V1\Pharmacy\PharmacyRegistrationController;
+use App\Http\Controllers\Api\V1\SiteSettingsController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/v1/auth.php';
+
+Route::get('/settings', SiteSettingsController::class)
+    ->name('settings.index');
 
 Route::middleware('auth:api')
     ->group(function () {
@@ -15,7 +15,6 @@ Route::middleware('auth:api')
             ->name('notifications.index');
         Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])
             ->name('notifications.read');
-
 
         require base_path('routes/api/v1/doctor.php');
         require base_path('routes/api/v1/patient.php');
@@ -25,4 +24,5 @@ Route::middleware('auth:api')
         require base_path('routes/api/v1/prescription.php');
         require base_path('routes/api/v1/users.php');
         require base_path('routes/api/v1/pharmacies.php');
+        require app_path('Modules/BloodBank/routes/api.php');
     });

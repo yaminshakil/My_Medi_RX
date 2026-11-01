@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\Pediatric\PediatricDoseRuleController;
 use App\Http\Controllers\Admin\PharmacistController;
 use App\Http\Controllers\Admin\PharmacyAnalyticsController;
 use App\Http\Controllers\Admin\PharmacyController;
+use App\Http\Controllers\Admin\PharmacyInventoryCsvController;
+use App\Http\Controllers\Admin\PharmacyInventoryItemController;
 use App\Http\Controllers\Admin\PharmacyLicenseController;
 use App\Http\Controllers\Admin\Pregnancy\PregnancyProfileController;
 use App\Http\Controllers\Admin\Pregnancy\PregnancyTipController;
@@ -71,6 +73,24 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'role.re
     Route::patch('pharmacies/{pharmacy}/pharmacists/{pharmacist}/review', [PharmacistController::class, 'review'])
         ->name('pharmacies.pharmacists.review');
 });
+
+Route::middleware(['auth', 'verified', 'role.redirect:Admin,Pharmacy'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('inventory/template', [PharmacyInventoryCsvController::class, 'template'])
+            ->name('inventory.template');
+        Route::get('inventory/export', [PharmacyInventoryCsvController::class, 'export'])
+            ->name('inventory.export');
+        Route::post('inventory/import', [PharmacyInventoryCsvController::class, 'import'])
+            ->name('inventory.import');
+        Route::patch('inventory/{inventoryItem}/stock', [PharmacyInventoryItemController::class, 'adjustStock'])
+            ->name('inventory.stock');
+
+        Route::resource('inventory', PharmacyInventoryItemController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->parameters(['inventory' => 'inventoryItem']);
+    });
 
 Route::middleware(['auth', 'role.redirect:Admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('reviews', AdminReviewController::class);

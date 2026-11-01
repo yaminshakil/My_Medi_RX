@@ -85,7 +85,7 @@ class BloodIssueService
                 'blood_bag_id'                  => $bag->id,
                 'patient_id'                    => $patient->id,
                 'physician_id'                  => $data['physician_id'],
-                'hospital_id'                   => $user->hospital_id,
+                'hospital_id'                   => $user->hospital?->id,
                 'emergency_request_id'          => $data['emergency_request_id'] ?? null,
                 'issued_by'                     => $user->id,
                 'indication'                    => $data['indication'],

@@ -44,6 +44,8 @@ class PharmacyOperationsService
      *     medicine_name: string,
      *     generic_name?: string|null,
      *     strength?: string|null,
+     *     regular_price?: string|float|int,
+     *     discount_percentage?: string|float|int,
      *     stock_quantity: int,
      *     reorder_level: int,
      *     expiry_date?: string|null
@@ -187,6 +189,8 @@ class PharmacyOperationsService
                     'pharmacy_inventory_item_id'     => $inventoryItem->id,
                     'dispensed_by'                   => $owner->id,
                     'quantity'                       => $itemData['quantity'],
+                    'unit_regular_price'             => $inventoryItem->regular_price,
+                    'discount_percentage'            => $inventoryItem->discount_percentage,
                     'dispensed_at'                   => now(),
                 ]);
             }
@@ -198,6 +202,37 @@ class PharmacyOperationsService
 
             return $order->refresh();
         });
+    }
+
+    public function prescriptionOrderForBill(User $owner, int $orderId): PharmacyPrescriptionOrder
+    {
+        $order = $this->approvedPharmacyFor($owner)
+            ->prescriptionOrders()
+            ->with([
+                'pharmacy.address',
+                'prescription.patient',
+                'dispenses.inventoryItem',
+            ])
+            ->findOrFail($orderId);
+
+        if ($order->status !== 'dispensed' || $order->dispenses->isEmpty()) {
+            throw new PharmacyOperationException(
+                'A bill is available only after the prescription has been dispensed.',
+                409,
+            );
+        }
+
+        if ($order->dispenses->contains(
+            fn (PharmacyDispense $dispense): bool => $dispense->unit_regular_price === null
+                || $dispense->discount_percentage === null
+        )) {
+            throw new PharmacyOperationException(
+                'This older dispense has no saved price details and cannot produce an accurate bill.',
+                409,
+            );
+        }
+
+        return $order;
     }
 
     private function pharmacyFor(User $owner): Pharmacy

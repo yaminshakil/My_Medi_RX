@@ -14,7 +14,7 @@ class EmergencyRequestResource extends JsonResource
         return [
             'id'                    => $this->id,
             'reference'             => $this->reference,
-            'hospital'              => $this->hospital?->name,
+            'hospital'              => $this->hospital?->hospital_name,
             'blood_group'           => $this->blood_group->value,
             'component_label'       => $this->component->label(),
             'units_needed'          => $this->units_needed,

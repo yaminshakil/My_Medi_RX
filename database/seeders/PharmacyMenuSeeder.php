@@ -36,5 +36,18 @@ class PharmacyMenuSeeder extends Seeder
         );
 
         $menu->roles()->syncWithoutDetaching($adminRoleIds->all());
+
+        $inventoryMenu = Menu::query()->updateOrCreate(
+            ['slug' => '/admin/inventory'],
+            [
+                'parent_id'   => null,
+                'name'        => 'Inventory & Stock',
+                'menu_method' => 'get',
+                'menu_icon'   => 'Boxes',
+                'order_by'    => 9,
+            ],
+        );
+
+        $inventoryMenu->roles()->syncWithoutDetaching($adminRoleIds->all());
     }
 }

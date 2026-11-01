@@ -12,6 +12,11 @@ class BloodDonor extends Model
 
     protected $table = 'bb_donors';
 
+    protected $attributes = [
+        'is_verified'  => false,
+        'is_available' => true,
+    ];
+
     protected $fillable = [
         'user_id', 'name', 'phone', 'email', 'blood_group', 'latitude', 'longitude',
         'city', 'last_donated_at', 'is_verified', 'verified_at', 'is_available',

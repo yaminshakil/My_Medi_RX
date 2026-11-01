@@ -26,8 +26,12 @@ class StoreBloodBagRequest extends FormRequest
             'volume_ml'       => ['required', 'integer', 'min:10', 'max:1000'],
             'collected_at'    => ['required', 'date'],
             'expires_at'      => ['nullable', 'date', 'after:collected_at'],
-            'storage_unit_id' => ['required', 'integer', 'exists:bb_storage_units,id'],
-            'quarantine'      => ['boolean'],
+            'storage_unit_id' => [
+                'required',
+                'integer',
+                Rule::exists('bb_storage_units', 'id')->where('is_active', true),
+            ],
+            'quarantine' => ['boolean'],
         ];
     }
 }

@@ -41,7 +41,7 @@ class ExpiryMonitoringService
 
             // Everyone attached to a hospital gets the digest. Narrow this query if you add roles.
             Notification::send(
-                User::query()->whereNotNull('hospital_id')->get(),
+                User::query()->whereHas('hospital')->get(),
                 new NearExpiryNotification($lines, $expiredCount)
             );
         }

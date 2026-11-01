@@ -2,6 +2,7 @@
 
 namespace App\Modules\BloodBank\Models;
 
+use App\Models\Hospital;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

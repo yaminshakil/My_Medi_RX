@@ -12,7 +12,7 @@ class SharePrescriptionWithPharmacyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()?->hasRole('Patient', 'api') ?? false;
+        return true;
     }
 
     /**

@@ -42,7 +42,7 @@ class EmergencyBloodRequestNotification extends Notification implements ShouldQu
             ->greeting("Hello {$this->donor->name},")
             ->line(sprintf(
                 '%s needs %d unit(s) of %s (%s). You are about %.1f km away.',
-                $this->request->hospital->name,
+                $this->request->hospital->hospital_name,
                 $this->request->units_needed,
                 strtolower($this->request->component->label()),
                 $this->request->blood_group->value,
@@ -65,7 +65,7 @@ class EmergencyBloodRequestNotification extends Notification implements ShouldQu
 
         return sprintf(
             '%s needs %s %s. Can you donate? Yes: %s',
-            $this->request->hospital->name,
+            $this->request->hospital->hospital_name,
             $this->request->blood_group->value,
             strtolower($this->request->component->label()),
             $this->link('accepted')

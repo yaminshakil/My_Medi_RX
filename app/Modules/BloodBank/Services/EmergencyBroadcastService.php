@@ -29,17 +29,14 @@ class EmergencyBroadcastService
 
     public function broadcast(User $user, array $data): EmergencyRequest
     {
-        $hospital_id = DB::table('hospitals')
-            ->where('created_by', $user->id)
-            ->value('id');
-        $hospital = Hospital::find($hospital_id);
+        $hospital = $user->hospital;
 
         if (! $hospital) {
             throw new BloodBankException('Your account is not linked to a hospital, so there is no location to search from.');
         }
 
         if (is_null($hospital->latitude) || is_null($hospital->longitude)) {
-            throw new BloodBankException("Add latitude and longitude to {$hospital->name} before broadcasting requests.");
+            throw new BloodBankException("Add latitude and longitude to {$hospital->hospital_name} before broadcasting requests.");
         }
 
         $group = BloodGroup::from($data['blood_group']);

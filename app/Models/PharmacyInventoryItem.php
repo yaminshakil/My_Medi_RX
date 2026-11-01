@@ -13,6 +13,8 @@ class PharmacyInventoryItem extends Model
         'medicine_name',
         'generic_name',
         'strength',
+        'regular_price',
+        'discount_percentage',
         'stock_quantity',
         'reorder_level',
         'expiry_date',
@@ -21,9 +23,11 @@ class PharmacyInventoryItem extends Model
     protected function casts(): array
     {
         return [
-            'stock_quantity' => 'integer',
-            'reorder_level'  => 'integer',
-            'expiry_date'    => 'date',
+            'stock_quantity'      => 'integer',
+            'reorder_level'       => 'integer',
+            'regular_price'       => 'decimal:2',
+            'discount_percentage' => 'decimal:2',
+            'expiry_date'         => 'date',
         ];
     }
 

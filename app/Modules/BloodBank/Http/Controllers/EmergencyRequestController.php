@@ -60,7 +60,7 @@ class EmergencyRequestController extends Controller
 
     public function show(EmergencyRequest $emergencyRequest): Response
     {
-        $emergencyRequest->load(['hospital:id,name', 'donors']);
+        $emergencyRequest->load(['hospital:id,hospital_name', 'donors']);
 
         return Inertia::render('Admin/BloodBank/Emergency/Show', [
             'request' => EmergencyRequestResource::make($emergencyRequest)->resolve(),

@@ -40,7 +40,11 @@ class User extends Authenticatable implements JWTSubject
         'google_id',
     ];
 
-    protected $guard_name = 'web';
+    protected function getDefaultGuardName(): string
+    {
+        return request()->is('api/*') ? 'api' : 'web';
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

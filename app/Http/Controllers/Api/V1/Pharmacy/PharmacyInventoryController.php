@@ -22,13 +22,15 @@ class PharmacyInventoryController extends Controller
         }
 
         return ApiResponseService::success($items->map(fn ($item): array => [
-            'id'             => $item->id,
-            'medicine_name'  => $item->medicine_name,
-            'generic_name'   => $item->generic_name,
-            'strength'       => $item->strength,
-            'stock_quantity' => $item->stock_quantity,
-            'reorder_level'  => $item->reorder_level,
-            'expiry_date'    => $item->expiry_date?->toDateString(),
+            'id'                  => $item->id,
+            'medicine_name'       => $item->medicine_name,
+            'generic_name'        => $item->generic_name,
+            'strength'            => $item->strength,
+            'regular_price'       => $item->regular_price,
+            'discount_percentage' => $item->discount_percentage,
+            'stock_quantity'      => $item->stock_quantity,
+            'reorder_level'       => $item->reorder_level,
+            'expiry_date'         => $item->expiry_date?->toDateString(),
         ]));
     }
 
@@ -44,13 +46,15 @@ class PharmacyInventoryController extends Controller
         }
 
         return ApiResponseService::success([
-            'id'             => $item->id,
-            'medicine_name'  => $item->medicine_name,
-            'generic_name'   => $item->generic_name,
-            'strength'       => $item->strength,
-            'stock_quantity' => $item->stock_quantity,
-            'reorder_level'  => $item->reorder_level,
-            'expiry_date'    => $item->expiry_date?->toDateString(),
+            'id'                  => $item->id,
+            'medicine_name'       => $item->medicine_name,
+            'generic_name'        => $item->generic_name,
+            'strength'            => $item->strength,
+            'regular_price'       => $item->regular_price,
+            'discount_percentage' => $item->discount_percentage,
+            'stock_quantity'      => $item->stock_quantity,
+            'reorder_level'       => $item->reorder_level,
+            'expiry_date'         => $item->expiry_date?->toDateString(),
         ], 'Pharmacy inventory item created successfully.', 201);
     }
 
@@ -67,13 +71,15 @@ class PharmacyInventoryController extends Controller
         }
 
         return ApiResponseService::success([
-            'id'             => $item->id,
-            'medicine_name'  => $item->medicine_name,
-            'generic_name'   => $item->generic_name,
-            'strength'       => $item->strength,
-            'stock_quantity' => $item->stock_quantity,
-            'reorder_level'  => $item->reorder_level,
-            'expiry_date'    => $item->expiry_date?->toDateString(),
+            'id'                  => $item->id,
+            'medicine_name'       => $item->medicine_name,
+            'generic_name'        => $item->generic_name,
+            'strength'            => $item->strength,
+            'regular_price'       => $item->regular_price,
+            'discount_percentage' => $item->discount_percentage,
+            'stock_quantity'      => $item->stock_quantity,
+            'reorder_level'       => $item->reorder_level,
+            'expiry_date'         => $item->expiry_date?->toDateString(),
         ], 'Pharmacy inventory item updated successfully.');
     }
 }

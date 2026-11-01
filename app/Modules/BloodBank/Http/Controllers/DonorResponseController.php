@@ -23,7 +23,7 @@ class DonorResponseController extends Controller
         return Inertia::render('BloodBank/Public/DonorResponse', [
             'recorded' => $recorded,
             'response' => $response,
-            'hospital' => $emergencyRequest->hospital?->name,
+            'hospital' => $emergencyRequest->hospital?->hospital_name,
             'donor'    => $donor->name,
         ]);
     }
