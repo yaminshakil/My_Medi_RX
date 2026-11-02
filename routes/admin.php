@@ -27,6 +27,10 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin,Doc
     Route::post('/menus/{id}/update', [MenuController::class, 'update'])->name('menus.update');
     Route::delete('/menus/{id}/destroy', [MenuController::class, 'destroy'])->name('menus.destroy');
 
+    Route::get('/users/{id}/analytics/export/{format}', [UserController::class, 'exportDoctorAnalytics'])
+        ->where(['id' => '[0-9]+', 'format' => 'csv|pdf'])
+        ->middleware('permission:users.menu')
+        ->name('users.analytics.export');
     Route::resource('users', UserController::class)->middleware('permission:users.menu');
 
     Route::resource('roles', RoleController::class)->middleware('permission:roles.menu');

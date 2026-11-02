@@ -6,6 +6,8 @@ use App\Modules\BloodBank\Http\Controllers\DashboardController;
 use App\Modules\BloodBank\Http\Controllers\DonorController;
 use App\Modules\BloodBank\Http\Controllers\DonorResponseController;
 use App\Modules\BloodBank\Http\Controllers\EmergencyRequestController;
+use App\Modules\BloodBank\Http\Controllers\PhysicianController;
+use App\Modules\BloodBank\Http\Controllers\StorageUnitController;
 use Illuminate\Support\Facades\Route;
 
 $prefix = config('blood-bank.route_prefix', 'blood-bank');
@@ -23,6 +25,12 @@ Route::middleware(['web', 'auth', 'can:manage-blood-bank'])
         Route::post('bags', [BloodBagController::class, 'store'])->name('bags.store');
         Route::patch('bags/{bag}/discard', [BloodBagController::class, 'discard'])->name('bags.discard');
         Route::patch('bags/{bag}/release', [BloodBagController::class, 'release'])->name('bags.release');
+
+        // Storage facilities
+        Route::get('storage-units', [StorageUnitController::class, 'index'])->name('storage-units.index');
+        Route::post('storage-units', [StorageUnitController::class, 'store'])->name('storage-units.store');
+        Route::put('storage-units/{storageUnit}', [StorageUnitController::class, 'update'])->name('storage-units.update');
+        Route::delete('storage-units/{storageUnit}', [StorageUnitController::class, 'destroy'])->name('storage-units.destroy');
 
         // Transfusion & issue log. No delete route on purpose: the log is an audit trail.
         Route::get('issues', [BloodIssueController::class, 'index'])->name('issues.index');
@@ -42,6 +50,10 @@ Route::middleware(['web', 'auth', 'can:manage-blood-bank'])
         Route::get('donors', [DonorController::class, 'index'])->name('donors.index');
         Route::post('donors', [DonorController::class, 'store'])->name('donors.store');
         Route::patch('donors/{donor}/verify', [DonorController::class, 'verify'])->name('donors.verify');
+
+        Route::get('physicians', [PhysicianController::class, 'index'])->name('physicians.index');
+        Route::post('physicians', [PhysicianController::class, 'store'])->name('physicians.store');
+        Route::patch('physicians/{physician}/toggle', [PhysicianController::class, 'toggle'])->name('physicians.toggle');
     });
 
 // Donor replies from the email link: public, but the URL must carry a valid signature.

@@ -21,7 +21,8 @@ class EmergencyRequestController extends Controller
     public function __construct(
         private readonly EmergencyRequestRepositoryInterface $requests,
         private readonly EmergencyBroadcastService $service,
-    ) {}
+    ) {
+    }
 
     public function index(Request $request): Response
     {

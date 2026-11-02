@@ -6,6 +6,7 @@ use App\Modules\BloodBank\Http\Controllers\Api\DashboardApiController;
 use App\Modules\BloodBank\Http\Controllers\Api\DonorApiController;
 use App\Modules\BloodBank\Http\Controllers\Api\EmergencyRequestApiController;
 use App\Modules\BloodBank\Http\Controllers\Api\LookupApiController;
+use App\Modules\BloodBank\Http\Controllers\Api\StorageUnitApiController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('blood-bank')
@@ -14,6 +15,7 @@ Route::prefix('blood-bank')
         Route::get('dashboard', DashboardApiController::class)->name('dashboard');
         Route::get('lookups', [LookupApiController::class, 'index'])->name('lookups.index');
         Route::get('patients', [LookupApiController::class, 'patients'])->name('patients.index');
+        Route::get('storage-units', [StorageUnitApiController::class, 'index'])->name('storage-units.index');
 
         Route::get('bags', [BloodBagApiController::class, 'index'])->name('bags.index');
         Route::post('bags', [BloodBagApiController::class, 'store'])->name('bags.store');

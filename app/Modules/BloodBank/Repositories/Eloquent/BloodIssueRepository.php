@@ -21,8 +21,8 @@ class BloodIssueRepository implements BloodIssueRepositoryInterface
                 ->where('issue_number', 'like', "%{$s}%")
                 ->orWhereHas('patient', fn ($p) => $p
                     ->where('name', 'like', "%{$s}%")
-                    ->orWhere('mrn', 'like', "%{$s}%")
-                    ->orWhere('clinical_file_no', 'like', "%{$s}%"))
+                    ->orWhere('email', 'like', "%{$s}%")
+                    ->orWhere('phone', 'like', "%{$s}%"))
                 ->orWhereHas('bag', fn ($b) => $b->where('bag_number', 'like', "%{$s}%"))))
             ->when($filters['component'] ?? null, fn ($q, $v) => $q->whereHas('bag', fn ($b) => $b->where('component', $v)))
             ->when($filters['physician_id'] ?? null, fn ($q, $v) => $q->where('physician_id', $v))

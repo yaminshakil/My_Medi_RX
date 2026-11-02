@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -32,9 +33,9 @@ class Patient extends Model
         return $this->hasMany(Prescription::class)->orderBy('created_at', 'desc');
     }
 
-    public function vitals()
+    public function vitals(): HasMany
     {
-        return $this->hasMany(Prescription::class, 'patient_id')->latest();
+        return $this->hasMany(Vital::class)->latest();
     }
 
     // Accessor: get age in years

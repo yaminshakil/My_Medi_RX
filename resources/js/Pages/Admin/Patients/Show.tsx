@@ -1,411 +1,589 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui/avatar';
-import { AdminPageHeader } from '@/Components/AdminPageHeader';
-import { Badge } from '@/Components/ui/badge';
-import { Button } from '@/Components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Separator } from '@/Components/ui/separator';
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router } from '@inertiajs/react';
+import { AdminPageHeader } from "@/Components/AdminPageHeader";
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
+import { Badge } from "@/Components/ui/badge";
+import { Button } from "@/Components/ui/button";
 import {
-    BadgeCheck,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/Components/ui/card";
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router } from "@inertiajs/react";
+import {
+    Activity,
     Calendar,
-    CreditCard,
-    Download,
-    Globe,
+    ClipboardList,
+    Droplets,
+    HeartPulse,
     Mail,
-    MapPin,
     Phone,
-    Receipt,
-    RefreshCw,
-    ShoppingCart,
-    UserIcon,
-} from 'lucide-react';
-import user from 'pusher-js/types/src/core/user';
+    Stethoscope,
+    UserRound,
+} from "lucide-react";
 
-interface Role {
+interface VitalRecord {
     id: number;
-    name: string;
+    blood_pressure: string | null;
+    heart_rate: number | string | null;
+    temperature: number | string | null;
+    respiratory_rate: number | string | null;
+    oxygen_saturation: number | string | null;
+    weight: number | string | null;
+    height: number | string | null;
+    bmi: number | string | null;
+    notes: string | null;
+    created_at: string;
 }
 
-
-
-interface UserData {
+interface PrescriptionMedication {
     id: number;
-    uuid: string;
-    name: string;
-    first_name: string | null;
-    last_name: string | null;
-    email: string;
-    mobile: string | null;
+    strength: string | null;
+    dosage: string | null;
+    duration: string | null;
+    meal_time: string | null;
+    advice: string | null;
+    medicine: {
+        brand_name: string | null;
+        generic_name: string | null;
+    } | null;
+}
+
+interface PrescriptionRecord {
+    id: number;
+    prescription_number: string;
+    diagnosis: string | null;
     status: string;
-    email_verified_at: string | null;
-    avatar: string | null;
+    followup_date: string | null;
     created_at: string;
-    roles: Role[];
+    doctor: {
+        name: string;
+    } | null;
+    medications: PrescriptionMedication[];
+}
+
+interface PatientRecord {
+    id: number;
+    patient_number: string;
+    name: string;
+    date_of_birth: string | null;
+    gender: string | null;
+    marital_status: string | null;
+    phone: string;
+    email: string | null;
+    address: string | null;
+    city: string | null;
+    state: string | null;
+    postal_code: string | null;
+    country: string | null;
+    blood_group: string | null;
+    relationship: string | null;
+    emergency_contact_name: string | null;
+    emergency_contact_phone: string | null;
+    emergency_contact_relationship: string | null;
+    user_id: number | null;
+    profile_image_url: string | null;
+    created_at: string;
+    vitals: VitalRecord[];
+    prescriptions: PrescriptionRecord[];
 }
 
 interface ShowProps {
-    user: UserData;
+    patient: PatientRecord;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Users', href: '/admin/users' },
-    { title: 'User Details', href: '' },
+    { title: "Patients", href: "/admin/patients" },
+    { title: "Patient Details", href: "" },
 ];
 
-function InfoRow({ label, value, icon: Icon }: { label: string; value: string | null | undefined; icon?: React.ElementType }) {
-    if (!value) return null;
-    return (
-        <div className="flex items-start gap-2 py-1.5">
-            {Icon && <Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />}
-            <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">{label}</p>
-                <p className="text-sm break-words">{value}</p>
-            </div>
-        </div>
-    );
-}
-
-function StatusBadge({ status, label }: { status: string; label: string }) {
-    return (
-        <Badge variant={status == 'active' ? 'default' : status == 'suspended' ? 'secondary' : 'destructive'} className="text-xs">
-            {status == 'active' ? label : status == 'suspended' ? 'Suspended' : `Inactive`}
-        </Badge>
-    );
-}
-
 function formatDate(date: string | null | undefined): string {
-    if (!date) return '-';
-    return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    if (!date) {
+        return "Not recorded";
+    }
+
+    const parsedDate = new Date(date);
+
+    return Number.isNaN(parsedDate.getTime())
+        ? date
+        : parsedDate.toLocaleDateString("en-GB", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+          });
 }
 
-function formatDateTime(date: string | null | undefined): string {
-    if (!date) return '-';
-    return new Date(date).toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    });
+function formatDateTime(date: string): string {
+    const parsedDate = new Date(date);
+
+    return Number.isNaN(parsedDate.getTime())
+        ? date
+        : parsedDate.toLocaleString("en-GB", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+          });
 }
 
 function getInitials(name: string): string {
     return name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
+        .trim()
+        .split(/\s+/)
+        .map((part) => part[0])
+        .join("")
         .toUpperCase()
         .slice(0, 2);
 }
 
+function InfoRow({
+    label,
+    value,
+}: {
+    label: string;
+    value: string | null | undefined;
+}) {
+    if (!value) {
+        return null;
+    }
+
+    return (
+        <div className="space-y-1">
+            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                {label}
+            </p>
+            <p className="text-sm break-words">{value}</p>
+        </div>
+    );
+}
+
+function PrescriptionStatus({ status }: { status: string }) {
+    const normalizedStatus = status.toLowerCase();
+    const variant =
+        normalizedStatus === "cancelled"
+            ? "destructive"
+            : normalizedStatus === "draft"
+              ? "secondary"
+              : "outline";
+
+    return (
+        <Badge variant={variant} className="capitalize">
+            {normalizedStatus}
+        </Badge>
+    );
+}
+
+function formatMetric(value: number | string | null, unit: string): string {
+    return value === null || value === "" ? "Not recorded" : `${value}${unit}`;
+}
+
 export default function Show({ patient }: ShowProps) {
+    const vitals = patient.vitals ?? [];
+    const prescriptions = patient.prescriptions ?? [];
+    const latestVital = vitals[0];
+    const patientAddress = [
+        patient.address,
+        patient.city,
+        patient.state,
+        patient.postal_code,
+        patient.country,
+    ]
+        .filter(Boolean)
+        .join(", ");
 
-    const billing = patient?.user?.freemius_billing || [];
-    const subscriptions = patient?.user?.subscriptions || [];
-    const payments = patient?.user?.freemius_payment || [];
-    const activations = patient?.user?.license_activations || [];
-
-    const totalSpent = payments.reduce((sum, p) => sum + Number(p.gross || 0), 0);
-    const activeSubscriptions = subscriptions.filter((s) => s.is_active).length;
-    console.log(patient.user);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`User - ${patient?.user?.name}`} />
+            <Head title={`Patient - ${patient.name}`} />
 
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
                 <AdminPageHeader
                     breadcrumbs={breadcrumbs}
-                    description="View full user profile, Patients, Prescriptions and Analytics"
+                    description="Patient profile, vital signs, and prescription history"
                     actions={
-                        <Button variant="outline" size="sm" onClick={() => router.visit(route('users.edit', patient?.user?.id))} className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white">
-                            Edit User
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                                router.visit(route("patients.edit", patient.id))
+                            }
+                            className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white"
+                        >
+                            Edit Patient
                         </Button>
                     }
                 />
-                {/* Smart Header */}
+
                 <Card>
                     <CardContent className="pt-6">
-                        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-                            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+                            <div className="flex items-center gap-4">
                                 <Avatar className="size-20 border-2 border-white shadow-md">
-                                    <AvatarImage src={patient?.user?.avatar || undefined} alt={patient?.user?.name} />
+                                    <AvatarImage
+                                        src={
+                                            patient.profile_image_url ||
+                                            undefined
+                                        }
+                                        alt={patient.name}
+                                    />
                                     <AvatarFallback className="bg-primary text-xl font-bold text-primary-foreground">
-                                        {getInitials(patient?.user?.name)}
+                                        {getInitials(patient.name)}
                                     </AvatarFallback>
                                 </Avatar>
-                                <div className="space-y-1">
+                                <div className="space-y-2">
                                     <div className="flex flex-wrap items-center gap-2">
-                                        <h1 className="text-2xl font-bold">{patient?.user?.name}</h1>
-                                        {patient?.user?.email_verified_at && (
-                                            <Badge variant="outline" className="gap-1 border-green-200 text-green-700">
-                                                <BadgeCheck className="size-3" />
-                                                Verified
-                                            </Badge>
-                                        )}
-                                        <StatusBadge status={patient?.user?.status} label="Active" />
+                                        <h1 className="text-2xl font-bold">
+                                            {patient.name}
+                                        </h1>
+                                        <Badge variant="secondary">
+                                            {patient.patient_number}
+                                        </Badge>
                                     </div>
-                                    <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                                    <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
                                         <span className="flex items-center gap-1">
-                                            <Mail className="size-3.5" />
-                                            {patient?.user?.email}
+                                            <Phone className="size-4" />
+                                            {patient.phone}
                                         </span>
-                                        {patient?.user?.mobile && (
+                                        {patient.email && (
                                             <span className="flex items-center gap-1">
-                                                <Phone className="size-3.5" />
-                                                {patient?.user?.mobile}
+                                                <Mail className="size-4" />
+                                                {patient.email}
                                             </span>
                                         )}
                                         <span className="flex items-center gap-1">
-                                            <Calendar className="size-3.5" />
-                                            Joined {formatDate(patient?.user?.created_at)}
+                                            <Calendar className="size-4" />
+                                            Registered{" "}
+                                            {formatDate(patient.created_at)}
                                         </span>
                                     </div>
-                                    {patient?.user?.roles.length > 0 && (
-                                        <div className="flex flex-wrap gap-1.5 pt-1">
-                                            {patient?.user?.roles.map((role) => (
-                                                <Badge key={role.id} variant="secondary" className="capitalize">
-                                                    <UserIcon className="mr-1 size-3" />
-                                                    {role.name}
-                                                </Badge>
-                                            ))}
-                                        </div>
-                                    )}
                                 </div>
                             </div>
-                            <div className="flex gap-2">
-                            </div>
-                        </div>
-
-                        {/* Quick Stats */}
-                        <Separator className="my-4" />
-                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                            <div className="text-center">
-                                <p className="text-2xl font-bold">{subscriptions.length}</p>
-                                <p className="text-xs text-muted-foreground">Total Rx</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-2xl font-bold">{activeSubscriptions}</p>
-                                <p className="text-xs text-muted-foreground">Active Patients</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-2xl font-bold">{payments.length}</p>
-                                <p className="text-xs text-muted-foreground">This Month</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-2xl font-bold">{activations.length}</p>
-                                <p className="text-xs text-muted-foreground">Activations</p>
+                            <div className="grid grid-cols-3 gap-4 border-t pt-4 text-center md:border-t-0 md:border-l md:pt-0 md:pl-6">
+                                <div>
+                                    <p className="text-2xl font-bold">
+                                        {prescriptions.length}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Prescriptions
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-2xl font-bold">
+                                        {vitals.length}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Vital records
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-2xl font-bold">
+                                        {patient.blood_group || "—"}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Blood group
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </CardContent>
                 </Card>
 
                 <div className="grid gap-6 lg:grid-cols-2">
-                    {/* Patient Analytics */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
-                                <CreditCard className="size-5" />
-                                Medication History
+                                <UserRound className="size-5" />
+                                Patient information
                             </CardTitle>
-                            <CardDescription>Medication History</CardDescription>
+                            <CardDescription>
+                                Demographic and contact details
+                            </CardDescription>
                         </CardHeader>
-                        <CardContent>
-                            {billing ? (
-                                <div className="space-y-0 divide-y">
-                                    {(billing.business_name || billing.first) && (
-                                        <div className="pb-2">
-                                            {billing.business_name && <InfoRow label="Business" value={billing.business_name} />}
-                                            {(billing.first || billing.last) && (
-                                                <InfoRow label="Name" value={`${billing.first || ''} ${billing.last || ''}`.trim()} icon={UserIcon} />
-                                            )}
-                                        </div>
-                                    )}
-                                    <div className="py-2">
-                                        <InfoRow label="Email" value={billing.email} icon={Mail} />
-                                        <InfoRow label="Phone" value={billing.phone} icon={Phone} />
-                                        <InfoRow label="Website" value={billing.website} icon={Globe} />
-                                        <InfoRow label="Tax ID" value={billing.tax_id} />
-                                    </div>
-                                    {(billing.address_street || billing.address_city) && (
-                                        <div className="pt-2">
-                                            <InfoRow
-                                                label="Address"
-                                                value={[
-                                                    billing.address_street,
-                                                    billing.address_apt,
-                                                    billing.address_city,
-                                                    billing.address_state,
-                                                    billing.address_zip,
-                                                    billing.address_country,
-                                                ]
-                                                    .filter(Boolean)
-                                                    .join(', ')}
-                                                icon={MapPin}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No Medication History available</p>
-                            )}
+                        <CardContent className="grid gap-5 sm:grid-cols-2">
+                            <InfoRow
+                                label="Date of birth"
+                                value={formatDate(patient.date_of_birth)}
+                            />
+                            <InfoRow label="Gender" value={patient.gender} />
+                            <InfoRow
+                                label="Marital status"
+                                value={patient.marital_status}
+                            />
+                            <InfoRow
+                                label="Relationship"
+                                value={patient.relationship}
+                            />
+                            <InfoRow label="Address" value={patientAddress} />
+                            <InfoRow
+                                label="Portal account"
+                                value={
+                                    patient.user_id ? "Linked" : "Not linked"
+                                }
+                            />
                         </CardContent>
                     </Card>
 
-                    {/* Prescription history */}
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
-                                <RefreshCw className="size-5" />
-                                Prescription history
+                                <Phone className="size-5" />
+                                Emergency contact
                             </CardTitle>
-                            <CardDescription>{subscriptions.length} history(s) found</CardDescription>
+                            <CardDescription>
+                                Contact details to use in an emergency
+                            </CardDescription>
                         </CardHeader>
-                        <CardContent>
-                            {subscriptions.length > 0 ? (
-                                <div className="space-y-4">
-                                    {subscriptions.map((sub) => (
-                                        <div key={sub.id} className="space-y-2 rounded-lg border bg-muted/50 p-4">
-                                            <div className="flex items-center justify-between">
-                                                <p className="font-semibold">{sub.plan_title}</p>
-                                                <StatusBadge active={sub.is_active} label="Active" />
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-muted-foreground">
-                                                <span>
-                                                    Initial: {sub.currency?.toUpperCase()} {sub.initial_amount}
-                                                </span>
-                                                <span>
-                                                    Renewal: {sub.currency?.toUpperCase()} {sub.renewal_amount}
-                                                </span>
-                                                <span>Cycle: {sub.billing_cycle || '-'}</span>
-                                                <span>Renewal Date: {formatDate(sub.renewal_date)}</span>
-                                                {sub.is_trial && (
-                                                    <>
-                                                        <span className="text-amber-600">Trial</span>
-                                                        <span>Ends: {formatDate(sub.trial_ends)}</span>
-                                                    </>
-                                                )}
-                                                {sub.cancelled_at && (
-                                                    <span className="col-span-2 text-red-600">Cancelled: {formatDate(sub.cancelled_at)}</span>
-                                                )}
-                                            </div>
-                                            {sub.payment_method?.type && (
-                                                <p className="text-xs text-muted-foreground">Payment: {sub.payment_method.type}</p>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No Prescription history found</p>
-                            )}
-                        </CardContent>
-                    </Card>
-
-                    {/* Top medicines */}
-                    <Card>
-                        <CardHeader>
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <CardTitle className="flex items-center gap-2 text-lg">
-                                        <Receipt className="size-5" />
-                                        Top medicines
-                                    </CardTitle>
-                                    <CardDescription>
-                                        {payments.length} payment(s) &middot; Total spent: {payments[0]?.currency?.toUpperCase() || 'USD'}{' '}
-                                        {(Number(totalSpent) || 0).toFixed(2)}
-                                    </CardDescription>
-                                </div>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            {payments.length > 0 ? (
-                                <div className="space-y-3">
-                                    {payments.map((payment) => (
-                                        <div key={payment.id} className="flex items-center justify-between rounded-lg border p-3">
-                                            <div className="space-y-0.5">
-                                                <p className="text-sm font-medium">{payment.plan_title || 'Payment'}</p>
-                                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                                    <span>{formatDateTime(payment.freemius_created_at)}</span>
-                                                    {payment.gateway && <span>&middot; {payment.gateway}</span>}
-                                                    {payment.is_renewal && (
-                                                        <Badge variant="outline" className="h-4 px-1 py-0 text-[10px]">
-                                                            Renewal
-                                                        </Badge>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div className="text-right">
-                                                <p className="text-sm font-semibold">
-                                                    {payment.currency?.toUpperCase()} {(Number(payment.gross) || 0).toFixed(2)}
-                                                </p>
-                                                {payment.invoice_url && (
-                                                    <a
-                                                        href={payment.invoice_url}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-xs text-primary hover:underline"
-                                                    >
-                                                        Invoice
-                                                    </a>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No Top medicines found</p>
-                            )}
-                        </CardContent>
-                    </Card>
-
-                    {/* Patient adherence statistics */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <Download className="size-5" />
-                                Patient adherence statistics
-                            </CardTitle>
-                            <CardDescription>{activations.length} active installation(s)</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            {activations.length > 0 ? (
-                                <div className="space-y-3">
-                                    {activations.map((activation) => (
-                                        <div key={activation.id} className="flex items-start justify-between rounded-lg border bg-muted/50 p-4">
-                                            <div className="space-y-1">
-                                                <div className="flex items-center gap-2">
-                                                    <ShoppingCart className="size-4 text-muted-foreground" />
-                                                    <p className="text-sm font-semibold">{activation.title || activation.uid}</p>
-                                                </div>
-                                                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                                                    {activation.license_plan_name && <span>Plan: {activation.license_plan_name}</span>}
-                                                    {activation.version && <span>v{activation.version}</span>}
-                                                    <span>Activated: {formatDate(activation.activated_at)}</span>
-                                                </div>
-                                                {activation.url && (
-                                                    <a
-                                                        href={activation.url}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-xs text-primary hover:underline"
-                                                    >
-                                                        {activation.url}
-                                                    </a>
-                                                )}
-                                            </div>
-                                            <Badge variant="outline" className="shrink-0">
-                                                Active
-                                            </Badge>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No Patient adherence statistics found</p>
-                            )}
+                        <CardContent className="grid gap-5 sm:grid-cols-2">
+                            <InfoRow
+                                label="Name"
+                                value={patient.emergency_contact_name}
+                            />
+                            <InfoRow
+                                label="Relationship"
+                                value={patient.emergency_contact_relationship}
+                            />
+                            <InfoRow
+                                label="Phone"
+                                value={patient.emergency_contact_phone}
+                            />
+                            {!patient.emergency_contact_name &&
+                                !patient.emergency_contact_phone && (
+                                    <p className="text-sm text-muted-foreground sm:col-span-2">
+                                        No emergency contact recorded.
+                                    </p>
+                                )}
                         </CardContent>
                     </Card>
                 </div>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                            <HeartPulse className="size-5" />
+                            Vital signs
+                        </CardTitle>
+                        <CardDescription>
+                            {latestVital
+                                ? `Most recent record: ${formatDateTime(latestVital.created_at)}`
+                                : "No vital signs have been recorded."}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {vitals.length > 0 ? (
+                            <div className="space-y-4">
+                                {vitals.map((vital) => {
+                                    const metrics = [
+                                        {
+                                            label: "Blood pressure",
+                                            value: formatMetric(
+                                                vital.blood_pressure,
+                                                "",
+                                            ),
+                                        },
+                                        {
+                                            label: "Heart rate",
+                                            value: formatMetric(
+                                                vital.heart_rate,
+                                                " bpm",
+                                            ),
+                                        },
+                                        {
+                                            label: "Temperature",
+                                            value: formatMetric(
+                                                vital.temperature,
+                                                " °C",
+                                            ),
+                                        },
+                                        {
+                                            label: "Respiratory rate",
+                                            value: formatMetric(
+                                                vital.respiratory_rate,
+                                                " /min",
+                                            ),
+                                        },
+                                        {
+                                            label: "Oxygen saturation",
+                                            value: formatMetric(
+                                                vital.oxygen_saturation,
+                                                "%",
+                                            ),
+                                        },
+                                        {
+                                            label: "Weight",
+                                            value: formatMetric(
+                                                vital.weight,
+                                                " kg",
+                                            ),
+                                        },
+                                        {
+                                            label: "Height",
+                                            value: formatMetric(
+                                                vital.height,
+                                                " cm",
+                                            ),
+                                        },
+                                        {
+                                            label: "BMI",
+                                            value: formatMetric(vital.bmi, ""),
+                                        },
+                                    ];
+
+                                    return (
+                                        <div
+                                            key={vital.id}
+                                            className="rounded-lg border bg-muted/30 p-4"
+                                        >
+                                            <div className="mb-3 flex items-center justify-between gap-3">
+                                                <p className="flex items-center gap-2 font-medium">
+                                                    <Activity className="size-4 text-muted-foreground" />
+                                                    Vitals record
+                                                </p>
+                                                <span className="text-xs text-muted-foreground">
+                                                    {formatDateTime(
+                                                        vital.created_at,
+                                                    )}
+                                                </span>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                                                {metrics.map((metric) => (
+                                                    <div key={metric.label}>
+                                                        <p className="text-xs text-muted-foreground">
+                                                            {metric.label}
+                                                        </p>
+                                                        <p className="text-sm font-medium">
+                                                            {metric.value}
+                                                        </p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            {vital.notes && (
+                                                <p className="mt-3 border-t pt-3 text-sm text-muted-foreground">
+                                                    {vital.notes}
+                                                </p>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <p className="py-8 text-center text-sm text-muted-foreground">
+                                No vital signs recorded.
+                            </p>
+                        )}
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                            <ClipboardList className="size-5" />
+                            Prescription history
+                        </CardTitle>
+                        <CardDescription>
+                            {prescriptions.length} prescription(s)
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {prescriptions.length > 0 ? (
+                            <div className="space-y-4">
+                                {prescriptions.map((prescription) => (
+                                    <div
+                                        key={prescription.id}
+                                        className="rounded-lg border p-4"
+                                    >
+                                        <div className="flex flex-wrap items-start justify-between gap-3">
+                                            <div>
+                                                <p className="font-semibold">
+                                                    {
+                                                        prescription.prescription_number
+                                                    }
+                                                </p>
+                                                <p className="mt-1 text-sm text-muted-foreground">
+                                                    {prescription.diagnosis ||
+                                                        "No diagnosis recorded"}
+                                                </p>
+                                            </div>
+                                            <PrescriptionStatus
+                                                status={prescription.status}
+                                            />
+                                        </div>
+                                        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted-foreground">
+                                            <span>
+                                                Issued:{" "}
+                                                {formatDateTime(
+                                                    prescription.created_at,
+                                                )}
+                                            </span>
+                                            {prescription.doctor && (
+                                                <span>
+                                                    Doctor:{" "}
+                                                    {prescription.doctor.name}
+                                                </span>
+                                            )}
+                                            <span>
+                                                Follow-up:{" "}
+                                                {formatDate(
+                                                    prescription.followup_date,
+                                                )}
+                                            </span>
+                                        </div>
+                                        {prescription.medications.length >
+                                            0 && (
+                                            <div className="mt-4 space-y-2 border-t pt-3">
+                                                {prescription.medications.map(
+                                                    (medication) => (
+                                                        <div
+                                                            key={medication.id}
+                                                            className="flex items-start gap-2 text-sm"
+                                                        >
+                                                            <Droplets className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+                                                            <div>
+                                                                <p className="font-medium">
+                                                                    {medication
+                                                                        .medicine
+                                                                        ?.brand_name ||
+                                                                        medication
+                                                                            .medicine
+                                                                            ?.generic_name ||
+                                                                        "Medicine"}
+                                                                    {medication.strength
+                                                                        ? ` · ${medication.strength}`
+                                                                        : ""}
+                                                                </p>
+                                                                <p className="text-xs text-muted-foreground">
+                                                                    {[
+                                                                        medication.dosage,
+                                                                        medication.duration,
+                                                                        medication.meal_time,
+                                                                        medication.advice,
+                                                                    ]
+                                                                        .filter(
+                                                                            Boolean,
+                                                                        )
+                                                                        .join(
+                                                                            " · ",
+                                                                        ) ||
+                                                                        "No instructions recorded"}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    ),
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center gap-2 py-8 text-center text-sm text-muted-foreground">
+                                <Stethoscope className="size-5" />
+                                <p>No prescriptions found for this patient.</p>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
             </div>
         </AppLayout>
     );

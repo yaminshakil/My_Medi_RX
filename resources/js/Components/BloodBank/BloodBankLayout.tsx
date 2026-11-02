@@ -10,20 +10,25 @@ const nav = [
     ['Issue log', 'blood-bank.issues.index', 'blood-bank.issues.*'],
     ['Emergency requests', 'blood-bank.emergency.index', 'blood-bank.emergency.*'],
     ['Donors', 'blood-bank.donors.index', 'blood-bank.donors.*'],
+    ['Physicians', 'blood-bank.physicians.index', 'blood-bank.physicians.*'],
+    ['Storage units', 'blood-bank.storage-units.index', 'blood-bank.storage-units.*'],
 ];
 
-export default function BloodBankLayout({ title, actions, children }) {
+export default function BloodBankLayout({ title, actions, children, breadcrumbs }) {
     const { flash } = usePage().props;
 
     return (
         <AppLayout
-            header={
+            breadcrumbs={breadcrumbs}
+        >
+            <Head title={title} />
+            <div className="py-6">
                 <div className="space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-3">
-                        <h2 className="text-xl font-semibold text-slate-800">{title}</h2>
+                        <h2 className="text-xl font-semibold text-slate-800 px-4 sm:px-6 lg:px-8">{title}</h2>
                         {actions}
                     </div>
-                    <nav className="-mb-px flex gap-1 overflow-x-auto" aria-label="Blood bank sections">
+                    <nav className="-mb-px px-4 sm:px-6 lg:px-8 flex gap-1 overflow-x-auto" aria-label="Blood bank sections">
                         {nav.map(([label, name, pattern]) => (
                             <Link
                                 key={name}
@@ -40,11 +45,7 @@ export default function BloodBankLayout({ title, actions, children }) {
                         ))}
                     </nav>
                 </div>
-            }
-        >
-            <Head title={title} />
-            <div className="py-6">
-                <div className="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto w-full space-y-6 px-4 sm:px-6 lg:px-8">
                     {flash?.success && (
                         <div role="status" className="rounded-md bg-teal-50 px-4 py-3 text-sm text-teal-900 ring-1 ring-teal-200">
                             {flash.success}

@@ -9,8 +9,10 @@ use App\Models\Doctor;
 use App\Models\Setting;
 use App\Models\User;
 use App\Services\Doctors\DoctorService;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ManageDoctorController extends Controller
 {
@@ -67,6 +69,26 @@ class ManageDoctorController extends Controller
 
         return Inertia::render('Admin/Doctors/Create', [
             'specialties' => $specialties,
+        ]);
+    }
+
+    public function show(Doctor $doctor): Response
+    {
+        $doctor->load([
+            'user:id,name,email,mobile,created_at',
+            'user.profileImage',
+            'user.specialties:id,name',
+            'educations'  => fn (HasMany $query) => $query->orderByDesc('year')->orderByDesc('id'),
+            'experiences' => fn (HasMany $query) => $query->orderByDesc('from_year')->orderByDesc('id'),
+        ]);
+        $doctor->user->setAppends(['profile_image_url']);
+
+        foreach ($doctor->user->specialties as $specialty) {
+            $specialty->setAppends([]);
+        }
+
+        return Inertia::render('Admin/Doctors/Show', [
+            'doctor' => $doctor,
         ]);
     }
 
@@ -130,7 +152,13 @@ class ManageDoctorController extends Controller
     public function toggleActive(Doctor $doctor)
     {
         $user = $doctor->user;
-        $user->update(['status' => ! $user->status]);
+        if ($user->status === 'suspended') {
+            return back()->with('error', 'Suspended users cannot be toggled. Change their status from the suspension screen.');
+        }
+
+        $user->update([
+            'status' => $user->status === 'active' ? 'inactive' : 'active',
+        ]);
         $doctor->update(['active' => ! $doctor->active]);
 
         return redirect()->back()->with('success', 'Doctor updated successfully.');

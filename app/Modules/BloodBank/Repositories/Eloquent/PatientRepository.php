@@ -15,6 +15,7 @@ class PatientRepository implements PatientRepositoryInterface
                 ->where('name', 'like', "%{$term}%")
                 ->orWhere('email', 'like', "%{$term}%")
                 ->orWhere('phone', 'like', "%{$term}%"))
+            ->orWhere('patient_number', 'like', "%{$term}%")
             ->orderBy('name')
             ->limit($limit)
             ->get();

@@ -1,101 +1,48 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui/avatar';
-import { AdminPageHeader } from '@/Components/AdminPageHeader';
-import { Badge } from '@/Components/ui/badge';
-import { Button } from '@/Components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Separator } from '@/Components/ui/separator';
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router } from '@inertiajs/react';
+import { AdminPageHeader } from "@/Components/AdminPageHeader";
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
+import { Badge } from "@/Components/ui/badge";
+import { Button } from "@/Components/ui/button";
 import {
-    BadgeCheck,
-    Calendar,
-    CreditCard,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/Components/ui/card";
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router } from "@inertiajs/react";
+import {
+    Activity,
+    CalendarDays,
+    ClipboardList,
     Download,
-    Globe,
+    FileSpreadsheet,
+    FileText,
     Mail,
-    MapPin,
     Phone,
-    Receipt,
-    RefreshCw,
-    ShoppingCart,
-    UserIcon,
-} from 'lucide-react';
+    Stethoscope,
+    UserRound,
+} from "lucide-react";
 
 interface Role {
     id: number;
     name: string;
 }
 
-interface Billing {
-    id: number;
-    business_name: string | null;
-    first: string | null;
-    last: string | null;
-    email: string;
-    phone: string | null;
-    website: string | null;
-    tax_id: string | null;
-    address_street: string | null;
-    address_apt: string | null;
-    address_city: string | null;
-    address_state: string | null;
-    address_zip: string | null;
-    address_country: string | null;
-    address_country_code: string | null;
-}
-
-interface Subscription {
-    id: number;
-    subscription_id: number;
-    plan_title: string;
-    renewal_amount: number;
-    initial_amount: number;
-    billing_cycle: string | null;
-    is_active: boolean;
-    renewal_date: string | null;
-    currency: string | null;
-    cancelled_at: string | null;
-    is_trial: boolean;
-    trial_ends: string | null;
-    is_free_trial: boolean;
-    freemius_created_at: string | null;
-    payment_method: { type: string } | null;
-}
-
-interface Payment {
-    id: number;
-    freemius_payment_id: number;
-    gross: number;
-    gateway_fee: number | null;
-    vat: number | null;
-    currency: string | null;
-    is_renewal: boolean;
-    gateway: string | null;
-    payment_method: string | null;
-    plan_title: string | null;
-    country_code: string | null;
-    invoice_url: string | null;
-    freemius_created_at: string | null;
-}
-
-interface LicenseActivation {
-    id: number;
-    uid: string;
-    title: string | null;
-    version: string | null;
-    url: string | null;
-    license_plan_name: string | null;
-    plugin_id: string | null;
-    activated_at: string | null;
+interface DoctorProfile {
+    registration_no: string | null;
+    specialization: string | null;
+    designation: string | null;
+    qualification: string | null;
+    experience_years: number | null;
+    working_institute: string | null;
+    bio: string | null;
 }
 
 interface UserData {
     id: number;
-    uuid: string;
     name: string;
-    first_name: string | null;
-    last_name: string | null;
     email: string;
     mobile: string | null;
     status: string;
@@ -103,374 +50,681 @@ interface UserData {
     avatar: string | null;
     created_at: string;
     roles: Role[];
-    freemius_billing: Billing | null;
-    subscriptions: Subscription[];
-    freemius_payment: Payment[];
-    license_activations: LicenseActivation[];
+    doctor: DoctorProfile | null;
+}
+
+interface PrescriptionSummary {
+    patients: number;
+    prescriptions: number;
+    new_visits: number;
+    follow_up_visits: number;
+}
+
+interface PatientAdherence {
+    patient_id: number;
+    patient_name: string;
+    patient_number: string;
+    eligible_doses: number;
+    taken: number;
+    missed: number;
+    percentage: number;
+}
+
+interface PrescriptionLog {
+    id: number;
+    prescription_number: string;
+    diagnosis: string | null;
+    is_followup: boolean;
+    status: string;
+    created_at: string;
+    medications: {
+        id: number;
+        strength: string | null;
+        medicine: {
+            brand_name: string | null;
+            generic_name: string | null;
+        } | null;
+    }[];
+    patient: {
+        name: string;
+        patient_number: string;
+    } | null;
+}
+
+interface DoctorAnalytics {
+    daily: PrescriptionSummary;
+    monthly: PrescriptionSummary;
+    adherence: {
+        period_days: number;
+        eligible_doses: number;
+        taken: number;
+        missed: number;
+        skipped: number;
+        percentage: number | null;
+    };
+    patient_adherence: PatientAdherence[];
+    recent_prescriptions: PrescriptionLog[];
 }
 
 interface ShowProps {
     user: UserData;
+    doctorAnalytics: DoctorAnalytics | null;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Users', href: '/admin/users' },
-    { title: 'User Details', href: '' },
+    { title: "Users", href: "/admin/users" },
+    { title: "User Details", href: "" },
 ];
 
-function InfoRow({ label, value, icon: Icon }: { label: string; value: string | null | undefined; icon?: React.ElementType }) {
-    if (!value) return null;
-    return (
-        <div className="flex items-start gap-2 py-1.5">
-            {Icon && <Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />}
-            <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">{label}</p>
-                <p className="text-sm break-words">{value}</p>
-            </div>
-        </div>
-    );
-}
-
-function StatusBadge({ status, label }: { status: string; label: string }) {
-    return (
-        <Badge variant={status == 'active' ? 'default' : status == 'suspended' ? 'secondary' : 'destructive'} className="text-xs">
-            {status == 'active' ? label : status == 'suspended' ? 'Suspended' : `Inactive`}
-        </Badge>
-    );
-}
-
 function formatDate(date: string | null | undefined): string {
-    if (!date) return '-';
-    return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    if (!date) {
+        return "Not recorded";
+    }
+
+    const parsedDate = new Date(date);
+
+    return Number.isNaN(parsedDate.getTime())
+        ? date
+        : parsedDate.toLocaleDateString("en-GB", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+          });
 }
 
-function formatDateTime(date: string | null | undefined): string {
-    if (!date) return '-';
-    return new Date(date).toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    });
+function formatDateTime(date: string): string {
+    const parsedDate = new Date(date);
+
+    return Number.isNaN(parsedDate.getTime())
+        ? date
+        : parsedDate.toLocaleString("en-GB", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+          });
 }
 
 function getInitials(name: string): string {
     return name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
+        .trim()
+        .split(/\s+/)
+        .map((part) => part[0])
+        .join("")
         .toUpperCase()
         .slice(0, 2);
 }
 
-export default function Show({ user }: ShowProps) {
+function MetricCard({
+    label,
+    value,
+    description,
+    icon: Icon,
+}: {
+    label: string;
+    value: number | string;
+    description: string;
+    icon: typeof Activity;
+}) {
+    return (
+        <Card>
+            <CardContent className="flex items-start justify-between gap-4 pt-6">
+                <div className="space-y-1">
+                    <p className="text-sm text-muted-foreground">{label}</p>
+                    <p className="text-3xl font-semibold">{value}</p>
+                    <p className="text-xs text-muted-foreground">
+                        {description}
+                    </p>
+                </div>
+                <span className="rounded-lg bg-primary/10 p-2 text-primary">
+                    <Icon className="size-5" />
+                </span>
+            </CardContent>
+        </Card>
+    );
+}
 
-    const billing = user.freemius_billing;
-    const subscriptions = user.subscriptions || [];
-    const payments = user.freemius_payment || [];
-    const activations = user.license_activations || [];
+function ExportLink({
+    userId,
+    format,
+    children,
+}: {
+    userId: number;
+    format: "csv" | "pdf";
+    children: React.ReactNode;
+}) {
+    return (
+        <a
+            href={route("users.analytics.export", {
+                id: userId,
+                format,
+            })}
+            className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-input bg-background px-3 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+            {children}
+        </a>
+    );
+}
 
-    const totalSpent = payments.reduce((sum, p) => sum + Number(p.gross || 0), 0);
-    const activeSubscriptions = subscriptions.filter((s) => s.is_active).length;
+export default function Show({ user, doctorAnalytics }: ShowProps) {
+    const isDoctor = user.roles.some(
+        (role) => role.name.toLowerCase() === "doctor",
+    );
+    const exportAnalytics = isDoctor && doctorAnalytics !== null;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`User - ${user.name}`} />
+            <Head title={`${isDoctor ? "Doctor" : "User"} - ${user.name}`} />
 
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
                 <AdminPageHeader
                     breadcrumbs={breadcrumbs}
-                    description="View full user profile, Patients, Prescriptions and Analytics"
+                    description={
+                        isDoctor
+                            ? "Doctor profile, prescription statistics, and patient adherence"
+                            : "User profile and account details"
+                    }
                     actions={
-                        <Button variant="outline" size="sm" onClick={() => router.visit(route('users.edit', user.id))} className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                                router.visit(route("users.edit", user.id))
+                            }
+                            className="border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white"
+                        >
                             Edit User
                         </Button>
                     }
                 />
-                {/* Smart Header */}
+
                 <Card>
                     <CardContent className="pt-6">
-                        <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-                            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+                            <div className="flex items-center gap-4">
                                 <Avatar className="size-20 border-2 border-white shadow-md">
-                                    <AvatarImage src={user.avatar || undefined} alt={user.name} />
+                                    <AvatarImage
+                                        src={user.avatar || undefined}
+                                        alt={user.name}
+                                    />
                                     <AvatarFallback className="bg-primary text-xl font-bold text-primary-foreground">
                                         {getInitials(user.name)}
                                     </AvatarFallback>
                                 </Avatar>
-                                <div className="space-y-1">
+                                <div className="space-y-2">
                                     <div className="flex flex-wrap items-center gap-2">
-                                        <h1 className="text-2xl font-bold">{user.name}</h1>
+                                        <h1 className="text-2xl font-bold">
+                                            {user.name}
+                                        </h1>
+                                        <Badge variant="secondary">
+                                            {user.status}
+                                        </Badge>
                                         {user.email_verified_at && (
-                                            <Badge variant="outline" className="gap-1 border-green-200 text-green-700">
-                                                <BadgeCheck className="size-3" />
+                                            <Badge
+                                                variant="outline"
+                                                className="border-green-200 text-green-700"
+                                            >
                                                 Verified
                                             </Badge>
                                         )}
-                                        <StatusBadge status={user.status} label="Active" />
                                     </div>
-                                    <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                                    <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
                                         <span className="flex items-center gap-1">
-                                            <Mail className="size-3.5" />
+                                            <Mail className="size-4" />
                                             {user.email}
                                         </span>
                                         {user.mobile && (
                                             <span className="flex items-center gap-1">
-                                                <Phone className="size-3.5" />
+                                                <Phone className="size-4" />
                                                 {user.mobile}
                                             </span>
                                         )}
                                         <span className="flex items-center gap-1">
-                                            <Calendar className="size-3.5" />
+                                            <CalendarDays className="size-4" />
                                             Joined {formatDate(user.created_at)}
                                         </span>
                                     </div>
-                                    {user.roles.length > 0 && (
-                                        <div className="flex flex-wrap gap-1.5 pt-1">
-                                            {user.roles.map((role) => (
-                                                <Badge key={role.id} variant="secondary" className="capitalize">
-                                                    <UserIcon className="mr-1 size-3" />
-                                                    {role.name}
-                                                </Badge>
-                                            ))}
-                                        </div>
-                                    )}
+                                    <div className="flex flex-wrap gap-2">
+                                        {user.roles.map((role) => (
+                                            <Badge
+                                                key={role.id}
+                                                variant="outline"
+                                                className="capitalize"
+                                            >
+                                                {role.name}
+                                            </Badge>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex gap-2">
-                            </div>
-                        </div>
-
-                        {/* Quick Stats */}
-                        <Separator className="my-4" />
-                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                            <div className="text-center">
-                                <p className="text-2xl font-bold">{subscriptions.length}</p>
-                                <p className="text-xs text-muted-foreground">Total Rx</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-2xl font-bold">{activeSubscriptions}</p>
-                                <p className="text-xs text-muted-foreground">Active Patients</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-2xl font-bold">{payments.length}</p>
-                                <p className="text-xs text-muted-foreground">This Month</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-2xl font-bold">{activations.length}</p>
-                                <p className="text-xs text-muted-foreground">Activations</p>
-                            </div>
+                            {exportAnalytics && (
+                                <div className="flex flex-wrap gap-2">
+                                    <ExportLink userId={user.id} format="csv">
+                                        <FileSpreadsheet className="size-4" />
+                                        Export CSV
+                                    </ExportLink>
+                                    <ExportLink userId={user.id} format="pdf">
+                                        <FileText className="size-4" />
+                                        Export PDF
+                                    </ExportLink>
+                                </div>
+                            )}
                         </div>
                     </CardContent>
                 </Card>
 
-                <div className="grid gap-6 lg:grid-cols-2">
-                    {/* Doctor Analytics */}
+                {isDoctor && user.doctor && (
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
-                                <CreditCard className="size-5" />
-                                Doctor Analytics
+                                <Stethoscope className="size-5" />
+                                Doctor profile
                             </CardTitle>
-                            <CardDescription>Doctor Analytics</CardDescription>
+                            <CardDescription>
+                                Professional and practice information
+                            </CardDescription>
                         </CardHeader>
-                        <CardContent>
-                            {billing ? (
-                                <div className="space-y-0 divide-y">
-                                    {(billing.business_name || billing.first) && (
-                                        <div className="pb-2">
-                                            {billing.business_name && <InfoRow label="Business" value={billing.business_name} />}
-                                            {(billing.first || billing.last) && (
-                                                <InfoRow label="Name" value={`${billing.first || ''} ${billing.last || ''}`.trim()} icon={UserIcon} />
-                                            )}
-                                        </div>
-                                    )}
-                                    <div className="py-2">
-                                        <InfoRow label="Email" value={billing.email} icon={Mail} />
-                                        <InfoRow label="Phone" value={billing.phone} icon={Phone} />
-                                        <InfoRow label="Website" value={billing.website} icon={Globe} />
-                                        <InfoRow label="Tax ID" value={billing.tax_id} />
-                                    </div>
-                                    {(billing.address_street || billing.address_city) && (
-                                        <div className="pt-2">
-                                            <InfoRow
-                                                label="Address"
-                                                value={[
-                                                    billing.address_street,
-                                                    billing.address_apt,
-                                                    billing.address_city,
-                                                    billing.address_state,
-                                                    billing.address_zip,
-                                                    billing.address_country,
-                                                ]
-                                                    .filter(Boolean)
-                                                    .join(', ')}
-                                                icon={MapPin}
-                                            />
-                                        </div>
-                                    )}
+                        <CardContent className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                            <ProfileValue
+                                label="Specialization"
+                                value={user.doctor.specialization}
+                            />
+                            <ProfileValue
+                                label="Designation"
+                                value={user.doctor.designation}
+                            />
+                            <ProfileValue
+                                label="Qualification"
+                                value={user.doctor.qualification}
+                            />
+                            <ProfileValue
+                                label="Registration number"
+                                value={user.doctor.registration_no}
+                            />
+                            <ProfileValue
+                                label="Experience"
+                                value={
+                                    user.doctor.experience_years === null
+                                        ? null
+                                        : `${user.doctor.experience_years} years`
+                                }
+                            />
+                            <ProfileValue
+                                label="Institute"
+                                value={user.doctor.working_institute}
+                            />
+                            {user.doctor.bio && (
+                                <div className="sm:col-span-2 lg:col-span-3">
+                                    <ProfileValue
+                                        label="Professional bio"
+                                        value={user.doctor.bio}
+                                    />
                                 </div>
-                            ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No Doctor Analytics available</p>
                             )}
                         </CardContent>
                     </Card>
+                )}
 
-                    {/* Prescription statistics */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <RefreshCw className="size-5" />
-                                Prescription statistics
-                            </CardTitle>
-                            <CardDescription>{subscriptions.length} subscription(s) found</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            {subscriptions.length > 0 ? (
-                                <div className="space-y-4">
-                                    {subscriptions.map((sub) => (
-                                        <div key={sub.id} className="space-y-2 rounded-lg border bg-muted/50 p-4">
-                                            <div className="flex items-center justify-between">
-                                                <p className="font-semibold">{sub.plan_title}</p>
-                                                <StatusBadge active={sub.is_active} label="Active" />
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-muted-foreground">
-                                                <span>
-                                                    Initial: {sub.currency?.toUpperCase()} {sub.initial_amount}
-                                                </span>
-                                                <span>
-                                                    Renewal: {sub.currency?.toUpperCase()} {sub.renewal_amount}
-                                                </span>
-                                                <span>Cycle: {sub.billing_cycle || '-'}</span>
-                                                <span>Renewal Date: {formatDate(sub.renewal_date)}</span>
-                                                {sub.is_trial && (
-                                                    <>
-                                                        <span className="text-amber-600">Trial</span>
-                                                        <span>Ends: {formatDate(sub.trial_ends)}</span>
-                                                    </>
-                                                )}
-                                                {sub.cancelled_at && (
-                                                    <span className="col-span-2 text-red-600">Cancelled: {formatDate(sub.cancelled_at)}</span>
-                                                )}
-                                            </div>
-                                            {sub.payment_method?.type && (
-                                                <p className="text-xs text-muted-foreground">Payment: {sub.payment_method.type}</p>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No Prescription statistics found</p>
-                            )}
-                        </CardContent>
-                    </Card>
+                {exportAnalytics && (
+                    <>
+                        <section className="space-y-3">
+                            <div>
+                                <h2 className="text-xl font-semibold">
+                                    Prescription statistics
+                                </h2>
+                                <p className="text-sm text-muted-foreground">
+                                    Distinct patients and issued prescription
+                                    visits
+                                </p>
+                            </div>
+                            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                                <MetricCard
+                                    label="Patients today"
+                                    value={doctorAnalytics.daily.patients}
+                                    description="Unique patients with an issued prescription"
+                                    icon={UserRound}
+                                />
+                                <MetricCard
+                                    label="Prescriptions today"
+                                    value={doctorAnalytics.daily.prescriptions}
+                                    description={`${doctorAnalytics.daily.new_visits} new · ${doctorAnalytics.daily.follow_up_visits} follow-up`}
+                                    icon={ClipboardList}
+                                />
+                                <MetricCard
+                                    label="Patients this month"
+                                    value={doctorAnalytics.monthly.patients}
+                                    description="Unique patients with an issued prescription"
+                                    icon={UserRound}
+                                />
+                                <MetricCard
+                                    label="Prescriptions this month"
+                                    value={
+                                        doctorAnalytics.monthly.prescriptions
+                                    }
+                                    description={`${doctorAnalytics.monthly.new_visits} new · ${doctorAnalytics.monthly.follow_up_visits} follow-up`}
+                                    icon={ClipboardList}
+                                />
+                            </div>
+                        </section>
 
-                    {/* Top medicines */}
-                    <Card>
-                        <CardHeader>
-                            <div className="flex items-center justify-between">
-                                <div>
+                        <div className="grid gap-6 lg:grid-cols-5">
+                            <Card className="lg:col-span-2">
+                                <CardHeader>
                                     <CardTitle className="flex items-center gap-2 text-lg">
-                                        <Receipt className="size-5" />
-                                        Top medicines
+                                        <Activity className="size-5" />
+                                        Patient adherence
                                     </CardTitle>
                                     <CardDescription>
-                                        {payments.length} payment(s) &middot; Total spent: {payments[0]?.currency?.toUpperCase() || 'USD'}{' '}
-                                        {(Number(totalSpent) || 0).toFixed(2)}
+                                        Aggregated from eligible medication logs
+                                        in the last{" "}
+                                        {doctorAnalytics.adherence.period_days}{" "}
+                                        days
                                     </CardDescription>
-                                </div>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            {payments.length > 0 ? (
-                                <div className="space-y-3">
-                                    {payments.map((payment) => (
-                                        <div key={payment.id} className="flex items-center justify-between rounded-lg border p-3">
-                                            <div className="space-y-0.5">
-                                                <p className="text-sm font-medium">{payment.plan_title || 'Payment'}</p>
-                                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                                    <span>{formatDateTime(payment.freemius_created_at)}</span>
-                                                    {payment.gateway && <span>&middot; {payment.gateway}</span>}
-                                                    {payment.is_renewal && (
-                                                        <Badge variant="outline" className="h-4 px-1 py-0 text-[10px]">
-                                                            Renewal
-                                                        </Badge>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div className="text-right">
-                                                <p className="text-sm font-semibold">
-                                                    {payment.currency?.toUpperCase()} {(Number(payment.gross) || 0).toFixed(2)}
-                                                </p>
-                                                {payment.invoice_url && (
-                                                    <a
-                                                        href={payment.invoice_url}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-xs text-primary hover:underline"
-                                                    >
-                                                        Invoice
-                                                    </a>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No Top medicines found</p>
-                            )}
-                        </CardContent>
-                    </Card>
+                                </CardHeader>
+                                <CardContent className="space-y-5">
+                                    <div>
+                                        <p className="text-4xl font-semibold">
+                                            {doctorAnalytics.adherence
+                                                .percentage === null
+                                                ? "—"
+                                                : `${doctorAnalytics.adherence.percentage}%`}
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">
+                                            Compliance rate
+                                        </p>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <AdherenceCount
+                                            label="Taken"
+                                            count={
+                                                doctorAnalytics.adherence.taken
+                                            }
+                                        />
+                                        <AdherenceCount
+                                            label="Missed"
+                                            count={
+                                                doctorAnalytics.adherence.missed
+                                            }
+                                        />
+                                        <AdherenceCount
+                                            label="Skipped"
+                                            count={
+                                                doctorAnalytics.adherence
+                                                    .skipped
+                                            }
+                                        />
+                                        <AdherenceCount
+                                            label="Eligible doses"
+                                            count={
+                                                doctorAnalytics.adherence
+                                                    .eligible_doses
+                                            }
+                                        />
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">
+                                        Compliance is taken doses divided by
+                                        taken plus missed doses. Skipped doses
+                                        are excluded.
+                                    </p>
+                                </CardContent>
+                            </Card>
 
-                    {/* Patient adherence statistics */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <Download className="size-5" />
-                                Patient adherence statistics
-                            </CardTitle>
-                            <CardDescription>{activations.length} active installation(s)</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            {activations.length > 0 ? (
-                                <div className="space-y-3">
-                                    {activations.map((activation) => (
-                                        <div key={activation.id} className="flex items-start justify-between rounded-lg border bg-muted/50 p-4">
-                                            <div className="space-y-1">
-                                                <div className="flex items-center gap-2">
-                                                    <ShoppingCart className="size-4 text-muted-foreground" />
-                                                    <p className="text-sm font-semibold">{activation.title || activation.uid}</p>
-                                                </div>
-                                                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                                                    {activation.license_plan_name && <span>Plan: {activation.license_plan_name}</span>}
-                                                    {activation.version && <span>v{activation.version}</span>}
-                                                    <span>Activated: {formatDate(activation.activated_at)}</span>
-                                                </div>
-                                                {activation.url && (
-                                                    <a
-                                                        href={activation.url}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-xs text-primary hover:underline"
+                            <Card className="lg:col-span-3">
+                                <CardHeader>
+                                    <CardTitle className="text-lg">
+                                        Patient compliance overview
+                                    </CardTitle>
+                                    <CardDescription>
+                                        Patients with the most missed doses
+                                        during this period
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    {doctorAnalytics.patient_adherence.length >
+                                    0 ? (
+                                        <div className="space-y-4">
+                                            {doctorAnalytics.patient_adherence.map(
+                                                (patient) => (
+                                                    <div
+                                                        key={patient.patient_id}
+                                                        className="space-y-2"
                                                     >
-                                                        {activation.url}
-                                                    </a>
-                                                )}
-                                            </div>
-                                            <Badge variant="outline" className="shrink-0">
-                                                Active
-                                            </Badge>
+                                                        <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+                                                            <div>
+                                                                <p className="font-medium">
+                                                                    {
+                                                                        patient.patient_name
+                                                                    }
+                                                                </p>
+                                                                <p className="text-xs text-muted-foreground">
+                                                                    {
+                                                                        patient.patient_number
+                                                                    }
+                                                                    {" · "}
+                                                                    {
+                                                                        patient.eligible_doses
+                                                                    }{" "}
+                                                                    eligible
+                                                                    doses
+                                                                </p>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <p className="font-semibold">
+                                                                    {
+                                                                        patient.percentage
+                                                                    }
+                                                                    %
+                                                                </p>
+                                                                <p className="text-xs text-muted-foreground">
+                                                                    {
+                                                                        patient.missed
+                                                                    }{" "}
+                                                                    missed
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="h-2 overflow-hidden rounded-full bg-muted">
+                                                            <div
+                                                                className="h-full rounded-full bg-primary"
+                                                                style={{
+                                                                    width: `${Math.min(patient.percentage, 100)}%`,
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                ),
+                                            )}
                                         </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="py-8 text-center text-sm text-muted-foreground">No Patient adherence statistics found</p>
-                            )}
+                                    ) : (
+                                        <EmptyState message="No eligible adherence records found in the last 30 days." />
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-lg">
+                                    <ClipboardList className="size-5" />
+                                    Recent prescription log
+                                </CardTitle>
+                                <CardDescription>
+                                    Latest prescriptions issued by this doctor
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                {doctorAnalytics.recent_prescriptions.length >
+                                0 ? (
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full min-w-[720px] text-left text-sm">
+                                            <thead>
+                                                <tr className="border-b text-xs text-muted-foreground">
+                                                    <th className="px-3 py-2 font-medium">
+                                                        Date
+                                                    </th>
+                                                    <th className="px-3 py-2 font-medium">
+                                                        Patient
+                                                    </th>
+                                                    <th className="px-3 py-2 font-medium">
+                                                        Prescription
+                                                    </th>
+                                                    <th className="px-3 py-2 font-medium">
+                                                        Visit
+                                                    </th>
+                                                    <th className="px-3 py-2 font-medium">
+                                                        Status
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {doctorAnalytics.recent_prescriptions.map(
+                                                    (prescription) => (
+                                                        <tr
+                                                            key={
+                                                                prescription.id
+                                                            }
+                                                            className="border-b last:border-0"
+                                                        >
+                                                            <td className="px-3 py-3">
+                                                                {formatDateTime(
+                                                                    prescription.created_at,
+                                                                )}
+                                                            </td>
+                                                            <td className="px-3 py-3">
+                                                                <p className="font-medium">
+                                                                    {prescription
+                                                                        .patient
+                                                                        ?.name ??
+                                                                        "Patient unavailable"}
+                                                                </p>
+                                                                <p className="text-xs text-muted-foreground">
+                                                                    {prescription
+                                                                        .patient
+                                                                        ?.patient_number ??
+                                                                        ""}
+                                                                </p>
+                                                            </td>
+                                                            <td className="px-3 py-3">
+                                                                <p className="font-medium">
+                                                                    {
+                                                                        prescription.prescription_number
+                                                                    }
+                                                                </p>
+                                                                <p className="max-w-xs truncate text-xs text-muted-foreground">
+                                                                    {prescription.diagnosis ??
+                                                                        "No diagnosis"}
+                                                                </p>
+                                                                {prescription.medications.length >
+                                                                    0 && (
+                                                                    <p className="max-w-xs truncate text-xs text-muted-foreground">
+                                                                        {prescription.medications
+                                                                            .map(
+                                                                                (
+                                                                                    medication,
+                                                                                ) =>
+                                                                                    `${
+                                                                                        medication
+                                                                                            .medicine
+                                                                                            ?.brand_name ??
+                                                                                        medication
+                                                                                            .medicine
+                                                                                            ?.generic_name ??
+                                                                                        "Medicine"
+                                                                                    } ${
+                                                                                        medication.strength ??
+                                                                                        ""
+                                                                                    }`,
+                                                                            )
+                                                                            .join(
+                                                                                ", ",
+                                                                            )}
+                                                                    </p>
+                                                                )}
+                                                            </td>
+                                                            <td className="px-3 py-3">
+                                                                <Badge variant="outline">
+                                                                    {prescription.is_followup
+                                                                        ? "Follow-up"
+                                                                        : "New"}
+                                                                </Badge>
+                                                            </td>
+                                                            <td className="px-3 py-3">
+                                                                <Badge
+                                                                    variant={
+                                                                        prescription.status ===
+                                                                        "cancelled"
+                                                                            ? "destructive"
+                                                                            : "secondary"
+                                                                    }
+                                                                    className="capitalize"
+                                                                >
+                                                                    {
+                                                                        prescription.status
+                                                                    }
+                                                                </Badge>
+                                                            </td>
+                                                        </tr>
+                                                    ),
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                ) : (
+                                    <EmptyState message="No prescriptions found for this doctor." />
+                                )}
+                            </CardContent>
+                        </Card>
+                    </>
+                )}
+
+                {isDoctor && !doctorAnalytics && (
+                    <Card>
+                        <CardContent className="py-8 text-center text-sm text-muted-foreground">
+                            Doctor analytics are currently unavailable.
                         </CardContent>
                     </Card>
-                </div>
+                )}
             </div>
         </AppLayout>
+    );
+}
+
+function ProfileValue({
+    label,
+    value,
+}: {
+    label: string;
+    value: string | number | null;
+}) {
+    if (value === null || value === "") {
+        return null;
+    }
+
+    return (
+        <div className="space-y-1">
+            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                {label}
+            </p>
+            <p className="text-sm break-words">{value}</p>
+        </div>
+    );
+}
+
+function AdherenceCount({ label, count }: { label: string; count: number }) {
+    return (
+        <div className="rounded-lg border p-3">
+            <p className="text-xl font-semibold">{count}</p>
+            <p className="text-xs text-muted-foreground">{label}</p>
+        </div>
+    );
+}
+
+function EmptyState({ message }: { message: string }) {
+    return (
+        <div className="flex flex-col items-center gap-2 py-8 text-center text-sm text-muted-foreground">
+            <Download className="size-5" />
+            <p>{message}</p>
+        </div>
     );
 }

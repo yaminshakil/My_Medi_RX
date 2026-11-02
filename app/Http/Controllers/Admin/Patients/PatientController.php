@@ -7,8 +7,10 @@ use App\Http\Requests\Patients\CreatePatientRequest;
 use App\Http\Requests\Patients\UpdatePatientRequest;
 use App\Models\Setting;
 use App\Services\Patients\PatientService;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PatientController extends Controller
 {
@@ -70,10 +72,15 @@ class PatientController extends Controller
         return redirect()->route('patients.index')->with('success', 'Patient created successfully');
     }
 
-    public function show($id)
+    public function show(int $id): Response
     {
         $patient = $this->patientService->find($id);
-        $patient->load('user', 'user.roles', 'vitals', 'prescriptions');
+        $patient->load([
+            'profile_image',
+            'vitals' => fn (HasMany $query) => $query->latest()->limit(5),
+            'prescriptions.doctor:id,name',
+            'prescriptions.medications.medicine:id,brand_name,generic_name,strength,type',
+        ]);
 
         return Inertia::render('Admin/Patients/Show', [
             'patient' => $patient,

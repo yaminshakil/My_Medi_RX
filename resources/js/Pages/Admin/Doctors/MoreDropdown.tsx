@@ -2,14 +2,24 @@ import { Button } from '@/Components/ui/button';
 import { router } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 
-export default function DoctorMoreDropdown({ doctor }) {
+interface DoctorSummary {
+    uuid: string;
+    featured: boolean;
+    active: boolean;
+}
+
+export default function DoctorMoreDropdown({
+    doctor,
+}: {
+    doctor: DoctorSummary;
+}) {
     const [open, setOpen] = useState(false);
-    const dropdownRef = useRef(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     // Close dropdown if clicked outside
     useEffect(() => {
-        function handleClickOutside(e) {
-            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        function handleClickOutside(event: MouseEvent): void {
+            if (dropdownRef.current && event.target instanceof Node && !dropdownRef.current.contains(event.target)) {
                 setOpen(false);
             }
         }
@@ -29,6 +39,11 @@ export default function DoctorMoreDropdown({ doctor }) {
         setOpen(false);
     };
 
+    const viewDoctor = () => {
+        router.get(route('doctors.show', doctor.uuid));
+        setOpen(false);
+    };
+
     return (
         <div className="relative inline-block" ref={dropdownRef}>
             {/* Button with vertical ... and More */}
@@ -40,6 +55,10 @@ export default function DoctorMoreDropdown({ doctor }) {
             {/* Dropdown */}
             {open && (
                 <div className="absolute right-0 z-50 mt-2 w-48 rounded-lg border bg-white shadow-lg">
+                    <button onClick={viewDoctor} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">
+                        View Details
+                    </button>
+
                     <button onClick={toggleFeatured} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">
                         {doctor?.featured ? 'Mark as Non Featured' : 'Mark as Featured'}
                     </button>

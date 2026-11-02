@@ -259,7 +259,7 @@ export default function Create({ options }: CreateProps) {
                                             {options.storage_units.map((unit) => (
                                                 <SelectItem
                                                     key={unit.value}
-                                                    value={unit.value}
+                                                    value={String(unit.value)}
                                                 >
                                                     {unit.label}
                                                 </SelectItem>
