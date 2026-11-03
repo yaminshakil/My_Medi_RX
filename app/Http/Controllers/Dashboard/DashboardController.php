@@ -19,8 +19,6 @@ class DashboardController extends Controller
 
     protected $analytics;
 
-    protected $user;
-
     public function __construct(
         DashboardRepositoryInterface $dashboardRepository,
         DoctorChamberRepositoryInterface $doctorChamberRepository,
@@ -29,14 +27,19 @@ class DashboardController extends Controller
         $this->dashboardRepository = $dashboardRepository;
         $this->doctorChamberRepository = $doctorChamberRepository;
         $this->analytics = $analytics;
-        $this->user = Auth::user();
     }
 
     public function index()
     {
+        $user = Auth::user();
+
+        if (! $user) {
+            abort(403);
+        }
+
         $token = $this->dashboardRepository->getToken();
 
-        if ($this->user->hasRole('Doctor') || $this->user->hasRole('Assistant')) {
+        if ($user->hasRole('Doctor') || $user->hasRole('Assistant')) {
             $eprescriptions = $this->dashboardRepository->ePrescriptionDashboardInfo();
             $chambers = $this->doctorChamberRepository->all();
 
@@ -46,7 +49,7 @@ class DashboardController extends Controller
                 'eprescriptions' => $eprescriptions,
                 'chambers'       => $chambers,
             ]);
-        } elseif ($this->user->hasRole('Admin')) {
+        } elseif ($user->hasRole('Admin')) {
             $eprescriptions = $this->dashboardRepository->getAdminDashboardInfo();
 
             return Inertia::render('Dashboard/Dashboard', [
@@ -54,20 +57,20 @@ class DashboardController extends Controller
                 'status'         => session('status'),
                 'eprescriptions' => $eprescriptions,
             ]);
-        } elseif ($this->user->hasRole('Patient')) {
+        } elseif ($user->hasRole('Patient')) {
             $patientinfo = $this->dashboardRepository->patientDashboardInfo();
 
             return Inertia::render('Dashboard/PatientDashboard', [
                 'token'       => $token,
                 'patientinfo' => $patientinfo,
             ]);
-        } elseif ($this->user->hasRole('Pharmacy')) {
+        } elseif ($user->hasRole('Pharmacy')) {
             return Inertia::render(
                 'Admin/Pharmacies/Analytics',
-                $this->analytics->dashboard($this->user),
+                $this->analytics->dashboard($user),
             );
-        } elseif ($this->user->hasRole('Hospital')) {
-            $hospital = $this->user->hospital()
+        } elseif ($user->hasRole('Hospital')) {
+            $hospital = $user->hospital()
                 ->withCount([
                     'chambers',
                     'chambers as active_chambers_count' => fn (Builder $query) => $query->where('is_active', true),
