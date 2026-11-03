@@ -14,6 +14,7 @@ Route::prefix('blood-bank')
     ->group(function (): void {
         Route::get('dashboard', DashboardApiController::class)->name('dashboard');
         Route::get('lookups', [LookupApiController::class, 'index'])->name('lookups.index');
+        Route::get('components', [LookupApiController::class, 'components'])->name('components.index');
         Route::get('patients', [LookupApiController::class, 'patients'])->name('patients.index');
         Route::get('storage-units', [StorageUnitApiController::class, 'index'])->name('storage-units.index');
 

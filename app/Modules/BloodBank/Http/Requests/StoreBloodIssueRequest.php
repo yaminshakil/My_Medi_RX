@@ -16,7 +16,7 @@ class StoreBloodIssueRequest extends FormRequest
     {
         return [
             'blood_bag_id'                  => ['required', 'integer', 'exists:bb_blood_bags,id'],
-            'patient_id'                    => ['required', 'integer', 'exists:bb_patients,id'],
+            'patient_id'                    => ['required', 'integer', 'exists:patients,id'],
             'physician_id'                  => ['required', 'integer', 'exists:bb_physicians,id'],
             'indication'                    => ['required', 'string', 'max:1000'],
             'ward'                          => ['nullable', 'string', 'max:100'],

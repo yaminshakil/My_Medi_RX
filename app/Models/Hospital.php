@@ -86,10 +86,9 @@ class Hospital extends Model
         });
     }
 
-    public function chambers()
+    public function chambers(): HasMany
     {
-        return $this->belongsToMany(DoctorChamber::class, 'doctor_chambers')
-            ->withTimestamps();
+        return $this->hasMany(DoctorChamber::class, 'hospital_id');
     }
 
     public function getLogoImageUrlAttribute()

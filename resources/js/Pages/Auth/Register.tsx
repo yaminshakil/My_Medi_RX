@@ -12,7 +12,8 @@ import AuthLayout from '@/Layouts/auth-layout';
 import { Select } from 'antd';
 
 type RegisterForm = {
-    name: string;
+    first_name: string;
+    last_name: string;
     email: string;
     password: string;
     password_confirmation: string;
@@ -24,9 +25,19 @@ const registrationtype = [
     { value: 'Doctor', label: 'Doctor' },
 ];
 
-export default function Register() {
+interface RoleOption {
+    value: string;
+    label: string;
+}
+
+interface Props {
+    roles: RoleOption[];
+}
+
+export default function Register({ roles }: Props) {
     const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
-        name: '',
+        first_name: '',
+        last_name: '',
         email: '',
         password: '',
         password_confirmation: '',
@@ -62,12 +73,30 @@ export default function Register() {
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="name"
-                                    value={data.name}
-                                    onChange={(e) => setData('name', e.target.value)}
+                                    value={data.first_name}
+                                    onChange={(e) => setData('first_name', e.target.value)}
                                     disabled={processing}
-                                    placeholder="Full name"
+                                    placeholder="First name"
                                 />
-                                <InputError message={errors.name} className="mt-2" />
+                                <InputError message={errors.first_name} className="mt-2" />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="last_name" className="text-white">
+                                    Last Name
+                                </Label>
+                                <Input
+                                    id="last_name"
+                                    type="text"
+                                    required
+                                    tabIndex={2}
+                                    autoComplete="last-name"
+                                    value={data.last_name}
+                                    onChange={(e) => setData('last_name', e.target.value)}
+                                    disabled={processing}
+                                    placeholder="Last name"
+                                />
+                                <InputError message={errors.last_name} className="mt-2" />
                             </div>
 
                             <div className="grid gap-2">
@@ -137,7 +166,7 @@ export default function Register() {
                                     value={data.registration_type || undefined}
                                     onChange={(value) => setData('registration_type', value)}
                                     className="basic-single m-0 !h-[36px] w-full rounded-md disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-                                    options={registrationtype}
+                                    options={roles}
                                     disabled={processing}
                                     tabIndex={5}
                                 />

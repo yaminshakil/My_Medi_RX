@@ -46,7 +46,8 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
         } elseif ($this->user->hasRole('Patient')) {
             $this->patient_id = $this->user->patient?->id;
         } else {
-            $this->doctor_id = $this->user->id;
+            $this->doctor_id = null;
+            $this->patient_id = null;
         }
     }
 
@@ -65,9 +66,6 @@ class PrescriptionRepository implements PrescriptionRepositoryInterface
             $prescriptions = $prescriptions->where('doctor_id', $this->doctor_id);
         } elseif ($this->patient_id) {
             $prescriptions = $prescriptions->where('patient_id', $this->patient_id);
-        } else {
-            // Fallback: If unauthorized or role cannot be determined, return empty results
-            $prescriptions->whereRaw('1 = 0');
         }
 
         $prescriptions = $prescriptions->latest()->paginate($parPage)->withQueryString();

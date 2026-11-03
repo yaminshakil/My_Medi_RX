@@ -35,6 +35,43 @@ class BloodBankApiTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_returns_401_when_blood_components_are_requested_without_authentication(): void
+    {
+        $this->getJson('/api/v1/blood-bank/components')
+            ->assertUnauthorized();
+    }
+
+    public function test_authorized_user_can_list_blood_components(): void
+    {
+        $this->actingAs($this->administrator(), 'api')
+            ->getJson('/api/v1/blood-bank/components')
+            ->assertOk()
+            ->assertJsonPath('success', true)
+            ->assertJsonPath('message', 'Blood components loaded.')
+            ->assertJsonPath('data', [
+                [
+                    'value'           => 'whole_blood',
+                    'label'           => 'Whole blood',
+                    'shelf_life_days' => 35,
+                ],
+                [
+                    'value'           => 'packed_red_cells',
+                    'label'           => 'Packed red cells',
+                    'shelf_life_days' => 42,
+                ],
+                [
+                    'value'           => 'platelets',
+                    'label'           => 'Platelets',
+                    'shelf_life_days' => 5,
+                ],
+                [
+                    'value'           => 'plasma',
+                    'label'           => 'Plasma',
+                    'shelf_life_days' => 365,
+                ],
+            ]);
+    }
+
     public function test_authorized_user_can_register_and_list_blood_bags(): void
     {
         $user = $this->administrator();

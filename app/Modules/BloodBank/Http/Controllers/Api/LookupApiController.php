@@ -38,6 +38,14 @@ class LookupApiController extends BloodBankApiController
         ], 'Blood-bank lookup options loaded.');
     }
 
+    public function components(): JsonResponse
+    {
+        return $this->success(
+            LookupOptions::components(),
+            'Blood components loaded.',
+        );
+    }
+
     public function patients(Request $request): JsonResponse
     {
         $data = $request->validate([

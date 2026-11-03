@@ -44,7 +44,7 @@ class BloodIssueApiController extends BloodBankApiController
     public function availableBags(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'patient_id'  => ['nullable', 'integer', 'exists:bb_patients,id'],
+            'patient_id'  => ['nullable', 'integer', 'exists:patients,id'],
             'component'   => ['required', Rule::in(BloodComponent::values())],
             'include_all' => ['nullable', 'boolean'],
         ]);

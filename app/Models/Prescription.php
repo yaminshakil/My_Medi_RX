@@ -81,4 +81,9 @@ class Prescription extends Model
     {
         return $this->hasOne(GynaeHistory::class);
     }
+
+    public function qrCodes()
+    {
+        return $this->hasMany(PrescriptionQrCode::class);
+    }
 }

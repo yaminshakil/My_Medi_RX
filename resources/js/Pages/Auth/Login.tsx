@@ -10,6 +10,8 @@ import { Checkbox } from '@/Components/ui/checkbox';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 import AuthLayout from '@/Layouts/auth-layout';
+import { Eye, EyeOff, Lock } from 'lucide-react';
+import React, { useState } from 'react';
 
 type LoginForm = {
     email: string;
@@ -23,6 +25,8 @@ interface LoginProps {
 }
 
 export default function Login({ status, canResetPassword }: LoginProps) {
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const { data, setData, post, processing, errors, reset } = useForm<Required<LoginForm>>({
         email: '',
         password: '',
@@ -35,6 +39,10 @@ export default function Login({ status, canResetPassword }: LoginProps) {
             onFinish: () => reset('password'),
         });
     };
+
+     const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
 
     return (
         <AuthLayout title="" description="">
@@ -76,9 +84,10 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                         </TextLink>
                                     )}
                                 </div>
+                                <div className="relative flex items-center">
                                 <Input
                                     id="password"
-                                    type="password"
+                                    type={showPassword ? 'text' : 'password'}
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
@@ -86,7 +95,21 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     onChange={(e) => setData('password', e.target.value)}
                                     placeholder="Password"
                                 />
+                                {/* Right Toggle Button (Eye / EyeOff) */}
+                                        <button
+                                          type="button"
+                                          onClick={togglePasswordVisibility}
+                                          aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                          className="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors focus:outline-none p-1 rounded-md"
+                                        >
+                                          {showPassword ? (
+                                            <EyeOff className="w-5 h-5" />
+                                          ) : (
+                                            <Eye className="w-5 h-5" />
+                                          )}
+                                        </button>
                                 <InputError message={errors.password} />
+                                </div>
                             </div>
 
                             <div className="flex items-center space-x-3">
