@@ -6,6 +6,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeederController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\SslCommerzController;
+use App\Http\Controllers\Admin\SubscriptionPlanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -115,6 +118,36 @@ Route::get('/language/{locale}', function ($locale) {
 
     return back();
 })->name('language.switch');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/subscriptions', [SubscriptionController::class,'index'])->name('subscriptions.index');
+    Route::post('/subscriptions/{plan}/checkout', [SubscriptionController::class,'checkout'])->name('subscriptions.checkout');
+    Route::get('/subscriptions/history', [SubscriptionController::class,'history'])->name('subscriptions.history');
+    Route::get('/subscriptions/result', [SubscriptionController::class,'result'])->name('subscriptions.result');
+});
+Route::post('/payments/sslcommerz/success', [SslCommerzController::class,'success'])->name('sslcommerz.success');
+Route::post('/payments/sslcommerz/fail', [SslCommerzController::class,'fail'])->name('sslcommerz.fail');
+Route::post('/payments/sslcommerz/cancel', [SslCommerzController::class,'cancel'])->name('sslcommerz.cancel');
+Route::post('/payments/sslcommerz/ipn', [SslCommerzController::class,'ipn'])->name('sslcommerz.ipn');
+
+Route::middleware(['auth', 'role:Admin,web'])
+    ->prefix('admin/subscription-plans')
+    ->name('admin.subscription-plans.')
+    ->group(function () {
+        Route::get('/', [SubscriptionPlanController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [SubscriptionPlanController::class, 'store'])
+            ->name('store');
+
+        Route::put('/{plan}', [SubscriptionPlanController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{plan}', [SubscriptionPlanController::class, 'destroy'])
+            ->name('destroy');
+    });
+
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

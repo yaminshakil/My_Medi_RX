@@ -25,8 +25,9 @@ class CreatePatientProfileRequest extends FormRequest
     {
         return [
             'name'                           => 'required|string|max:255',
-            'date_of_birth'                  => 'required|date',
-            'gender'                         => 'required|in:male,female,other',
+            'date_of_birth'                  => 'nullable|date',
+            'age'                            => 'required|integer|min:0|max:150',
+            'gender'                         => 'nullable|in:male,female,other',
             'phone'                          => 'required|string|max:20',
             'email'                          => 'nullable|email',
             'blood_group'                    => 'nullable|string',

@@ -73,7 +73,7 @@ export default function Register({ roles }: Props) {
                         <div className="grid gap-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="name" className="text-white">
-                                    Name
+                                    First Name
                                 </Label>
                                 <Input
                                     id="name"
@@ -143,18 +143,18 @@ export default function Register({ roles }: Props) {
                                     placeholder="Password"
                                 />
                                 {/* Right Toggle Button (Eye / EyeOff) */}
-                                                                        <button
-                                                                          type="button"
-                                                                          onClick={togglePasswordVisibility}
-                                                                          aria-label={showPassword ? 'Hide password' : 'Show password'}
-                                                                          className="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors focus:outline-none p-1 rounded-md"
-                                                                        >
-                                                                          {showPassword ? (
-                                                                            <EyeOff className="w-5 h-5" />
-                                                                          ) : (
-                                                                            <Eye className="w-5 h-5" />
-                                                                          )}
-                                                                        </button>
+                                <button
+                                    type="button"
+                                    onClick={togglePasswordVisibility}
+                                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                    className="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors focus:outline-none p-1 rounded-md"
+                                >
+                                    {showPassword ? (
+                                    <EyeOff className="w-5 h-5" />
+                                    ) : (
+                                    <Eye className="w-5 h-5" />
+                                    )}
+                                </button>
                                 <InputError message={errors.password} />
                                 </div>
                             </div>

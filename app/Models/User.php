@@ -275,4 +275,13 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(MenstrualCycleProfile::class);
     }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+    public function subscriptionPayments()
+    {
+        return $this->hasMany(SubscriptionPayment::class);
+    }
 }

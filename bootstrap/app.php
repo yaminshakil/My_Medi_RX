@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
+use App\Http\Middleware\EnsureActiveSubscription;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -35,6 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => RoleOrPermissionMiddleware::class,
             'profile.exists'     => EnsureProfileExists::class,
             'role.redirect'      => RoleRedirectMiddleware::class,
+            'subscription'       => EnsureActiveSubscription::class
         ]);
 
         $middleware->web(append: [

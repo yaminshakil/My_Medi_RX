@@ -187,6 +187,25 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
 
                         <InputError className="mt-2 text-red-700" message={errors.date_of_birth} />
                     </div>
+                    <div>
+                        <Label htmlFor="age" className="after:text-red-500 after:content-['*']">
+                            Age
+                        </Label>
+                        <Input
+                            id="age"
+                            type="text"
+                            required={true}
+                            onChange={(e) => {
+                                setData('age', parseInt(e.target.value) || 0);
+                            }}
+                            value={data.age}
+                            name="age"
+                            className="w-full bg-white sm:w-auto"
+                            disabled={processing}
+                        />
+
+                        <InputError className="mt-2 text-red-700" message={errors.age} />
+                    </div>
                 </div>
             </div>
 

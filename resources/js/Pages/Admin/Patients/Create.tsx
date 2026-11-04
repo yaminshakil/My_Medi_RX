@@ -18,6 +18,7 @@ type PatientForm = {
     email: string;
     gender: string;
     date_of_birth?: string;
+    age: number;
     address: string;
     city: string;
     blood_group: string;
@@ -30,6 +31,7 @@ export default function Create() {
         phone: '',
         email: '',
         date_of_birth: '',
+        age: 0,
         address: '',
         city: '',
         gender: '',

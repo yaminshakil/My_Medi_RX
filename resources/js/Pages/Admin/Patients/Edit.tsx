@@ -19,6 +19,7 @@ type PatientForm = {
     email: string;
     gender: string;
     date_of_birth?: string;
+    age: number;
     address: string;
     city: string;
     blood_group: string;
@@ -32,6 +33,7 @@ export default function Edit() {
         phone: patient.phone || '',
         email: patient.email || '',
         date_of_birth: patient.birth_date || '',
+        age: patient.age.y || 0,
         address: patient.address || '',
         city: patient.city || '',
         gender: patient.gender || '',
@@ -45,6 +47,7 @@ export default function Edit() {
         e.preventDefault();
         post(route('patients.update', patient.id));
     };
+    console.log('patient', patient);
 
     useEffect(() => {
         if (flash.message.success) {
