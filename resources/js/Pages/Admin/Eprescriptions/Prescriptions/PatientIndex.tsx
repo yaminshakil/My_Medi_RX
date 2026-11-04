@@ -1,13 +1,14 @@
-import { ConfirmDialog } from '@/components/ConfirmDialog';
-import PageHeader from '@/components/PageHeader';
-import { Pagination } from '@/components/pagination';
-import Table from '@/components/Table';
-import AppLayout from '@/layouts/app-layout';
+import { ConfirmDialog } from '@/Components/ConfirmDialog';
+import PageHeader from '@/Components/PageHeader';
+import { Pagination } from '@/Components/pagination';
+import Table from '@/Components/Table';
+import AppLayout from '@/Layouts/app-layout';
 import { useCan } from '@/lib/can';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { Printer } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
+import PrescriptionQrCode from "@/Components/prescription-qr-code";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -98,6 +99,7 @@ export default function PatientIndex(props) {
 
     const PrintPrescription = ({ prescription }) => {
         return (
+            <>
             <a
                 target="_blank"
                 href={route('eprescription.pdf', prescription.uuid)}
@@ -105,6 +107,12 @@ export default function PatientIndex(props) {
             >
                 <Printer size={20} />
             </a>
+            <PrescriptionQrCode
+                        prescriptionId={prescription.uuid}
+                        prescriptionNumber={prescription.prescription_number}
+                        canGenerate={prescription.status === "issued"}
+                        />
+            </>
         );
     };
 

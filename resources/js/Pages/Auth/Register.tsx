@@ -10,6 +10,8 @@ import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 import AuthLayout from '@/Layouts/auth-layout';
 import { Select } from 'antd';
+import { Eye, EyeOff, Lock } from 'lucide-react';
+import React, { useState } from 'react';
 
 type RegisterForm = {
     first_name: string;
@@ -35,6 +37,9 @@ interface Props {
 }
 
 export default function Register({ roles }: Props) {
+     const [password, setPassword] = useState('');
+     const [showPassword, setShowPassword] = useState(false);
+
     const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
         first_name: '',
         last_name: '',
@@ -50,6 +55,10 @@ export default function Register({ roles }: Props) {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };
+
+     const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
 
     return (
         <AuthLayout title="" description="">
@@ -121,9 +130,10 @@ export default function Register({ roles }: Props) {
                                 <Label htmlFor="password" className="text-white">
                                     Password
                                 </Label>
+                                <div className="relative flex items-center">
                                 <Input
                                     id="password"
-                                    type="password"
+                                    type={showPassword ? 'text' : 'password'}
                                     required
                                     tabIndex={3}
                                     autoComplete="new-password"
@@ -132,16 +142,31 @@ export default function Register({ roles }: Props) {
                                     disabled={processing}
                                     placeholder="Password"
                                 />
+                                {/* Right Toggle Button (Eye / EyeOff) */}
+                                                                        <button
+                                                                          type="button"
+                                                                          onClick={togglePasswordVisibility}
+                                                                          aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                                                          className="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors focus:outline-none p-1 rounded-md"
+                                                                        >
+                                                                          {showPassword ? (
+                                                                            <EyeOff className="w-5 h-5" />
+                                                                          ) : (
+                                                                            <Eye className="w-5 h-5" />
+                                                                          )}
+                                                                        </button>
                                 <InputError message={errors.password} />
+                                </div>
                             </div>
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password_confirmation" className="text-white">
                                     Confirm password
                                 </Label>
+                                <div className="relative flex items-center">
                                 <Input
                                     id="password_confirmation"
-                                    type="password"
+                                    type={showPassword ? 'text' : 'password'}
                                     required
                                     tabIndex={4}
                                     autoComplete="new-password"
@@ -150,7 +175,21 @@ export default function Register({ roles }: Props) {
                                     disabled={processing}
                                     placeholder="Confirm password"
                                 />
+                                {/* Right Toggle Button (Eye / EyeOff) */}
+                                                                        <button
+                                                                          type="button"
+                                                                          onClick={togglePasswordVisibility}
+                                                                          aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                                                          className="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors focus:outline-none p-1 rounded-md"
+                                                                        >
+                                                                          {showPassword ? (
+                                                                            <EyeOff className="w-5 h-5" />
+                                                                          ) : (
+                                                                            <Eye className="w-5 h-5" />
+                                                                          )}
+                                                                        </button>
                                 <InputError message={errors.password_confirmation} />
+                                </div>
                             </div>
 
                             <div className="grid gap-2">

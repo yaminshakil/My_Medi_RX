@@ -10,6 +10,8 @@ class PrescriptionQrCode extends Model
     protected $fillable = [
         'prescription_id',
         'token',
+        'verification_url',
+        'qr_code',
         'expires_at',
         'revoked_at',
     ];

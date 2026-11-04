@@ -12,6 +12,11 @@ import { configureEcho } from '@laravel/echo-react';
 import 'react-calendar/dist/Calendar.css'; // Import default styles
 import 'react-datetime-picker/dist/DateTimePicker.css';
 
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 configureEcho({
     broadcaster: 'pusher',
 });

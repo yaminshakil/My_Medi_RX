@@ -7,6 +7,7 @@ use App\Http\Controllers\SeederController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Prescriptions\PrescriptionVerificationController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -115,6 +116,8 @@ Route::get('/language/{locale}', function ($locale) {
 
     return back();
 })->name('language.switch');
+
+Route::get('/prescriptions/verify/{token}', [PrescriptionVerificationController::class, 'verify'])->name('prescriptions.verify');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

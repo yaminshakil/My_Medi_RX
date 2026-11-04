@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -37,6 +38,14 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
+
+        $user = $request->user();
+        $jwtToken = null;
+
+        if ($user) {
+            // Generate a valid JWT token for the currently logged-in user session
+            $jwtToken = JWTAuth::fromUser($user);
+        }
 
         if (Auth::check()) {
             $userRoles = auth()->user()->roles->pluck('id');
@@ -72,9 +81,10 @@ class HandleInertiaRequests extends Middleware
             'auth'  => [
                 'user'        => $request->user(),
                 'permissions' => fn () => $request->user()?->getAllPermissions()->pluck('name') ?? [],
+                'jwt_token' => $jwtToken,
             ],
             'ziggy' => fn (): array => [
-                ...(new Ziggy)->toArray(),
+                ...(new Ziggy())->toArray(),
                 'location' => $request->url(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',

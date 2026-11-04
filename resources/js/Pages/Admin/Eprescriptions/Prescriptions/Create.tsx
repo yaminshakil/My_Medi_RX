@@ -1,6 +1,6 @@
 import AddPatient from '@/components/AddPatient';
 import AddVital from '@/components/AddVital';
-import { CommonModal } from '@/components/CommonModal';
+import { CommonModal } from '@/Components/CommonModal';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import GynaeHistoryForm from '@/components/GynaeHistoryForm';
 import GynaeHistorySidebar from '@/components/GynaeHistorySidebar';

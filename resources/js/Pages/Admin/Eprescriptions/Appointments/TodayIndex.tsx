@@ -1,5 +1,5 @@
 import AddVital from '@/components/AddVital';
-import { CommonModal } from '@/components/CommonModal';
+import { CommonModal } from '@/Components/CommonModal';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import PageHeader from '@/components/PageHeader';
 import { Pagination } from '@/components/pagination';

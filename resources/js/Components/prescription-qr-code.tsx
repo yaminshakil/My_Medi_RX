@@ -1,14 +1,14 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import {
     Card,
     CardContent,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
+} from "@/Components/ui/card";
 
 import {
     Download,
@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 
 import { toast } from "sonner";
+import { usePage } from "@inertiajs/react";
+
 
 interface PrescriptionQrCodeProps {
     prescriptionId: number;
@@ -40,20 +42,32 @@ export default function PrescriptionQrCode({
     const [qrData, setQrData] = useState<QrResponse | null>(null);
     const [loading, setLoading] = useState(false);
 
+    const { auth } = usePage<any>().props;
+    const token = auth?.jwt_token;
+
     const generateQr = async () => {
         try {
             setLoading(true);
 
             const response = await axios.post(
-                `/api/v1/prescriptions/${prescriptionId}/generate-qr`
+                `/api/v1/prescriptions/${prescriptionId}/generate-qr`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Pass the prop token here
+                    },
+                }
             );
 
             setQrData(response.data.data);
 
             toast.success("Prescription QR generated successfully.");
         } catch (error: any) {
+            console.error("Full Axios Error:", error.response || error); // Check this in F12 Console
+
             toast.error(
                 error.response?.data?.message ||
+                error.message ||
                 "Unable to generate prescription QR."
             );
         } finally {
@@ -73,6 +87,38 @@ export default function PrescriptionQrCode({
         link.click();
         link.remove();
     };
+
+    const fetchExistingQr = async () => {
+    try {
+        setLoading(true);
+
+        const response = await axios.get(
+            `/api/v1/prescriptions/${prescriptionId}/qr`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        console.log("Existing QR fetched:", response.data.data);
+        setQrData(response.data.data);
+    } catch (error: any) {
+        // No QR code exists yet.
+        if (error.response?.status === 404) {
+            setQrData(null);
+        } else {
+            console.error("Unable to load existing QR:", error);
+        }
+    } finally {
+        setLoading(false);
+    }
+};
+
+useEffect(() => {
+    if (prescriptionId && token) {
+        fetchExistingQr();
+    }
+}, [prescriptionId, token]);
 
     return (
         <Card>
