@@ -7,30 +7,23 @@ use App\Models\Prescription;
 use App\Models\PrescriptionQrCode;
 use App\Services\Eprescriptions\PrescriptionQrService;
 use Illuminate\Http\JsonResponse;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 
 class PrescriptionVerificationController extends Controller
 {
     public function verify(string $token)
     {
-        $qr = PrescriptionQrCode::with('prescription')
-            ->where('token', $token)
+        $qr = PrescriptionQrCode::where('token', $token)
             ->first();
 
-        if (! $qr || ! $qr->isValid()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Prescription QR code is invalid, expired or revoked.',
-            ], 404);
+        if (!$qr || !$qr->isValid()) {
+            abort(404, 'Invalid, expired or revoked prescription QR code.');
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Prescription QR code is valid.',
-            'data'    => [
-                'prescription_id'     => $qr->prescription_id,
-                'status'              => 'valid',
-                'verification_status' => 'verified',
-            ],
+        return redirect()->route('prescriptions.qr.pdf', [
+            'token' => $token,
         ]);
     }
 
@@ -76,5 +69,36 @@ class PrescriptionVerificationController extends Controller
                 'expires_at' => $qr->expires_at,
             ],
         ]);
+    }
+
+    /**
+     * Generate and display prescription PDF.
+     */
+    public function pdf(string $token): Response
+    {
+        $qr = PrescriptionQrCode::where('token', $token)
+            ->first();
+
+        if (!$qr || !$qr->isValid()) {
+            abort(404, 'Prescription QR code is invalid or expired.');
+        }
+
+        $prescription = $qr->prescription;
+
+        // Load your actual prescription relationships here.
+        $prescription->load([
+            'patient',
+            'doctor',
+            'vitals', 'medications', 'medications.medicines'
+        ]);
+
+        $pdf = Pdf::loadView(
+            'eprescriptions.prescription-dompdf-a4',
+            compact('prescription')
+        )->setPaper('a4', 'portrait');
+
+        return $pdf->stream(
+            'prescription-' . $prescription->id . '.pdf'
+        );
     }
 }

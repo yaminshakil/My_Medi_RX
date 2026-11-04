@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Eprescriptions\MedicineDoseController;
 use App\Http\Controllers\Admin\Eprescriptions\MedicineDurationController;
 use App\Http\Controllers\Admin\Eprescriptions\PrescriptionController;
 use App\Http\Controllers\Admin\Eprescriptions\VitalController;
+use App\Http\Controllers\Api\V1\Prescriptions\PrescriptionVerificationController;
 use Illuminate\Support\Facades\Route;
 
 // Route::group(['middleware' => ['web', 'auth']], function () {
@@ -58,3 +59,9 @@ Route::prefix('admin')->middleware(['web', 'auth', 'profile.exists', 'role.redir
     Route::get('switchchamber/{chamber_id}', [DoctorChamberController::class, 'switchChamber'])->name('switchchamber');
     Route::get('defaulthamber/{chamber_id}', [DoctorChamberController::class, 'switchChamber'])->name('chambers.setDefault');
 });
+
+Route::get(
+    '/prescriptions/qr/{token}/pdf',
+    [PrescriptionVerificationController::class, 'pdf']
+)->name('prescriptions.qr.pdf');
+Route::get('/prescriptions/verify/{token}', [PrescriptionVerificationController::class, 'verify'])->name('prescriptions.verify');
