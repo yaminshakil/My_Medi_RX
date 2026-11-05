@@ -44,7 +44,7 @@ class NearestMedicalFacilityService
             ->when(
                 $query !== null && trim($query) !== '',
                 function (Builder $builder) use ($query) {
-                    $term = '%' . trim($query) . '%';
+                    $term = '%'.trim($query).'%';
 
                     $builder->where(function (Builder $search) use ($term) {
                         $search

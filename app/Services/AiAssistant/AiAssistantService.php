@@ -6,6 +6,7 @@ use App\Models\AiChatMessage;
 use App\Models\AiChatSession;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -17,15 +18,14 @@ class AiAssistantService
 {
     private const DISCLAIMER =
         'This guidance is AI-generated and does not substitute '
-        . 'a licensed physician consultation.';
-
+        .'a licensed physician consultation.';
 
     public function chat(User $user, array $data): array
     {
         Log::info('AI DEBUG 1: chat method entered', [
-            'user_id' => $user->id,
+            'user_id'        => $user->id,
             'has_session_id' => ! empty($data['sessionId']),
-            'has_message' => ! empty($data['message']),
+            'has_message'    => ! empty($data['message']),
         ]);
 
         try {
@@ -53,7 +53,7 @@ class AiAssistantService
 
             $messages = [
                 [
-                    'role' => 'system',
+                    'role'    => 'system',
                     'content' => $this->systemPrompt(),
                 ],
             ];
@@ -68,13 +68,13 @@ class AiAssistantService
             }
 
             $messages[] = [
-                'role' => 'user',
+                'role'    => 'user',
                 'content' => $data['message'],
             ];
 
             Log::info('AI DEBUG 5: calling provider', [
-                'model' => config('services.ai_assistant.model'),
-                'message_count' => count($messages),
+                'model'              => config('services.ai_assistant.model'),
+                'message_count'      => count($messages),
                 'api_key_configured' => filled(
                     config('openai.api_key')
                 ),
@@ -101,13 +101,13 @@ class AiAssistantService
                 $reply
             ) {
                 $session->messages()->create([
-                    'sender' => 'user',
+                    'sender'  => 'user',
                     'message' => $data['message'],
                 ]);
 
                 $session->messages()->create([
-                    'sender' => 'ai',
-                    'message' => $reply,
+                    'sender'            => 'ai',
+                    'message'           => $reply,
                     'suggested_actions' => [],
                 ]);
 
@@ -121,25 +121,24 @@ class AiAssistantService
             Log::info('AI DEBUG 7: messages saved');
 
             return [
-                'sessionId' => $session->session_id,
-                'reply' => $reply,
+                'sessionId'        => $session->session_id,
+                'reply'            => $reply,
                 'suggestedActions' => [],
-                'disclaimer' => self::DISCLAIMER,
+                'disclaimer'       => self::DISCLAIMER,
             ];
         } catch (Throwable $exception) {
             Log::error('AI DEBUG FAILED', [
-                'user_id' => $user->id,
-                'exception' => $exception::class,
-                'error' => $exception->getMessage(),
-                'file' => $exception->getFile(),
-                'line' => $exception->getLine(),
+                'user_id'        => $user->id,
+                'exception'      => $exception::class,
+                'error'          => $exception->getMessage(),
+                'file'           => $exception->getFile(),
+                'line'           => $exception->getLine(),
                 'previous_error' => $exception->getPrevious()?->getMessage(),
             ]);
 
             throw $exception;
         }
     }
-
 
     public function history(
         User $user,
@@ -151,7 +150,7 @@ class AiAssistantService
             ->first();
 
         if (! $session) {
-            throw new \Illuminate\Database\Eloquent\ModelNotFoundException(
+            throw new ModelNotFoundException(
                 'AI chat session not found.'
             );
         }
@@ -160,8 +159,8 @@ class AiAssistantService
             ->orderBy('id')
             ->get()
             ->map(fn (AiChatMessage $message) => [
-                'sender' => $message->sender,
-                'message' => $message->message,
+                'sender'    => $message->sender,
+                'message'   => $message->message,
                 'timestamp' => $message->created_at
                     ->toISOString(),
             ])
@@ -189,7 +188,7 @@ class AiAssistantService
 
         return AiChatSession::create([
             'session_id' => (string) Str::uuid(),
-            'user_id' => $user->id,
+            'user_id'    => $user->id,
         ]);
     }
 

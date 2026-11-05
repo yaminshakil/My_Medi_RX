@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class () extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -13,8 +14,8 @@ return new class () extends Migration {
         Schema::create('ai_chat_messages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ai_chat_session_id')
-        ->constrained('ai_chat_sessions')
-        ->cascadeOnDelete();
+                ->constrained('ai_chat_sessions')
+                ->cascadeOnDelete();
 
             $table->enum('sender', ['user', 'ai']);
             $table->text('message');

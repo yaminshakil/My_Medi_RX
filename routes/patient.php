@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\MenstrualCycle\MenstrualCycleLogController;
+use App\Http\Controllers\Admin\MenstrualCycle\MenstrualCycleProfileController;
 use App\Http\Controllers\Admin\Patients\PatientController;
 use App\Http\Controllers\Admin\Patients\PatientProfileController;
 use App\Http\Controllers\Profile\ProfileController;
-use App\Http\Controllers\Admin\MenstrualCycle\MenstrualCycleLogController;
-use App\Http\Controllers\Admin\MenstrualCycle\MenstrualCycleProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {

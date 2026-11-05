@@ -20,20 +20,20 @@ class MedicalFacilityResource extends JsonResource
         $type = Str::slug((string) $rawType);
 
         $iconMap = [
-            'hospital' => 'building2',
-            'clinic' => 'home',
-            'medical-center' => 'building2',
-            'emergency' => 'thermometer',
-            'pharmacy' => 'pill',
+            'hospital'          => 'building2',
+            'clinic'            => 'home',
+            'medical-center'    => 'building2',
+            'emergency'         => 'thermometer',
+            'pharmacy'          => 'pill',
             'diagnostic-center' => 'activity',
         ];
 
         $colorMap = [
-            'hospital' => '#2196F3',
-            'clinic' => '#4CAF50',
-            'medical-center' => '#2196F3',
-            'emergency' => '#00BCD4',
-            'pharmacy' => '#9C27B0',
+            'hospital'          => '#2196F3',
+            'clinic'            => '#4CAF50',
+            'medical-center'    => '#2196F3',
+            'emergency'         => '#00BCD4',
+            'pharmacy'          => '#9C27B0',
             'diagnostic-center' => '#FF9800',
         ];
 
@@ -51,17 +51,17 @@ class MedicalFacilityResource extends JsonResource
         $distance = (float) $this->distance_km;
 
         return [
-            'id' => $this->uuid ?: 'fac-' . $this->id,
-            'name' => $this->hospital_name,
-            'type' => $type,
-            'distance' => number_format($distance, 1) . ' km away',
-            'distanceKm' => round($distance, 2),
-            'status' => $displayStatus,
-            'phone' => $this->phone_number,
-            'latitude' => (float) $this->latitude,
-            'longitude' => (float) $this->longitude,
-            'icon' => $iconMap[$type] ?? 'map-pin',
-            'colorHex' => $colorMap[$type] ?? '#607D8B',
+            'id'           => $this->uuid ?: 'fac-'.$this->id,
+            'name'         => $this->hospital_name,
+            'type'         => $type,
+            'distance'     => number_format($distance, 1).' km away',
+            'distanceKm'   => round($distance, 2),
+            'status'       => $displayStatus,
+            'phone'        => $this->phone_number,
+            'latitude'     => (float) $this->latitude,
+            'longitude'    => (float) $this->longitude,
+            'icon'         => $iconMap[$type] ?? 'map-pin',
+            'colorHex'     => $colorMap[$type] ?? '#607D8B',
             'hasEmergency' => filled($this->emergency_contact),
         ];
     }

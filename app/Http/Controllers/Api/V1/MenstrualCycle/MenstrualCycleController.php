@@ -15,8 +15,7 @@ class MenstrualCycleController extends Controller
     public function __construct(
         private readonly MenstrualCycleService $cycleService,
         private readonly MenstrualCycleLogService $logService,
-    ) {
-    }
+    ) {}
 
     private function profileFor(Request $request): MenstrualCycleProfile
     {
@@ -24,9 +23,9 @@ class MenstrualCycleController extends Controller
             ['user_id' => $request->user()->id],
             [
                 'last_period_start' => $request->input('date', now()),
-                'cycle_length' => 28,
-                'period_length' => 5,
-                'is_active' => true,
+                'cycle_length'      => 28,
+                'period_length'     => 5,
+                'is_active'         => true,
             ]
         );
     }
@@ -35,20 +34,20 @@ class MenstrualCycleController extends Controller
     {
         $profile = $this->profileFor($request);
 
-        if (!$profile->is_active) {
+        if (! $profile->is_active) {
             return response()->json([
-                'success' => false,
+                'success'    => false,
                 'statusCode' => 403,
-                'message' => 'Menstrual cycle tracking is inactive.',
-                'data' => null,
+                'message'    => 'Menstrual cycle tracking is inactive.',
+                'data'       => null,
             ], 403);
         }
 
         return response()->json([
-            'success' => true,
+            'success'    => true,
             'statusCode' => 200,
-            'message' => 'Menstrual cycle status calculated',
-            'data' => $this->cycleService->getStatus($profile),
+            'message'    => 'Menstrual cycle status calculated',
+            'data'       => $this->cycleService->getStatus($profile),
         ]);
     }
 
@@ -57,12 +56,12 @@ class MenstrualCycleController extends Controller
     ): JsonResponse {
         $profile = $this->profileFor($request);
 
-        if (!$profile->is_active) {
+        if (! $profile->is_active) {
             return response()->json([
-                'success' => false,
+                'success'    => false,
                 'statusCode' => 403,
-                'message' => 'Menstrual cycle tracking is inactive.',
-                'data' => null,
+                'message'    => 'Menstrual cycle tracking is inactive.',
+                'data'       => null,
             ], 403);
         }
 
@@ -71,12 +70,11 @@ class MenstrualCycleController extends Controller
             $request->validated()
         );
 
-
         return response()->json([
-            'success' => true,
+            'success'    => true,
             'statusCode' => 201,
-            'message' => 'Cycle data logged successfully',
-            'data' => $data,
+            'message'    => 'Cycle data logged successfully',
+            'data'       => $data,
         ], 201);
     }
 }

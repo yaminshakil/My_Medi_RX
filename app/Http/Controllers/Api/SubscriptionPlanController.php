@@ -27,6 +27,7 @@ class SubscriptionPlanController extends Controller
     public function show(SubscriptionPlan $plan)
     {
         abort_unless($plan->is_active, 404);
+
         return (new SubscriptionPlanResource($plan))->additional(['success' => true]);
     }
 }

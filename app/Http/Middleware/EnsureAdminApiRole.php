@@ -12,6 +12,7 @@ class EnsureAdminApiRole
     {
         $user = $request->user();
         abort_unless($user && $user->getRoleNames()->contains('Admin'), 403, 'Administrator access required.');
+
         return $next($request);
     }
 }

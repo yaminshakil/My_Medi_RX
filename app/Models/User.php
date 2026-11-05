@@ -45,7 +45,6 @@ class User extends Authenticatable implements JWTSubject
         return request()->is('api/*') ? 'api' : 'web';
     }
 
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -280,6 +279,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Subscription::class);
     }
+
     public function subscriptionPayments()
     {
         return $this->hasMany(SubscriptionPayment::class);

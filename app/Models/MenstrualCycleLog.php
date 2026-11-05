@@ -17,7 +17,7 @@ class MenstrualCycleLog extends Model
         'water_glasses',
         'symptoms',
         'notes',
-        'period_started'
+        'period_started',
     ];
 
     protected function casts(): array

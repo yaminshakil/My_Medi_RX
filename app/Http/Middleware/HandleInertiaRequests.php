@@ -81,10 +81,10 @@ class HandleInertiaRequests extends Middleware
             'auth'  => [
                 'user'        => $request->user(),
                 'permissions' => fn () => $request->user()?->getAllPermissions()->pluck('name') ?? [],
-                'jwt_token' => $jwtToken,
+                'jwt_token'   => $jwtToken,
             ],
             'ziggy' => fn (): array => [
-                ...(new Ziggy())->toArray(),
+                ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',

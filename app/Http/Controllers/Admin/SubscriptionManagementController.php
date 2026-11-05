@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -11,7 +12,7 @@ class SubscriptionManagementController extends Controller
     public function index()
     {
         return Inertia::render('admin/subscriptions/Index', [
-            'subscriptions' => Subscription::with(['user:id,name,email','plan:id,name'])
+            'subscriptions' => Subscription::with(['user:id,name,email', 'plan:id,name'])
                 ->latest()->paginate(20),
         ]);
     }
@@ -19,7 +20,7 @@ class SubscriptionManagementController extends Controller
     public function payments()
     {
         return Inertia::render('admin/subscriptions/Payments/Index', [
-            'payments' => SubscriptionPayment::with(['user:id,name,email','subscription.plan:id,name'])
+            'payments' => SubscriptionPayment::with(['user:id,name,email', 'subscription.plan:id,name'])
                 ->latest()->paginate(20),
         ]);
     }

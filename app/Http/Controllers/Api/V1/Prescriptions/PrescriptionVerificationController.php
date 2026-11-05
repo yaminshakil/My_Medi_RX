@@ -6,9 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Prescription;
 use App\Models\PrescriptionQrCode;
 use App\Services\Eprescriptions\PrescriptionQrService;
-use Illuminate\Http\JsonResponse;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class PrescriptionVerificationController extends Controller
@@ -18,7 +17,7 @@ class PrescriptionVerificationController extends Controller
         $qr = PrescriptionQrCode::where('token', $token)
             ->first();
 
-        if (!$qr || !$qr->isValid()) {
+        if (! $qr || ! $qr->isValid()) {
             abort(404, 'Invalid, expired or revoked prescription QR code.');
         }
 
@@ -53,20 +52,20 @@ class PrescriptionVerificationController extends Controller
             $prescription->id
         )->latest()->first();
 
-        if (!$qr || ($qr->expires_at && $qr->expires_at->isPast())) {
+        if (! $qr || ($qr->expires_at && $qr->expires_at->isPast())) {
             return response()->json([
                 'message' => 'QR code not found or expired.',
-                'data' => null,
+                'data'    => null,
             ], 404);
         }
 
         return response()->json([
             'message' => 'Prescription QR retrieved successfully.',
-            'data' => [
-                'token' => $qr->token,
+            'data'    => [
+                'token'            => $qr->token,
                 'verification_url' => $qr->verification_url,
-                'qr_code' => $qr->qr_code,
-                'expires_at' => $qr->expires_at,
+                'qr_code'          => $qr->qr_code,
+                'expires_at'       => $qr->expires_at,
             ],
         ]);
     }
@@ -79,7 +78,7 @@ class PrescriptionVerificationController extends Controller
         $qr = PrescriptionQrCode::where('token', $token)
             ->first();
 
-        if (!$qr || !$qr->isValid()) {
+        if (! $qr || ! $qr->isValid()) {
             abort(404, 'Prescription QR code is invalid or expired.');
         }
 
@@ -89,7 +88,7 @@ class PrescriptionVerificationController extends Controller
         $prescription->load([
             'patient',
             'doctor',
-            'vitals', 'medications', 'medications.medicines'
+            'vitals', 'medications', 'medications.medicines',
         ]);
 
         $pdf = Pdf::loadView(
@@ -98,7 +97,7 @@ class PrescriptionVerificationController extends Controller
         )->setPaper('a4', 'portrait');
 
         return $pdf->stream(
-            'prescription-' . $prescription->id . '.pdf'
+            'prescription-'.$prescription->id.'.pdf'
         );
     }
 }

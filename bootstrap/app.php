@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\EnsureActiveSubscription;
+use App\Http\Middleware\EnsureAdminApiRole;
 use App\Http\Middleware\EnsureProfileExists;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\NotifyAdminsOfSuccessfulPost;
@@ -14,8 +16,6 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
-use App\Http\Middleware\EnsureActiveSubscription;
-use App\Http\Middleware\EnsureAdminApiRole;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(

@@ -15,16 +15,16 @@ class MenstrualCycleLogService
         $log = MenstrualCycleLog::updateOrCreate(
             [
                 'menstrual_cycle_profile_id' => $profile->id,
-                'entry_date' => $data['date'],
+                'entry_date'                 => $data['date'],
             ],
             [
-                'uuid' => (string) Str::uuid(),
-                'flow' => $data['flow'],
-                'cramps' => $data['cramps'],
-                'mood' => $data['mood'] ?? null,
-                'water_glasses' => $data['waterGlasses'],
-                'symptoms' => $data['symptoms'] ?? [],
-                'notes' => $data['notes'] ?? null,
+                'uuid'           => (string) Str::uuid(),
+                'flow'           => $data['flow'],
+                'cramps'         => $data['cramps'],
+                'mood'           => $data['mood'] ?? null,
+                'water_glasses'  => $data['waterGlasses'],
+                'symptoms'       => $data['symptoms'] ?? [],
+                'notes'          => $data['notes'] ?? null,
                 'period_started' => $data['periodStarted'] ?? false,
             ]
         );
@@ -36,22 +36,22 @@ class MenstrualCycleLogService
         }
 
         $metrics = [
-            'Flow: ' . $log->flow,
-            'Cramps: ' . $log->cramps,
+            'Flow: '.$log->flow,
+            'Cramps: '.$log->cramps,
         ];
 
         if ($log->mood) {
-            $metrics[] = 'Mood: ' . $log->mood;
+            $metrics[] = 'Mood: '.$log->mood;
         }
 
-        $metrics[] = 'Water: ' . $log->water_glasses . ' glasses';
+        $metrics[] = 'Water: '.$log->water_glasses.' glasses';
 
         foreach ($log->symptoms ?? [] as $symptom) {
-            $metrics[] = 'Symptom: ' . $symptom;
+            $metrics[] = 'Symptom: '.$symptom;
         }
 
         return [
-            'entryDate' => $log->entry_date->format('Y-m-d'),
+            'entryDate'       => $log->entry_date->format('Y-m-d'),
             'recordedMetrics' => $metrics,
         ];
     }

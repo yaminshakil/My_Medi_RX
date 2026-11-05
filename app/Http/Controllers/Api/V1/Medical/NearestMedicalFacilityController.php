@@ -13,25 +13,24 @@ class NearestMedicalFacilityController extends Controller
 {
     public function __construct(
         private readonly NearestMedicalFacilityService $facilityService
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): JsonResponse
     {
         $validator = Validator::make($request->query(), [
-            'lat' => ['required', 'numeric', 'between:-90,90'],
-            'lng' => ['required', 'numeric', 'between:-180,180'],
+            'lat'    => ['required', 'numeric', 'between:-90,90'],
+            'lng'    => ['required', 'numeric', 'between:-180,180'],
             'radius' => ['sometimes', 'numeric', 'gt:0', 'max:100'],
-            'query' => ['nullable', 'string', 'max:100'],
+            'query'  => ['nullable', 'string', 'max:100'],
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'success' => false,
+                'success'    => false,
                 'statusCode' => 422,
-                'message' => 'Invalid facility search parameters.',
-                'errors' => $validator->errors(),
-                'data' => null,
+                'message'    => 'Invalid facility search parameters.',
+                'errors'     => $validator->errors(),
+                'data'       => null,
             ], 422);
         }
 
@@ -48,10 +47,10 @@ class NearestMedicalFacilityController extends Controller
             ->resolve($request);
 
         return response()->json([
-            'success' => true,
+            'success'    => true,
             'statusCode' => 200,
-            'message' => 'Medical facilities retrieved',
-            'data' => $data,
+            'message'    => 'Medical facilities retrieved',
+            'data'       => $data,
         ]);
     }
 }

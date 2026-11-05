@@ -30,21 +30,21 @@ class MenstrualCycleLogController extends Controller
             ->withQueryString();
 
         $logs->getCollection()->transform(fn ($log) => [
-            'id' => $log->id,
-            'uuid' => $log->uuid,
-            'user_name' => $log->profile?->user?->name ?? 'Unknown user',
-            'email' => $log->profile?->user?->email,
-            'entry_date' => $log->entry_date?->format('Y-m-d'),
-            'flow' => $log->flow,
-            'cramps' => $log->cramps,
-            'mood' => $log->mood,
+            'id'            => $log->id,
+            'uuid'          => $log->uuid,
+            'user_name'     => $log->profile?->user?->name ?? 'Unknown user',
+            'email'         => $log->profile?->user?->email,
+            'entry_date'    => $log->entry_date?->format('Y-m-d'),
+            'flow'          => $log->flow,
+            'cramps'        => $log->cramps,
+            'mood'          => $log->mood,
             'water_glasses' => $log->water_glasses,
-            'symptoms' => $log->symptoms ?? [],
-            'notes' => $log->notes,
+            'symptoms'      => $log->symptoms ?? [],
+            'notes'         => $log->notes,
         ]);
 
         return Inertia::render('Admin/MenstrualCycle/Logs/Index', [
-            'logs' => $logs,
+            'logs'    => $logs,
             'filters' => $request->only('search', 'date'),
         ]);
     }
