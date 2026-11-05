@@ -22,6 +22,7 @@ type Props = {
     }|null
 };
 export default function Index({plans,current}:Props) {
+    console.log(plans,current);
   const checkout=(id:number)=>router.post(route('subscriptions.checkout',id));
   const breadcrumbs: BreadcrumbItem[] = [
           {

@@ -25,4 +25,5 @@ Route::middleware('auth:api')
         require base_path('routes/api/v1/users.php');
         require base_path('routes/api/v1/pharmacies.php');
         require app_path('Modules/BloodBank/routes/api.php');
+        require base_path('routes/api/v1/subscriptions.php');
     });
