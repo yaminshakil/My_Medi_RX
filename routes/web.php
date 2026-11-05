@@ -141,7 +141,7 @@ Route::middleware(['auth', 'role:Admin,web'])
         Route::post('/', [SubscriptionPlanController::class, 'store'])
             ->name('store');
 
-        Route::put('/{plan}', [SubscriptionPlanController::class, 'update'])
+        Route::match(['put', 'patch'], '/{plan}', [SubscriptionPlanController::class, 'update'])
             ->name('update');
 
         Route::delete('/{plan}', [SubscriptionPlanController::class, 'destroy'])

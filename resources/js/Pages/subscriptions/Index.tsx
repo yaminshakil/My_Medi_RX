@@ -1,6 +1,8 @@
 import { Head, router } from '@inertiajs/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
+import AppLayout from '@/Layouts/app-layout';
+import { BreadcrumbItem } from '../../types';
 
 type Plan = {
     id:number;
@@ -21,10 +23,16 @@ type Props = {
 };
 export default function Index({plans,current}:Props) {
   const checkout=(id:number)=>router.post(route('subscriptions.checkout',id));
-  return
-  <>
+  const breadcrumbs: BreadcrumbItem[] = [
+          {
+              title: 'Subscriptions',
+              href: '/subscriptions',
+          },
+      ];
+  return(
+ <AppLayout breadcrumbs={breadcrumbs}>
   <Head title="Subscriptions"/>
-  <div className="mx-auto max-w-6xl space-y-6 p-6">
+  <div className="mx-auto w-full space-y-6 p-6">
     <div>
         <h1 className="text-2xl font-semibold">Subscription plans</h1>
         <p className="text-muted-foreground">Choose a plan for your Medirx account.</p>
@@ -55,5 +63,6 @@ export default function Index({plans,current}:Props) {
         </Card>)}
         </div>
   </div>
-  </>;
+  </AppLayout>
+  );
 }
