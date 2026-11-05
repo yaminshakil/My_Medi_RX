@@ -30,6 +30,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(append: [
             NotifyFirebaseOfSuccessfulApiPost::class,
         ]);
+        $middleware->preventRequestForgery(except: [
+            'payments/sslcommerz/*',
+        ]);
 
         $middleware->alias([
             'role'               => RoleMiddleware::class,

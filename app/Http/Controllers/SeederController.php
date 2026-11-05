@@ -20,7 +20,7 @@ class SeederController extends Controller
         try {
             // Run a specific seeder class
             Artisan::call('db:seed', [
-                '--class' => 'PediatricDoseRulePermissionSeeder', // Replace with your target seeder class name
+                '--class' => 'SubscriptionPlanSeeder', // Replace with your target seeder class name
                 '--force' => true, // Bypass production warnings if needed
             ]);
 
