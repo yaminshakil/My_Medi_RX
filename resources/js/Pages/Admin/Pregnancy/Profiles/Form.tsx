@@ -1,4 +1,3 @@
-
 import { useForm } from "@inertiajs/react";
 import type { FormEvent } from "react";
 import { Button } from "@/Components/ui/button";
@@ -26,13 +25,9 @@ type Props = {
 
 export default function ProfileForm({ patients, profile }: Props) {
     const form = useForm({
-        user_id: profile?.user_id
-            ? String(profile.user_id)
-            : "",
-        last_menstrual_period:
-            profile?.last_menstrual_period ?? "",
-        dating_confirmed_date:
-            profile?.dating_confirmed_date ?? "",
+        user_id: profile?.user_id ? String(profile.user_id) : "",
+        last_menstrual_period: profile?.last_menstrual_period ?? "",
+        dating_confirmed_date: profile?.dating_confirmed_date ?? "",
         is_active: profile?.is_active ?? true,
     });
 
@@ -47,26 +42,21 @@ export default function ProfileForm({ patients, profile }: Props) {
             form.transform((data) => ({
                 ...data,
                 user_id: Number(data.user_id),
-                dating_confirmed_date:
-                    data.dating_confirmed_date || null,
+                dating_confirmed_date: data.dating_confirmed_date || null,
             }));
 
             form.put(
                 route("admin.pregnancy.profiles.update", profile.id),
-                options
+                options,
             );
         } else {
             form.transform((data) => ({
                 ...data,
                 user_id: Number(data.user_id),
-                dating_confirmed_date:
-                    data.dating_confirmed_date || null,
+                dating_confirmed_date: data.dating_confirmed_date || null,
             }));
 
-            form.post(
-                route("admin.pregnancy.profiles.store"),
-                options
-            );
+            form.post(route("admin.pregnancy.profiles.store"), options);
         }
     }
 
@@ -86,10 +76,7 @@ export default function ProfileForm({ patients, profile }: Props) {
                     <option value="">Select a patient</option>
 
                     {patients.map((patient) => (
-                        <option
-                            key={patient.user_id}
-                            value={patient.user_id}
-                        >
+                        <option key={patient.user_id} value={patient.user_id}>
                             {patient.name}
                             {patient.email ? ` (${patient.email})` : ""}
                         </option>
@@ -115,7 +102,7 @@ export default function ProfileForm({ patients, profile }: Props) {
                     onChange={(event) =>
                         form.setData(
                             "last_menstrual_period",
-                            event.target.value
+                            event.target.value,
                         )
                     }
                     required
@@ -126,8 +113,8 @@ export default function ProfileForm({ patients, profile }: Props) {
                     </p>
                 )}
                 <p className="text-xs text-muted-foreground">
-                    The estimated due date is calculated as 280 days
-                    after the LMP.
+                    The estimated due date is calculated as 280 days after the
+                    LMP.
                 </p>
             </div>
 
@@ -143,7 +130,7 @@ export default function ProfileForm({ patients, profile }: Props) {
                     onChange={(event) =>
                         form.setData(
                             "dating_confirmed_date",
-                            event.target.value
+                            event.target.value,
                         )
                     }
                 />
@@ -175,8 +162,8 @@ export default function ProfileForm({ patients, profile }: Props) {
                 {form.processing
                     ? "Saving..."
                     : profile
-                        ? "Update Profile"
-                        : "Create Profile"}
+                      ? "Update Profile"
+                      : "Create Profile"}
             </Button>
         </form>
     );

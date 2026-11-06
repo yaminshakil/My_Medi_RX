@@ -1,16 +1,16 @@
-import { Head } from '@inertiajs/react';
+import { Head } from "@inertiajs/react";
 
-import AppearanceTabs from '@/Components/appearance-tabs';
-import HeadingSmall from '@/Components/heading-small';
-import { type BreadcrumbItem } from '@/types';
+import AppearanceTabs from "@/Components/appearance-tabs";
+import HeadingSmall from "@/Components/heading-small";
+import { type BreadcrumbItem } from "@/types";
 
-import AppLayout from '@/Layouts/app-layout';
-import SettingsLayout from '@/Layouts/settings/layout';
+import AppLayout from "@/Layouts/app-layout";
+import SettingsLayout from "@/Layouts/settings/layout";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Appearance settings',
-        href: '/settings/appearance',
+        title: "Appearance settings",
+        href: "/settings/appearance",
     },
 ];
 
@@ -21,7 +21,10 @@ export default function Appearance() {
 
             <SettingsLayout>
                 <div className="space-y-6">
-                    <HeadingSmall title="Appearance settings" description="Update your account's appearance settings" />
+                    <HeadingSmall
+                        title="Appearance settings"
+                        description="Update your account's appearance settings"
+                    />
                     <AppearanceTabs />
                 </div>
             </SettingsLayout>

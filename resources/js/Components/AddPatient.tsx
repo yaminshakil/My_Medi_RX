@@ -1,40 +1,47 @@
-import InputError from '@/Components/input-error';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import { Select } from 'antd';
-import React from 'react';
+import InputError from "@/Components/input-error";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { Textarea } from "@/Components/ui/textarea";
+import { Select } from "antd";
+import React from "react";
 
 const bloodgroup = [
-    { value: 'A+', label: 'A+' },
-    { value: 'A-', label: 'A-' },
-    { value: 'B+', label: 'B+' },
-    { value: 'B-', label: 'B-' },
-    { value: 'AB+', label: 'AB+' },
-    { value: 'AB-', label: 'AB-' },
-    { value: 'O+', label: 'O+' },
-    { value: 'O-', label: 'O-' },
+    { value: "A+", label: "A+" },
+    { value: "A-", label: "A-" },
+    { value: "B+", label: "B+" },
+    { value: "B-", label: "B-" },
+    { value: "AB+", label: "AB+" },
+    { value: "AB-", label: "AB-" },
+    { value: "O+", label: "O+" },
+    { value: "O-", label: "O-" },
 ];
 
 const options = [
-    { label: 'Male', value: 'male' },
-    { label: 'Female', value: 'female' },
-    { label: 'Other', value: 'other' },
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
+    { label: "Other", value: "other" },
 ];
 
-export default function AddPatient({ patientData, setPatientData, onHandleChange, errorsPateint }) {
+export default function AddPatient({
+    patientData,
+    setPatientData,
+    onHandleChange,
+    errorsPateint,
+}) {
     const maritalstatusoptions = [
-        { label: 'Single', value: 'single' },
-        { label: 'Married', value: 'married' },
-        { label: 'Divorced', value: 'divorced' },
-        { label: 'Widowed', value: 'widowed' },
+        { label: "Single", value: "single" },
+        { label: "Married", value: "married" },
+        { label: "Divorced", value: "divorced" },
+        { label: "Widowed", value: "widowed" },
     ];
 
     return (
         <React.Fragment>
             <form className="mx-auto w-full space-y-4 pb-4">
                 <div className="mt-0">
-                    <Label className="block after:text-red-500 after:content-['*']">Name</Label>
+                    <Label className="block after:text-red-500 after:content-['*']">
+                        Name
+                    </Label>
                     <Input
                         type="text"
                         name="name"
@@ -44,11 +51,18 @@ export default function AddPatient({ patientData, setPatientData, onHandleChange
                         className="w-full border p-2"
                         required={true}
                     />
-                    {patientData.name == '' && <InputError className="mt-2 text-red-700" message={errorsPateint.name} />}
+                    {patientData.name == "" && (
+                        <InputError
+                            className="mt-2 text-red-700"
+                            message={errorsPateint.name}
+                        />
+                    )}
                 </div>
                 <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
                     <div className="min-w-0">
-                        <Label className="block after:text-red-500 after:content-['*']">Phone</Label>
+                        <Label className="block after:text-red-500 after:content-['*']">
+                            Phone
+                        </Label>
                         <Input
                             type="text"
                             name="phone"
@@ -58,11 +72,18 @@ export default function AddPatient({ patientData, setPatientData, onHandleChange
                             className="w-full border p-2"
                             required={true}
                         />
-                        {patientData.phone == '' && <InputError className="mt-2 text-red-700" message={errorsPateint.phone} />}
+                        {patientData.phone == "" && (
+                            <InputError
+                                className="mt-2 text-red-700"
+                                message={errorsPateint.phone}
+                            />
+                        )}
                     </div>
 
                     <div className="min-w-0">
-                        <Label className="block after:text-red-500 after:content-['*']">Email</Label>
+                        <Label className="block after:text-red-500 after:content-['*']">
+                            Email
+                        </Label>
                         <Input
                             type="text"
                             name="email"
@@ -72,12 +93,20 @@ export default function AddPatient({ patientData, setPatientData, onHandleChange
                             className="w-full border p-2"
                             required={true}
                         />
-                        {patientData.email == '' && <InputError className="mt-2 text-red-700" message={errorsPateint.email} />}
+                        {patientData.email == "" && (
+                            <InputError
+                                className="mt-2 text-red-700"
+                                message={errorsPateint.email}
+                            />
+                        )}
                     </div>
                 </div>
                 <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
                     <div className="min-w-0">
-                        <Label htmlFor="gender" className="block after:text-red-500 after:content-['*']">
+                        <Label
+                            htmlFor="gender"
+                            className="block after:text-red-500 after:content-['*']"
+                        >
                             Gender
                         </Label>
                         <Select
@@ -87,12 +116,19 @@ export default function AddPatient({ patientData, setPatientData, onHandleChange
                             optionFilterProp="label"
                             id="gender"
                             value={patientData.gender || undefined}
-                            onChange={(value) => setPatientData('gender', value)}
+                            onChange={(value) =>
+                                setPatientData("gender", value)
+                            }
                             className="basic-single m-0 h-10 w-full"
                             options={options}
                             required={true}
                         />
-                        {patientData.gender == '' && <InputError className="mt-2 text-red-700" message={errorsPateint.gender} />}
+                        {patientData.gender == "" && (
+                            <InputError
+                                className="mt-2 text-red-700"
+                                message={errorsPateint.gender}
+                            />
+                        )}
                     </div>
 
                     <div className="min-w-0">
@@ -105,25 +141,39 @@ export default function AddPatient({ patientData, setPatientData, onHandleChange
                             optionFilterProp="label"
                             id="blood_group"
                             value={patientData.blood_group || undefined}
-                            onChange={(value) => setPatientData('blood_group', value)}
+                            onChange={(value) =>
+                                setPatientData("blood_group", value)
+                            }
                             className="basic-single m-0 h-10 w-full"
                             options={bloodgroup}
                         />
-                        {patientData.blood_group == '' && <InputError className="mt-2 text-red-700" message={errorsPateint.blood_group} />}
+                        {patientData.blood_group == "" && (
+                            <InputError
+                                className="mt-2 text-red-700"
+                                message={errorsPateint.blood_group}
+                            />
+                        )}
                     </div>
                 </div>
 
                 <div>
-                    <Label className="block text-sm font-medium text-gray-700">Marital status</Label>
+                    <Label className="block text-sm font-medium text-gray-700">
+                        Marital status
+                    </Label>
                     <Select
                         placeholder="Select Marital status"
                         optionFilterProp="label"
                         value={patientData.marital_status || undefined}
-                        onChange={(value) => setPatientData('marital_status', value)}
+                        onChange={(value) =>
+                            setPatientData("marital_status", value)
+                        }
                         className="basic-single m-0 h-10 w-full"
                         options={maritalstatusoptions}
                     />
-                    <InputError className="mt-2 text-red-700" message={errorsPateint.marital_status} />
+                    <InputError
+                        className="mt-2 text-red-700"
+                        message={errorsPateint.marital_status}
+                    />
                 </div>
 
                 <div className="mt-4">
@@ -133,7 +183,9 @@ export default function AddPatient({ patientData, setPatientData, onHandleChange
                         className="w-full border p-2"
                         placeholder="Enter address"
                         value={patientData.address}
-                        onChange={(e) => setPatientData('address', e.target.value)}
+                        onChange={(e) =>
+                            setPatientData("address", e.target.value)
+                        }
                     ></Textarea>
                 </div>
                 <div className="mt-4">
@@ -149,7 +201,10 @@ export default function AddPatient({ patientData, setPatientData, onHandleChange
                 </div>
 
                 <div className="w-fit-content mt-4">
-                    <Label htmlFor="dob" className="after:text-red-500 after:content-['*']">
+                    <Label
+                        htmlFor="dob"
+                        className="after:text-red-500 after:content-['*']"
+                    >
                         Date of Birth
                     </Label>
                     <Input
@@ -160,7 +215,12 @@ export default function AddPatient({ patientData, setPatientData, onHandleChange
                         value={patientData.date_of_birth}
                         onChange={onHandleChange}
                     />
-                    {patientData.date_of_birth == '' && <InputError className="mt-2 text-red-700" message={errorsPateint.date_of_birth} />}
+                    {patientData.date_of_birth == "" && (
+                        <InputError
+                            className="mt-2 text-red-700"
+                            message={errorsPateint.date_of_birth}
+                        />
+                    )}
                 </div>
             </form>
         </React.Fragment>

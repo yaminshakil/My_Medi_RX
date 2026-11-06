@@ -1,22 +1,22 @@
-import { CommonModal } from '@/Components/CommonModal';
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import PageHeader from '@/Components/PageHeader';
-import { Pagination } from '@/Components/pagination';
-import Table from '@/Components/Table';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import AppLayout from '@/Layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { CommonModal } from "@/Components/CommonModal";
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import PageHeader from "@/Components/PageHeader";
+import { Pagination } from "@/Components/pagination";
+import Table from "@/Components/Table";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { Textarea } from "@/Components/ui/textarea";
+import AppLayout from "@/Layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Medicine Doses',
-        href: '/medicine-doses',
+        title: "Medicine Doses",
+        href: "/medicine-doses",
     },
 ];
 
@@ -25,18 +25,18 @@ export default function Index() {
     const [showForm, setShowForm] = useState(false);
     const [editingDose, setEditingDose] = useState(null);
     const [confirmDelete, setConfirmDelete] = useState(null);
-    const canCreate = useCan('Create');
-    const canEdit = useCan('Edit');
-    const canDelete = useCan('Delete');
+    const canCreate = useCan("Create");
+    const canEdit = useCan("Edit");
+    const canDelete = useCan("Delete");
 
     const form = useForm({
-        name: '',
-        description: '',
+        name: "",
+        description: "",
         active: true,
     });
 
     const { data, setData } = useForm({
-        search: filters?.search || '',
+        search: filters?.search || "",
     });
 
     const openCreateForm = () => {
@@ -48,8 +48,8 @@ export default function Index() {
     const openEditForm = (dose) => {
         setEditingDose(dose);
         form.setData({
-            name: dose.name || '',
-            description: dose.description || '',
+            name: dose.name || "",
+            description: dose.description || "",
             active: dose.active,
         });
         setShowForm(true);
@@ -59,14 +59,14 @@ export default function Index() {
         e.preventDefault();
 
         if (editingDose) {
-            form.put(route('medicine-doses.update', editingDose.id), {
+            form.put(route("medicine-doses.update", editingDose.id), {
                 onSuccess: () => {
                     setShowForm(false);
                     setEditingDose(null);
                 },
             });
         } else {
-            form.post(route('medicine-doses.store'), {
+            form.post(route("medicine-doses.store"), {
                 onSuccess: () => {
                     setShowForm(false);
                     form.reset();
@@ -76,7 +76,7 @@ export default function Index() {
     };
 
     const handleConfirmDelete = (id) => {
-        router.delete(route('medicine-doses.destroy', id), {
+        router.delete(route("medicine-doses.destroy", id), {
             onSuccess: () => setConfirmDelete(null),
         });
     };
@@ -91,18 +91,26 @@ export default function Index() {
     }, [flash]);
 
     const handlePerPageChange = (e) => {
-        router.get(route('medicine-doses.index'), { ...filters, per_page: e.target.value }, { preserveState: true });
+        router.get(
+            route("medicine-doses.index"),
+            { ...filters, per_page: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleSearch = (e) => {
-        setData('search', e.target.value);
-        router.get(route('medicine-doses.index'), { ...filters, search: e.target.value }, { preserveState: true });
+        setData("search", e.target.value);
+        router.get(
+            route("medicine-doses.index"),
+            { ...filters, search: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleReset = () => {
-        setData('search', '');
+        setData("search", "");
         router.get(
-            route('medicine-doses.index'),
+            route("medicine-doses.index"),
             {},
             {
                 preserveState: true,
@@ -124,15 +132,19 @@ export default function Index() {
     };
 
     const columns = [
-        { key: '#', label: '#', render: (item) => item.id },
-        { key: 'name', label: 'Name' },
-        { key: 'description', label: 'Description' },
+        { key: "#", label: "#", render: (item) => item.id },
+        { key: "name", label: "Name" },
+        { key: "description", label: "Description" },
         {
-            key: 'active',
-            label: 'Status',
-            className: 'text-center',
+            key: "active",
+            label: "Status",
+            className: "text-center",
             render: (item) => (
-                <span className={`badge ${item.active ? 'badge--success' : 'badge--warning'}`}>{item.active ? 'Active' : 'Inactive'}</span>
+                <span
+                    className={`badge ${item.active ? "badge--success" : "badge--warning"}`}
+                >
+                    {item.active ? "Active" : "Inactive"}
+                </span>
             ),
         },
     ];
@@ -183,27 +195,39 @@ export default function Index() {
                     onCancel={handleDoseCancel}
                     isOpen={showForm}
                     onClose={() => setShowForm(false)}
-                    title={editingDose ? 'Edit Dose' : 'Add Dose'}
+                    title={editingDose ? "Edit Dose" : "Add Dose"}
                 >
                     <div className="space-y-4">
                         <div>
-                            <Label className="block text-sm font-medium">Name</Label>
+                            <Label className="block text-sm font-medium">
+                                Name
+                            </Label>
                             <Input
                                 type="text"
                                 className="mt-1 w-full rounded border px-3 py-2 text-sm"
                                 value={form.data.name}
-                                onChange={(e) => form.setData('name', e.target.value)}
+                                onChange={(e) =>
+                                    form.setData("name", e.target.value)
+                                }
                             />
-                            {form.errors.name && <div className="mt-1 text-xs text-red-600">{form.errors.name}</div>}
+                            {form.errors.name && (
+                                <div className="mt-1 text-xs text-red-600">
+                                    {form.errors.name}
+                                </div>
+                            )}
                         </div>
 
                         <div>
-                            <Label className="block text-sm font-medium">Description</Label>
+                            <Label className="block text-sm font-medium">
+                                Description
+                            </Label>
                             <Textarea
                                 className="mt-1 w-full rounded border px-3 py-2 text-sm"
                                 rows={2}
                                 value={form.data.description}
-                                onChange={(e) => form.setData('description', e.target.value)}
+                                onChange={(e) =>
+                                    form.setData("description", e.target.value)
+                                }
                             ></Textarea>
                         </div>
 
@@ -213,7 +237,9 @@ export default function Index() {
                                 className="w-6"
                                 type="checkbox"
                                 checked={form.data.active}
-                                onChange={(e) => form.setData('active', e.target.checked)}
+                                onChange={(e) =>
+                                    form.setData("active", e.target.checked)
+                                }
                             />
                             <Label htmlFor="active" className="text-sm">
                                 Active

@@ -1,4 +1,4 @@
-import { Select } from 'antd';
+import { Select } from "antd";
 
 const { Option, OptGroup } = Select;
 
@@ -25,7 +25,7 @@ export default function SpecialtiesSelect({ groups, value, onChange }: Props) {
             value={value}
             onChange={onChange}
             placeholder="Select Specialties"
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
             optionLabelProp="label"
             showSearch
             tagRender={(props) => {
@@ -33,18 +33,21 @@ export default function SpecialtiesSelect({ groups, value, onChange }: Props) {
                 return (
                     <span
                         style={{
-                            backgroundColor: 'var(--base-color)',
-                            color: '#fff',
-                            padding: '2px 6px',
+                            backgroundColor: "var(--base-color)",
+                            color: "#fff",
+                            padding: "2px 6px",
                             borderRadius: 4,
                             marginRight: 4,
-                            display: 'inline-flex',
-                            alignItems: 'center',
+                            display: "inline-flex",
+                            alignItems: "center",
                         }}
                     >
                         {label}
                         {closable && (
-                            <span onClick={onClose} style={{ marginLeft: 4, cursor: 'pointer' }}>
+                            <span
+                                onClick={onClose}
+                                style={{ marginLeft: 4, cursor: "pointer" }}
+                            >
                                 ×
                             </span>
                         )}
@@ -55,7 +58,11 @@ export default function SpecialtiesSelect({ groups, value, onChange }: Props) {
             {groups.map((group) => (
                 <OptGroup key={group.label} label={group.label}>
                     {group.options.map((option) => (
-                        <Option key={option.value} value={option.value} label={option.label}>
+                        <Option
+                            key={option.value}
+                            value={option.value}
+                            label={option.label}
+                        >
                             {option.label}
                         </Option>
                     ))}

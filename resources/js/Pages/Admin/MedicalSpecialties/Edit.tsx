@@ -1,31 +1,33 @@
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
-import Form from './Form';
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, useForm } from "@inertiajs/react";
+import { FormEventHandler } from "react";
+import Form from "./Form";
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Create Medical Specialty', href: '/medical-specialties/create' }];
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: "Create Medical Specialty", href: "/medical-specialties/create" },
+];
 
 type SpecialtyForm = {
     name: string;
     icon: string;
     description: string;
-    parent_id?: number | '';
+    parent_id?: number | "";
     is_surgical: boolean;
 };
 
 export default function Edit({ specialty, parents }) {
     const { data, setData, put, processing, errors } = useForm<SpecialtyForm>({
-        name: specialty?.name || '',
-        icon: specialty?.icon || '',
-        description: specialty?.description || '',
+        name: specialty?.name || "",
+        icon: specialty?.icon || "",
+        description: specialty?.description || "",
         parent_id: specialty?.parent_id || null,
         is_surgical: specialty?.is_surgical || false,
     });
 
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        put(route('medical-specialties.update', specialty?.id));
+        put(route("medical-specialties.update", specialty?.id));
     };
 
     return (

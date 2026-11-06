@@ -1,34 +1,34 @@
-import '../css/app.css';
-import './bootstrap';
+import "../css/app.css";
+import "./bootstrap";
 
-import { createInertiaApp } from '@inertiajs/react';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { createRoot } from 'react-dom/client';
-import GlobalPostNotifications from './Components/GlobalPostNotifications';
+import { createInertiaApp } from "@inertiajs/react";
+import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
+import { createRoot } from "react-dom/client";
+import GlobalPostNotifications from "./Components/GlobalPostNotifications";
 
 // React Toastify CSS (if used)
-import 'react-toastify/dist/ReactToastify.css';
-import { configureEcho } from '@laravel/echo-react';
-import 'react-calendar/dist/Calendar.css'; // Import default styles
-import 'react-datetime-picker/dist/DateTimePicker.css';
+import "react-toastify/dist/ReactToastify.css";
+import { configureEcho } from "@laravel/echo-react";
+import "react-calendar/dist/Calendar.css"; // Import default styles
+import "react-datetime-picker/dist/DateTimePicker.css";
 
-import axios from 'axios';
+import axios from "axios";
 
 axios.defaults.withCredentials = true;
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 configureEcho({
-    broadcaster: 'pusher',
+    broadcaster: "pusher",
 });
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.tsx`,
-            import.meta.glob('./Pages/**/*.tsx'),
+            import.meta.glob("./Pages/**/*.tsx"),
         ),
     setup({ el, App, props }) {
         const root = createRoot(el);
@@ -41,6 +41,6 @@ createInertiaApp({
         );
     },
     progress: {
-        color: '#4B5563',
+        color: "#4B5563",
     },
 });

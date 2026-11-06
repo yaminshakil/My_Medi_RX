@@ -1,6 +1,6 @@
-import type { LucideIcon } from 'lucide-react';
-import type { Config } from 'ziggy-js';
-import { PageProps as InertiaPageProps } from '@inertiajs/core';
+import type { LucideIcon } from "lucide-react";
+import type { Config } from "ziggy-js";
+import { PageProps as InertiaPageProps } from "@inertiajs/core";
 
 export interface Language {
     code: string;

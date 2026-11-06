@@ -10,7 +10,7 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem } from "@/types";
 
 type Tip = {
     id: number;
@@ -30,7 +30,9 @@ type Props = {
 };
 
 export default function Index({ tips }: Props) {
-    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Pregnancy Tips', href: '/admin/pregnancy/tips' }];
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: "Pregnancy Tips", href: "/admin/pregnancy/tips" },
+    ];
     function remove(id: number) {
         if (!window.confirm("Delete this pregnancy tip?")) return;
 
@@ -46,7 +48,9 @@ export default function Index({ tips }: Props) {
             <div className="space-y-6 p-6">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                        <h1 className="text-2xl font-semibold">Pregnancy Tips</h1>
+                        <h1 className="text-2xl font-semibold">
+                            Pregnancy Tips
+                        </h1>
                         <p className="text-sm text-muted-foreground">
                             Manage tips by trimester and gestational week.
                         </p>
@@ -68,7 +72,9 @@ export default function Index({ tips }: Props) {
                                 <TableHead>Trimester</TableHead>
                                 <TableHead>Weeks</TableHead>
                                 <TableHead>Status</TableHead>
-                                <TableHead className="text-right">Actions</TableHead>
+                                <TableHead className="text-right">
+                                    Actions
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
 
@@ -109,7 +115,9 @@ export default function Index({ tips }: Props) {
                                                 <Button
                                                     variant="destructive"
                                                     size="icon"
-                                                    onClick={() => remove(tip.id)}
+                                                    onClick={() =>
+                                                        remove(tip.id)
+                                                    }
                                                     aria-label="Delete tip"
                                                 >
                                                     <Trash2 className="h-4 w-4" />
@@ -134,8 +142,8 @@ export default function Index({ tips }: Props) {
 
                 <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
                     <span>
-                        Showing {tips.from} to {tips.to} {" "} from total {" "}
-                        {tips.total} Highlights
+                        Showing {tips.from} to {tips.to} from total {tips.total}{" "}
+                        Highlights
                     </span>
                     <div className="flex flex-wrap gap-2">
                         {tips.links.map((link, index) => (
@@ -146,10 +154,14 @@ export default function Index({ tips }: Props) {
                                 disabled={!link.url}
                                 onClick={() => {
                                     if (link.url) {
-                                        router.get(link.url, {}, {
-                                            preserveScroll: true,
-                                            preserveState: true,
-                                        });
+                                        router.get(
+                                            link.url,
+                                            {},
+                                            {
+                                                preserveScroll: true,
+                                                preserveState: true,
+                                            },
+                                        );
                                     }
                                 }}
                             >

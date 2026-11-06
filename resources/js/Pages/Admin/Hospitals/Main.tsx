@@ -1,15 +1,15 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import PageHeader from '@/Components/PageHeader';
-import { Pagination } from '@/Components/pagination';
-import Table from '@/Components/Table';
-import AppLayout from '@/Layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import { AppPageProps } from '@/types';
-import { Hospital } from 'lucide-react';
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import PageHeader from "@/Components/PageHeader";
+import { Pagination } from "@/Components/pagination";
+import Table from "@/Components/Table";
+import AppLayout from "@/Layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import { AppPageProps } from "@/types";
+import { Hospital } from "lucide-react";
 
 export default function Index({ hospital }) {
     const { translations } = usePage<AppPageProps>().props;
@@ -17,13 +17,13 @@ export default function Index({ hospital }) {
     const [showConfirm, setShowConfirm] = useState(false);
     const [selectedHospital, setSelectedHospital] = useState<any>(null);
 
-    const canCreate = useCan('Create');
-    const canEdit = useCan('Edit');
-    const canDelete = useCan('Delete');
+    const canCreate = useCan("Create");
+    const canEdit = useCan("Edit");
+    const canDelete = useCan("Delete");
 
     const { data, setData } = useForm({
-        search: filters?.search || '',
-        status: filters?.status ?? '',
+        search: filters?.search || "",
+        status: filters?.status ?? "",
     });
 
     /**
@@ -32,21 +32,17 @@ export default function Index({ hospital }) {
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
 
-        setData('search', value);
+        setData("search", value);
 
         const queryString = {
             ...(value ? { search: value } : {}),
-            ...(data.status !== '' ? { status: data.status } : {}),
+            ...(data.status !== "" ? { status: data.status } : {}),
         };
 
-        router.get(
-            route('hospital.index'),
-            queryString,
-            {
-                preserveState: true,
-                preserveScroll: true,
-            }
-        );
+        router.get(route("hospital.index"), queryString, {
+            preserveState: true,
+            preserveScroll: true,
+        });
     };
 
     /**
@@ -54,43 +50,37 @@ export default function Index({ hospital }) {
      */
     const handleReset = () => {
         setData({
-            search: '',
-            status: '',
+            search: "",
+            status: "",
         });
 
         router.get(
-            route('hospital.index'),
+            route("hospital.index"),
             {},
             {
                 preserveState: true,
                 preserveScroll: true,
-            }
+            },
         );
     };
 
     /**
      * Status filter
      */
-    const handleStatusChange = (
-        e: React.ChangeEvent<HTMLSelectElement>
-    ) => {
+    const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
 
-        setData('status', value);
+        setData("status", value);
 
         const queryString = {
             ...(data.search ? { search: data.search } : {}),
-            ...(value !== '' ? { status: value } : {}),
+            ...(value !== "" ? { status: value } : {}),
         };
 
-        router.get(
-            route('hospital.index'),
-            queryString,
-            {
-                preserveState: true,
-                preserveScroll: true,
-            }
-        );
+        router.get(route("hospital.index"), queryString, {
+            preserveState: true,
+            preserveScroll: true,
+        });
     };
 
     /**
@@ -98,14 +88,14 @@ export default function Index({ hospital }) {
      */
     const handlePerPageChange = (e) => {
         router.get(
-            route('hospital.index'),
+            route("hospital.index"),
             {
                 ...filters,
                 per_page: e.target.value,
             },
             {
                 preserveState: true,
-            }
+            },
         );
     };
 
@@ -113,17 +103,14 @@ export default function Index({ hospital }) {
      * Create
      */
     const handleCreate = () => {
-        router.visit(route('hospital.create'));
+        router.visit(route("hospital.create"));
     };
 
     /**
      * Edit
      */
     const handleEdit: FormEventHandler = (item) => {
-        router.get(
-            item.edit_url ??
-            route('hospital.edit', { id: item.id })
-        );
+        router.get(item.edit_url ?? route("hospital.edit", { id: item.id }));
     };
 
     /**
@@ -142,16 +129,13 @@ export default function Index({ hospital }) {
             return;
         }
 
-        router.delete(
-            route('hospital.delete', selectedHospital.id),
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    setShowConfirm(false);
-                    setSelectedHospital(null);
-                },
-            }
-        );
+        router.delete(route("hospital.delete", selectedHospital.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setShowConfirm(false);
+                setSelectedHospital(null);
+            },
+        });
     };
 
     /**
@@ -175,25 +159,24 @@ export default function Index({ hospital }) {
         }
     }, [flash]);
 
-
     /**
      * Table columns
      */
     const columns = [
         {
-            key: '#',
-            label: '#',
+            key: "#",
+            label: "#",
             render: (item) => item.id,
         },
 
         {
-            key: 'hospital_name',
-            label: 'Hospital Name',
+            key: "hospital_name",
+            label: "Hospital Name",
             render: (item) => (
                 <div className="flex items-center gap-3">
                     {item.hospital_logo ? (
                         <img
-                            src={`${item.image_url ?? ''}/storage/${item.hospital_logo}`}
+                            src={`${item.image_url ?? ""}/storage/${item.hospital_logo}`}
                             alt={item.hospital_name}
                             className="h-10 w-10 rounded-md border object-contain"
                         />
@@ -204,9 +187,7 @@ export default function Index({ hospital }) {
                     )}
 
                     <div>
-                        <div className="font-medium">
-                            {item.hospital_name}
-                        </div>
+                        <div className="font-medium">{item.hospital_name}</div>
 
                         {item.address && (
                             <div className="max-w-[300px] truncate text-xs text-muted-foreground">
@@ -219,15 +200,14 @@ export default function Index({ hospital }) {
         },
 
         {
-            key: 'mobile_number',
-            label: 'Mobile',
-            render: (item) =>
-                item.mobile_number || '-',
+            key: "mobile_number",
+            label: "Mobile",
+            render: (item) => item.mobile_number || "-",
         },
 
         {
-            key: 'hospital_url',
-            label: 'Website',
+            key: "hospital_url",
+            label: "Website",
             render: (item) =>
                 item.hospital_url ? (
                     <a
@@ -239,43 +219,43 @@ export default function Index({ hospital }) {
                         Visit Website
                     </a>
                 ) : (
-                    '-'
+                    "-"
                 ),
         },
 
         {
-            key: 'status',
-            label: 'Status',
-            className: 'text-center',
+            key: "status",
+            label: "Status",
+            className: "text-center",
             render: (item) => (
                 <span
-                    className={`badge ${item.status
-                        ? 'badge--success'
-                        : 'badge--warning'
-                        }`}
+                    className={`badge ${
+                        item.status ? "badge--success" : "badge--warning"
+                    }`}
                 >
-                    {item.status ? 'Active' : 'Inactive'}
+                    {item.status ? "Active" : "Inactive"}
                 </span>
             ),
         },
         {
-            key: 'verification_status',
-            label: 'Verification Status',
-            className: 'text-center',
+            key: "verification_status",
+            label: "Verification Status",
+            className: "text-center",
             render: (item) => (
                 <span
-                    className={`badge ${item.verification_status === 'approved'
-                        ? 'badge--success capitalize'
-                        : 'badge--warning capitalize'
-                        }`}
+                    className={`badge ${
+                        item.verification_status === "approved"
+                            ? "badge--success capitalize"
+                            : "badge--warning capitalize"
+                    }`}
                 >
                     {item.verification_status}
                 </span>
             ),
         },
         {
-            key: 'verification_url',
-            label: 'Website',
+            key: "verification_url",
+            label: "Website",
             render: (item) =>
                 item.verification_url ? (
                     <a
@@ -287,15 +267,15 @@ export default function Index({ hospital }) {
                         Verify
                     </a>
                 ) : (
-                    '-'
+                    "-"
                 ),
         },
     ];
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: 'Hospitals',
-            href: route('hospital.index'),
+            title: "Hospitals",
+            href: route("hospital.index"),
         },
     ];
     console.log(hospital);
@@ -306,7 +286,6 @@ export default function Index({ hospital }) {
             <ToastContainer />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-
                 {/* Header / Search / Filters */}
                 <PageHeader
                     data={data}
@@ -321,10 +300,7 @@ export default function Index({ hospital }) {
 
                 {/* Status Filter */}
                 <div className="flex items-center gap-3">
-                    <label
-                        htmlFor="status"
-                        className="text-sm font-medium"
-                    >
+                    <label htmlFor="status" className="text-sm font-medium">
                         Status
                     </label>
 
@@ -334,17 +310,11 @@ export default function Index({ hospital }) {
                         onChange={handleStatusChange}
                         className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
                     >
-                        <option value="">
-                            All
-                        </option>
+                        <option value="">All</option>
 
-                        <option value="1">
-                            Active
-                        </option>
+                        <option value="1">Active</option>
 
-                        <option value="0">
-                            Inactive
-                        </option>
+                        <option value="0">Inactive</option>
                     </select>
                 </div>
 
@@ -373,7 +343,7 @@ export default function Index({ hospital }) {
             {/* Delete Confirmation */}
             <ConfirmDialog
                 title="Delete Hospital"
-                message={`Are you sure you want to delete this <b>${selectedHospital?.hospital_name ?? ''}</b>?`}
+                message={`Are you sure you want to delete this <b>${selectedHospital?.hospital_name ?? ""}</b>?`}
                 onConfirm={handleConfirm}
                 onCancel={handleCancel}
                 isOpen={showConfirm}

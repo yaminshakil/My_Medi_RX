@@ -1,19 +1,19 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import PageHeader from '@/Components/PageHeader';
-import { Pagination } from '@/Components/pagination';
-import Table from '@/Components/Table';
-import AppLayout from '@/Layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import MoreDropdown from './MoreDropdown';
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import PageHeader from "@/Components/PageHeader";
+import { Pagination } from "@/Components/pagination";
+import Table from "@/Components/Table";
+import AppLayout from "@/Layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import MoreDropdown from "./MoreDropdown";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Doctors',
-        href: '/doctors',
+        title: "Doctors",
+        href: "/doctors",
     },
 ];
 
@@ -21,28 +21,28 @@ export default function Index({ doctors }) {
     const { flash, filters } = usePage().props;
     const [showConfirm, setShowConfirm] = useState(false);
     const [doctor, setDoctor] = useState(false);
-    const canCreate = useCan('Create');
-    const canEdit = useCan('Edit');
-    const canDelete = useCan('Delete');
+    const canCreate = useCan("Create");
+    const canEdit = useCan("Edit");
+    const canDelete = useCan("Delete");
 
     const { data, setData } = useForm({
-        search: filters?.search || '',
+        search: filters?.search || "",
     });
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setData('search', value);
+        setData("search", value);
         const queryString = value ? { search: value } : {};
-        router.get(route('doctors.index'), queryString, {
+        router.get(route("doctors.index"), queryString, {
             preserveState: true,
             preserveScroll: true,
         });
     };
 
     const handleReset = () => {
-        setData('search', '');
+        setData("search", "");
         router.get(
-            route('doctors.index'),
+            route("doctors.index"),
             {},
             {
                 preserveState: true,
@@ -61,7 +61,7 @@ export default function Index({ doctors }) {
     }, [flash]);
 
     const handleConfirm = () => {
-        router.delete(route('doctors.destroy', doctor.doctor), {
+        router.delete(route("doctors.destroy", doctor.doctor), {
             preserveScroll: true,
         });
         setShowConfirm(false);
@@ -72,11 +72,15 @@ export default function Index({ doctors }) {
     };
 
     const handlePerPageChange = (e) => {
-        router.get(route('doctors.index'), { ...filters, per_page: e.target.value }, { preserveState: true });
+        router.get(
+            route("doctors.index"),
+            { ...filters, per_page: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleEdit: FormEventHandler = (item) => {
-        router.get(route('doctors.edit', { doctor: item.doctor.uuid }));
+        router.get(route("doctors.edit", { doctor: item.doctor.uuid }));
     };
 
     const handleDelete: FormEventHandler = (item) => {
@@ -85,30 +89,38 @@ export default function Index({ doctors }) {
     };
 
     const columns = [
-        { key: '#', label: '#', render: (item) => item.id },
-        { key: 'name', label: 'Name' },
-        { key: 'email', label: 'Email' },
+        { key: "#", label: "#", render: (item) => item.id },
+        { key: "name", label: "Name" },
+        { key: "email", label: "Email" },
         {
-            key: 'featured',
-            label: 'Featured',
-            className: 'text-center',
+            key: "featured",
+            label: "Featured",
+            className: "text-center",
             render: (item) => (
-                <span className={`badge ${item.featured ? 'badge--success' : 'badge--warning'}`}>{item.featured ? 'Featured' : 'Non Featured'}</span>
+                <span
+                    className={`badge ${item.featured ? "badge--success" : "badge--warning"}`}
+                >
+                    {item.featured ? "Featured" : "Non Featured"}
+                </span>
             ),
         },
         {
-            key: 'active',
-            label: 'Status',
-            className: 'text-center',
+            key: "active",
+            label: "Status",
+            className: "text-center",
             render: (item) => (
-                <span className={`badge ${item.active ? 'badge--success' : 'badge--warning'}`}>{item.active ? 'Active' : 'Inactive'}</span>
+                <span
+                    className={`badge ${item.active ? "badge--success" : "badge--warning"}`}
+                >
+                    {item.active ? "Active" : "Inactive"}
+                </span>
             ),
         },
-        { key: 'created_at', label: 'Created At' },
+        { key: "created_at", label: "Created At" },
     ];
 
     const handleCreate = () => {
-        router.visit(route('doctors.create'));
+        router.visit(route("doctors.create"));
     };
 
     return (
@@ -136,7 +148,9 @@ export default function Index({ doctors }) {
                             canDelete={canDelete}
                             onEdit={handleEdit}
                             onDelete={handleDelete}
-                            renderActions={(doctor) => <MoreDropdown doctor={doctor?.doctor} />}
+                            renderActions={(doctor) => (
+                                <MoreDropdown doctor={doctor?.doctor} />
+                            )}
                             emptyMessage="No Doctor found."
                         />
                         <div className="mt-4">

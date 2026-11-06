@@ -1,15 +1,18 @@
 import { Head } from "@inertiajs/react";
 import { Link } from "@inertiajs/react";
 
-import RuleForm, {
-    MedicineOption,
-} from "./components/RuleForm";
+import RuleForm, { MedicineOption } from "./components/RuleForm";
 
 import { Button } from "@/Components/ui/button";
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Create Pediatric Dose Rule', href: '/admin/pediatric-dose-rules/create' }];
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: "Create Pediatric Dose Rule",
+        href: "/admin/pediatric-dose-rules/create",
+    },
+];
 
 type Props = {
     medicines: MedicineOption[];

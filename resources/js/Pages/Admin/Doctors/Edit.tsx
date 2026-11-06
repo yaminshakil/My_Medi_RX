@@ -1,6 +1,6 @@
-import AppLayout from '@/Layouts/app-layout';
-import { Head, router, useForm } from '@inertiajs/react';
-import Form from './Form';
+import AppLayout from "@/Layouts/app-layout";
+import { Head, router, useForm } from "@inertiajs/react";
+import Form from "./Form";
 
 type DoctorForm = {
     name: string;
@@ -16,30 +16,31 @@ type DoctorForm = {
     working_institute: string;
     designation?: string;
     qualification?: string;
-    experience_years?: number | '';
+    experience_years?: number | "";
     bio?: string;
     active: boolean;
 };
 
 export default function Edit({ doctor, specialties }) {
-    const selectedSpecialties = doctor?.user?.specialties?.map((s) => s.id) || [];
+    const selectedSpecialties =
+        doctor?.user?.specialties?.map((s) => s.id) || [];
 
     const { data, setData, post, errors, processing } = useForm<DoctorForm>({
-        name: doctor.user.name || '',
-        email: doctor.user.email || '',
-        password: '',
-        password_confirmation: '',
-        phone: doctor.phone || '',
-        gender: doctor.gender || '',
-        dob: doctor.dob || '',
-        specialization: doctor.specialization || '',
-        designation: doctor.designation || '',
-        registration_no: doctor.registration_no || '',
-        working_institute: doctor.working_institute || '',
-        qualification: doctor.qualification || '',
-        experience_years: doctor.experience_years || '',
-        bio: doctor.bio || '',
-        social: doctor.social || { facebook: '', linkedin: '', twitter: '' },
+        name: doctor.user.name || "",
+        email: doctor.user.email || "",
+        password: "",
+        password_confirmation: "",
+        phone: doctor.phone || "",
+        gender: doctor.gender || "",
+        dob: doctor.dob || "",
+        specialization: doctor.specialization || "",
+        designation: doctor.designation || "",
+        registration_no: doctor.registration_no || "",
+        working_institute: doctor.working_institute || "",
+        qualification: doctor.qualification || "",
+        experience_years: doctor.experience_years || "",
+        bio: doctor.bio || "",
+        social: doctor.social || { facebook: "", linkedin: "", twitter: "" },
         profile_image: null,
         active: doctor.active || boolean,
         featured: doctor.featured || false,
@@ -48,11 +49,11 @@ export default function Edit({ doctor, specialties }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('doctors.update', doctor.uuid), { forceFormData: true });
+        post(route("doctors.update", doctor.uuid), { forceFormData: true });
     };
 
     const handleCancel = () => {
-        router.get(route('doctors.index'));
+        router.get(route("doctors.index"));
     };
 
     return (

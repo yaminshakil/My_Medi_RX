@@ -1,4 +1,4 @@
-import { router, usePage } from '@inertiajs/react';
+import { router, usePage } from "@inertiajs/react";
 
 interface Language {
     code: string;
@@ -20,7 +20,7 @@ export default function LanguageSwitcher() {
             {
                 preserveState: true,
                 preserveScroll: true,
-            }
+            },
         );
     };
 

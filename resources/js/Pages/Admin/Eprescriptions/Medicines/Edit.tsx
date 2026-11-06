@@ -1,12 +1,12 @@
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/react';
-import Form from './Form';
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, useForm, usePage } from "@inertiajs/react";
+import Form from "./Form";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Edit Medicine',
-        href: '/medicines',
+        title: "Edit Medicine",
+        href: "/medicines",
     },
 ];
 
@@ -24,7 +24,7 @@ export default function Edit() {
 
     function handleSubmit(e) {
         e.preventDefault();
-        put(route('medicines.update', medicine.id));
+        put(route("medicines.update", medicine.id));
     }
 
     return (

@@ -1,15 +1,16 @@
-import { Select } from 'antd';
-import { useState } from 'react';
-import PrescriptionChart from './PrescriptionChart'; // your LineChart component
+import { Select } from "antd";
+import { useState } from "react";
+import PrescriptionChart from "./PrescriptionChart"; // your LineChart component
 
 const { Option } = Select;
 
 export default function DoctorFilterChart({ data, doctorsMap }) {
-
     const doctorKeys = Object.keys(doctorsMap);
 
     // Default: show first 3 doctors
-    const [selectedDoctors, setSelectedDoctors] = useState(doctorKeys.slice(0, 3));
+    const [selectedDoctors, setSelectedDoctors] = useState(
+        doctorKeys.slice(0, 3),
+    );
 
     return (
         <div>
@@ -20,7 +21,7 @@ export default function DoctorFilterChart({ data, doctorsMap }) {
                     placeholder="Select doctors"
                     value={selectedDoctors}
                     onChange={(val) => setSelectedDoctors(val)}
-                    style={{ width: '100%' }}
+                    style={{ width: "100%" }}
                 >
                     {doctorKeys.map((key) => (
                         <Option key={key} value={key}>
@@ -30,7 +31,12 @@ export default function DoctorFilterChart({ data, doctorsMap }) {
                 </Select>
             </div>
 
-            <PrescriptionChart data={data} doctorsMap={Object.fromEntries(selectedDoctors.map((k) => [k, doctorsMap[k]]))} />
+            <PrescriptionChart
+                data={data}
+                doctorsMap={Object.fromEntries(
+                    selectedDoctors.map((k) => [k, doctorsMap[k]]),
+                )}
+            />
         </div>
     );
 }

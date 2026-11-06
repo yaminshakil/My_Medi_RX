@@ -1,4 +1,4 @@
-import { Star, StarHalf } from 'lucide-react';
+import { Star, StarHalf } from "lucide-react";
 
 export default function RenderStars({ rating }) {
     const stars = [];
@@ -7,18 +7,32 @@ export default function RenderStars({ rating }) {
 
     // Full stars
     for (let i = 0; i < fullStars; i++) {
-        stars.push(<Star key={`full-${i}`} size={18} className="fill-[var(--base-color)] text-[var(--base-color)]" />);
+        stars.push(
+            <Star
+                key={`full-${i}`}
+                size={18}
+                className="fill-[var(--base-color)] text-[var(--base-color)]"
+            />,
+        );
     }
 
     // Half star
     if (hasHalfStar) {
-        stars.push(<StarHalf key="half" size={18} className="fill-[var(--base-color)] text-[var(--base-color)]" />);
+        stars.push(
+            <StarHalf
+                key="half"
+                size={18}
+                className="fill-[var(--base-color)] text-[var(--base-color)]"
+            />,
+        );
     }
 
     // Empty stars
     const emptyStars = 5 - Math.ceil(rating);
     for (let i = 0; i < emptyStars; i++) {
-        stars.push(<Star key={`empty-${i}`} size={18} className="text-gray-300" />);
+        stars.push(
+            <Star key={`empty-${i}`} size={18} className="text-gray-300" />,
+        );
     }
 
     return stars;

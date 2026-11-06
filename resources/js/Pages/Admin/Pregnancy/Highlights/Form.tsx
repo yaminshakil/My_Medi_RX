@@ -52,10 +52,14 @@ export default function HighlightForm({ highlight }: Props) {
                     min={1}
                     max={42}
                     value={form.data.week}
-                    onChange={(e) => form.setData("week", Number(e.target.value))}
+                    onChange={(e) =>
+                        form.setData("week", Number(e.target.value))
+                    }
                 />
                 {form.errors.week && (
-                    <p className="text-sm text-destructive">{form.errors.week}</p>
+                    <p className="text-sm text-destructive">
+                        {form.errors.week}
+                    </p>
                 )}
             </div>
 
@@ -67,13 +71,17 @@ export default function HighlightForm({ highlight }: Props) {
                     onChange={(e) => form.setData("fruit_name", e.target.value)}
                 />
                 {form.errors.fruit_name && (
-                    <p className="text-sm text-destructive">{form.errors.fruit_name}</p>
+                    <p className="text-sm text-destructive">
+                        {form.errors.fruit_name}
+                    </p>
                 )}
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                    <Label htmlFor="approx_length_cm">Approximate length (cm)</Label>
+                    <Label htmlFor="approx_length_cm">
+                        Approximate length (cm)
+                    </Label>
                     <Input
                         id="approx_length_cm"
                         type="number"
@@ -86,7 +94,9 @@ export default function HighlightForm({ highlight }: Props) {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="approx_weight_grams">Approximate weight (g)</Label>
+                    <Label htmlFor="approx_weight_grams">
+                        Approximate weight (g)
+                    </Label>
                     <Input
                         id="approx_weight_grams"
                         type="number"
@@ -103,15 +113,21 @@ export default function HighlightForm({ highlight }: Props) {
                 <Textarea
                     id="description"
                     value={form.data.description}
-                    onChange={(e) => form.setData("description", e.target.value)}
+                    onChange={(e) =>
+                        form.setData("description", e.target.value)
+                    }
                 />
                 {form.errors.description && (
-                    <p className="text-sm text-destructive">{form.errors.description}</p>
+                    <p className="text-sm text-destructive">
+                        {form.errors.description}
+                    </p>
                 )}
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="source_reference">Clinical/content source reference</Label>
+                <Label htmlFor="source_reference">
+                    Clinical/content source reference
+                </Label>
                 <Textarea
                     id="source_reference"
                     value={form.data.source_reference}
@@ -126,7 +142,9 @@ export default function HighlightForm({ highlight }: Props) {
                 <Input
                     id="source_version"
                     value={form.data.source_version}
-                    onChange={(e) => form.setData("source_version", e.target.value)}
+                    onChange={(e) =>
+                        form.setData("source_version", e.target.value)
+                    }
                 />
             </div>
 
@@ -134,7 +152,9 @@ export default function HighlightForm({ highlight }: Props) {
                 <input
                     type="checkbox"
                     checked={form.data.is_published}
-                    onChange={(e) => form.setData("is_published", e.target.checked)}
+                    onChange={(e) =>
+                        form.setData("is_published", e.target.checked)
+                    }
                 />
                 Published and visible to users
             </label>

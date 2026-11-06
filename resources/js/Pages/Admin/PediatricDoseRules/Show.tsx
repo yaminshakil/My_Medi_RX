@@ -1,5 +1,12 @@
 import { Head, Link, router, usePage } from "@inertiajs/react";
-import { CheckCircle, XCircle, Send, Power, PowerOff, Pencil } from "lucide-react";
+import {
+    CheckCircle,
+    XCircle,
+    Send,
+    Power,
+    PowerOff,
+    Pencil,
+} from "lucide-react";
 
 import RuleStatusBadge from "./components/RuleStatusBadge";
 
@@ -17,7 +24,7 @@ import {
     AlertDialogTrigger,
 } from "@/Components/ui/alert-dialog";
 import { Separator } from "@/Components/ui/separator";
-import AppLayout from '@/Layouts/app-layout';
+import AppLayout from "@/Layouts/app-layout";
 
 type Rule = {
     id: number;
@@ -119,10 +126,9 @@ export default function Show({ rule, audits }: Props) {
             return;
         }
 
-        router.post(
-            route("admin.pediatric-dose-rules.reject", rule.id),
-            { reason },
-        );
+        router.post(route("admin.pediatric-dose-rules.reject", rule.id), {
+            reason,
+        });
     }
     console.log(rule.medicine);
     return (
@@ -134,7 +140,8 @@ export default function Show({ rule, audits }: Props) {
                     <div className="space-y-2">
                         <div className="flex flex-wrap items-center gap-3">
                             <h1 className="text-2xl font-semibold">
-                                {rule.medicine?.brand_name ?? "Pediatric Dose Rule"}
+                                {rule.medicine?.brand_name ??
+                                    "Pediatric Dose Rule"}
                             </h1>
                             <RuleStatusBadge status={rule.status} />
                         </div>
@@ -160,7 +167,7 @@ export default function Show({ rule, audits }: Props) {
                         )}
 
                         {rule.status === "draft" ||
-                            rule.status === "rejected" ? (
+                        rule.status === "rejected" ? (
                             <Button onClick={() => postAction("submit")}>
                                 <Send className="mr-2 h-4 w-4" />
                                 Submit for Review
@@ -174,7 +181,10 @@ export default function Show({ rule, audits }: Props) {
                                     Approve
                                 </Button>
 
-                                <Button variant="destructive" onClick={rejectRule}>
+                                <Button
+                                    variant="destructive"
+                                    onClick={rejectRule}
+                                >
                                     <XCircle className="mr-2 h-4 w-4" />
                                     Reject
                                 </Button>
@@ -220,15 +230,33 @@ export default function Show({ rule, audits }: Props) {
                         <CardTitle>Medicine and Eligibility</CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        <Detail label="Medicine" value={rule.medicine?.brand_name} />
+                        <Detail
+                            label="Medicine"
+                            value={rule.medicine?.brand_name}
+                        />
                         <Detail label="Formulation" value={rule.formulation} />
                         <Detail label="Indication" value={rule.indication} />
                         <Detail label="Route" value={rule.route} />
-                        <Detail label="Minimum age (months)" value={rule.min_age_months} />
-                        <Detail label="Maximum age (months)" value={rule.max_age_months} />
-                        <Detail label="Minimum weight (kg)" value={rule.min_weight_kg} />
-                        <Detail label="Maximum weight (kg)" value={rule.max_weight_kg} />
-                        <Detail label="Active" value={rule.is_active ? "Yes" : "No"} />
+                        <Detail
+                            label="Minimum age (months)"
+                            value={rule.min_age_months}
+                        />
+                        <Detail
+                            label="Maximum age (months)"
+                            value={rule.max_age_months}
+                        />
+                        <Detail
+                            label="Minimum weight (kg)"
+                            value={rule.min_weight_kg}
+                        />
+                        <Detail
+                            label="Maximum weight (kg)"
+                            value={rule.max_weight_kg}
+                        />
+                        <Detail
+                            label="Active"
+                            value={rule.is_active ? "Yes" : "No"}
+                        />
                     </CardContent>
                 </Card>
 
@@ -277,8 +305,14 @@ export default function Show({ rule, audits }: Props) {
                         <CardTitle>Clinical Source and Notes</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <Detail label="Source reference" value={rule.source_reference} />
-                        <Detail label="Source version" value={rule.source_version} />
+                        <Detail
+                            label="Source reference"
+                            value={rule.source_reference}
+                        />
+                        <Detail
+                            label="Source version"
+                            value={rule.source_version}
+                        />
                         <Separator />
                         <Detail
                             label="Contraindications and warnings"
@@ -287,7 +321,10 @@ export default function Show({ rule, audits }: Props) {
                         <Detail label="Notes" value={rule.notes} />
                         <Separator />
                         <Detail label="Created by" value={rule.creator?.name} />
-                        <Detail label="Reviewed by" value={rule.reviewer?.name} />
+                        <Detail
+                            label="Reviewed by"
+                            value={rule.reviewer?.name}
+                        />
                     </CardContent>
                 </Card>
 
@@ -313,15 +350,20 @@ export default function Show({ rule, audits }: Props) {
                                         </p>
                                         <p className="text-sm text-muted-foreground">
                                             {audit.user?.name ?? "System"} ·{" "}
-                                            {new Date(audit.created_at).toLocaleString()}
+                                            {new Date(
+                                                audit.created_at,
+                                            ).toLocaleString()}
                                         </p>
                                         {audit.from_status && (
                                             <p className="text-sm">
-                                                {audit.from_status} → {audit.to_status}
+                                                {audit.from_status} →{" "}
+                                                {audit.to_status}
                                             </p>
                                         )}
                                         {audit.reason && (
-                                            <p className="text-sm">{audit.reason}</p>
+                                            <p className="text-sm">
+                                                {audit.reason}
+                                            </p>
                                         )}
                                     </div>
                                 </div>

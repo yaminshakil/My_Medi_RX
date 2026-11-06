@@ -1,6 +1,15 @@
 // PrescriptionChart.jsx
-import React from 'react';
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import React from "react";
+import {
+    CartesianGrid,
+    Legend,
+    Line,
+    LineChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from "recharts";
 
 /**
  * Props:
@@ -11,18 +20,27 @@ export default function PrescriptionChart({ data = [], doctorsMap = {} }) {
     // Normalize & sort incoming data by date
     const chartData = React.useMemo(() => {
         if (!Array.isArray(data) || data.length === 0) return [];
-        return [...data].map((d) => ({ ...d, date: String(d.date) })).sort((a, b) => new Date(a.date) - new Date(b.date));
+        return [...data]
+            .map((d) => ({ ...d, date: String(d.date) }))
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
     }, [data]);
 
     // Use doctorsMap keys (keeps order stable and prevents collapsing on identical display names)
-    const doctorKeys = React.useMemo(() => Object.keys(doctorsMap || {}), [doctorsMap]);
+    const doctorKeys = React.useMemo(
+        () => Object.keys(doctorsMap || {}),
+        [doctorsMap],
+    );
 
     if (chartData.length === 0 || doctorKeys.length === 0) {
-        return <div className="p-4 text-sm text-gray-500">No prescription data to display.</div>;
+        return (
+            <div className="p-4 text-sm text-gray-500">
+                No prescription data to display.
+            </div>
+        );
     }
 
     return (
-        <div style={{ width: '100%', height: 250 }}>
+        <div style={{ width: "100%", height: 250 }}>
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />

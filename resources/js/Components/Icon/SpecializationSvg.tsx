@@ -1,5 +1,13 @@
 const SpecializationSvg = (props) => (
-    <svg className="text-[var(--base-color)]" width={15} height={22} viewBox="0 0 15 22" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg
+        className="text-[var(--base-color)]"
+        width={15}
+        height={22}
+        viewBox="0 0 15 22"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        {...props}
+    >
         <path
             d="M7.13773 3.65137L6.09071 5.77286L3.74951 6.11305L5.4436 7.76442L5.04369 10.0962L7.13773 8.99526L9.23177 10.0962L8.83186 7.76442L10.5259 6.11305L8.18475 5.77286L7.13773 3.65137Z"
             fill="url(#paint0_linear)"
@@ -18,22 +26,50 @@ const SpecializationSvg = (props) => (
         />
 
         <defs>
-            <linearGradient id="paint0_linear" x1="7.13773" y1="3.65137" x2="7.13773" y2="10.0962" gradientUnits="userSpaceOnUse">
+            <linearGradient
+                id="paint0_linear"
+                x1="7.13773"
+                y1="3.65137"
+                x2="7.13773"
+                y2="10.0962"
+                gradientUnits="userSpaceOnUse"
+            >
                 <stop stopColor="var(--base-color)" />
                 <stop offset="1" stopColor="var(--base-color)" />
             </linearGradient>
 
-            <linearGradient id="paint1_linear" x1="7.13775" y1="0" x2="7.13775" y2="14.2755" gradientUnits="userSpaceOnUse">
+            <linearGradient
+                id="paint1_linear"
+                x1="7.13775"
+                y1="0"
+                x2="7.13775"
+                y2="14.2755"
+                gradientUnits="userSpaceOnUse"
+            >
                 <stop stopColor="var(--base-color)" />
                 <stop offset="1" stopColor="var(--base-color)" />
             </linearGradient>
 
-            <linearGradient id="paint2_linear" x1="10.5305" y1="14.2482" x2="10.5305" y2="22" gradientUnits="userSpaceOnUse">
+            <linearGradient
+                id="paint2_linear"
+                x1="10.5305"
+                y1="14.2482"
+                x2="10.5305"
+                y2="22"
+                gradientUnits="userSpaceOnUse"
+            >
                 <stop stopColor="var(--base-color)" />
                 <stop offset="1" stopColor="var(--base-color)" />
             </linearGradient>
 
-            <linearGradient id="paint3_linear" x1="3.7473" y1="14.249" x2="3.7473" y2="21.9999" gradientUnits="userSpaceOnUse">
+            <linearGradient
+                id="paint3_linear"
+                x1="3.7473"
+                y1="14.249"
+                x2="3.7473"
+                y2="21.9999"
+                gradientUnits="userSpaceOnUse"
+            >
                 <stop stopColor="var(--base-color)" />
                 <stop offset="1" stopColor="var(--base-color)" />
             </linearGradient>

@@ -1,21 +1,21 @@
-import { Link } from '@inertiajs/react';
+import { Link } from "@inertiajs/react";
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/Components/ui/button';
+import { cn } from "@/lib/utils";
+import { Button } from "@/Components/ui/button";
 import {
     Card as ShadcnCard,
     CardContent,
     CardHeader,
     CardTitle,
-} from '@/Components/ui/card';
-import { Label } from '@/Components/ui/label';
+} from "@/Components/ui/card";
+import { Label } from "@/Components/ui/label";
 import {
     Select as ShadcnSelect,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/Components/ui/select';
+} from "@/Components/ui/select";
 
 // -----------------------------------------------------------------------------
 // Helpers
@@ -28,23 +28,23 @@ export const clean = (obj) =>
     Object.fromEntries(
         Object.entries(obj).filter(
             ([, value]) =>
-                value !== '' && value !== null && value !== undefined
-        )
+                value !== "" && value !== null && value !== undefined,
+        ),
     );
 
 export const inputCls =
-    'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50';
+    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50";
 
 export const formatDateTime = (iso) =>
     iso
         ? new Date(iso).toLocaleString([], {
-            dateStyle: 'medium',
-            timeStyle: 'short',
-        })
-        : '—';
+              dateStyle: "medium",
+              timeStyle: "short",
+          })
+        : "—";
 
 export const formatHoursLeft = (hours) => {
-    if (hours < 0) return 'Expired';
+    if (hours < 0) return "Expired";
     if (hours < 24) return `${hours}h left`;
     return `${Math.floor(hours / 24)}d left`;
 };
@@ -54,20 +54,20 @@ export const formatHoursLeft = (hours) => {
 // -----------------------------------------------------------------------------
 
 const tones = {
-    slate: 'border-slate-200 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200',
-    teal: 'border-teal-200 bg-teal-50 text-teal-800 dark:border-teal-900 dark:bg-teal-950 dark:text-teal-300',
-    amber: 'border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300',
-    rose: 'border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-300',
-    sky: 'border-sky-200 bg-sky-50 text-sky-800 dark:border-sky-900 dark:bg-sky-950 dark:text-sky-300',
+    slate: "border-slate-200 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200",
+    teal: "border-teal-200 bg-teal-50 text-teal-800 dark:border-teal-900 dark:bg-teal-950 dark:text-teal-300",
+    amber: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300",
+    rose: "border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-300",
+    sky: "border-sky-200 bg-sky-50 text-sky-800 dark:border-sky-900 dark:bg-sky-950 dark:text-sky-300",
 };
 
-export function Pill({ tone = 'slate', children, className, ...props }) {
+export function Pill({ tone = "slate", children, className, ...props }) {
     return (
         <span
             className={cn(
-                'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium',
+                "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium",
                 tones[tone] ?? tones.slate,
-                className
+                className,
             )}
             {...props}
         >
@@ -77,31 +77,31 @@ export function Pill({ tone = 'slate', children, className, ...props }) {
 }
 
 const statusTone = {
-    available: 'teal',
-    quarantined: 'amber',
-    issued: 'sky',
-    expired: 'rose',
-    discarded: 'slate',
+    available: "teal",
+    quarantined: "amber",
+    issued: "sky",
+    expired: "rose",
+    discarded: "slate",
 };
 
 export function StatusPill({ status }) {
     const label = status
         ? status.charAt(0).toUpperCase() + status.slice(1)
-        : 'Unknown';
+        : "Unknown";
 
-    return <Pill tone={statusTone[status] ?? 'slate'}>{label}</Pill>;
+    return <Pill tone={statusTone[status] ?? "slate"}>{label}</Pill>;
 }
 
 const expiryTone = {
-    ok: 'slate',
-    warning: 'amber',
-    critical: 'rose',
-    expired: 'rose',
+    ok: "slate",
+    warning: "amber",
+    critical: "rose",
+    expired: "rose",
 };
 
 export function ExpiryPill({ state, hours }) {
     return (
-        <Pill tone={expiryTone[state] ?? 'slate'}>
+        <Pill tone={expiryTone[state] ?? "slate"}>
             {formatHoursLeft(hours)}
         </Pill>
     );
@@ -112,18 +112,17 @@ export function ExpiryPill({ state, hours }) {
 // -----------------------------------------------------------------------------
 
 const buttonVariants = {
-    primary: 'bg-rose-800 text-white hover:bg-rose-900',
+    primary: "bg-rose-800 text-white hover:bg-rose-900",
     secondary:
-        'border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground',
-    danger:
-        'border border-rose-200 bg-background text-rose-700 hover:bg-rose-50 dark:border-rose-900 dark:text-rose-300 dark:hover:bg-rose-950',
+        "border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground",
+    danger: "border border-rose-200 bg-background text-rose-700 hover:bg-rose-50 dark:border-rose-900 dark:text-rose-300 dark:hover:bg-rose-950",
 };
 
 export function Btn({
-    variant = 'primary',
+    variant = "primary",
     href,
     className,
-    type = 'button',
+    type = "button",
     children,
     ...props
 }) {
@@ -131,22 +130,14 @@ export function Btn({
 
     if (href) {
         return (
-            <Button
-                asChild
-                className={cn(variantClass, className)}
-                {...props}
-            >
+            <Button asChild className={cn(variantClass, className)} {...props}>
                 <Link href={href}>{children}</Link>
             </Button>
         );
     }
 
     return (
-        <Button
-            type={type}
-            className={cn(variantClass, className)}
-            {...props}
-        >
+        <Button type={type} className={cn(variantClass, className)} {...props}>
             {children}
         </Button>
     );
@@ -158,7 +149,7 @@ export function Btn({
 
 export function Card({ title, actions, children, className }) {
     return (
-        <ShadcnCard className={cn('overflow-hidden', className)}>
+        <ShadcnCard className={cn("overflow-hidden", className)}>
             {title || actions ? (
                 <CardHeader className="flex flex-row items-center justify-between gap-3 border-b px-5 py-4">
                     {title ? (
@@ -173,9 +164,7 @@ export function Card({ title, actions, children, className }) {
                 </CardHeader>
             ) : null}
 
-            <CardContent
-                className={cn('p-5', !(title || actions) && 'pt-5')}
-            >
+            <CardContent className={cn("p-5", !(title || actions) && "pt-5")}>
                 {children}
             </CardContent>
         </ShadcnCard>
@@ -186,16 +175,9 @@ export function Card({ title, actions, children, className }) {
 // Form fields
 // -----------------------------------------------------------------------------
 
-export function Field({
-    label,
-    error,
-    hint,
-    children,
-    className,
-    id,
-}) {
+export function Field({ label, error, hint, children, className, id }) {
     return (
-        <div className={cn('grid gap-2', className)}>
+        <div className={cn("grid gap-2", className)}>
             {label ? (
                 <Label htmlFor={id} className="text-sm font-medium">
                     {label}
@@ -209,7 +191,10 @@ export function Field({
             ) : null}
 
             {error ? (
-                <p className="text-sm font-medium text-destructive" role="alert">
+                <p
+                    className="text-sm font-medium text-destructive"
+                    role="alert"
+                >
                     {error}
                 </p>
             ) : null}
@@ -226,7 +211,7 @@ export function Field({
 
 export function Select({
     options = [],
-    placeholder = 'Select an option',
+    placeholder = "Select an option",
     className,
     value,
     onChange,
@@ -237,17 +222,17 @@ export function Select({
     ...props
 }) {
     const normalizedOptions = options.map((option) =>
-        typeof option === 'object'
+        typeof option === "object"
             ? {
-                value: String(option.value),
-                label: String(option.label ?? option.value),
-                disabled: option.disabled ?? false,
-            }
+                  value: String(option.value),
+                  label: String(option.label ?? option.value),
+                  disabled: option.disabled ?? false,
+              }
             : {
-                value: String(option),
-                label: String(option),
-                disabled: false,
-            }
+                  value: String(option),
+                  label: String(option),
+                  disabled: false,
+              },
     );
 
     const handleValueChange = (nextValue) => {
@@ -264,14 +249,14 @@ export function Select({
 
     return (
         <ShadcnSelect
-            value={value === '' || value == null ? undefined : String(value)}
+            value={value === "" || value == null ? undefined : String(value)}
             onValueChange={handleValueChange}
             name={name}
             required={required}
             disabled={disabled}
             {...props}
         >
-            <SelectTrigger className={cn('w-full', className)}>
+            <SelectTrigger className={cn("w-full", className)}>
                 <SelectValue placeholder={placeholder} />
             </SelectTrigger>
 
@@ -304,12 +289,12 @@ export function Pagination({ links }) {
         >
             {links.map((link, index) => {
                 const label = link.label
-                    .replace(/&laquo;|&#171;/g, '«')
-                    .replace(/&raquo;|&#187;/g, '»')
-                    .replace(/&amp;/g, '&')
-                    .replace(/<[^>]*>/g, '');
+                    .replace(/&laquo;|&#171;/g, "«")
+                    .replace(/&raquo;|&#187;/g, "»")
+                    .replace(/&amp;/g, "&")
+                    .replace(/<[^>]*>/g, "");
 
-                const variant = link.active ? 'default' : 'outline';
+                const variant = link.active ? "default" : "outline";
 
                 return link.url ? (
                     <Button
@@ -320,7 +305,7 @@ export function Pagination({ links }) {
                         disabled={!link.url}
                         className={cn(
                             link.active &&
-                            'border-rose-800 bg-rose-800 text-white hover:bg-rose-900'
+                                "border-rose-800 bg-rose-800 text-white hover:bg-rose-900",
                         )}
                     >
                         <Link href={link.url} preserveScroll>
@@ -333,7 +318,7 @@ export function Pagination({ links }) {
                         size="sm"
                         variant="outline"
                         disabled
-                        aria-current={link.active ? 'page' : undefined}
+                        aria-current={link.active ? "page" : undefined}
                     >
                         {label}
                     </Button>
@@ -358,6 +343,6 @@ export function EmptyState({ children }) {
 }
 
 export const th =
-    'h-10 px-3 text-left align-middle text-xs font-semibold text-muted-foreground';
+    "h-10 px-3 text-left align-middle text-xs font-semibold text-muted-foreground";
 
-export const td = 'px-3 py-3 align-middle text-sm text-foreground';
+export const td = "px-3 py-3 align-middle text-sm text-foreground";

@@ -1,6 +1,5 @@
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
-
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
 
 declare global {
     interface Window {
@@ -14,7 +13,7 @@ window.Pusher = Pusher;
 //Pusher.logToConsole = true;
 
 const echo = new Echo({
-    broadcaster: 'pusher',
+    broadcaster: "pusher",
 
     key: import.meta.env.VITE_PUSHER_APP_KEY,
 
@@ -22,7 +21,7 @@ const echo = new Echo({
 
     forceTLS: true,
 
-    enabledTransports: ['ws', 'wss'],
+    enabledTransports: ["ws", "wss"],
 });
 
 export default echo;

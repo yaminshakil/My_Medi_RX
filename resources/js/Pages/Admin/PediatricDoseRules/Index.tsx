@@ -20,10 +20,12 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Pediatric Dose Rules', href: '/admin/pediatric-dose-rules' }];
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: "Pediatric Dose Rules", href: "/admin/pediatric-dose-rules" },
+];
 
 type Medicine = {
     id: number;
@@ -77,12 +79,7 @@ type Props = {
     };
 };
 
-export default function Index({
-    rules,
-    filters,
-    stats,
-    permissions,
-}: Props) {
+export default function Index({ rules, filters, stats, permissions }: Props) {
     const [search, setSearch] = useState(filters.search ?? "");
     const [status, setStatus] = useState(filters.status ?? "all");
 
@@ -119,13 +116,18 @@ export default function Index({
                             Pediatric Dose Rules
                         </h1>
                         <p className="text-sm text-muted-foreground">
-                            Manage clinical dosing rules and their approval workflow.
+                            Manage clinical dosing rules and their approval
+                            workflow.
                         </p>
                     </div>
 
                     {permissions.create && (
                         <Button asChild>
-                            <Link href={route("admin.pediatric-dose-rules.create")}>
+                            <Link
+                                href={route(
+                                    "admin.pediatric-dose-rules.create",
+                                )}
+                            >
                                 <Plus className="mr-2 h-4 w-4" />
                                 Create Rule
                             </Link>
@@ -161,9 +163,12 @@ export default function Index({
                                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                                 <Input
                                     value={search}
-                                    onChange={(event) => setSearch(event.target.value)}
+                                    onChange={(event) =>
+                                        setSearch(event.target.value)
+                                    }
                                     onKeyDown={(event) => {
-                                        if (event.key === "Enter") applyFilters();
+                                        if (event.key === "Enter")
+                                            applyFilters();
                                     }}
                                     placeholder="Search medicine, formulation, indication..."
                                     className="pl-9"
@@ -175,13 +180,19 @@ export default function Index({
                                     <SelectValue placeholder="Filter status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All statuses</SelectItem>
+                                    <SelectItem value="all">
+                                        All statuses
+                                    </SelectItem>
                                     <SelectItem value="draft">Draft</SelectItem>
                                     <SelectItem value="pending_review">
                                         Pending review
                                     </SelectItem>
-                                    <SelectItem value="approved">Approved</SelectItem>
-                                    <SelectItem value="rejected">Rejected</SelectItem>
+                                    <SelectItem value="approved">
+                                        Approved
+                                    </SelectItem>
+                                    <SelectItem value="rejected">
+                                        Rejected
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
 
@@ -218,18 +229,29 @@ export default function Index({
                                         rules.data.map((rule) => (
                                             <TableRow key={rule.id}>
                                                 <TableCell className="font-medium">
-                                                    {rule.medicine?.brand_name ??
+                                                    {rule.medicine
+                                                        ?.brand_name ??
                                                         `Medicine #${rule.medicine_id}`}
                                                 </TableCell>
-                                                <TableCell>{rule.formulation}</TableCell>
-                                                <TableCell>{rule.indication}</TableCell>
                                                 <TableCell>
-                                                    <RuleStatusBadge status={rule.status} />
+                                                    {rule.formulation}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {rule.is_active ? "Yes" : "No"}
+                                                    {rule.indication}
                                                 </TableCell>
-                                                <TableCell>v{rule.version}</TableCell>
+                                                <TableCell>
+                                                    <RuleStatusBadge
+                                                        status={rule.status}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    {rule.is_active
+                                                        ? "Yes"
+                                                        : "No"}
+                                                </TableCell>
+                                                <TableCell>
+                                                    v{rule.version}
+                                                </TableCell>
                                                 <TableCell>
                                                     <div className="flex justify-end gap-2">
                                                         <Button
@@ -248,29 +270,32 @@ export default function Index({
                                                             </Link>
                                                         </Button>
 
-                                                        {["draft", "rejected"].includes(
+                                                        {[
+                                                            "draft",
+                                                            "rejected",
+                                                        ].includes(
                                                             rule.status,
                                                         ) && (
-                                                                <Button
-                                                                    asChild
-                                                                    size="icon"
-                                                                    variant="outline"
-                                                                    aria-label="Edit rule"
+                                                            <Button
+                                                                asChild
+                                                                size="icon"
+                                                                variant="outline"
+                                                                aria-label="Edit rule"
+                                                            >
+                                                                <Link
+                                                                    href={route(
+                                                                        "admin.pediatric-dose-rules.edit",
+                                                                        rule.id,
+                                                                    )}
                                                                 >
-                                                                    <Link
-                                                                        href={route(
-                                                                            "admin.pediatric-dose-rules.edit",
-                                                                            rule.id,
-                                                                        )}
-                                                                    >
-                                                                        <Pencil className="h-4 w-4" />
-                                                                    </Link>
-                                                                </Button>
-                                                            )}
+                                                                    <Pencil className="h-4 w-4" />
+                                                                </Link>
+                                                            </Button>
+                                                        )}
 
                                                         {permissions.approve &&
                                                             rule.status ===
-                                                            "pending_review" && (
+                                                                "pending_review" && (
                                                                 <Button
                                                                     asChild
                                                                     size="icon"
@@ -307,7 +332,9 @@ export default function Index({
                                     <Button
                                         key={`${link.label}-${index}`}
                                         size="sm"
-                                        variant={link.active ? "default" : "outline"}
+                                        variant={
+                                            link.active ? "default" : "outline"
+                                        }
                                         disabled={!link.url}
                                         onClick={() => {
                                             if (link.url) {

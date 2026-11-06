@@ -1,31 +1,33 @@
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
-import Form from './Form';
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, useForm } from "@inertiajs/react";
+import { FormEventHandler } from "react";
+import Form from "./Form";
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Create Medical Specialty', href: '/medical-specialties/create' }];
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: "Create Medical Specialty", href: "/medical-specialties/create" },
+];
 
 type SpecialtyForm = {
     name: string;
     icon: string;
     description: string;
-    parent_id?: number | '';
+    parent_id?: number | "";
     is_surgical: boolean;
 };
 
 export default function Create({ parents }) {
     const { data, setData, post, processing, errors } = useForm<SpecialtyForm>({
-        name: '',
-        icon: '',
-        description: '',
+        name: "",
+        icon: "",
+        description: "",
         parent_id: null,
         is_surgical: false,
     });
 
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('medical-specialties.store'));
+        post(route("medical-specialties.store"));
     };
 
     return (

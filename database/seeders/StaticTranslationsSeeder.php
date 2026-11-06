@@ -194,6 +194,82 @@ class StaticTranslationsSeeder extends Seeder
                 'en' => 'Delete account',
                 'bn' => 'অ্যাকাউন্ট মুছে ফেলুন',
             ],
+            'system_settings' => [
+                'en' => 'System Settings',
+                'bn' => 'সিস্টেম সেটিংস',
+            ],
+            'general_settings' => [
+                'en' => 'General Settings',
+                'bn' => 'সাধারণ সেটিংস',
+            ],
+            'site_identity' => [
+                'en' => 'Site Identity',
+                'bn' => 'সাইট পরিচিতি',
+            ],
+            'color_settings' => [
+                'en' => 'Color Settings',
+                'bn' => 'রঙের সেটিংস',
+            ],
+            'system_configuration' => [
+                'en' => 'System Configuration',
+                'bn' => 'সিস্টেম কনফিগারেশন',
+            ],
+            'notification_settings' => [
+                'en' => 'Notification Setting',
+                'bn' => 'নোটিফিকেশন সেটিং',
+            ],
+            'seo_configuration' => [
+                'en' => 'SEO Configuration',
+                'bn' => 'এসইও কনফিগারেশন',
+            ],
+            'configure' => [
+                'en' => 'Configure',
+                'bn' => 'কনফিগার করুন',
+            ],
+            'here' => [
+                'en' => 'here',
+                'bn' => 'এখানে',
+            ],
+            'site_title' => [
+                'en' => 'Site Title',
+                'bn' => 'সাইট টাইটেল',
+            ],
+            'currency' => [
+                'en' => 'Currency',
+                'bn' => 'মুদ্রা',
+            ],
+            'currency_symbol' => [
+                'en' => 'Currency Symbol',
+                'bn' => 'মুদ্রা সংকেত',
+            ],
+            'currency_format' => [
+                'en' => 'Currency Format',
+                'bn' => 'মুদ্রা ফরম্যাট',
+            ],
+            'timezone' => [
+                'en' => 'Timezone',
+                'bn' => 'টাইমজোন',
+            ],
+            'mobile_country_code' => [
+                'en' => 'Mobile Country Code',
+                'bn' => 'মোবাইল কাউন্ট্রি কোড',
+            ],
+            'records_per_page' => [
+                'en' => 'Records Per Page',
+                'bn' => 'প্রতি পৃষ্ঠায় রেকর্ডস',
+            ],
+            'mobile' => [
+                'en' => 'Mobile',
+                'bn' => 'মোবাইল',
+            ],
+            'email' => [
+                'en' => 'Email',
+                'bn' => 'ইমেইল',
+            ],
+            'site_address' => [
+                'en' => 'Site Address',
+                'bn' => 'সাইট ঠিকানা',
+            ],
         ];
 
         $now = now();

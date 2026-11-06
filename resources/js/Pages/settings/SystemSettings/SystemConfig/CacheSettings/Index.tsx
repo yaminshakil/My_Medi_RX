@@ -1,15 +1,15 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { RefreshCw } from 'lucide-react';
-import { useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, Link, usePage } from "@inertiajs/react";
+import { RefreshCw } from "lucide-react";
+import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Cache Settings',
-        href: '/admin/settings/system/cachesettings',
+        title: "Cache Settings",
+        href: "/admin/settings/system/cachesettings",
     },
 ];
 
@@ -27,29 +27,29 @@ export default function Index() {
 
     const settingsMenu = [
         {
-            title: 'Clear Route:Cache',
+            title: "Clear Route:Cache",
             icon: RefreshCw,
-            href: route('settings.system.routecachesettings.clear'),
+            href: route("settings.system.routecachesettings.clear"),
         },
         {
-            title: 'Clear View:Cache',
+            title: "Clear View:Cache",
             icon: RefreshCw,
-            href: route('settings.system.viewcachesettings.clear'),
+            href: route("settings.system.viewcachesettings.clear"),
         },
         {
-            title: 'Clear Config:Cache',
+            title: "Clear Config:Cache",
             icon: RefreshCw,
-            href: route('settings.system.configcachesettings.clear'),
+            href: route("settings.system.configcachesettings.clear"),
         },
         {
-            title: 'Clear Event:Cache',
+            title: "Clear Event:Cache",
             icon: RefreshCw,
-            href: route('settings.system.eventcachesettings.clear'),
+            href: route("settings.system.eventcachesettings.clear"),
         },
         {
-            title: 'Clear All Kind of Cache',
+            title: "Clear All Kind of Cache",
             icon: RefreshCw,
-            href: route('settings.system.allcachesettings.clear'),
+            href: route("settings.system.allcachesettings.clear"),
         },
     ];
 
@@ -65,10 +65,14 @@ export default function Index() {
                             <Card className="h-full cursor-pointer transition-all hover:shadow-lg">
                                 <CardHeader className="flex flex-row items-center gap-3">
                                     <Icon className="h-6 w-6 text-[var(--base-color)]" />
-                                    <CardTitle className="text-lg">{item.title}</CardTitle>
+                                    <CardTitle className="text-lg">
+                                        {item.title}
+                                    </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="text-sm text-gray-500">Cache {item.title.toLowerCase()} here.</p>
+                                    <p className="text-sm text-gray-500">
+                                        Cache {item.title.toLowerCase()} here.
+                                    </p>
                                 </CardContent>
                             </Card>
                         </Link>

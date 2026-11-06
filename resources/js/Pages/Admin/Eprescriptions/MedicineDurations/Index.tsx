@@ -1,23 +1,28 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import PageHeader from '@/Components/PageHeader';
-import { Pagination } from '@/Components/pagination';
-import Table from '@/Components/Table';
-import { Button } from '@/Components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/Components/ui/dialog';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Switch } from '@/Components/ui/switch';
-import AppLayout from '@/Layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import PageHeader from "@/Components/PageHeader";
+import { Pagination } from "@/Components/pagination";
+import Table from "@/Components/Table";
+import { Button } from "@/Components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/Components/ui/dialog";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { Switch } from "@/Components/ui/switch";
+import AppLayout from "@/Layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Medicine Durations',
-        href: '/medicine-durations',
+        title: "Medicine Durations",
+        href: "/medicine-durations",
     },
 ];
 
@@ -26,18 +31,18 @@ export default function Index() {
     const [isOpen, setIsOpen] = useState(false);
     const [editId, setEditId] = useState(null);
     const [confirmDelete, setConfirmDelete] = useState(null);
-    const canCreate = useCan('Create');
-    const canEdit = useCan('Edit');
-    const canDelete = useCan('Delete');
+    const canCreate = useCan("Create");
+    const canEdit = useCan("Edit");
+    const canDelete = useCan("Delete");
 
     const { data, setData, post, put, reset, errors, processing } = useForm({
-        name: '',
-        days: '',
+        name: "",
+        days: "",
         is_active: true,
     });
 
     const { data: searchData, setData: setSearchData } = useForm({
-        search: filters?.search || '',
+        search: filters?.search || "",
     });
 
     const openCreateModal = () => {
@@ -49,11 +54,11 @@ export default function Index() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (editId) {
-            put(route('medicine-durations.update', editId), {
+            put(route("medicine-durations.update", editId), {
                 onSuccess: () => setIsOpen(false),
             });
         } else {
-            post(route('medicine-durations.store'), {
+            post(route("medicine-durations.store"), {
                 onSuccess: () => setIsOpen(false),
             });
         }
@@ -69,18 +74,26 @@ export default function Index() {
     }, [flash]);
 
     const handlePerPageChange = (e) => {
-        router.get(route('medicine-durations.index'), { ...filters, per_page: e.target.value }, { preserveState: true });
+        router.get(
+            route("medicine-durations.index"),
+            { ...filters, per_page: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleSearch = (e) => {
-        setSearchData('search', e.target.value);
-        router.get(route('medicine-durations.index'), { ...filters, search: e.target.value }, { preserveState: true });
+        setSearchData("search", e.target.value);
+        router.get(
+            route("medicine-durations.index"),
+            { ...filters, search: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleReset = () => {
-        setSearchData('search', '');
+        setSearchData("search", "");
         router.get(
-            route('medicine-durations.index'),
+            route("medicine-durations.index"),
             {},
             {
                 preserveState: true,
@@ -92,7 +105,7 @@ export default function Index() {
     const handleEdit: FormEventHandler = (duration) => {
         setData({
             name: duration.name,
-            days: duration.days ?? '',
+            days: duration.days ?? "",
             is_active: duration.is_active,
         });
         setEditId(duration.id);
@@ -104,21 +117,25 @@ export default function Index() {
     };
 
     const handleConfirmDelete = (id) => {
-        router.delete(route('medicine-durations.destroy', id), {
+        router.delete(route("medicine-durations.destroy", id), {
             onSuccess: () => setConfirmDelete(null),
         });
     };
 
     const columns = [
-        { key: '#', label: '#', render: (item) => item.id },
-        { key: 'name', label: 'Name' },
-        { key: 'days', label: 'Days' },
+        { key: "#", label: "#", render: (item) => item.id },
+        { key: "name", label: "Name" },
+        { key: "days", label: "Days" },
         {
-            key: 'is_active',
-            label: 'Status',
-            className: 'text-center',
+            key: "is_active",
+            label: "Status",
+            className: "text-center",
             render: (item) => (
-                <span className={`badge ${item.is_active ? 'badge--success' : 'badge--warning'}`}>{item.is_active ? 'Active' : 'Inactive'}</span>
+                <span
+                    className={`badge ${item.is_active ? "badge--success" : "badge--warning"}`}
+                >
+                    {item.is_active ? "Active" : "Inactive"}
+                </span>
             ),
         },
     ];
@@ -170,7 +187,9 @@ export default function Index() {
                 <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogContent aria-describedby="dialog-description">
                         <DialogHeader>
-                            <DialogTitle>{editId ? 'Edit Duration' : 'Add New Duration'}</DialogTitle>
+                            <DialogTitle>
+                                {editId ? "Edit Duration" : "Add New Duration"}
+                            </DialogTitle>
                         </DialogHeader>
                         <form
                             onSubmit={handleSubmit}
@@ -180,8 +199,19 @@ export default function Index() {
                         >
                             <div>
                                 <Label htmlFor="name">Name</Label>
-                                <Input id="name" value={data.name} onChange={(e) => setData('name', e.target.value)} placeholder="e.g. 5 days" />
-                                {errors.name && <div className="mt-1 text-sm text-red-600">{errors.name}</div>}
+                                <Input
+                                    id="name"
+                                    value={data.name}
+                                    onChange={(e) =>
+                                        setData("name", e.target.value)
+                                    }
+                                    placeholder="e.g. 5 days"
+                                />
+                                {errors.name && (
+                                    <div className="mt-1 text-sm text-red-600">
+                                        {errors.name}
+                                    </div>
+                                )}
                             </div>
 
                             <div>
@@ -190,27 +220,38 @@ export default function Index() {
                                     id="days"
                                     type="number"
                                     value={data.days}
-                                    onChange={(e) => setData('days', e.target.value)}
+                                    onChange={(e) =>
+                                        setData("days", e.target.value)
+                                    }
                                     placeholder="e.g. 5"
                                 />
-                                {errors.days && <div className="mt-1 text-sm text-red-600">{errors.days}</div>}
+                                {errors.days && (
+                                    <div className="mt-1 text-sm text-red-600">
+                                        {errors.days}
+                                    </div>
+                                )}
                             </div>
 
                             <div className="flex items-center space-x-2">
                                 <Switch
                                     className="data-[state=checked]:bg-[var(--btn-base-color)]"
                                     checked={data.is_active}
-                                    onCheckedChange={(val) => setData('is_active', val)}
+                                    onCheckedChange={(val) =>
+                                        setData("is_active", val)
+                                    }
                                 />
                                 <Label>Active</Label>
                             </div>
 
                             <div className="flex justify-end space-x-2 pt-3">
-                                <Button type="button" onClick={() => setIsOpen(false)}>
+                                <Button
+                                    type="button"
+                                    onClick={() => setIsOpen(false)}
+                                >
                                     Cancel
                                 </Button>
                                 <Button type="submit" disabled={processing}>
-                                    {editId ? 'Update' : 'Create'}
+                                    {editId ? "Update" : "Create"}
                                 </Button>
                             </div>
                         </form>

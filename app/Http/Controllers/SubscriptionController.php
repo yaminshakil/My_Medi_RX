@@ -6,18 +6,15 @@ use App\Models\Subscription;
 use App\Models\SubscriptionPayment;
 use App\Models\SubscriptionPlan;
 use App\Services\SslCommerzService;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class SubscriptionController extends Controller
 {
-    public function __construct(private SslCommerzService $gateway)
-    {
-    }
+    public function __construct(private SslCommerzService $gateway) {}
 
     public function index(Request $request)
     {

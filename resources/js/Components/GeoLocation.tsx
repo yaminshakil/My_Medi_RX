@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import {
     Select,
@@ -7,9 +7,9 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/Components/ui/select';
+} from "@/Components/ui/select";
 
-import { Label } from '@/Components/ui/label';
+import { Label } from "@/Components/ui/label";
 
 interface LocationItem {
     id: number;
@@ -51,11 +51,11 @@ export default function GeoLocation({
             try {
                 setLoadingDivisions(true);
 
-                const response = await axios.get('/divisions');
+                const response = await axios.get("/divisions");
 
                 setDivisions(response.data);
             } catch (error) {
-                console.error('Failed to load divisions:', error);
+                console.error("Failed to load divisions:", error);
             } finally {
                 setLoadingDivisions(false);
             }
@@ -79,12 +79,12 @@ export default function GeoLocation({
                 setLoadingDistricts(true);
 
                 const response = await axios.get(
-                    `/districts/${data.division_id}`
+                    `/districts/${data.division_id}`,
                 );
 
                 setDistricts(response.data);
             } catch (error) {
-                console.error('Failed to load districts:', error);
+                console.error("Failed to load districts:", error);
                 setDistricts([]);
             } finally {
                 setLoadingDistricts(false);
@@ -107,13 +107,11 @@ export default function GeoLocation({
             try {
                 setLoadingThanas(true);
 
-                const response = await axios.get(
-                    `/thanas/${data.district_id}`
-                );
+                const response = await axios.get(`/thanas/${data.district_id}`);
 
                 setThanas(response.data);
             } catch (error) {
-                console.error('Failed to load thanas:', error);
+                console.error("Failed to load thanas:", error);
                 setThanas([]);
             } finally {
                 setLoadingThanas(false);
@@ -129,11 +127,11 @@ export default function GeoLocation({
     const handleDivisionChange = (value: string) => {
         const divisionId = Number(value);
 
-        setData('division_id', divisionId);
+        setData("division_id", divisionId);
 
         // Reset dependent fields
-        setData('district_id', null);
-        setData('thana_id', null);
+        setData("district_id", null);
+        setData("thana_id", null);
 
         setDistricts([]);
         setThanas([]);
@@ -145,10 +143,10 @@ export default function GeoLocation({
     const handleDistrictChange = (value: string) => {
         const districtId = Number(value);
 
-        setData('district_id', districtId);
+        setData("district_id", districtId);
 
         // Reset dependent field
-        setData('thana_id', null);
+        setData("thana_id", null);
 
         setThanas([]);
     };
@@ -157,7 +155,7 @@ export default function GeoLocation({
      * Thana change
      */
     const handleThanaChange = (value: string) => {
-        setData('thana_id', Number(value));
+        setData("thana_id", Number(value));
     };
 
     return (
@@ -167,15 +165,15 @@ export default function GeoLocation({
                 <Label htmlFor="division">Division</Label>
 
                 <Select
-                    value={data.division_id?.toString() ?? ''}
+                    value={data.division_id?.toString() ?? ""}
                     onValueChange={handleDivisionChange}
                 >
                     <SelectTrigger id="division" className="w-full">
                         <SelectValue
                             placeholder={
                                 loadingDivisions
-                                    ? 'Loading divisions...'
-                                    : 'Select Division'
+                                    ? "Loading divisions..."
+                                    : "Select Division"
                             }
                         />
                     </SelectTrigger>
@@ -204,7 +202,7 @@ export default function GeoLocation({
                 <Label htmlFor="district">District</Label>
 
                 <Select
-                    value={data.district_id?.toString() ?? ''}
+                    value={data.district_id?.toString() ?? ""}
                     onValueChange={handleDistrictChange}
                     disabled={!data.division_id || loadingDistricts}
                 >
@@ -212,8 +210,8 @@ export default function GeoLocation({
                         <SelectValue
                             placeholder={
                                 loadingDistricts
-                                    ? 'Loading districts...'
-                                    : 'Select District'
+                                    ? "Loading districts..."
+                                    : "Select District"
                             }
                         />
                     </SelectTrigger>
@@ -242,7 +240,7 @@ export default function GeoLocation({
                 <Label htmlFor="thana">PS. (Thana)</Label>
 
                 <Select
-                    value={data.thana_id?.toString() ?? ''}
+                    value={data.thana_id?.toString() ?? ""}
                     onValueChange={handleThanaChange}
                     disabled={!data.district_id || loadingThanas}
                 >
@@ -250,8 +248,8 @@ export default function GeoLocation({
                         <SelectValue
                             placeholder={
                                 loadingThanas
-                                    ? 'Loading thanas...'
-                                    : 'Select Thana'
+                                    ? "Loading thanas..."
+                                    : "Select Thana"
                             }
                         />
                     </SelectTrigger>

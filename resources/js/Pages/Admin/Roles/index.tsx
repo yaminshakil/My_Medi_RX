@@ -1,19 +1,19 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import { AdminPageHeader } from '@/Components/AdminPageHeader';
-import PageHeader from '@/Components/PageHeader';
-import { Pagination } from '@/Components/pagination';
-import Table from '@/Components/Table';
-import AppLayout from '@/Layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import { AdminPageHeader } from "@/Components/AdminPageHeader";
+import PageHeader from "@/Components/PageHeader";
+import { Pagination } from "@/Components/pagination";
+import Table from "@/Components/Table";
+import AppLayout from "@/Layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Roles',
-        href: '/roles',
+        title: "Roles",
+        href: "/roles",
     },
 ];
 
@@ -21,28 +21,28 @@ export default function Index({ roles }) {
     const { flash, filters } = usePage().props;
     const [showConfirm, setShowConfirm] = useState(false);
     const [role, setRole] = useState(false);
-    const canCreate = useCan('Create');
-    const canEdit = useCan('Edit');
-    const canDelete = useCan('Delete');
+    const canCreate = useCan("Create");
+    const canEdit = useCan("Edit");
+    const canDelete = useCan("Delete");
 
     const { data, setData } = useForm({
-        search: filters?.search || '',
+        search: filters?.search || "",
     });
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setData('search', value);
+        setData("search", value);
         const queryString = value ? { search: value } : {};
-        router.get(route('roles.index'), queryString, {
+        router.get(route("roles.index"), queryString, {
             preserveState: true,
             preserveScroll: true,
         });
     };
 
     const handleReset = () => {
-        setData('search', '');
+        setData("search", "");
         router.get(
-            route('roles.index'),
+            route("roles.index"),
             {},
             {
                 preserveState: true,
@@ -61,7 +61,7 @@ export default function Index({ roles }) {
     }, [flash]);
 
     const handleConfirm = () => {
-        router.delete(route('roles.destroy', role.id), {
+        router.delete(route("roles.destroy", role.id), {
             preserveScroll: true,
         });
         setShowConfirm(false);
@@ -72,11 +72,15 @@ export default function Index({ roles }) {
     };
 
     const handlePerPageChange = (e) => {
-        router.get(route('roles.index'), { ...filters, per_page: e.target.value }, { preserveState: true });
+        router.get(
+            route("roles.index"),
+            { ...filters, per_page: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleEdit: FormEventHandler = (item) => {
-        router.get(route('roles.edit', item.id));
+        router.get(route("roles.edit", item.id));
     };
 
     const handleDelete: FormEventHandler = (item) => {
@@ -85,20 +89,24 @@ export default function Index({ roles }) {
     };
 
     const columns = [
-        { key: '#', label: '#', render: (item) => item.id },
-        { key: 'name', label: 'Name' },
+        { key: "#", label: "#", render: (item) => item.id },
+        { key: "name", label: "Name" },
         {
-            key: 'permission',
-            label: 'Permissions',
-            className: 'text-center',
+            key: "permission",
+            label: "Permissions",
+            className: "text-center",
             render: (item) =>
-                item.permissions.map((permission) => <span className="mr-1 bg-green-100 text-xs font-medium text-green-800">{permission.name}</span>),
+                item.permissions.map((permission) => (
+                    <span className="mr-1 bg-green-100 text-xs font-medium text-green-800">
+                        {permission.name}
+                    </span>
+                )),
         },
-        { key: 'created_at', label: 'Created At' },
+        { key: "created_at", label: "Created At" },
     ];
 
     const handleCreate = () => {
-        router.visit(route('roles.create'));
+        router.visit(route("roles.create"));
     };
 
     return (

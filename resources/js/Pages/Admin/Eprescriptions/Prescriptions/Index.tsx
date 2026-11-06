@@ -1,20 +1,20 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import PageHeader from '@/Components/PageHeader';
-import { Pagination } from '@/Components/pagination';
-import Table from '@/Components/Table';
-import AppLayout from '@/Layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { Printer } from 'lucide-react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import PageHeader from "@/Components/PageHeader";
+import { Pagination } from "@/Components/pagination";
+import Table from "@/Components/Table";
+import AppLayout from "@/Layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { Printer } from "lucide-react";
+import { FormEventHandler, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import PrescriptionQrCode from "@/Components/prescription-qr-code";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Prescriptions',
-        href: '/prescriptions',
+        title: "Prescriptions",
+        href: "/prescriptions",
     },
 ];
 
@@ -22,21 +22,25 @@ export default function Index(props) {
     const { flash, filters } = usePage().props;
     const [showConfirm, setShowConfirm] = useState(false);
     const [prescription, setPrescription] = useState(false);
-    const canCreate = useCan('Create');
-    const canDelete = useCan('Delete');
+    const canCreate = useCan("Create");
+    const canDelete = useCan("Delete");
 
     const { data, setData } = useForm({
-        search: filters?.search || '',
+        search: filters?.search || "",
     });
     const handleSearch = (e) => {
-        setData('search', e.target.value);
-        router.get(route('prescriptions.index'), { ...filters, search: e.target.value }, { preserveState: true });
+        setData("search", e.target.value);
+        router.get(
+            route("prescriptions.index"),
+            { ...filters, search: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleReset = () => {
-        setData('search', '');
+        setData("search", "");
         router.get(
-            route('prescriptions.index'),
+            route("prescriptions.index"),
             {},
             {
                 preserveState: true,
@@ -46,11 +50,15 @@ export default function Index(props) {
     };
 
     const handlePerPageChange = (e) => {
-        router.get(route('prescriptions.index'), { ...filters, perPage: e.target.value }, { preserveState: true });
+        router.get(
+            route("prescriptions.index"),
+            { ...filters, perPage: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleConfirm = () => {
-        router.delete(route('prescriptions.destroy', prescription.id), {
+        router.delete(route("prescriptions.destroy", prescription.id), {
             preserveScroll: true,
             onSuccess: () => {
                 setShowConfirm(false);
@@ -77,10 +85,14 @@ export default function Index(props) {
     };
 
     const columns = [
-        { key: 'prescription_number', label: 'Prescription No', render: (item) => item.prescription_number },
         {
-            key: 'patient',
-            label: 'Patient',
+            key: "prescription_number",
+            label: "Prescription No",
+            render: (item) => item.prescription_number,
+        },
+        {
+            key: "patient",
+            label: "Patient",
             render: (item) => (
                 <div>
                     {item.patient?.name}
@@ -95,37 +107,51 @@ export default function Index(props) {
                 </div>
             ),
         },
-        { key: 'doctor', label: 'Doctor', render: (item) => item.doctor?.name || '—' },
-        { key: 'date', label: 'Date', render: (item) => item.created_at || '—' },
         {
-            key: 'status',
-            label: 'Status',
-            className: 'text-center',
-            render: (item) => <span className={`badge ${item.status ? 'badge--success' : 'badge--warning'}`}>{item.status}</span>,
+            key: "doctor",
+            label: "Doctor",
+            render: (item) => item.doctor?.name || "—",
+        },
+        {
+            key: "date",
+            label: "Date",
+            render: (item) => item.created_at || "—",
+        },
+        {
+            key: "status",
+            label: "Status",
+            className: "text-center",
+            render: (item) => (
+                <span
+                    className={`badge ${item.status ? "badge--success" : "badge--warning"}`}
+                >
+                    {item.status}
+                </span>
+            ),
         },
     ];
 
     const PrintPrescription = ({ prescription }) => {
         return (
             <>
-            <a
-                target="_blank"
-                href={route('eprescription.pdf', prescription.uuid)}
-                className="rounded-lg bg-[var(--btn-base-color)] p-3 text-white hover:bg-[var(--btn-base-hover-color)] hover:underline"
-            >
-                <Printer size={20} />
-            </a>
-            <PrescriptionQrCode
-            prescriptionId={prescription.uuid}
-            prescriptionNumber={prescription.prescription_number}
-            canGenerate={prescription.status === "issued"}
-        />
+                <a
+                    target="_blank"
+                    href={route("eprescription.pdf", prescription.uuid)}
+                    className="rounded-lg bg-[var(--btn-base-color)] p-3 text-white hover:bg-[var(--btn-base-hover-color)] hover:underline"
+                >
+                    <Printer size={20} />
+                </a>
+                <PrescriptionQrCode
+                    prescriptionId={prescription.uuid}
+                    prescriptionNumber={prescription.prescription_number}
+                    canGenerate={prescription.status === "issued"}
+                />
             </>
         );
     };
 
     const handleCreate = () => {
-        router.visit(route('prescriptions.saveandnew'));
+        router.visit(route("prescriptions.saveandnew"));
     };
 
     return (
@@ -154,7 +180,11 @@ export default function Index(props) {
                             canDelete={canDelete}
                             onDelete={handleDelete}
                             actionHeadClass="border p-4 w-24 text-center"
-                            renderActions={(prescription) => <PrintPrescription prescription={prescription} />}
+                            renderActions={(prescription) => (
+                                <PrintPrescription
+                                    prescription={prescription}
+                                />
+                            )}
                             emptyMessage="No Prescriptions found."
                         />
                         <div className="mt-4">

@@ -1,47 +1,58 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
-import { Bell, FileText, Globe, Image, Monitor, Palette, Settings } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, Link, usePage } from "@inertiajs/react";
+import {
+    Bell,
+    FileText,
+    Globe,
+    Image,
+    Monitor,
+    Palette,
+    Settings,
+} from "lucide-react";
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'System Settings',
-        href: '/system-setting',
-    },
-];
+
 
 export default function Index() {
+    const { translations } = usePage<AppPageProps>().props;
+    console.log(translations.common.system_settings);
+    const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: translations.common.system_settings,
+        href: "/system-setting",
+    },
+];
     const settingsMenu = [
         {
-            title: 'General Setting',
+            title: translations.common.general_settings,
             icon: Settings,
-            href: route('settings.system.general.edit'),
+            href: route("settings.system.general.edit"),
         },
         {
-            title: 'Site Identity',
+            title: translations.common.site_identity,
             icon: Image,
-            href: route('settings.system.site_identity.edit'),
+            href: route("settings.system.site_identity.edit"),
         },
         {
-            title: 'Color Settings',
+            title: translations.common.color_settings,
             icon: Palette,
-            href: route('settings.system.color.edit'),
+            href: route("settings.system.color.edit"),
         },
         {
-            title: 'System Configuration',
+            title: translations.common.system_configuration,
             icon: Monitor,
-            href: route('settings.system.systemconfig.index'),
+            href: route("settings.system.systemconfig.index"),
         },
         {
-            title: 'Notification Setting',
+            title: translations.common.notification_settings,
             icon: Bell,
-            href: route('settings.system.email-templates.index'),
+            href: route("settings.system.email-templates.index"),
         },
         {
-            title: 'SEO Configuration',
+            title: translations.common.seo_configuration,
             icon: Globe,
-            href: route('settings.system.seo.edit'),
+            href: route("settings.system.seo.edit"),
         },
     ];
 
@@ -56,10 +67,15 @@ export default function Index() {
                             <Card className="h-full cursor-pointer transition-all hover:shadow-lg">
                                 <CardHeader className="flex flex-row items-center gap-3">
                                     <Icon className="h-6 w-6 text-[var(--base-color)]" />
-                                    <CardTitle className="text-lg">{item.title}</CardTitle>
+                                    <CardTitle className="text-lg">
+                                        {item.title}
+                                    </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="text-sm text-gray-500">Configure {item.title.toLowerCase()} here.</p>
+                                    <p className="text-sm text-gray-500">
+                                        {translations.common.configure} {item.title.toLowerCase()}{" "}
+                                        {translations.common.here}.
+                                    </p>
                                 </CardContent>
                             </Card>
                         </Link>

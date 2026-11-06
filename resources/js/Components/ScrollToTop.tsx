@@ -1,8 +1,8 @@
-import { Button } from '@/Components/ui/button';
-import { ArrowUp } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Button } from "@/Components/ui/button";
+import { ArrowUp } from "lucide-react";
+import { useEffect, useState } from "react";
 
-export default function ScrollToTop({ behavior = 'auto' }) {
+export default function ScrollToTop({ behavior = "auto" }) {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
@@ -11,8 +11,8 @@ export default function ScrollToTop({ behavior = 'auto' }) {
             setVisible(window.scrollY > 300);
         };
 
-        window.addEventListener('scroll', toggleVisibility);
-        return () => window.removeEventListener('scroll', toggleVisibility);
+        window.addEventListener("scroll", toggleVisibility);
+        return () => window.removeEventListener("scroll", toggleVisibility);
     }, []);
 
     const scrollToTop = () => {
@@ -20,8 +20,14 @@ export default function ScrollToTop({ behavior = 'auto' }) {
     };
 
     return (
-        <div className={`fixed right-6 bottom-6 transition-opacity duration-300 ${visible ? 'opacity-100' : 'pointer-events-none opacity-0'}`}>
-            <Button size="icon" onClick={scrollToTop} className="cursor-pointer rounded-full shadow-lg hover:shadow-xl">
+        <div
+            className={`fixed right-6 bottom-6 transition-opacity duration-300 ${visible ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        >
+            <Button
+                size="icon"
+                onClick={scrollToTop}
+                className="cursor-pointer rounded-full shadow-lg hover:shadow-xl"
+            >
                 <ArrowUp className="h-5 w-5" />
             </Button>
         </div>

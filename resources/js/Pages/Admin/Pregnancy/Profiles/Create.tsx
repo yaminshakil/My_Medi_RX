@@ -1,9 +1,8 @@
-
 import { Head, Link } from "@inertiajs/react";
-import AppLayout from '@/Layouts/app-layout';
+import AppLayout from "@/Layouts/app-layout";
 import { Button } from "@/Components/ui/button";
 import ProfileForm from "./Form";
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem } from "@/types";
 
 type Props = {
     patients: {
@@ -14,7 +13,12 @@ type Props = {
 };
 
 export default function Create({ patients }: Props) {
-    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Create Pregnancy Profile', href: '/admin/pregnancy/profiles' }];
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: "Create Pregnancy Profile",
+            href: "/admin/pregnancy/profiles",
+        },
+    ];
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Create Pregnancy Profile" />
@@ -22,11 +26,7 @@ export default function Create({ patients }: Props) {
             <div className="space-y-6 p-6">
                 <div>
                     <Button variant="outline" asChild>
-                        <Link
-                            href={route(
-                                "admin.pregnancy.profiles.index"
-                            )}
-                        >
+                        <Link href={route("admin.pregnancy.profiles.index")}>
                             Back to Profiles
                         </Link>
                     </Button>

@@ -1,30 +1,32 @@
-import AddPatient from '@/components/AddPatient';
-import AddVital from '@/components/AddVital';
-import { CommonModal } from '@/Components/CommonModal';
-import { ConfirmDialog } from '@/components/ConfirmDialog';
-import GynaeHistoryForm from '@/components/GynaeHistoryForm';
-import GynaeHistorySidebar from '@/components/GynaeHistorySidebar';
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/react';
-import axios from 'axios';
-import { History, LoaderCircle, PlusIcon, X } from 'lucide-react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import DateTimePicker from 'react-datetime-picker';
-import { ToastContainer, toast } from 'react-toastify';
-import AddMedicine from './AddMedicine';
-import Footer from './Footer';
-import Header from './Header';
-import InstructionSelector from './InstructionSelector';
-import MedicationsList from './MedicationsList';
-import PatientInfo from './PatientInfo';
+import AddPatient from "@/components/AddPatient";
+import AddVital from "@/components/AddVital";
+import { CommonModal } from "@/Components/CommonModal";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import GynaeHistoryForm from "@/components/GynaeHistoryForm";
+import GynaeHistorySidebar from "@/components/GynaeHistorySidebar";
+import InputError from "@/components/input-error";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import AppLayout from "@/layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, useForm, usePage } from "@inertiajs/react";
+import axios from "axios";
+import { History, LoaderCircle, PlusIcon, X } from "lucide-react";
+import { FormEventHandler, useEffect, useState } from "react";
+import DateTimePicker from "react-datetime-picker";
+import { ToastContainer, toast } from "react-toastify";
+import AddMedicine from "./AddMedicine";
+import Footer from "./Footer";
+import Header from "./Header";
+import InstructionSelector from "./InstructionSelector";
+import MedicationsList from "./MedicationsList";
+import PatientInfo from "./PatientInfo";
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Create Prescription', href: '/prescriptions' }];
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: "Create Prescription", href: "/prescriptions" },
+];
 
 export default function Create(props) {
     const { flash } = usePage().props;
@@ -38,49 +40,49 @@ export default function Create(props) {
     const [selectedInstructions, setSelectedInstructions] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
     const [editingMedication, setEditingMedication] = useState({
-        type: '',
+        type: "",
         medicine_id: null,
-        brand_name: '',
-        strength: '',
-        dosage: '',
-        duration: '',
-        advice: '',
-        meal_time: '',
+        brand_name: "",
+        strength: "",
+        dosage: "",
+        duration: "",
+        advice: "",
+        meal_time: "",
     });
 
     const [showAddGynaeHiModal, setShowAddGynaeHiModal] = useState(false);
     const [loadingButton, setLoadingButton] = useState(null); // 'saveNew' | 'saveComplete' | null
 
     const { data, setData, post, errors } = useForm({
-        patient_id: '',
-        followup_date: '',
-        diagnosis: '',
-        symptoms: [{ name: '' }],
+        patient_id: "",
+        followup_date: "",
+        diagnosis: "",
+        symptoms: [{ name: "" }],
         medications: [],
-        vital_id: '',
-        instructions: '',
-        follow_up_advice: '',
+        vital_id: "",
+        instructions: "",
+        follow_up_advice: "",
         onexaminations: [],
         investigations: [],
-        status: 'issued',
-        appointment_id: '',
+        status: "issued",
+        appointment_id: "",
         gynae_history: {
-            marital_status: '',
-            marriage_duration: '',
-            consanguinity: '',
-            menarche_age: '',
-            lmp: '',
-            cycle: '',
-            flow: '',
+            marital_status: "",
+            marriage_duration: "",
+            consanguinity: "",
+            menarche_age: "",
+            lmp: "",
+            cycle: "",
+            flow: "",
             dysmenorrhea: false,
             contraceptive_use: false,
-            gravida: '',
-            para: '',
-            abortion: '',
-            living_children: '',
-            edd: '',
-            anc: '',
-            other_history: '',
+            gravida: "",
+            para: "",
+            abortion: "",
+            living_children: "",
+            edd: "",
+            anc: "",
+            other_history: "",
         },
     });
 
@@ -89,24 +91,29 @@ export default function Create(props) {
         setData: setVitalData,
         post: postVital,
     } = useForm({
-        patient_id: '',
-        blood_pressure: '',
-        heart_rate: '',
-        temperature: '',
-        respiratory_rate: '',
-        oxygen_saturation: '',
-        weight: '',
-        height: '',
-        bmi: '',
-        notes: '',
+        patient_id: "",
+        blood_pressure: "",
+        heart_rate: "",
+        temperature: "",
+        respiratory_rate: "",
+        oxygen_saturation: "",
+        weight: "",
+        height: "",
+        bmi: "",
+        notes: "",
     });
 
     const onHandleVitalChange = (event) => {
-        setVitalData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
+        setVitalData(
+            event.target.name,
+            event.target.type === "checkbox"
+                ? event.target.checked
+                : event.target.value,
+        );
     };
 
     const handleAddvital = () => {
-        postVital(route('vitals.store'), {
+        postVital(route("vitals.store"), {
             preserveScroll: true,
             onSuccess: () => {
                 fetchPatients();
@@ -129,23 +136,28 @@ export default function Create(props) {
         post: postPatient,
         errors: errorsPateint,
     } = useForm({
-        name: '',
-        phone: '',
-        email: '',
-        date_of_birth: '',
-        address: '',
-        city: '',
-        gender: '',
-        blood_group: '',
-        marital_status: '',
+        name: "",
+        phone: "",
+        email: "",
+        date_of_birth: "",
+        address: "",
+        city: "",
+        gender: "",
+        blood_group: "",
+        marital_status: "",
     });
 
     const onHandlePatientChange = (event) => {
-        setPatientData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
+        setPatientData(
+            event.target.name,
+            event.target.type === "checkbox"
+                ? event.target.checked
+                : event.target.value,
+        );
     };
 
     const handleAddPatient = () => {
-        postPatient(route('prescriptions.createpatient'), {
+        postPatient(route("prescriptions.createpatient"), {
             onSuccess: () => {
                 setShowAddPatientModal(false);
                 fetchPatients();
@@ -162,14 +174,21 @@ export default function Create(props) {
 
     useEffect(() => {
         if (selectedPatient?.appointment) {
-            setData((prev) => ({ ...prev, appointment_id: selectedPatient?.appointment.id, vital_id: selectedPatient?.vital?.id }));
+            setData((prev) => ({
+                ...prev,
+                appointment_id: selectedPatient?.appointment.id,
+                vital_id: selectedPatient?.vital?.id,
+            }));
         }
-        console.log('selectedPatient?.appointment', selectedPatient?.appointment);
+        console.log(
+            "selectedPatient?.appointment",
+            selectedPatient?.appointment,
+        );
     }, [selectedPatient]);
 
     const fetchPatients = () => {
         axios
-            .get('/admin/eprescriptions/get-patients')
+            .get("/admin/eprescriptions/get-patients")
             .then((res) => setPatients(res.data))
             .catch(console.error);
     };
@@ -181,18 +200,23 @@ export default function Create(props) {
     // Prescription
 
     function Content({ content }) {
-        return <div className="ql-editor" dangerouslySetInnerHTML={{ __html: content }} />;
+        return (
+            <div
+                className="ql-editor"
+                dangerouslySetInnerHTML={{ __html: content }}
+            />
+        );
     }
 
     const addComplaint = () => {
-        setData('symptoms', [...data.symptoms, { name: '' }]);
+        setData("symptoms", [...data.symptoms, { name: "" }]);
     };
 
     const updateComplaient = (index, field, value) => {
         const symptoms = [...data.symptoms];
         symptoms[index][field] = value;
-        setData('symptoms', symptoms);
-        if (value && value.trim() !== '') {
+        setData("symptoms", symptoms);
+        if (value && value.trim() !== "") {
             setLocalErrors((prev) => ({ ...prev, symptoms: null }));
         }
     };
@@ -200,34 +224,43 @@ export default function Create(props) {
     const handleSymptomRemove = (index) => {
         const list = [...data.symptoms];
         list.splice(index, 1);
-        setData('symptoms', list);
+        setData("symptoms", list);
     };
 
     const handleMedicineRemove = (index) => {
         const list = [...data.medications];
         list.splice(index, 1);
-        setData('medications', list);
+        setData("medications", list);
     };
 
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        setLoadingButton('saveComplete');
-        if (!data.patient_id || !data.medications.length || !data.appointment_id) {
+        setLoadingButton("saveComplete");
+        if (
+            !data.patient_id ||
+            !data.medications.length ||
+            !data.appointment_id
+        ) {
             setShowConfirm(true);
             return true;
         }
 
         // Check if symptoms are empty or have blank values
-        const hasComplaint = Array.isArray(data.symptoms) && data.symptoms.some((s) => s.name && s.name.trim() !== '');
+        const hasComplaint =
+            Array.isArray(data.symptoms) &&
+            data.symptoms.some((s) => s.name && s.name.trim() !== "");
 
         if (!hasComplaint) {
-            setLocalErrors((prev) => ({ ...prev, symptoms: 'Chief Complaint is required.' }));
+            setLocalErrors((prev) => ({
+                ...prev,
+                symptoms: "Chief Complaint is required.",
+            }));
             setLoadingButton(null);
             return;
         }
 
         setLocalErrors((prev) => ({ ...prev, symptoms: null }));
-        post(route('prescriptions.store'), {
+        post(route("prescriptions.store"), {
             onSuccess: () => setLoadingButton(null),
             onError: () => setLoadingButton(null),
             onFinish: () => setLoadingButton(null),
@@ -236,8 +269,13 @@ export default function Create(props) {
 
     // Load medicines
     useEffect(() => {
-        axios.get('/admin/get-medicines').then((res) => {
-            const options = res.data.map((m) => ({ value: m.id, label: m.brand_name + ' ' + m.strength, strength: m.strength, type: m.type }));
+        axios.get("/admin/get-medicines").then((res) => {
+            const options = res.data.map((m) => ({
+                value: m.id,
+                label: m.brand_name + " " + m.strength,
+                strength: m.strength,
+                type: m.type,
+            }));
             setMedicines(options);
         });
     }, []);
@@ -245,108 +283,125 @@ export default function Create(props) {
     // On Examinations
 
     const onExamination = () => {
-        setData('onexaminations', [...data.onexaminations, { name: '' }]);
+        setData("onexaminations", [...data.onexaminations, { name: "" }]);
     };
 
     const updateOnExamination = (index, field, value) => {
         const onexaminations = [...data.onexaminations];
         onexaminations[index][field] = value;
-        setData('onexaminations', onexaminations);
+        setData("onexaminations", onexaminations);
     };
 
     const handleOnExamination = (index) => {
         const list = [...data.onexaminations];
         list.splice(index, 1);
-        setData('onexaminations', list);
+        setData("onexaminations", list);
     };
 
     // On Investigations
 
     const addInvestigation = () => {
-        setData('investigations', [...data.investigations, { name: '' }]);
+        setData("investigations", [...data.investigations, { name: "" }]);
     };
 
     const updateInvestigation = (index, field, value) => {
         const investigations = [...data.investigations];
         investigations[index][field] = value;
-        setData('investigations', investigations);
+        setData("investigations", investigations);
     };
 
     const handleInvestigation = (index) => {
         const list = [...data.investigations];
         list.splice(index, 1);
-        setData('investigations', list);
+        setData("investigations", list);
     };
 
     const onChangeDate = (date) => {
         if (date) {
             // Create UTC date at midnight
-            const utcMidnight = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+            const utcMidnight = new Date(
+                Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+            );
 
-            setData('followup_date', utcMidnight);
+            setData("followup_date", utcMidnight);
         }
     };
 
     const quickAppointment = (e) => {
         e.preventDefault();
-        post(route('prescriptions.saveandnew.quickAppointment', data.patient_id), {
-            onSuccess: () => {
-                fetchPatients();
+        post(
+            route("prescriptions.saveandnew.quickAppointment", data.patient_id),
+            {
+                onSuccess: () => {
+                    fetchPatients();
+                },
             },
-        });
+        );
     };
 
     const saveAndNew: FormEventHandler = (e) => {
         e.preventDefault();
-        setLoadingButton('saveNew');
-        if (!data.patient_id || !data.medications.length || !data.appointment_id) {
+        setLoadingButton("saveNew");
+        if (
+            !data.patient_id ||
+            !data.medications.length ||
+            !data.appointment_id
+        ) {
             setShowConfirm(true);
             return true;
         }
         // Check if symptoms are empty or have blank values
-        const hasComplaint = Array.isArray(data.symptoms) && data.symptoms.some((s) => s.name && s.name.trim() !== '');
+        const hasComplaint =
+            Array.isArray(data.symptoms) &&
+            data.symptoms.some((s) => s.name && s.name.trim() !== "");
 
         if (!hasComplaint) {
-            setLocalErrors((prev) => ({ ...prev, symptoms: 'Chief Complaint is required.' }));
+            setLocalErrors((prev) => ({
+                ...prev,
+                symptoms: "Chief Complaint is required.",
+            }));
             setLoadingButton(null);
             return;
         }
 
         setLocalErrors((prev) => ({ ...prev, symptoms: null }));
 
-        post(route('prescriptions.saveandnew.store'), {
+        post(route("prescriptions.saveandnew.store"), {
             onSuccess: (res) => {
-                window.open(route('eprescription.pdf', res.props.flash.message.uuid), '_blank');
+                window.open(
+                    route("eprescription.pdf", res.props.flash.message.uuid),
+                    "_blank",
+                );
                 fetchPatients();
                 setData((prev) => ({
                     ...prev,
-                    patient_id: '',
-                    followup_date: '',
-                    diagnosis: '',
-                    symptoms: [{ name: '' }],
+                    patient_id: "",
+                    followup_date: "",
+                    diagnosis: "",
+                    symptoms: [{ name: "" }],
                     medications: [],
-                    vital_id: '',
-                    instructions: '',
-                    follow_up_advice: '',
+                    vital_id: "",
+                    instructions: "",
+                    follow_up_advice: "",
                     onexaminations: [],
                     investigations: [],
-                    status: 'issued',
-                    appointment_id: '',
+                    status: "issued",
+                    appointment_id: "",
                     gynae_history: {
-                        marital_status: '',
-                        marriage_duration: '',
-                        consanguinity: '',
-                        menarche_age: '',
-                        lmp: '',
-                        cycle: '',
-                        flow: '',
+                        marital_status: "",
+                        marriage_duration: "",
+                        consanguinity: "",
+                        menarche_age: "",
+                        lmp: "",
+                        cycle: "",
+                        flow: "",
                         dysmenorrhea: false,
                         contraceptive_use: false,
-                        gravida: '',
-                        para: '',
-                        abortion: '',
-                        living_children: '',
-                        other_history: '',
+                        gravida: "",
+                        para: "",
+                        abortion: "",
+                        living_children: "",
+                        other_history: "",
                     },
                 }));
                 setSelectedInstructions([]);
@@ -361,7 +416,10 @@ export default function Create(props) {
     // if Laravel flashed an ID, open PDF
     useEffect(() => {
         if (flash.message.uuid && flash.message.is_followup) {
-            window.open(route('eprescription.pdf', flash.message.uuid), '_blank');
+            window.open(
+                route("eprescription.pdf", flash.message.uuid),
+                "_blank",
+            );
             return () => (flash.message.uuid = null);
         }
     }, [flash.message.uuid]);
@@ -390,19 +448,19 @@ export default function Create(props) {
             meds.push({ ...editingMedication });
         }
 
-        setData('medications', meds);
+        setData("medications", meds);
 
         // Reset form
         setEditingIndex(null);
         setEditingMedication({
-            type: '',
+            type: "",
             medicine_id: null,
-            brand_name: '',
-            strength: '',
-            dosage: '',
-            duration: '',
-            advice: '',
-            meal_time: '',
+            brand_name: "",
+            strength: "",
+            dosage: "",
+            duration: "",
+            advice: "",
+            meal_time: "",
         });
     };
 
@@ -426,8 +484,8 @@ export default function Create(props) {
     }, [patients, data.patient_id]);
 
     const mimealtimeOption = [
-        { label: 'Before Meal', value: 'Before Meal' },
-        { label: 'After Meal', value: 'After Meal' },
+        { label: "Before Meal", value: "Before Meal" },
+        { label: "After Meal", value: "After Meal" },
     ];
 
     useEffect(() => {
@@ -459,7 +517,11 @@ export default function Create(props) {
                         <div className="text-left">
                             <div className="border-b p-2">
                                 <div className="text-md font-medium">
-                                    <Content content={props?.doctor?.chamber?.header_left} />
+                                    <Content
+                                        content={
+                                            props?.doctor?.chamber?.header_left
+                                        }
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -468,7 +530,14 @@ export default function Create(props) {
                     {/* Center - Logo */}
                     {props?.doctor?.chamber?.chamber_logo && (
                         <div className="flex items-center justify-center">
-                            <img src={'/storage/' + props?.doctor?.chamber?.chamber_logo} alt="Clinic Logo" className="h-24" />
+                            <img
+                                src={
+                                    "/storage/" +
+                                    props?.doctor?.chamber?.chamber_logo
+                                }
+                                alt="Clinic Logo"
+                                className="h-24"
+                            />
                         </div>
                     )}
 
@@ -476,7 +545,11 @@ export default function Create(props) {
                     <div className="flex flex-col items-center space-x-3">
                         <div className="text-right">
                             <div className="text-md font-medium">
-                                <Content content={props?.doctor?.chamber?.header_right} />
+                                <Content
+                                    content={
+                                        props?.doctor?.chamber?.header_right
+                                    }
+                                />
                             </div>
                         </div>
                     </div>
@@ -488,7 +561,9 @@ export default function Create(props) {
                     <aside className="flex w-full flex-col bg-white shadow-lg md:w-72">
                         <div className="mb-2 ml-2 flex items-center space-x-2">
                             <History className="h-5 w-5 text-indigo-500" />
-                            <span className="font-semibold">Patient History</span>
+                            <span className="font-semibold">
+                                Patient History
+                            </span>
                         </div>
 
                         {/* Patient History */}
@@ -501,51 +576,148 @@ export default function Create(props) {
                                             className="mb-2 w-full cursor-pointer justify-center text-white"
                                             onClick={() => addComplaint()}
                                         >
-                                            <PlusIcon className="cursor-pointer" size={14} />
+                                            <PlusIcon
+                                                className="cursor-pointer"
+                                                size={14}
+                                            />
                                             Chief Complaint(cc)
                                         </Button>
                                         {data.symptoms.map((symptom, index) => (
-                                            <div key={index} className="mt-2 flex">
+                                            <div
+                                                key={index}
+                                                className="mt-2 flex"
+                                            >
                                                 <Input
                                                     placeholder="Complaint"
                                                     value={symptom.name}
-                                                    onChange={(e) => updateComplaient(index, 'name', e.target.value)}
+                                                    onChange={(e) =>
+                                                        updateComplaient(
+                                                            index,
+                                                            "name",
+                                                            e.target.value,
+                                                        )
+                                                    }
                                                 />
                                                 {data.symptoms.length !== 1 && (
                                                     <X
                                                         className="mt-3 cursor-pointer text-red-700"
-                                                        onClick={() => handleSymptomRemove(index)}
+                                                        onClick={() =>
+                                                            handleSymptomRemove(
+                                                                index,
+                                                            )
+                                                        }
                                                         size={15}
                                                     />
                                                 )}
                                             </div>
                                         ))}
                                         {/* Show validation error */}
-                                        {(localErrors.symptoms || errors.symptoms) && (
-                                            <p className="mt-1 text-sm text-red-600">{localErrors.symptoms || errors.symptoms}</p>
+                                        {(localErrors.symptoms ||
+                                            errors.symptoms) && (
+                                            <p className="mt-1 text-sm text-red-600">
+                                                {localErrors.symptoms ||
+                                                    errors.symptoms}
+                                            </p>
                                         )}
                                     </div>
 
                                     <div>
                                         {selectedPatient?.vital ? (
                                             <ul className="ml-5 list-disc">
-                                                <h2 className="mb-2 font-bold">Vitals</h2>
-                                                <div key={selectedPatient.vital.id}>
-                                                    {selectedPatient.vital.blood_pressure && (
-                                                        <li>BP: {selectedPatient.vital.blood_pressure || ' '}</li>
+                                                <h2 className="mb-2 font-bold">
+                                                    Vitals
+                                                </h2>
+                                                <div
+                                                    key={
+                                                        selectedPatient.vital.id
+                                                    }
+                                                >
+                                                    {selectedPatient.vital
+                                                        .blood_pressure && (
+                                                        <li>
+                                                            BP:{" "}
+                                                            {selectedPatient
+                                                                .vital
+                                                                .blood_pressure ||
+                                                                " "}
+                                                        </li>
                                                     )}
-                                                    {selectedPatient.vital.heart_rate && <li>HR: {selectedPatient.vital.heart_rate || ' '}</li>}
-                                                    {selectedPatient.vital.temperature && <li>Temp: {selectedPatient.vital.temperature || ' '}</li>}
-                                                    {selectedPatient.vital.oxygen_saturation && (
-                                                        <li>SpO₂: {selectedPatient.vital.oxygen_saturation || ' '}</li>
+                                                    {selectedPatient.vital
+                                                        .heart_rate && (
+                                                        <li>
+                                                            HR:{" "}
+                                                            {selectedPatient
+                                                                .vital
+                                                                .heart_rate ||
+                                                                " "}
+                                                        </li>
                                                     )}
-                                                    {selectedPatient.vital.respiratory_rate && (
-                                                        <li>RR: {selectedPatient.vital.respiratory_rate || ' '}</li>
+                                                    {selectedPatient.vital
+                                                        .temperature && (
+                                                        <li>
+                                                            Temp:{" "}
+                                                            {selectedPatient
+                                                                .vital
+                                                                .temperature ||
+                                                                " "}
+                                                        </li>
                                                     )}
-                                                    {selectedPatient.vital.weight && <li>Wt: {selectedPatient.vital.weight || ' '}</li>}
-                                                    {selectedPatient.vital.height && <li>Ht: {selectedPatient.vital.height || ' '}</li>}
-                                                    {selectedPatient.vital.bmi && <li>BMI: {selectedPatient.vital.bmi || ' '}</li>}
-                                                    {selectedPatient.vital.notes && <li>Notes: {selectedPatient.vital.notes || ' '}</li>}
+                                                    {selectedPatient.vital
+                                                        .oxygen_saturation && (
+                                                        <li>
+                                                            SpO₂:{" "}
+                                                            {selectedPatient
+                                                                .vital
+                                                                .oxygen_saturation ||
+                                                                " "}
+                                                        </li>
+                                                    )}
+                                                    {selectedPatient.vital
+                                                        .respiratory_rate && (
+                                                        <li>
+                                                            RR:{" "}
+                                                            {selectedPatient
+                                                                .vital
+                                                                .respiratory_rate ||
+                                                                " "}
+                                                        </li>
+                                                    )}
+                                                    {selectedPatient.vital
+                                                        .weight && (
+                                                        <li>
+                                                            Wt:{" "}
+                                                            {selectedPatient
+                                                                .vital.weight ||
+                                                                " "}
+                                                        </li>
+                                                    )}
+                                                    {selectedPatient.vital
+                                                        .height && (
+                                                        <li>
+                                                            Ht:{" "}
+                                                            {selectedPatient
+                                                                .vital.height ||
+                                                                " "}
+                                                        </li>
+                                                    )}
+                                                    {selectedPatient.vital
+                                                        .bmi && (
+                                                        <li>
+                                                            BMI:{" "}
+                                                            {selectedPatient
+                                                                .vital.bmi ||
+                                                                " "}
+                                                        </li>
+                                                    )}
+                                                    {selectedPatient.vital
+                                                        .notes && (
+                                                        <li>
+                                                            Notes:{" "}
+                                                            {selectedPatient
+                                                                .vital.notes ||
+                                                                " "}
+                                                        </li>
+                                                    )}
                                                 </div>
                                             </ul>
                                         ) : (
@@ -554,11 +726,20 @@ export default function Create(props) {
                                                     type="button"
                                                     className="mb-2 w-full cursor-pointer justify-center text-white"
                                                     onClick={() => {
-                                                        setShowAddVitalModal(true);
-                                                        setVitalData('patient_id', data.patient_id);
+                                                        setShowAddVitalModal(
+                                                            true,
+                                                        );
+                                                        setVitalData(
+                                                            "patient_id",
+                                                            data.patient_id,
+                                                        );
                                                     }}
                                                 >
-                                                    <PlusIcon className="cursor-pointer" size={14} /> Add Vital
+                                                    <PlusIcon
+                                                        className="cursor-pointer"
+                                                        size={14}
+                                                    />{" "}
+                                                    Add Vital
                                                 </Button>
                                             </div>
                                         )}
@@ -571,25 +752,46 @@ export default function Create(props) {
                                             className="mb-2 w-full cursor-pointer justify-center text-white"
                                             onClick={() => onExamination()}
                                         >
-                                            <PlusIcon className="cursor-pointer" size={14} />
+                                            <PlusIcon
+                                                className="cursor-pointer"
+                                                size={14}
+                                            />
                                             On Examinations (O/Ex)
                                         </Button>
-                                        {data.onexaminations.map((onexamination, index) => (
-                                            <div key={index} className="mt-2 flex">
-                                                <Input
-                                                    placeholder="On Examination"
-                                                    value={onexamination.name}
-                                                    onChange={(e) => updateOnExamination(index, 'name', e.target.value)}
-                                                />
-                                                {data.onexaminations.length !== 0 && (
-                                                    <X
-                                                        className="mt-3 cursor-pointer text-red-700"
-                                                        onClick={() => handleOnExamination(index)}
-                                                        size={15}
+                                        {data.onexaminations.map(
+                                            (onexamination, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="mt-2 flex"
+                                                >
+                                                    <Input
+                                                        placeholder="On Examination"
+                                                        value={
+                                                            onexamination.name
+                                                        }
+                                                        onChange={(e) =>
+                                                            updateOnExamination(
+                                                                index,
+                                                                "name",
+                                                                e.target.value,
+                                                            )
+                                                        }
                                                     />
-                                                )}
-                                            </div>
-                                        ))}
+                                                    {data.onexaminations
+                                                        .length !== 0 && (
+                                                        <X
+                                                            className="mt-3 cursor-pointer text-red-700"
+                                                            onClick={() =>
+                                                                handleOnExamination(
+                                                                    index,
+                                                                )
+                                                            }
+                                                            size={15}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ),
+                                        )}
                                     </div>
 
                                     {/* On Investigations */}
@@ -599,25 +801,46 @@ export default function Create(props) {
                                             className="mb-2 w-full cursor-pointer justify-center text-white"
                                             onClick={() => addInvestigation()}
                                         >
-                                            <PlusIcon className="cursor-pointer" size={14} />
+                                            <PlusIcon
+                                                className="cursor-pointer"
+                                                size={14}
+                                            />
                                             Investigations
                                         </Button>
-                                        {data.investigations.map((investigation, index) => (
-                                            <div key={index} className="mt-2 flex">
-                                                <Input
-                                                    placeholder="Investigation"
-                                                    value={investigation.name}
-                                                    onChange={(e) => updateInvestigation(index, 'name', e.target.value)}
-                                                />
-                                                {data.investigations.length !== 0 && (
-                                                    <X
-                                                        className="mt-3 cursor-pointer text-red-700"
-                                                        onClick={() => handleInvestigation(index)}
-                                                        size={15}
+                                        {data.investigations.map(
+                                            (investigation, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="mt-2 flex"
+                                                >
+                                                    <Input
+                                                        placeholder="Investigation"
+                                                        value={
+                                                            investigation.name
+                                                        }
+                                                        onChange={(e) =>
+                                                            updateInvestigation(
+                                                                index,
+                                                                "name",
+                                                                e.target.value,
+                                                            )
+                                                        }
                                                     />
-                                                )}
-                                            </div>
-                                        ))}
+                                                    {data.investigations
+                                                        .length !== 0 && (
+                                                        <X
+                                                            className="mt-3 cursor-pointer text-red-700"
+                                                            onClick={() =>
+                                                                handleInvestigation(
+                                                                    index,
+                                                                )
+                                                            }
+                                                            size={15}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ),
+                                        )}
                                     </div>
 
                                     {/* Gyne. & Obs. History */}
@@ -629,25 +852,43 @@ export default function Create(props) {
                                                 setShowAddGynaeHiModal(true);
                                             }}
                                         >
-                                            <PlusIcon className="cursor-pointer" size={14} /> Gyne. & Obs. History
+                                            <PlusIcon
+                                                className="cursor-pointer"
+                                                size={14}
+                                            />{" "}
+                                            Gyne. & Obs. History
                                         </Button>
                                         {data.gynae_history && (
                                             <GynaeHistorySidebar
-                                                gynaeHistory={data.gynae_history}
-                                                setGynaeHistory={(newHistory) => setData('gynae_history', newHistory)}
+                                                gynaeHistory={
+                                                    data.gynae_history
+                                                }
+                                                setGynaeHistory={(newHistory) =>
+                                                    setData(
+                                                        "gynae_history",
+                                                        newHistory,
+                                                    )
+                                                }
                                             />
                                         )}
                                     </div>
 
                                     {/* Diagnosis */}
                                     <div>
-                                        <label className="mb-1 block text-sm font-medium">Diagnosis</label>
+                                        <label className="mb-1 block text-sm font-medium">
+                                            Diagnosis
+                                        </label>
                                         <Textarea
                                             className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                             rows={3}
                                             value={data.diagnosis}
                                             name="diagnosis"
-                                            onChange={(e) => setData('diagnosis', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "diagnosis",
+                                                    e.target.value,
+                                                )
+                                            }
                                             placeholder="Enter diagnosis here..."
                                         />
                                     </div>
@@ -664,14 +905,20 @@ export default function Create(props) {
 
                             {/* Medicines */}
                             <div>
-                                <Label className="mb-1 block text-sm font-medium">Medicines</Label>
+                                <Label className="mb-1 block text-sm font-medium">
+                                    Medicines
+                                </Label>
 
                                 <AddMedicine
                                     editingMedication={editingMedication}
                                     setEditingMedication={setEditingMedication}
                                     medicines={medicines}
-                                    medicine_doses={props?.doctor?.medicine_doses}
-                                    medicine_durations={props?.doctor?.medicine_durations}
+                                    medicine_doses={
+                                        props?.doctor?.medicine_doses
+                                    }
+                                    medicine_durations={
+                                        props?.doctor?.medicine_durations
+                                    }
                                     mimealtimeOption={mimealtimeOption}
                                     editingIndex={editingIndex}
                                     saveMedication={saveMedication}
@@ -681,7 +928,9 @@ export default function Create(props) {
 
                                 <MedicationsList
                                     medications={data.medications}
-                                    onReorder={(newList) => setData('medications', newList)}
+                                    onReorder={(newList) =>
+                                        setData("medications", newList)
+                                    }
                                     setEditingIndex={setEditingIndex}
                                     setEditingMedication={setEditingMedication}
                                     handleMedicineRemove={handleMedicineRemove}
@@ -693,23 +942,34 @@ export default function Create(props) {
                                 data={data}
                                 setData={setData}
                                 selectedInstructions={selectedInstructions}
-                                setSelectedInstructions={setSelectedInstructions}
+                                setSelectedInstructions={
+                                    setSelectedInstructions
+                                }
                             />
 
                             {/* Followup Advice */}
                             <div>
-                                <Label className="mb-1 block text-sm font-medium">Followup Advice</Label>
+                                <Label className="mb-1 block text-sm font-medium">
+                                    Followup Advice
+                                </Label>
                                 <Textarea
                                     className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                     rows={2}
                                     value={data.follow_up_advice}
-                                    onChange={(e) => setData('follow_up_advice', e.target.value)}
+                                    onChange={(e) =>
+                                        setData(
+                                            "follow_up_advice",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="Followup Advice..."
                                 />
                             </div>
 
                             <div>
-                                <Label htmlFor="followup_date">Followup Date</Label>
+                                <Label htmlFor="followup_date">
+                                    Followup Date
+                                </Label>
                                 <DateTimePicker
                                     required={true}
                                     onChange={(e) => {
@@ -721,7 +981,12 @@ export default function Create(props) {
                                     className="w-full bg-white sm:w-auto"
                                 />
 
-                                {errors.followup_date && <InputError className="mt-2 text-red-700" message={errors.followup_date} />}
+                                {errors.followup_date && (
+                                    <InputError
+                                        className="mt-2 text-red-700"
+                                        message={errors.followup_date}
+                                    />
+                                )}
                             </div>
 
                             {/* Actions */}
@@ -733,11 +998,20 @@ export default function Create(props) {
                                     className="text-white"
                                     disabled={loadingButton !== null}
                                 >
-                                    {loadingButton === 'saveNew' && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                                    {loadingButton === "saveNew" && (
+                                        <LoaderCircle className="h-4 w-4 animate-spin" />
+                                    )}
                                     Save and New
                                 </Button>
-                                <Button onClick={(e) => onSubmit(e)} type="button" className="text-white" disabled={loadingButton !== null}>
-                                    {loadingButton === 'saveComplete' && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                                <Button
+                                    onClick={(e) => onSubmit(e)}
+                                    type="button"
+                                    className="text-white"
+                                    disabled={loadingButton !== null}
+                                >
+                                    {loadingButton === "saveComplete" && (
+                                        <LoaderCircle className="h-4 w-4 animate-spin" />
+                                    )}
                                     Save and Complete
                                 </Button>
                             </div>
@@ -752,7 +1026,11 @@ export default function Create(props) {
                     onClose={() => setShowAddVitalModal(false)}
                     title="Add Vital"
                 >
-                    <AddVital vitalData={vitalData} setVitalData={setVitalData} onHandleChange={onHandleVitalChange} />
+                    <AddVital
+                        vitalData={vitalData}
+                        setVitalData={setVitalData}
+                        onHandleChange={onHandleVitalChange}
+                    />
                 </CommonModal>
                 {/* Add Patient */}
                 <CommonModal
@@ -773,12 +1051,12 @@ export default function Create(props) {
                     title="Some Thing Messing"
                     message={
                         !data.patient_id
-                            ? 'You have net selected any Patient?'
+                            ? "You have net selected any Patient?"
                             : !data.appointment_id
-                                ? 'This Patient have not any Appointment?'
-                                : !data.medications[0]?.medicine_id
-                                    ? 'You did not added any medicine!'
-                                    : 'You have net selected any Patient?'
+                              ? "This Patient have not any Appointment?"
+                              : !data.medications[0]?.medicine_id
+                                ? "You did not added any medicine!"
+                                : "You have net selected any Patient?"
                     }
                     onConfirm={handleConfirm}
                     onCancel={handleCancel}
@@ -800,7 +1078,11 @@ export default function Create(props) {
                     onClose={() => setShowAddGynaeHiModal(false)}
                     title="Gynae History"
                 >
-                    <GynaeHistoryForm data={data} setData={setData} errors={errors} />
+                    <GynaeHistoryForm
+                        data={data}
+                        setData={setData}
+                        errors={errors}
+                    />
                 </CommonModal>
             </div>
         </AppLayout>

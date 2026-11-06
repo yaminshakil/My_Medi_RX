@@ -1,5 +1,5 @@
-import { Card, Select } from 'antd';
-import { useEffect, useState } from 'react';
+import { Card, Select } from "antd";
+import { useEffect, useState } from "react";
 
 const { Option } = Select;
 
@@ -12,7 +12,9 @@ const PatientSearchSelect = ({ patients, data, setData }) => {
         }
     }, [data?.patient_id, patients]);
 
-    const selectedPatient = patients.find((p) => String(p.id) === String(patientId));
+    const selectedPatient = patients.find(
+        (p) => String(p.id) === String(patientId),
+    );
 
     return (
         <div>
@@ -20,21 +22,29 @@ const PatientSearchSelect = ({ patients, data, setData }) => {
             <Select
                 allowClear
                 showSearch
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 placeholder="Search by name or mobile"
                 value={patientId}
                 onChange={(value) => {
                     setPatientId(value);
-                    setData('patient_id', value);
+                    setData("patient_id", value);
                 }}
                 filterOption={(input, option) => {
-                    const name = option?.name?.toLowerCase() || '';
-                    const mobile = option?.mobile?.toLowerCase() || '';
-                    return name.includes(input.toLowerCase()) || mobile.includes(input.toLowerCase());
+                    const name = option?.name?.toLowerCase() || "";
+                    const mobile = option?.mobile?.toLowerCase() || "";
+                    return (
+                        name.includes(input.toLowerCase()) ||
+                        mobile.includes(input.toLowerCase())
+                    );
                 }}
             >
                 {patients.map((p) => (
-                    <Option key={String(p.id)} value={String(p.id)} name={p.name} mobile={p.mobile}>
+                    <Option
+                        key={String(p.id)}
+                        value={String(p.id)}
+                        name={p.name}
+                        mobile={p.mobile}
+                    >
                         {p.name} ({p.mobile})
                     </Option>
                 ))}
@@ -64,7 +74,8 @@ const PatientSearchSelect = ({ patients, data, setData }) => {
                         <strong>Gender:</strong> {selectedPatient.gender}
                     </p>
                     <p>
-                        <strong>Blood Group:</strong> {selectedPatient.blood_group}
+                        <strong>Blood Group:</strong>{" "}
+                        {selectedPatient.blood_group}
                     </p>
                 </Card>
             )}

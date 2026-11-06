@@ -1,16 +1,27 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import { Button } from '@/Components/ui/button';
-import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { router } from '@inertiajs/react';
-import { Edit, GripVertical, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import { Button } from "@/Components/ui/button";
+import {
+    SortableContext,
+    useSortable,
+    verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { router } from "@inertiajs/react";
+import { Edit, GripVertical, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 export default function SortableItem({ id, menu, onDelete }) {
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({
         id,
         data: {
-            type: 'menu',
+            type: "menu",
             menu: menu,
         },
     });
@@ -24,7 +35,7 @@ export default function SortableItem({ id, menu, onDelete }) {
     };
 
     const handleEdit = () => {
-        router.get(route('menus.edit', menu.id));
+        router.get(route("menus.edit", menu.id));
     };
 
     const handleDelete = () => {
@@ -35,13 +46,13 @@ export default function SortableItem({ id, menu, onDelete }) {
     const handleCancel = () => {
         setShowConfirm(false);
     };
-    console.log('Submenus:', menu.submenu);
+    console.log("Submenus:", menu.submenu);
     return (
         <li
             ref={setNodeRef}
             style={style}
             {...attributes} // keep attributes for accessibility
-            className={`rounded border bg-white p-2 shadow ${isDragging ? 'border-blue-500' : 'border-gray-200'}`}
+            className={`rounded border bg-white p-2 shadow ${isDragging ? "border-blue-500" : "border-gray-200"}`}
         >
             <div className="flex items-center justify-between">
                 {/* Left side: drag handle + name */}
@@ -57,11 +68,20 @@ export default function SortableItem({ id, menu, onDelete }) {
 
                 {/* Right side: actions */}
                 <div className="flex space-x-2">
-                    <Button type="button" className="text-white" onClick={handleEdit}>
+                    <Button
+                        type="button"
+                        className="text-white"
+                        onClick={handleEdit}
+                    >
                         <Edit className="h-4 w-4 text-white" />
                         Edit
                     </Button>
-                    <Button variant="destructive" type="button" className="text-white" onClick={() => setShowConfirm(true)}>
+                    <Button
+                        variant="destructive"
+                        type="button"
+                        className="text-white"
+                        onClick={() => setShowConfirm(true)}
+                    >
                         <Trash2 className="h-4 w-4 text-white" />
                         Delete
                     </Button>
@@ -70,10 +90,18 @@ export default function SortableItem({ id, menu, onDelete }) {
 
             {/* Submenus */}
             {menu.submenu && menu.submenu.length > 0 && (
-                <SortableContext items={menu.submenu.map((c) => c.id)} strategy={verticalListSortingStrategy}>
+                <SortableContext
+                    items={menu.submenu.map((c) => c.id)}
+                    strategy={verticalListSortingStrategy}
+                >
                     <ul className="mt-4 ml-6 space-y-1">
                         {menu.submenu.map((child) => (
-                            <SortableItem key={child.id} id={child.id} menu={child} onDelete={onDelete} />
+                            <SortableItem
+                                key={child.id}
+                                id={child.id}
+                                menu={child}
+                                onDelete={onDelete}
+                            />
                         ))}
                     </ul>
                 </SortableContext>

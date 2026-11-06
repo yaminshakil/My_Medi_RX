@@ -1,3 +1,54 @@
-import { Head } from '@inertiajs/react';
-type Row={id:number;status:string;starts_at:string|null;ends_at:string|null;user:{name:string;email:string};plan:{name:string}};
-export default function Index({subscriptions}:{subscriptions:{data:Row[]}}){return <><Head title="Subscriptions management"/><div className="space-y-5 p-6"><h1 className="text-2xl font-semibold">Subscriptions</h1><div className="overflow-x-auto rounded-lg border"><table className="w-full text-sm"><thead><tr className="border-b text-left"><th className="p-3">User</th><th className="p-3">Plan</th><th className="p-3">Status</th><th className="p-3">Start</th><th className="p-3">Expiry</th></tr></thead><tbody>{subscriptions.data.map(s=><tr className="border-b" key={s.id}><td className="p-3">{s.user.name}<div className="text-muted-foreground">{s.user.email}</div></td><td className="p-3">{s.plan.name}</td><td className="p-3">{s.status}</td><td className="p-3">{s.starts_at??'—'}</td><td className="p-3">{s.ends_at??'—'}</td></tr>)}</tbody></table></div></div></>}
+import { Head } from "@inertiajs/react";
+type Row = {
+    id: number;
+    status: string;
+    starts_at: string | null;
+    ends_at: string | null;
+    user: { name: string; email: string };
+    plan: { name: string };
+};
+export default function Index({
+    subscriptions,
+}: {
+    subscriptions: { data: Row[] };
+}) {
+    return (
+        <>
+            <Head title="Subscriptions management" />
+            <div className="space-y-5 p-6">
+                <h1 className="text-2xl font-semibold">Subscriptions</h1>
+                <div className="overflow-x-auto rounded-lg border">
+                    <table className="w-full text-sm">
+                        <thead>
+                            <tr className="border-b text-left">
+                                <th className="p-3">User</th>
+                                <th className="p-3">Plan</th>
+                                <th className="p-3">Status</th>
+                                <th className="p-3">Start</th>
+                                <th className="p-3">Expiry</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {subscriptions.data.map((s) => (
+                                <tr className="border-b" key={s.id}>
+                                    <td className="p-3">
+                                        {s.user.name}
+                                        <div className="text-muted-foreground">
+                                            {s.user.email}
+                                        </div>
+                                    </td>
+                                    <td className="p-3">{s.plan.name}</td>
+                                    <td className="p-3">{s.status}</td>
+                                    <td className="p-3">
+                                        {s.starts_at ?? "—"}
+                                    </td>
+                                    <td className="p-3">{s.ends_at ?? "—"}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </>
+    );
+}

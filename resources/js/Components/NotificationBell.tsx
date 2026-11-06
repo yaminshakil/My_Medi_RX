@@ -1,8 +1,8 @@
-import { Bell } from 'lucide-react';
-import type { PageProps } from '@inertiajs/core';
-import { router, usePage } from '@inertiajs/react';
-import { useEffect, useRef, useState } from 'react';
-import echo from '@/echo';
+import { Bell } from "lucide-react";
+import type { PageProps } from "@inertiajs/core";
+import { router, usePage } from "@inertiajs/react";
+import { useEffect, useRef, useState } from "react";
+import echo from "@/echo";
 
 interface NotificationItem {
     id: string;
@@ -20,11 +20,16 @@ interface NotificationProps {
 }
 
 export default function NotificationBell() {
-    const { auth, notifications } = usePage<PageProps & NotificationProps>().props;
+    const { auth, notifications } = usePage<PageProps & NotificationProps>()
+        .props;
 
     const [isOpen, setIsOpen] = useState(false);
-    const [items, setItems] = useState<NotificationItem[]>(notifications?.items ?? []);
-    const [unreadCount, setUnreadCount] = useState<number>(notifications?.unread_count ?? 0);
+    const [items, setItems] = useState<NotificationItem[]>(
+        notifications?.items ?? [],
+    );
+    const [unreadCount, setUnreadCount] = useState<number>(
+        notifications?.unread_count ?? 0,
+    );
 
     const notificationRef = useRef<HTMLDivElement>(null);
 
@@ -43,28 +48,33 @@ export default function NotificationBell() {
      * 2. Listen for real-time Laravel Broadcast notifications
      */
 
-
     useEffect(() => {
         // 2. Check if auth.user.id exists
         if (!auth?.user?.id) {
-            console.warn('⚠️ No auth.user.id found! Echo subscription skipped.');
+            console.warn(
+                "⚠️ No auth.user.id found! Echo subscription skipped.",
+            );
             return;
         }
 
-        console.log('📡 Subscribing to channel for User ID:', auth.user.id);
+        console.log("📡 Subscribing to channel for User ID:", auth.user.id);
 
         const channelName = `App.Models.User.${auth.user.id}`;
         const channel = echo.private(channelName);
 
         channel.notification((notification: any) => {
-            console.log('🔥 Real-time notification received:', notification);
-            setItems((prev) => [{
-                id: notification.id,
-                title: notification.title,
-                message: notification.message,
-                url: notification.url ?? '#',
-                created_at: notification.created_at ?? new Date().toLocaleString(),
-            }, ...prev]);
+            console.log("🔥 Real-time notification received:", notification);
+            setItems((prev) => [
+                {
+                    id: notification.id,
+                    title: notification.title,
+                    message: notification.message,
+                    url: notification.url ?? "#",
+                    created_at:
+                        notification.created_at ?? new Date().toLocaleString(),
+                },
+                ...prev,
+            ]);
             setUnreadCount((c) => c + 1);
         });
 
@@ -86,9 +96,9 @@ export default function NotificationBell() {
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener("mousedown", handleClickOutside);
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
 
@@ -97,19 +107,21 @@ export default function NotificationBell() {
      */
     const handleNotificationClick = (id: string, url: string | null) => {
         router.post(
-            route('notifications.read', id),
+            route("notifications.read", id),
             {},
             {
                 onSuccess: () => {
                     setUnreadCount((count) => Math.max(count - 1, 0));
-                    setItems((current) => current.filter((item) => item.id !== id));
+                    setItems((current) =>
+                        current.filter((item) => item.id !== id),
+                    );
                     setIsOpen(false);
 
                     if (url) {
                         router.visit(url);
                     }
                 },
-            }
+            },
         );
     };
 
@@ -127,7 +139,7 @@ export default function NotificationBell() {
 
                 {unreadCount > 0 && (
                     <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-xs font-bold text-white shadow-sm">
-                        {unreadCount > 99 ? '99+' : unreadCount}
+                        {unreadCount > 99 ? "99+" : unreadCount}
                     </span>
                 )}
             </button>
@@ -157,7 +169,7 @@ export default function NotificationBell() {
                                     onClick={() =>
                                         handleNotificationClick(
                                             notification.id,
-                                            notification.url
+                                            notification.url,
                                         )
                                     }
                                     className="block w-full border-b p-3 text-left hover:bg-gray-50 transition-colors"

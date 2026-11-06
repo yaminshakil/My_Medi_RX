@@ -30,7 +30,11 @@ export type Department = {
     doctors?: DoctorAssignment[];
 };
 
-export type PaginationLink = { url: string | null; label: string; active: boolean };
+export type PaginationLink = {
+    url: string | null;
+    label: string;
+    active: boolean;
+};
 export type DepartmentItems = {
     data: Department[];
     links: PaginationLink[];

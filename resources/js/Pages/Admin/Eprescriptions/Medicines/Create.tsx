@@ -1,31 +1,31 @@
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
-import Form from './Form';
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler } from "react";
+import Form from "./Form";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Create Medicine',
-        href: '/medicines',
+        title: "Create Medicine",
+        href: "/medicines",
     },
 ];
 
 export default function Create() {
     const { manufacturers } = usePage().props;
     const { data, setData, post, processing, errors } = useForm({
-        doctor_id: '',
-        brand_name: '',
-        generic_name: '',
-        strength: '',
-        type: '',
-        manufacturer_id: '',
+        doctor_id: "",
+        brand_name: "",
+        generic_name: "",
+        strength: "",
+        type: "",
+        manufacturer_id: "",
         is_active: 1,
     });
 
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('medicines.store'));
+        post(route("medicines.store"));
     };
 
     return (

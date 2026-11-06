@@ -1,9 +1,9 @@
-import { Head, Link, useForm } from '@inertiajs/react';
-import AppLayout from '@/Layouts/app-layout';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { type BreadcrumbItem } from '@/types';
+import { Head, Link, useForm } from "@inertiajs/react";
+import AppLayout from "@/Layouts/app-layout";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { type BreadcrumbItem } from "@/types";
 
 type Profile = {
     id: number;
@@ -16,9 +16,14 @@ type Profile = {
 };
 
 export default function Edit({ profile }: { profile: Profile }) {
-    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Edit Cycle Profile', href: '/admin/menstrual-cycle/profiles' }];
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: "Edit Cycle Profile",
+            href: "/admin/menstrual-cycle/profiles",
+        },
+    ];
     const form = useForm({
-        last_period_start: profile.last_period_start ?? '',
+        last_period_start: profile.last_period_start ?? "",
         cycle_length: String(profile.cycle_length),
         period_length: String(profile.period_length),
         is_active: profile.is_active,
@@ -34,9 +39,7 @@ export default function Edit({ profile }: { profile: Profile }) {
             period_length: Number(data.period_length),
         }));
 
-        form.put(
-            route('admin.menstrual-cycle.profiles.update', profile.id)
-        );
+        form.put(route("admin.menstrual-cycle.profiles.update", profile.id));
     };
 
     return (
@@ -53,7 +56,10 @@ export default function Edit({ profile }: { profile: Profile }) {
                     </p>
                 </div>
 
-                <form onSubmit={submit} className="space-y-5 rounded-lg border p-5">
+                <form
+                    onSubmit={submit}
+                    className="space-y-5 rounded-lg border p-5"
+                >
                     <div className="space-y-2">
                         <Label htmlFor="last_period_start">
                             First day of last period
@@ -63,10 +69,12 @@ export default function Edit({ profile }: { profile: Profile }) {
                             type="date"
                             value={form.data.last_period_start}
                             max={new Date().toISOString().slice(0, 10)}
-                            onChange={(event) => form.setData(
-                                'last_period_start',
-                                event.target.value
-                            )}
+                            onChange={(event) =>
+                                form.setData(
+                                    "last_period_start",
+                                    event.target.value,
+                                )
+                            }
                         />
                         {form.errors.last_period_start && (
                             <p className="text-sm text-destructive">
@@ -86,10 +94,9 @@ export default function Edit({ profile }: { profile: Profile }) {
                             max={45}
                             required
                             value={form.data.cycle_length}
-                            onChange={(event) => form.setData(
-                                'cycle_length',
-                                event.target.value
-                            )}
+                            onChange={(event) =>
+                                form.setData("cycle_length", event.target.value)
+                            }
                         />
                         {form.errors.cycle_length && (
                             <p className="text-sm text-destructive">
@@ -109,10 +116,12 @@ export default function Edit({ profile }: { profile: Profile }) {
                             max={10}
                             required
                             value={form.data.period_length}
-                            onChange={(event) => form.setData(
-                                'period_length',
-                                event.target.value
-                            )}
+                            onChange={(event) =>
+                                form.setData(
+                                    "period_length",
+                                    event.target.value,
+                                )
+                            }
                         />
                         {form.errors.period_length && (
                             <p className="text-sm text-destructive">
@@ -125,10 +134,9 @@ export default function Edit({ profile }: { profile: Profile }) {
                         <input
                             type="checkbox"
                             checked={form.data.is_active}
-                            onChange={(event) => form.setData(
-                                'is_active',
-                                event.target.checked
-                            )}
+                            onChange={(event) =>
+                                form.setData("is_active", event.target.checked)
+                            }
                         />
                         Enable cycle tracking
                     </label>
@@ -141,11 +149,15 @@ export default function Edit({ profile }: { profile: Profile }) {
 
                     <div className="flex gap-2">
                         <Button type="submit" disabled={form.processing}>
-                            {form.processing ? 'Saving...' : 'Save changes'}
+                            {form.processing ? "Saving..." : "Save changes"}
                         </Button>
 
                         <Button asChild type="button" variant="outline">
-                            <Link href={route('admin.menstrual-cycle.profiles.index')}>
+                            <Link
+                                href={route(
+                                    "admin.menstrual-cycle.profiles.index",
+                                )}
+                            >
                                 Cancel
                             </Link>
                         </Button>

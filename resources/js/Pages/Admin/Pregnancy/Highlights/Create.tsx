@@ -1,11 +1,15 @@
-import AppLayout from '@/Layouts/app-layout';
+import AppLayout from "@/Layouts/app-layout";
 import { Head } from "@inertiajs/react";
 import HighlightForm from "./Form";
-import { type BreadcrumbItem } from '@/types';
-
+import { type BreadcrumbItem } from "@/types";
 
 export default function Create() {
-    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Create Weekly Highlight', href: '/admin/pregnancy/highlights' }];
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: "Create Weekly Highlight",
+            href: "/admin/pregnancy/highlights",
+        },
+    ];
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Create Pregnancy Highlight" />

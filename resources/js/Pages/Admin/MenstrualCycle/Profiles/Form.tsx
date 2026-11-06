@@ -1,10 +1,9 @@
+import { useForm, Link } from "@inertiajs/react";
+import type { FormEvent } from "react";
 
-import { useForm, Link } from '@inertiajs/react';
-import type { FormEvent } from 'react';
-
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
 
 export type CycleProfile = {
     id: number;
@@ -22,7 +21,7 @@ type Props = {
 
 export default function ProfileForm({ profile }: Props) {
     const form = useForm({
-        last_period_start: profile?.last_period_start ?? '',
+        last_period_start: profile?.last_period_start ?? "",
         cycle_length: String(profile?.cycle_length ?? 28),
         period_length: String(profile?.period_length ?? 5),
         is_active: profile?.is_active ?? true,
@@ -41,7 +40,7 @@ export default function ProfileForm({ profile }: Props) {
         if (profile) {
             form.transform(() => payload);
             form.put(
-                route('admin.menstrual-cycle.profiles.update', profile.id)
+                route("admin.menstrual-cycle.profiles.update", profile.id),
             );
         }
     };
@@ -67,7 +66,7 @@ export default function ProfileForm({ profile }: Props) {
                     max={new Date().toISOString().slice(0, 10)}
                     value={form.data.last_period_start}
                     onChange={(event) =>
-                        form.setData('last_period_start', event.target.value)
+                        form.setData("last_period_start", event.target.value)
                     }
                 />
                 {form.errors.last_period_start && (
@@ -87,7 +86,7 @@ export default function ProfileForm({ profile }: Props) {
                     required
                     value={form.data.cycle_length}
                     onChange={(event) =>
-                        form.setData('cycle_length', event.target.value)
+                        form.setData("cycle_length", event.target.value)
                     }
                 />
                 {form.errors.cycle_length && (
@@ -107,7 +106,7 @@ export default function ProfileForm({ profile }: Props) {
                     required
                     value={form.data.period_length}
                     onChange={(event) =>
-                        form.setData('period_length', event.target.value)
+                        form.setData("period_length", event.target.value)
                     }
                 />
                 {form.errors.period_length && (
@@ -122,7 +121,7 @@ export default function ProfileForm({ profile }: Props) {
                     type="checkbox"
                     checked={form.data.is_active}
                     onChange={(event) =>
-                        form.setData('is_active', event.target.checked)
+                        form.setData("is_active", event.target.checked)
                     }
                 />
                 Enable cycle tracking
@@ -130,10 +129,10 @@ export default function ProfileForm({ profile }: Props) {
 
             <div className="flex gap-2">
                 <Button type="submit" disabled={form.processing}>
-                    {form.processing ? 'Saving...' : 'Save profile'}
+                    {form.processing ? "Saving..." : "Save profile"}
                 </Button>
                 <Button asChild type="button" variant="outline">
-                    <Link href={route('admin.menstrual-cycle.profiles.index')}>
+                    <Link href={route("admin.menstrual-cycle.profiles.index")}>
                         Cancel
                     </Link>
                 </Button>

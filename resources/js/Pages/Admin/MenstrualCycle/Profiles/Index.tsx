@@ -1,10 +1,10 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { useState } from 'react';
-import { Pencil, Search, Trash2 } from 'lucide-react';
+import { Head, Link, router } from "@inertiajs/react";
+import { useState } from "react";
+import { Pencil, Search, Trash2 } from "lucide-react";
 
-import AppLayout from '@/Layouts/app-layout';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
+import AppLayout from "@/Layouts/app-layout";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
 import {
     Table,
     TableBody,
@@ -12,8 +12,8 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/Components/ui/table';
-import { type BreadcrumbItem } from '@/types';
+} from "@/Components/ui/table";
+import { type BreadcrumbItem } from "@/types";
 
 type Profile = {
     id: number;
@@ -46,26 +46,33 @@ type Props = {
 };
 
 export default function Index({ profiles, filters }: Props) {
-    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Menstrual Cycle Profiles', href: '/admin/menstrual-cycle/profiles' }];
-    const [search, setSearch] = useState(filters.search ?? '');
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: "Menstrual Cycle Profiles",
+            href: "/admin/menstrual-cycle/profiles",
+        },
+    ];
+    const [search, setSearch] = useState(filters.search ?? "");
 
     const searchProfiles = () => {
         router.get(
-            route('admin.menstrual-cycle.profiles.index'),
+            route("admin.menstrual-cycle.profiles.index"),
             { search },
-            { preserveState: true, replace: true }
+            { preserveState: true, replace: true },
         );
     };
 
     const deleteProfile = (profile: Profile) => {
-        if (!window.confirm(
-            `Delete the cycle profile for ${profile.name}? Its daily logs will also be deleted.`
-        )) {
+        if (
+            !window.confirm(
+                `Delete the cycle profile for ${profile.name}? Its daily logs will also be deleted.`,
+            )
+        ) {
             return;
         }
 
         router.delete(
-            route('admin.menstrual-cycle.profiles.destroy', profile.id)
+            route("admin.menstrual-cycle.profiles.destroy", profile.id),
         );
     };
 
@@ -89,7 +96,7 @@ export default function Index({ profiles, filters }: Props) {
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
                         onKeyDown={(event) => {
-                            if (event.key === 'Enter') searchProfiles();
+                            if (event.key === "Enter") searchProfiles();
                         }}
                     />
                     <Button onClick={searchProfiles}>
@@ -123,71 +130,84 @@ export default function Index({ profiles, filters }: Props) {
                                         No cycle profiles found.
                                     </TableCell>
                                 </TableRow>
-                            ) : profiles.data.map((profile) => (
-                                <TableRow key={profile.id}>
-                                    <TableCell>
-                                        <div className="font-medium">
-                                            {profile.name}
-                                        </div>
-                                        <div className="text-xs text-muted-foreground">
-                                            {profile.email}
-                                        </div>
-                                    </TableCell>
+                            ) : (
+                                profiles.data.map((profile) => (
+                                    <TableRow key={profile.id}>
+                                        <TableCell>
+                                            <div className="font-medium">
+                                                {profile.name}
+                                            </div>
+                                            <div className="text-xs text-muted-foreground">
+                                                {profile.email}
+                                            </div>
+                                        </TableCell>
 
-                                    <TableCell>
-                                        {profile.last_period_start ?? 'Not recorded'}
-                                    </TableCell>
+                                        <TableCell>
+                                            {profile.last_period_start ??
+                                                "Not recorded"}
+                                        </TableCell>
 
-                                    <TableCell>
-                                        {profile.cycle_length} days
-                                    </TableCell>
+                                        <TableCell>
+                                            {profile.cycle_length} days
+                                        </TableCell>
 
-                                    <TableCell>
-                                        {profile.period_length} days
-                                    </TableCell>
+                                        <TableCell>
+                                            {profile.period_length} days
+                                        </TableCell>
 
-                                    <TableCell>
-                                        <span className={
-                                            profile.is_active
-                                                ? 'text-green-700'
-                                                : 'text-muted-foreground'
-                                        }>
-                                            {profile.is_active ? 'Active' : 'Inactive'}
-                                        </span>
-                                    </TableCell>
-
-                                    <TableCell className="text-right">
-                                        <div className="flex justify-end gap-2">
-                                            <Button asChild size="sm" variant="outline">
-                                                <Link
-                                                    href={route(
-                                                        'admin.menstrual-cycle.profiles.edit',
-                                                        profile.id
-                                                    )}
-                                                >
-                                                    <Pencil className="mr-1 h-4 w-4" />
-                                                    Edit
-                                                </Link>
-                                            </Button>
-
-                                            <Button
-                                                size="sm"
-                                                variant="destructive"
-                                                onClick={() => deleteProfile(profile)}
+                                        <TableCell>
+                                            <span
+                                                className={
+                                                    profile.is_active
+                                                        ? "text-green-700"
+                                                        : "text-muted-foreground"
+                                                }
                                             >
-                                                <Trash2 className="mr-1 h-4 w-4" />
-                                                Delete
-                                            </Button>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                                                {profile.is_active
+                                                    ? "Active"
+                                                    : "Inactive"}
+                                            </span>
+                                        </TableCell>
+
+                                        <TableCell className="text-right">
+                                            <div className="flex justify-end gap-2">
+                                                <Button
+                                                    asChild
+                                                    size="sm"
+                                                    variant="outline"
+                                                >
+                                                    <Link
+                                                        href={route(
+                                                            "admin.menstrual-cycle.profiles.edit",
+                                                            profile.id,
+                                                        )}
+                                                    >
+                                                        <Pencil className="mr-1 h-4 w-4" />
+                                                        Edit
+                                                    </Link>
+                                                </Button>
+
+                                                <Button
+                                                    size="sm"
+                                                    variant="destructive"
+                                                    onClick={() =>
+                                                        deleteProfile(profile)
+                                                    }
+                                                >
+                                                    <Trash2 className="mr-1 h-4 w-4" />
+                                                    Delete
+                                                </Button>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
                         </TableBody>
                     </Table>
                 </div>
                 <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
                     <span>
-                        Showing {profiles.from} to {profiles.to} {" "} from total {" "}
+                        Showing {profiles.from} to {profiles.to} from total{" "}
                         {profiles.total} Profiles
                     </span>
 
@@ -196,17 +216,20 @@ export default function Index({ profiles, filters }: Props) {
                             <Button
                                 key={`${index}-${link.label}`}
                                 size="sm"
-                                variant={link.active ? 'default' : 'outline'}
+                                variant={link.active ? "default" : "outline"}
                                 disabled={!link.url}
-                                onClick={() => link.url && router.get(
-                                    link.url,
-                                    {},
-                                    { preserveState: true }
-                                )}
+                                onClick={() =>
+                                    link.url &&
+                                    router.get(
+                                        link.url,
+                                        {},
+                                        { preserveState: true },
+                                    )
+                                }
                             >
                                 {link.label
-                                    .replace('&laquo;', '«')
-                                    .replace('&raquo;', '»')}
+                                    .replace("&laquo;", "«")
+                                    .replace("&raquo;", "»")}
                             </Button>
                         ))}
                     </div>

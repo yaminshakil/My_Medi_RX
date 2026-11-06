@@ -1,19 +1,19 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import { AdminPageHeader } from '@/Components/AdminPageHeader';
-import PageHeader from '@/Components/PageHeader';
-import { Pagination } from '@/Components/pagination';
-import Table from '@/Components/Table';
-import AppLayout from '@/Layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import { AdminPageHeader } from "@/Components/AdminPageHeader";
+import PageHeader from "@/Components/PageHeader";
+import { Pagination } from "@/Components/pagination";
+import Table from "@/Components/Table";
+import AppLayout from "@/Layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Permissions',
-        href: '/permissions',
+        title: "Permissions",
+        href: "/permissions",
     },
 ];
 
@@ -21,28 +21,28 @@ export default function Index({ permissions }) {
     const { flash, filters } = usePage().props;
     const [showConfirm, setShowConfirm] = useState(false);
     const [permission, setPermission] = useState(false);
-    const canCreate = useCan('Create');
-    const canEdit = useCan('Edit');
-    const canDelete = useCan('Delete');
+    const canCreate = useCan("Create");
+    const canEdit = useCan("Edit");
+    const canDelete = useCan("Delete");
 
     const { data, setData } = useForm({
-        search: filters?.search || '',
+        search: filters?.search || "",
     });
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setData('search', value);
+        setData("search", value);
         const queryString = value ? { search: value } : {};
-        router.get(route('permissions.index'), queryString, {
+        router.get(route("permissions.index"), queryString, {
             preserveState: true,
             preserveScroll: true,
         });
     };
 
     const handleReset = () => {
-        setData('search', '');
+        setData("search", "");
         router.get(
-            route('permissions.index'),
+            route("permissions.index"),
             {},
             {
                 preserveState: true,
@@ -61,7 +61,7 @@ export default function Index({ permissions }) {
     }, [flash]);
 
     const handleConfirm = () => {
-        router.delete(route('permissions.destroy', permission.id), {
+        router.delete(route("permissions.destroy", permission.id), {
             preserveScroll: true,
         });
         setShowConfirm(false);
@@ -72,11 +72,15 @@ export default function Index({ permissions }) {
     };
 
     const handlePerPageChange = (e) => {
-        router.get(route('permissions.index'), { ...filters, per_page: e.target.value }, { preserveState: true });
+        router.get(
+            route("permissions.index"),
+            { ...filters, per_page: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleEdit: FormEventHandler = (item) => {
-        router.get(route('permissions.edit', item.id));
+        router.get(route("permissions.edit", item.id));
     };
 
     const handleDelete: FormEventHandler = (item) => {
@@ -85,13 +89,13 @@ export default function Index({ permissions }) {
     };
 
     const columns = [
-        { key: '#', label: '#', render: (item) => item.id },
-        { key: 'name', label: 'Name' },
-        { key: 'created_at', label: 'Created At' },
+        { key: "#", label: "#", render: (item) => item.id },
+        { key: "name", label: "Name" },
+        { key: "created_at", label: "Created At" },
     ];
 
     const handleCreate = () => {
-        router.visit(route('permissions.create'));
+        router.visit(route("permissions.create"));
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

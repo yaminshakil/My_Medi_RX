@@ -1,11 +1,11 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import { Pagination } from '@/Components/pagination';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import Authenticated from '@/Layouts/Authenticated';
-import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
-import { Pencil, Trash2, X } from 'lucide-react';
-import { useState } from 'react';
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import { Pagination } from "@/Components/pagination";
+import PrimaryButton from "@/Components/PrimaryButton";
+import TextInput from "@/Components/TextInput";
+import Authenticated from "@/Layouts/Authenticated";
+import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
+import { Pencil, Trash2, X } from "lucide-react";
+import { useState } from "react";
 
 export default function Index(props) {
     const { vitals } = usePage().props;
@@ -15,23 +15,23 @@ export default function Index(props) {
     const [vitalId, setVitalId] = useState(false);
 
     const { data, setData } = useForm({
-        search: props.filters?.search || '',
+        search: props.filters?.search || "",
     });
 
     const onHandleChange = (e) => {
         const value = e.target.value;
-        setData('search', value);
+        setData("search", value);
         const queryString = value ? { search: value } : {};
-        router.get(route('vitals.index'), queryString, {
+        router.get(route("vitals.index"), queryString, {
             preserveState: true,
             preserveScroll: true,
         });
     };
 
     const handleReset = () => {
-        setData('search', '');
+        setData("search", "");
         router.get(
-            route('vitals.index'),
+            route("vitals.index"),
             {},
             {
                 preserveState: true,
@@ -41,7 +41,7 @@ export default function Index(props) {
     };
 
     const handleConfirm = () => {
-        router.delete(route('vitals.destroy', vitalId), {
+        router.delete(route("vitals.destroy", vitalId), {
             preserveScroll: true,
             onSuccess: () => {
                 setShowConfirm(false);
@@ -54,7 +54,12 @@ export default function Index(props) {
     };
 
     return (
-        <Authenticated auth={props.auth} errors={props.errors} menu={props.menu} dashboardlogoUrl={props.dashboardlogoUrl}>
+        <Authenticated
+            auth={props.auth}
+            errors={props.errors}
+            menu={props.menu}
+            dashboardlogoUrl={props.dashboardlogoUrl}
+        >
             <Head title="All Patients" />
             <div className="container mx-auto mt-4">
                 <section className="mx-4 py-12">
@@ -84,7 +89,11 @@ export default function Index(props) {
                             placeholder="Search Vital ..."
                             name="search"
                         />
-                        <button type="button" onClick={handleReset} className="ml-2 h-10 cursor-pointer rounded-lg bg-red-600 px-4 py-3">
+                        <button
+                            type="button"
+                            onClick={handleReset}
+                            className="ml-2 h-10 cursor-pointer rounded-lg bg-red-600 px-4 py-3"
+                        >
                             <X className="mb-3 text-white" size={20} />
                         </button>
                     </div>
@@ -92,27 +101,52 @@ export default function Index(props) {
                         <table className="w-full border text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
                             <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
                                 <tr className="bg-gray-100">
-                                    <th className="border px-6 py-4">Patient</th>
-                                    <th className="border px-6 py-4">Blood Pressure</th>
-                                    <th className="border px-6 py-4">Heart Rate</th>
-                                    <th className="border px-6 py-4">Temperature</th>
-                                    <th className="border px-6 py-4">Created At</th>
-                                    <th className="border px-6 py-4">Actions</th>
+                                    <th className="border px-6 py-4">
+                                        Patient
+                                    </th>
+                                    <th className="border px-6 py-4">
+                                        Blood Pressure
+                                    </th>
+                                    <th className="border px-6 py-4">
+                                        Heart Rate
+                                    </th>
+                                    <th className="border px-6 py-4">
+                                        Temperature
+                                    </th>
+                                    <th className="border px-6 py-4">
+                                        Created At
+                                    </th>
+                                    <th className="border px-6 py-4">
+                                        Actions
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {vitals.data.map((v) => (
                                     <tr key={v.id}>
-                                        <td className="border px-6 py-2">{v?.name}</td>
-                                        <td className="border px-6 py-2">{v.blood_pressure}</td>
-                                        <td className="border px-6 py-2">{v.heart_rate}</td>
-                                        <td className="border px-6 py-2">{v.temperature}</td>
-                                        <td className="border px-6 py-2">{v.created_at}</td>
+                                        <td className="border px-6 py-2">
+                                            {v?.name}
+                                        </td>
+                                        <td className="border px-6 py-2">
+                                            {v.blood_pressure}
+                                        </td>
+                                        <td className="border px-6 py-2">
+                                            {v.heart_rate}
+                                        </td>
+                                        <td className="border px-6 py-2">
+                                            {v.temperature}
+                                        </td>
+                                        <td className="border px-6 py-2">
+                                            {v.created_at}
+                                        </td>
                                         <td className="border px-6 py-2">
                                             <Link
                                                 as="button"
                                                 className="mb-2 cursor-pointer rounded-lg bg-lime-600 p-3 text-white hover:bg-lime-700"
-                                                href={route('vitals.edit', v.id)}
+                                                href={route(
+                                                    "vitals.edit",
+                                                    v.id,
+                                                )}
                                             >
                                                 <Pencil size={20} />
                                             </Link>

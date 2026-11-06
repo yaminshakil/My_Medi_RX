@@ -1,10 +1,12 @@
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
-import Form from './Form';
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler } from "react";
+import Form from "./Form";
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Create Doctor', href: '/doctors/create' }];
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: "Create Doctor", href: "/doctors/create" },
+];
 
 type DoctorForm = {
     name: string;
@@ -20,45 +22,46 @@ type DoctorForm = {
     working_institute: string;
     designation?: string;
     qualification?: string;
-    experience_years?: number | '';
+    experience_years?: number | "";
     bio?: string;
     active: boolean;
 };
 
 export default function Create() {
     const { specialties } = usePage().props;
-    const { data, setData, post, processing, errors, reset } = useForm<DoctorForm>({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+    const { data, setData, post, processing, errors, reset } =
+        useForm<DoctorForm>({
+            name: "",
+            email: "",
+            password: "",
+            password_confirmation: "",
 
-        profile_image: null,
-        phone: '',
-        gender: '',
-        dob: '',
-        specialization: '',
-        working_institute: '',
-        registration_no: '',
-        designation: '',
-        qualification: '',
-        experience_years: '',
-        bio: '',
-        social: { facebook: '', linkedin: '', twitter: '' },
-        active: true,
-        featured: false,
-        specialization_ids: [],
-    });
+            profile_image: null,
+            phone: "",
+            gender: "",
+            dob: "",
+            specialization: "",
+            working_institute: "",
+            registration_no: "",
+            designation: "",
+            qualification: "",
+            experience_years: "",
+            bio: "",
+            social: { facebook: "", linkedin: "", twitter: "" },
+            active: true,
+            featured: false,
+            specialization_ids: [],
+        });
 
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('doctors.store'), {
-            onFinish: () => reset('password', 'password_confirmation'),
+        post(route("doctors.store"), {
+            onFinish: () => reset("password", "password_confirmation"),
         });
     };
 
     const handleCancel = () => {
-        router.get(route('doctors.index'));
+        router.get(route("doctors.index"));
     };
 
     return (

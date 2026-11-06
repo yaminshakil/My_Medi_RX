@@ -1,21 +1,26 @@
-import { ConfirmDialog } from '@/components/ConfirmDialog';
-import PageHeader from '@/components/PageHeader';
-import { Pagination } from '@/components/pagination';
-import Table from '@/components/Table';
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import AppLayout from '@/layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { Check, Star } from 'lucide-react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import PageHeader from "@/components/PageHeader";
+import { Pagination } from "@/components/pagination";
+import Table from "@/components/Table";
+import { Button } from "@/components/ui/button";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+import AppLayout from "@/layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { Check, Star } from "lucide-react";
+import { FormEventHandler, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Manage Cambers',
-        href: '/chambers',
+        title: "Manage Cambers",
+        href: "/chambers",
     },
 ];
 
@@ -23,28 +28,28 @@ export default function Index(props) {
     const { flash, filters } = usePage().props;
     const [showConfirm, setShowConfirm] = useState(false);
     const [chamber, setChamber] = useState(false);
-    const canCreate = useCan('Create');
-    const canEdit = useCan('Edit');
-    const canDelete = useCan('Delete');
+    const canCreate = useCan("Create");
+    const canEdit = useCan("Edit");
+    const canDelete = useCan("Delete");
 
     const { data, setData } = useForm({
-        search: filters?.search || '',
+        search: filters?.search || "",
     });
 
     const handleSearch = (e) => {
         const value = e.target.value;
-        setData('search', value);
+        setData("search", value);
         const queryString = value ? { search: value } : {};
-        router.get(route('chambers.index'), queryString, {
+        router.get(route("chambers.index"), queryString, {
             preserveState: true,
             preserveScroll: true,
         });
     };
 
     const handleReset = () => {
-        setData('search', '');
+        setData("search", "");
         router.get(
-            route('chambers.index'),
+            route("chambers.index"),
             {},
             {
                 preserveState: true,
@@ -54,7 +59,7 @@ export default function Index(props) {
     };
 
     const handleConfirm = () => {
-        router.delete(route('chambers.destroy', chamber.id), {
+        router.delete(route("chambers.destroy", chamber.id), {
             preserveScroll: true,
             onSuccess: () => {
                 setShowConfirm(false);
@@ -67,7 +72,12 @@ export default function Index(props) {
     };
 
     function Content({ content }) {
-        return <div className="ql-editor text-center" dangerouslySetInnerHTML={{ __html: content }} />;
+        return (
+            <div
+                className="ql-editor text-center"
+                dangerouslySetInnerHTML={{ __html: content }}
+            />
+        );
     }
 
     useEffect(() => {
@@ -80,7 +90,7 @@ export default function Index(props) {
     }, [flash]);
 
     const handleEdit: FormEventHandler = (item) => {
-        router.get(route('chambers.edit', item.id));
+        router.get(route("chambers.edit", item.id));
     };
 
     const handleDelete: FormEventHandler = (item) => {
@@ -89,22 +99,37 @@ export default function Index(props) {
     };
 
     const columns = [
-        { key: '#', label: '#', render: (item) => item.id },
-        { key: 'name', label: 'Name' },
-        { key: 'header_left', label: 'Prescription Header Left', render: (item) => <Content content={item.header_left} /> },
-        { key: 'header_right', label: 'Prescription Header Rright', render: (item) => <Content content={item.header_right} /> },
-        { key: 'footer_info', label: 'Prescription Footer', render: (item) => <Content content={item.footer_info} /> },
+        { key: "#", label: "#", render: (item) => item.id },
+        { key: "name", label: "Name" },
         {
-            key: 'active',
-            label: 'Status',
-            className: 'text-center',
+            key: "header_left",
+            label: "Prescription Header Left",
+            render: (item) => <Content content={item.header_left} />,
+        },
+        {
+            key: "header_right",
+            label: "Prescription Header Rright",
+            render: (item) => <Content content={item.header_right} />,
+        },
+        {
+            key: "footer_info",
+            label: "Prescription Footer",
+            render: (item) => <Content content={item.footer_info} />,
+        },
+        {
+            key: "active",
+            label: "Status",
+            className: "text-center",
             render: (item) =>
                 item.is_active ? (
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <span className="inline-flex cursor-default items-center gap-1 rounded-full border border-green-300 bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-                                    <Check size={14} className="text-green-600" />
+                                    <Check
+                                        size={14}
+                                        className="text-green-600"
+                                    />
                                     Active
                                 </span>
                             </TooltipTrigger>
@@ -124,14 +149,24 @@ export default function Index(props) {
                                     <Button
                                         size="sm"
                                         className="flex items-center gap-1 rounded-full px-3 py-1 text-xs text-white"
-                                        onClick={() => router.get(route('chambers.setDefault', item.id))}
+                                        onClick={() =>
+                                            router.get(
+                                                route(
+                                                    "chambers.setDefault",
+                                                    item.id,
+                                                ),
+                                            )
+                                        }
                                     >
                                         <Star size={14} />
                                         Set Default
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>Set this chamber as the default active one</p>
+                                    <p>
+                                        Set this chamber as the default active
+                                        one
+                                    </p>
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
@@ -141,11 +176,15 @@ export default function Index(props) {
     ];
 
     const handleCreate = () => {
-        router.get(route('chambers.create'));
+        router.get(route("chambers.create"));
     };
 
     const handlePerPageChange = (e) => {
-        router.get(route('chambers.index'), { ...filters, per_page: e.target.value }, { preserveState: true });
+        router.get(
+            route("chambers.index"),
+            { ...filters, per_page: e.target.value },
+            { preserveState: true },
+        );
     };
 
     return (

@@ -1,79 +1,85 @@
-import React, { useEffect, useState } from 'react';
-import AppLayout from '@/Layouts/app-layout';
-import { Head, usePage, useForm, router } from '@inertiajs/react';
+import React, { useEffect, useState } from "react";
+import AppLayout from "@/Layouts/app-layout";
+import { Head, usePage, useForm, router } from "@inertiajs/react";
 
-import { Hospital, ArrowLeft, Save, Upload, Image as ImageIcon } from 'lucide-react';
-import { Loader2 } from 'lucide-react';
+import {
+    Hospital,
+    ArrowLeft,
+    Save,
+    Upload,
+    Image as ImageIcon,
+} from "lucide-react";
+import { Loader2 } from "lucide-react";
 
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Textarea } from '@/Components/ui/textarea';
-import { Label } from '@/Components/ui/label';
-import { Checkbox } from '@/Components/ui/checkbox';
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Textarea } from "@/Components/ui/textarea";
+import { Label } from "@/Components/ui/label";
+import { Checkbox } from "@/Components/ui/checkbox";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from '@/Components/ui/card';
+} from "@/Components/ui/card";
 
-import GeoLocation from '@/Components/GeoLocation';
-import BannerCropper from '@/Components/BannerCropper';
+import GeoLocation from "@/Components/GeoLocation";
+import BannerCropper from "@/Components/BannerCropper";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/Components/ui/select';
+} from "@/Components/ui/select";
 
 export default function Create(props) {
     const { hospitalTypes } = usePage().props;
     const { data, setData, post, processing, errors, reset } = useForm({
-        hospital_name: '',
-        hospital_type_id: '',
-        hospital_logo: '',
-        banner_url: '',
-        banner_crop_data: '',
-        address: '',
-        hospital_description: '',
-        hospital_url: '',
-        mobile_number: '',
-        phone_number: '',
-        registration_no: '',
-        service_time: '',
-        organization_notice: '',
-        latitude: '',
-        longitude: '',
-        thana_id: '',
-        district_id: '',
-        division_id: '',
+        hospital_name: "",
+        hospital_type_id: "",
+        hospital_logo: "",
+        banner_url: "",
+        banner_crop_data: "",
+        address: "",
+        hospital_description: "",
+        hospital_url: "",
+        mobile_number: "",
+        phone_number: "",
+        registration_no: "",
+        service_time: "",
+        organization_notice: "",
+        latitude: "",
+        longitude: "",
+        thana_id: "",
+        district_id: "",
+        division_id: "",
         sort_order: 0,
         status: true,
-        verification_status: 'pending',
-        verification_note: '',
-        hospital_email: '',
+        verification_status: "pending",
+        verification_note: "",
+        hospital_email: "",
     });
 
     const [loadingHospitals, setLoadingHospitals] = useState(false);
 
-    const isAdmin = usePage().props.auth?.role?.slug === 'admin';
+    const isAdmin = usePage().props.auth?.role?.slug === "admin";
 
     useEffect(() => {
         return () => {
             reset(
-                'hospital_name',
-                'address',
-                'hospital_description',
-                'hospital_url',
-                'mobile_number',
-                'phone_number',
-                'sort_order',
-                'thana',
-                'district',
-                'status',
-                'hospital_email'
+                "hospital_name",
+                "address",
+                "hospital_description",
+                "hospital_url",
+                "mobile_number",
+                "phone_number",
+                "sort_order",
+                "thana",
+                "district",
+                "status",
+                "hospital_email",
             );
         };
     }, []);
@@ -81,17 +87,16 @@ export default function Create(props) {
     const onHandleChange = (event) => {
         setData(
             event.target.name,
-            event.target.type === 'checkbox'
+            event.target.type === "checkbox"
                 ? event.target.checked
-                : event.target.value
+                : event.target.value,
         );
     };
-
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('hospital.create'), {
+        post(route("hospital.create"), {
             forceFormData: true,
         });
     };
@@ -100,23 +105,21 @@ export default function Create(props) {
         const file = e.target.files?.[0];
 
         if (file) {
-            setData('hospital_logo', file);
+            setData("hospital_logo", file);
         }
     };
 
     /**
-   * Hospital type change
-   */
+     * Hospital type change
+     */
     const handleTypeChange = (value: string) => {
         const hospitalTypeId = Number(value);
 
-        setData('hospital_type_id', hospitalTypeId);
+        setData("hospital_type_id", hospitalTypeId);
     };
 
     return (
-        <AppLayout
-
-        >
+        <AppLayout>
             <Head title="Create Hospital" />
 
             <div className="container mx-auto max-w-6xl px-4 py-8">
@@ -216,18 +219,26 @@ export default function Create(props) {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="hospital_type_id">Hospital Type</Label>
+                                        <Label htmlFor="hospital_type_id">
+                                            Hospital Type
+                                        </Label>
 
                                         <Select
-                                            value={data.hospital_type_id?.toString() ?? ''}
+                                            value={
+                                                data.hospital_type_id?.toString() ??
+                                                ""
+                                            }
                                             onValueChange={handleTypeChange}
                                         >
-                                            <SelectTrigger id="hospital_type_id" className="w-full">
+                                            <SelectTrigger
+                                                id="hospital_type_id"
+                                                className="w-full"
+                                            >
                                                 <SelectValue
                                                     placeholder={
                                                         loadingHospitals
-                                                            ? 'Loading hospital types...'
-                                                            : 'Select Hospital Type'
+                                                            ? "Loading hospital types..."
+                                                            : "Select Hospital Type"
                                                     }
                                                 />
                                             </SelectTrigger>
@@ -434,8 +445,8 @@ export default function Create(props) {
                                         Location
                                     </h2>
                                     <p className="text-sm text-muted-foreground">
-                                        Enter the hospital address and geographic
-                                        information.
+                                        Enter the hospital address and
+                                        geographic information.
                                     </p>
                                 </div>
                                 <div className="grid gap-5 md:grid-cols-2">
@@ -526,7 +537,8 @@ export default function Create(props) {
                                             Admin Settings
                                         </h2>
                                         <p className="text-sm text-muted-foreground">
-                                            Configure display and visibility settings.
+                                            Configure display and visibility
+                                            settings.
                                         </p>
                                     </div>
 
@@ -558,8 +570,8 @@ export default function Create(props) {
                                                 checked={data.status}
                                                 onCheckedChange={(checked) =>
                                                     setData(
-                                                        'status',
-                                                        checked === true
+                                                        "status",
+                                                        checked === true,
                                                     )
                                                 }
                                             />
@@ -573,7 +585,8 @@ export default function Create(props) {
                                                 </Label>
 
                                                 <p className="text-xs text-muted-foreground">
-                                                    Hospital will be visible to users.
+                                                    Hospital will be visible to
+                                                    users.
                                                 </p>
                                             </div>
                                         </div>
@@ -620,7 +633,8 @@ export default function Create(props) {
                                                     </p>
 
                                                     <p className="mt-1 text-xs text-muted-foreground">
-                                                        PNG, JPG • Recommended 800×800
+                                                        PNG, JPG • Recommended
+                                                        800×800
                                                     </p>
                                                 </div>
 
@@ -644,7 +658,7 @@ export default function Create(props) {
 
                                                 <img
                                                     src={URL.createObjectURL(
-                                                        data.hospital_logo
+                                                        data.hospital_logo,
                                                     )}
                                                     alt="Hospital logo preview"
                                                     className="h-40 w-40 rounded-md object-contain"
@@ -661,9 +675,7 @@ export default function Create(props) {
 
                                     {/* Banner */}
                                     <div className="space-y-3">
-                                        <Label>
-                                            Hospital Banner
-                                        </Label>
+                                        <Label>Hospital Banner</Label>
 
                                         <div className="rounded-lg border p-4">
                                             <p className="mb-3 text-xs text-muted-foreground">
@@ -702,10 +714,9 @@ export default function Create(props) {
                                     type="button"
                                     variant="outline"
                                     onClick={() =>
-                                        router.visit(
-                                            route('hospital.index'),
-                                            { method: 'get' }
-                                        )
+                                        router.visit(route("hospital.index"), {
+                                            method: "get",
+                                        })
                                     }
                                     disabled={processing}
                                 >
@@ -714,10 +725,7 @@ export default function Create(props) {
                                 </Button>
                             )}
 
-                            <Button
-                                type="submit"
-                                disabled={processing}
-                            >
+                            <Button type="submit" disabled={processing}>
                                 {processing ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />

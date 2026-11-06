@@ -1,22 +1,27 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import PageHeader from '@/Components/PageHeader';
-import { Pagination } from '@/Components/pagination';
-import Table from '@/Components/Table';
-import { Button } from '@/Components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/Components/ui/dialog';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import AppLayout from '@/Layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import PageHeader from "@/Components/PageHeader";
+import { Pagination } from "@/Components/pagination";
+import Table from "@/Components/Table";
+import { Button } from "@/Components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/Components/ui/dialog";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import AppLayout from "@/Layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Manufacturers',
-        href: '/manufacturers',
+        title: "Manufacturers",
+        href: "/manufacturers",
     },
 ];
 
@@ -24,24 +29,24 @@ export default function Index() {
     const { manufacturers, flash, filters } = usePage().props;
     const [open, setOpen] = useState(false);
     const [editing, setEditing] = useState(null);
-    const canCreate = useCan('Create');
-    const canEdit = useCan('Edit');
-    const canDelete = useCan('Delete');
+    const canCreate = useCan("Create");
+    const canEdit = useCan("Edit");
+    const canDelete = useCan("Delete");
     const [confirmDelete, setConfirmDelete] = useState(null);
 
     const form = useForm({
-        company_name: '',
+        company_name: "",
         is_active: 1,
     });
 
     const { data, setData } = useForm({
-        search: filters?.search || '',
+        search: filters?.search || "",
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (editing) {
-            form.put(route('manufacturers.update', editing.id), {
+            form.put(route("manufacturers.update", editing.id), {
                 onSuccess: () => {
                     setOpen(false);
                     setEditing(null);
@@ -49,7 +54,7 @@ export default function Index() {
                 },
             });
         } else {
-            form.post(route('manufacturers.store'), {
+            form.post(route("manufacturers.store"), {
                 onSuccess: () => {
                     setOpen(false);
                     form.reset();
@@ -59,18 +64,26 @@ export default function Index() {
     };
 
     const handlePerPageChange = (e) => {
-        router.get(route('manufacturers.index'), { ...filters, per_page: e.target.value }, { preserveState: true });
+        router.get(
+            route("manufacturers.index"),
+            { ...filters, per_page: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleSearch = (e) => {
-        setData('search', e.target.value);
-        router.get(route('manufacturers.index'), { ...filters, search: e.target.value }, { preserveState: true });
+        setData("search", e.target.value);
+        router.get(
+            route("manufacturers.index"),
+            { ...filters, search: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleReset = () => {
-        setData('search', '');
+        setData("search", "");
         router.get(
-            route('manufacturers.index'),
+            route("manufacturers.index"),
             {},
             {
                 preserveState: true,
@@ -102,20 +115,28 @@ export default function Index() {
     };
 
     const handleConfirmDelete = (id) => {
-        router.delete(route('manufacturers.destroy', id), {
+        router.delete(route("manufacturers.destroy", id), {
             onSuccess: () => setConfirmDelete(null),
         });
     };
 
     const columns = [
-        { key: '#', label: '#', render: (item) => item.id },
-        { key: 'company_name', label: 'Company Name', render: (item) => item.company_name },
+        { key: "#", label: "#", render: (item) => item.id },
         {
-            key: 'is_active',
-            label: 'Status',
-            className: 'text-center',
+            key: "company_name",
+            label: "Company Name",
+            render: (item) => item.company_name,
+        },
+        {
+            key: "is_active",
+            label: "Status",
+            className: "text-center",
             render: (item) => (
-                <span className={`badge ${item.is_active ? 'badge--success' : 'badge--warning'}`}>{item.is_active ? 'Active' : 'Inactive'}</span>
+                <span
+                    className={`badge ${item.is_active ? "badge--success" : "badge--warning"}`}
+                >
+                    {item.is_active ? "Active" : "Inactive"}
+                </span>
             ),
         },
     ];
@@ -164,18 +185,37 @@ export default function Index() {
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>{editing ? 'Edit Manufacturer' : 'Add Manufacturer'}</DialogTitle>
+                            <DialogTitle>
+                                {editing
+                                    ? "Edit Manufacturer"
+                                    : "Add Manufacturer"}
+                            </DialogTitle>
                         </DialogHeader>
-                        <form onSubmit={handleSubmit} role="form" className="w-full space-y-4 border p-4 shadow-md sm:rounded-lg">
+                        <form
+                            onSubmit={handleSubmit}
+                            role="form"
+                            className="w-full space-y-4 border p-4 shadow-md sm:rounded-lg"
+                        >
                             <div>
-                                <Label className="mb-1 block text-sm">Company Name</Label>
+                                <Label className="mb-1 block text-sm">
+                                    Company Name
+                                </Label>
                                 <Input
                                     type="text"
                                     value={form.data.company_name}
-                                    onChange={(e) => form.setData('company_name', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            "company_name",
+                                            e.target.value,
+                                        )
+                                    }
                                     className="w-full rounded border p-2"
                                 />
-                                {form.errors.company_name && <div className="text-sm text-red-500">{form.errors.company_name}</div>}
+                                {form.errors.company_name && (
+                                    <div className="text-sm text-red-500">
+                                        {form.errors.company_name}
+                                    </div>
+                                )}
                             </div>
                             <div className="flex items-center space-x-2">
                                 <Input
@@ -183,7 +223,12 @@ export default function Index() {
                                     className="w-6"
                                     type="checkbox"
                                     checked={form.data.is_active}
-                                    onChange={(e) => form.setData('is_active', e.target.checked)}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            "is_active",
+                                            e.target.checked,
+                                        )
+                                    }
                                 />
                                 <Label htmlFor="active" className="text-sm">
                                     Active
@@ -199,8 +244,11 @@ export default function Index() {
                                 >
                                     Cancel
                                 </Button>
-                                <Button type="submit" disabled={form.processing}>
-                                    {editing ? 'Update' : 'Create'}
+                                <Button
+                                    type="submit"
+                                    disabled={form.processing}
+                                >
+                                    {editing ? "Update" : "Create"}
                                 </Button>
                             </div>
                         </form>

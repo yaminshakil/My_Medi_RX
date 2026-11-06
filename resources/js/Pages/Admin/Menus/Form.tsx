@@ -1,11 +1,11 @@
-import MainForm from '@/Components/Form/MainForm';
-import InputError from '@/Components/input-error';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { router, usePage } from '@inertiajs/react';
-import { Select } from 'antd';
-import type { Language } from '@/types';
-import { AppPageProps } from '@/types';
+import MainForm from "@/Components/Form/MainForm";
+import InputError from "@/Components/input-error";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { router, usePage } from "@inertiajs/react";
+import { Select } from "antd";
+import type { Language } from "@/types";
+import { AppPageProps } from "@/types";
 
 interface SharedProps {
     languages: Language[];
@@ -45,26 +45,38 @@ interface FormProps {
     heading: string;
     parentmenus: Parentmenus[];
 }
-export default function Form({ data, setData, handleSubmit, processing, errors, submitTitle = 'Create', roles, parentmenus, heading }: FormProps) {
+export default function Form({
+    data,
+    setData,
+    handleSubmit,
+    processing,
+    errors,
+    submitTitle = "Create",
+    roles,
+    parentmenus,
+    heading,
+}: FormProps) {
     console.log(data);
     const { languages } = usePage<SharedProps>().props;
     const { translations } = usePage<AppPageProps>().props;
     const onHandleChange = (event) => {
-        setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
+        setData(
+            event.target.name,
+            event.target.type === "checkbox"
+                ? event.target.checked
+                : event.target.value,
+        );
     };
 
     const handleCancel = () => {
-        router.get(route('menus.index'));
+        router.get(route("menus.index"));
     };
 
     /**
      * Update translation value
      */
-    const updateTranslation = (
-        locale: string,
-        value: string,
-    ) => {
-        setData('translations', {
+    const updateTranslation = (locale: string, value: string) => {
+        setData("translations", {
             ...(data.translations ?? {}),
 
             name: {
@@ -75,10 +87,18 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
     };
 
     return (
-        <MainForm handleSubmit={handleSubmit} handleCancel={handleCancel} processing={processing} submitTitle={submitTitle}>
+        <MainForm
+            handleSubmit={handleSubmit}
+            handleCancel={handleCancel}
+            processing={processing}
+            submitTitle={submitTitle}
+        >
             <h1 className="items-start !text-left font-extrabold">{heading}</h1>
             <div className="grid gap-2">
-                <Label htmlFor="name" className="after:text-red-500 after:content-['*']">
+                <Label
+                    htmlFor="name"
+                    className="after:text-red-500 after:content-['*']"
+                >
                     {translations.common.name}
                 </Label>
 
@@ -106,60 +126,63 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
                     </h3>
 
                     <p className="text-sm text-muted-foreground">
-                        {translations.common.Enter_the_specialty_name_in_each_supported_language}
+                        {
+                            translations.common
+                                .Enter_the_specialty_name_in_each_supported_language
+                        }
                     </p>
                 </div>
 
-                {languages.map((language) => (
-                    console.log(data.translations),
-                    <div
-                        key={language.code}
-                        className="grid gap-2"
-                    >
-                        <Label
-                            htmlFor={`translation_name_${language.code}`}
-                        >
-                            {translations.common.name} ({language.name})
-                        </Label>
+                {languages.map(
+                    (language) => (
+                        console.log(data.translations),
+                        (
+                            <div key={language.code} className="grid gap-2">
+                                <Label
+                                    htmlFor={`translation_name_${language.code}`}
+                                >
+                                    {translations.common.name} ({language.name})
+                                </Label>
 
-                        <Input
-                            id={`translation_name_${language.code}`}
-                            dir={
-                                language.code === 'ar'
-                                    ? 'rtl'
-                                    : 'ltr'
-                            }
-                            className="w-full border"
-                            value={
-                                data.translations?.name?.[
-                                language.code
-                                ] ?? ''
-                            }
-                            onChange={(e) =>
-                                updateTranslation(
-                                    language.code,
-                                    e.target.value,
-                                )
-                            }
-                        />
-
-                        {errors[
-                            `translations.name.${language.code}`
-                        ] && (
-                                <InputError
-                                    message={
-                                        errors[
-                                        `translations.name.${language.code}`
-                                        ]
+                                <Input
+                                    id={`translation_name_${language.code}`}
+                                    dir={language.code === "ar" ? "rtl" : "ltr"}
+                                    className="w-full border"
+                                    value={
+                                        data.translations?.name?.[
+                                            language.code
+                                        ] ?? ""
+                                    }
+                                    onChange={(e) =>
+                                        updateTranslation(
+                                            language.code,
+                                            e.target.value,
+                                        )
                                     }
                                 />
-                            )}
-                    </div>
-                ))}
+
+                                {errors[
+                                    `translations.name.${language.code}`
+                                ] && (
+                                    <InputError
+                                        message={
+                                            errors[
+                                                `translations.name.${language.code}`
+                                            ]
+                                        }
+                                    />
+                                )}
+                            </div>
+                        )
+                    ),
+                )}
             </div>
 
             <div className="grid gap-2">
-                <Label htmlFor="slug" className="after:text-red-500 after:content-['*']">
+                <Label
+                    htmlFor="slug"
+                    className="after:text-red-500 after:content-['*']"
+                >
                     {translations.common.slug}
                 </Label>
 
@@ -178,7 +201,8 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
             </div>
             <div className="grid gap-2">
                 <Label htmlFor="menu_icon">
-                    {translations.common.icon} ({translations.common.lucid_icon_name})
+                    {translations.common.icon} (
+                    {translations.common.lucid_icon_name})
                 </Label>
 
                 <Input
@@ -195,7 +219,10 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
             </div>
 
             <div className="grid w-1/4 gap-2">
-                <Label htmlFor="order_by" className="after:text-red-500 after:content-['*']">
+                <Label
+                    htmlFor="order_by"
+                    className="after:text-red-500 after:content-['*']"
+                >
                     {translations.common.order}
                 </Label>
 
@@ -221,7 +248,7 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
                     id="parent_id"
                     allowClear
                     onChange={(value) => {
-                        setData('parent_id', value ?? null);
+                        setData("parent_id", value ?? null);
                     }}
                     className="basic-single m-0 !h-9 w-full"
                     options={parentmenus}
@@ -231,9 +258,7 @@ export default function Form({ data, setData, handleSubmit, processing, errors, 
             </div>
 
             <div className="grid gap-2">
-                <Label htmlFor="user_role">
-                    {translations.common.role}
-                </Label>
+                <Label htmlFor="user_role">{translations.common.role}</Label>
                 <Select
                     id="user_role"
                     mode="multiple"

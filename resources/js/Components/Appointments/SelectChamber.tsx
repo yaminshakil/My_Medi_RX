@@ -1,7 +1,13 @@
-import { Button } from '@/Components/ui/button';
-import { Card } from 'antd';
+import { Button } from "@/Components/ui/button";
+import { Card } from "antd";
 
-export default function SelectChamber({ data, setData, chambers, selectedChamber, setSelectedChamber }) {
+export default function SelectChamber({
+    data,
+    setData,
+    chambers,
+    selectedChamber,
+    setSelectedChamber,
+}) {
     return (
         <div className="mb-6">
             <h3 className="mb-2 text-lg font-semibold">Select Chamber</h3>
@@ -15,15 +21,16 @@ export default function SelectChamber({ data, setData, chambers, selectedChamber
                             setData({
                                 ...data,
                                 chamber_id: ch.id,
-                                appointment_date: '',
-                                appointment_time: '',
-                                appointment_type: 'online',
+                                appointment_date: "",
+                                appointment_time: "",
+                                appointment_type: "online",
                             });
                         }}
-                        className={`rounded-lg border px-4 py-2 ${selectedChamber?.id === ch.id
-                            ? 'border text-white'
-                            : 'border border-[var(--base-color)] bg-gray-100 text-black hover:bg-lime-100'
-                            }`}
+                        className={`rounded-lg border px-4 py-2 ${
+                            selectedChamber?.id === ch.id
+                                ? "border text-white"
+                                : "border border-[var(--base-color)] bg-gray-100 text-black hover:bg-lime-100"
+                        }`}
                     >
                         {ch.name}
                     </Button>

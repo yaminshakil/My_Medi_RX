@@ -1,17 +1,17 @@
-import { router } from '@inertiajs/react';
-import { useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { router } from "@inertiajs/react";
+import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
-const toastContainerId = 'post-action-notifications';
+const toastContainerId = "post-action-notifications";
 
 function hasFlashMessage(flash: unknown): boolean {
-    if (typeof flash !== 'object' || flash === null) {
+    if (typeof flash !== "object" || flash === null) {
         return false;
     }
 
     const message = (flash as { message?: unknown }).message;
 
-    if (typeof message !== 'object' || message === null) {
+    if (typeof message !== "object" || message === null) {
         return false;
     }
 
@@ -21,8 +21,8 @@ function hasFlashMessage(flash: unknown): boolean {
     };
 
     return (
-        (typeof success === 'string' && success.trim().length > 0) ||
-        (typeof error === 'string' && error.trim().length > 0)
+        (typeof success === "string" && success.trim().length > 0) ||
+        (typeof error === "string" && error.trim().length > 0)
     );
 }
 
@@ -30,11 +30,11 @@ export default function GlobalPostNotifications() {
     useEffect(() => {
         let isPostVisit = false;
 
-        const removeStartListener = router.on('start', (event) => {
-            isPostVisit = event.detail.visit.method === 'post';
+        const removeStartListener = router.on("start", (event) => {
+            isPostVisit = event.detail.visit.method === "post";
         });
 
-        const removeSuccessListener = router.on('success', (event) => {
+        const removeSuccessListener = router.on("success", (event) => {
             if (
                 !isPostVisit ||
                 hasFlashMessage(event.detail.page.props.flash)
@@ -42,12 +42,12 @@ export default function GlobalPostNotifications() {
                 return;
             }
 
-            toast.success('Request completed successfully.', {
+            toast.success("Request completed successfully.", {
                 containerId: toastContainerId,
             });
         });
 
-        const removeFinishListener = router.on('finish', () => {
+        const removeFinishListener = router.on("finish", () => {
             isPostVisit = false;
         });
 

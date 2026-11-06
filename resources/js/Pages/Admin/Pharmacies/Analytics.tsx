@@ -257,7 +257,12 @@ export default function Analytics({
         <AppLayout
             breadcrumbs={
                 audience === "pharmacy"
-                    ? [{ title: "Pharmacy dashboard", href: route("dashboard") }]
+                    ? [
+                          {
+                              title: "Pharmacy dashboard",
+                              href: route("dashboard"),
+                          },
+                      ]
                     : [
                           {
                               title: "Pharmacies",
@@ -418,9 +423,7 @@ export default function Analytics({
                                                                 item.stock_quantity
                                                             }{" "}
                                                             /{" "}
-                                                            {
-                                                                item.reorder_level
-                                                            }
+                                                            {item.reorder_level}
                                                         </Badge>
                                                     </div>
                                                 ),

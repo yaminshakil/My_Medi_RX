@@ -1,39 +1,39 @@
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
-import Form from './Form';
+import AppLayout from "@/layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler } from "react";
+import Form from "./Form";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Create Cambers',
-        href: '/chambers/create',
+        title: "Create Cambers",
+        href: "/chambers/create",
     },
 ];
 
 export default function Create() {
     const { hospitaloptions } = usePage().props;
     const { data, setData, post, processing, errors } = useForm({
-        name: '',
-        chamber_logo: '',
-        footer_info: '',
-        header_left: '',
-        header_right: '',
+        name: "",
+        chamber_logo: "",
+        footer_info: "",
+        header_left: "",
+        header_right: "",
         schedules: [
-            { day: '', start_time: '', end_time: '', slot_duration: '' }, // at least one row
+            { day: "", start_time: "", end_time: "", slot_duration: "" }, // at least one row
         ],
-        fee: '',
-        followup_fee: '',
-        report_fee: '',
-        city: '',
-        address: '',
-        appoinment_limit: '',
-        hospital_id: hospitaloptions.length > 0 ? hospitaloptions[0].value : '', // default to first hospital if available
+        fee: "",
+        followup_fee: "",
+        report_fee: "",
+        city: "",
+        address: "",
+        appoinment_limit: "",
+        hospital_id: hospitaloptions.length > 0 ? hospitaloptions[0].value : "", // default to first hospital if available
     });
 
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('chambers.store'));
+        post(route("chambers.store"));
     };
 
     return (

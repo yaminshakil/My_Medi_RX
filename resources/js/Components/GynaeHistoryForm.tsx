@@ -6,14 +6,18 @@ export default function GynaeHistoryForm({ data, setData }) {
 
                 {/* Marriage Details */}
                 <div className="mb-4">
-                    <h4 className="mb-2 font-semibold text-lime-700">Marriage Details</h4>
+                    <h4 className="mb-2 font-semibold text-lime-700">
+                        Marriage Details
+                    </h4>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block">Marital Status</label>
                             <select
-                                value={data?.gynae_history?.marital_status || ''}
+                                value={
+                                    data?.gynae_history?.marital_status || ""
+                                }
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         marital_status: e.target.value,
                                     })
@@ -31,9 +35,11 @@ export default function GynaeHistoryForm({ data, setData }) {
                             <label className="block">Marriage Duration</label>
                             <input
                                 type="text"
-                                value={data?.gynae_history?.marriage_duration || ''}
+                                value={
+                                    data?.gynae_history?.marriage_duration || ""
+                                }
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         marriage_duration: e.target.value,
                                     })
@@ -45,9 +51,9 @@ export default function GynaeHistoryForm({ data, setData }) {
                         <div>
                             <label className="block">Consanguinity</label>
                             <select
-                                value={data?.gynae_history?.consanguinity || ''}
+                                value={data?.gynae_history?.consanguinity || ""}
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         consanguinity: e.target.value,
                                     })
@@ -64,15 +70,17 @@ export default function GynaeHistoryForm({ data, setData }) {
 
                 {/* Menstrual History */}
                 <div className="mb-4">
-                    <h4 className="mb-2 font-semibold text-lime-700">Menstrual History</h4>
+                    <h4 className="mb-2 font-semibold text-lime-700">
+                        Menstrual History
+                    </h4>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block">Menarche Age</label>
                             <input
                                 type="text"
-                                value={data?.gynae_history?.menarche_age || ''}
+                                value={data?.gynae_history?.menarche_age || ""}
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         menarche_age: e.target.value,
                                     })
@@ -81,12 +89,14 @@ export default function GynaeHistoryForm({ data, setData }) {
                             />
                         </div>
                         <div>
-                            <label className="block">Last Menstrual Period (LMP)</label>
+                            <label className="block">
+                                Last Menstrual Period (LMP)
+                            </label>
                             <input
                                 type="date"
-                                value={data?.gynae_history?.lmp || ''}
+                                value={data?.gynae_history?.lmp || ""}
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         lmp: e.target.value,
                                     })
@@ -98,9 +108,9 @@ export default function GynaeHistoryForm({ data, setData }) {
                             <label className="block">Cycle</label>
                             <input
                                 type="text"
-                                value={data?.gynae_history?.cycle || ''}
+                                value={data?.gynae_history?.cycle || ""}
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         cycle: e.target.value,
                                     })
@@ -113,9 +123,9 @@ export default function GynaeHistoryForm({ data, setData }) {
                             <label className="block">Flow</label>
                             <input
                                 type="text"
-                                value={data?.gynae_history?.flow || ''}
+                                value={data?.gynae_history?.flow || ""}
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         flow: e.target.value,
                                     })
@@ -127,9 +137,11 @@ export default function GynaeHistoryForm({ data, setData }) {
                         <div className="flex items-center">
                             <input
                                 type="checkbox"
-                                checked={data?.gynae_history?.dysmenorrhea || false}
+                                checked={
+                                    data?.gynae_history?.dysmenorrhea || false
+                                }
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         dysmenorrhea: e.target.checked,
                                     })
@@ -141,9 +153,12 @@ export default function GynaeHistoryForm({ data, setData }) {
                         <div className="flex items-center">
                             <input
                                 type="checkbox"
-                                checked={data?.gynae_history?.contraceptive_use || false}
+                                checked={
+                                    data?.gynae_history?.contraceptive_use ||
+                                    false
+                                }
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         contraceptive_use: e.target.checked,
                                     })
@@ -157,15 +172,17 @@ export default function GynaeHistoryForm({ data, setData }) {
 
                 {/* Obstetrical History */}
                 <div className="mb-4">
-                    <h4 className="mb-2 font-semibold text-lime-700">Obstetrical History</h4>
+                    <h4 className="mb-2 font-semibold text-lime-700">
+                        Obstetrical History
+                    </h4>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block">Gravida</label>
                             <input
                                 type="number"
-                                value={data?.gynae_history?.gravida || ''}
+                                value={data?.gynae_history?.gravida || ""}
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         gravida: e.target.value,
                                     })
@@ -177,9 +194,9 @@ export default function GynaeHistoryForm({ data, setData }) {
                             <label className="block">Para</label>
                             <input
                                 type="number"
-                                value={data?.gynae_history?.para || ''}
+                                value={data?.gynae_history?.para || ""}
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         para: e.target.value,
                                     })
@@ -191,9 +208,9 @@ export default function GynaeHistoryForm({ data, setData }) {
                             <label className="block">Abortion</label>
                             <input
                                 type="number"
-                                value={data?.gynae_history?.abortion || ''}
+                                value={data?.gynae_history?.abortion || ""}
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         abortion: e.target.value,
                                     })
@@ -205,9 +222,11 @@ export default function GynaeHistoryForm({ data, setData }) {
                             <label className="block">Living Children</label>
                             <input
                                 type="number"
-                                value={data?.gynae_history?.living_children || ''}
+                                value={
+                                    data?.gynae_history?.living_children || ""
+                                }
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         living_children: e.target.value,
                                     })
@@ -220,15 +239,17 @@ export default function GynaeHistoryForm({ data, setData }) {
 
                 {/* Current Pregnancy */}
                 <div>
-                    <h3 className="mb-2 text-lg font-semibold text-lime-700">Current Pregnancy</h3>
+                    <h3 className="mb-2 text-lg font-semibold text-lime-700">
+                        Current Pregnancy
+                    </h3>
                     <div className="grid grid-cols-2 gap-3">
                         <div>
                             <label className="text-sm font-medium">EDD</label>
                             <input
                                 type="date"
-                                value={data?.gynae_history?.edd || ''}
+                                value={data?.gynae_history?.edd || ""}
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         edd: e.target.value,
                                     })
@@ -237,11 +258,13 @@ export default function GynaeHistoryForm({ data, setData }) {
                             />
                         </div>
                         <div>
-                            <label className="text-sm font-medium">Antenatal Checkups</label>
+                            <label className="text-sm font-medium">
+                                Antenatal Checkups
+                            </label>
                             <select
-                                value={data?.gynae_history?.anc || ''}
+                                value={data?.gynae_history?.anc || ""}
                                 onChange={(e) =>
-                                    setData('gynae_history', {
+                                    setData("gynae_history", {
                                         ...data.gynae_history,
                                         anc: e.target.value,
                                     })
@@ -260,9 +283,9 @@ export default function GynaeHistoryForm({ data, setData }) {
                 <div className="mt-4">
                     <label className="block">Other Notes</label>
                     <textarea
-                        value={data?.gynae_history?.other_history || ''}
+                        value={data?.gynae_history?.other_history || ""}
                         onChange={(e) =>
-                            setData('gynae_history', {
+                            setData("gynae_history", {
                                 ...data.gynae_history,
                                 other_history: e.target.value,
                             })

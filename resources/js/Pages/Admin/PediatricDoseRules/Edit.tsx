@@ -1,13 +1,10 @@
 import { Head, Link } from "@inertiajs/react";
 
-import RuleForm, {
-    MedicineOption,
-    RuleFormData,
-} from "./components/RuleForm";
+import RuleForm, { MedicineOption, RuleFormData } from "./components/RuleForm";
 
 import { Button } from "@/Components/ui/button";
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
 
 type Rule = {
     id: number;
@@ -18,7 +15,12 @@ type Props = {
     medicines: MedicineOption[];
 };
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Edit Pediatric Dose Rule', href: '/admin/pediatric-dose-rules/create' }];
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: "Edit Pediatric Dose Rule",
+        href: "/admin/pediatric-dose-rules/create",
+    },
+];
 
 const editableFields: (keyof RuleFormData)[] = [
     "medicine_id",

@@ -1,25 +1,27 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import Table from '@/Components/Table';
-import { Button } from '@/Components/ui/button';
-import AppLayout from '@/Layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, usePage } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import Table from "@/Components/Table";
+import { Button } from "@/Components/ui/button";
+import AppLayout from "@/Layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, usePage } from "@inertiajs/react";
+import { ArrowLeft } from "lucide-react";
+import { FormEventHandler, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Notifications', href: '/settings/email-templates' }];
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: "Notifications", href: "/settings/email-templates" },
+];
 
 export default function Index({ templates }) {
     const { flash } = usePage().props;
     const [showConfirm, setShowConfirm] = useState(false);
     const [template, setTemplate] = useState(false);
-    const canEdit = useCan('Edit');
-    const canDelete = useCan('Delete');
+    const canEdit = useCan("Edit");
+    const canDelete = useCan("Delete");
 
     const handleConfirm = () => {
-        router.delete(route('email-templates.destroy', template.id), {
+        router.delete(route("email-templates.destroy", template.id), {
             preserveScroll: true,
             onSuccess: () => setShowConfirm(false),
         });
@@ -39,7 +41,7 @@ export default function Index({ templates }) {
     }, [flash]);
 
     const handleEdit: FormEventHandler = (item) => {
-        router.get(route('email-templates.edit', item.id));
+        router.get(route("email-templates.edit", item.id));
     };
 
     const handleDelete: FormEventHandler = (item) => {
@@ -48,10 +50,10 @@ export default function Index({ templates }) {
     };
 
     const columns = [
-        { key: '#', label: '#', render: (item) => item.id },
-        { key: 'name', label: 'Name' },
-        { key: 'slug', label: 'Slug' },
-        { key: 'subject', label: 'Subject' },
+        { key: "#", label: "#", render: (item) => item.id },
+        { key: "name", label: "Name" },
+        { key: "slug", label: "Slug" },
+        { key: "subject", label: "Subject" },
     ];
 
     return (
@@ -59,7 +61,10 @@ export default function Index({ templates }) {
             <Head title="Email Templates" />
             <ToastContainer />
             <div className="ml-auto p-4">
-                <Button onClick={() => window.history.back()} className="text-white">
+                <Button
+                    onClick={() => window.history.back()}
+                    className="text-white"
+                >
                     <ArrowLeft className="h-4 w-4" /> Back
                 </Button>
             </div>

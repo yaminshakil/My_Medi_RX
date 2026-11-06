@@ -1,10 +1,10 @@
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import React, { useEffect, useState } from 'react';
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { Textarea } from "@/Components/ui/textarea";
+import React, { useEffect, useState } from "react";
 
 export default function AddVital({ vitalData, setVitalData, onHandleChange }) {
-    const [category, setCategory] = useState('');
+    const [category, setCategory] = useState("");
     useEffect(() => {
         if (!vitalData.weight || !vitalData.height) return;
 
@@ -15,17 +15,20 @@ export default function AddVital({ vitalData, setVitalData, onHandleChange }) {
 
         const totalInches = feet * 12 + inches;
         const heightInMeters = totalInches * 0.0254;
-        const bmiValue = (vitalData.weight / (heightInMeters * heightInMeters)).toFixed(2);
-        setVitalData('bmi', bmiValue);
+        const bmiValue = (
+            vitalData.weight /
+            (heightInMeters * heightInMeters)
+        ).toFixed(2);
+        setVitalData("bmi", bmiValue);
         // Set category
         if (bmiValue < 18.5) {
-            setCategory('Underweight');
+            setCategory("Underweight");
         } else if (bmiValue >= 18.5 && bmiValue < 24.9) {
-            setCategory('Normal weight');
+            setCategory("Normal weight");
         } else if (bmiValue >= 25 && bmiValue < 29.9) {
-            setCategory('Overweight');
+            setCategory("Overweight");
         } else {
-            setCategory('Obese');
+            setCategory("Obese");
         }
     }, [vitalData.weight, vitalData.height]);
     return (
@@ -107,7 +110,13 @@ export default function AddVital({ vitalData, setVitalData, onHandleChange }) {
                         <Label htmlFor="weight" className="block">
                             Weight
                         </Label>
-                        <Input id="weight" name="weight" value={vitalData.weight} onChange={onHandleChange} className="w-full border p-2" />
+                        <Input
+                            id="weight"
+                            name="weight"
+                            value={vitalData.weight}
+                            onChange={onHandleChange}
+                            className="w-full border p-2"
+                        />
                     </div>
                     <div className="min-w-0">
                         <Label htmlFor="height" className="block">
@@ -136,7 +145,9 @@ export default function AddVital({ vitalData, setVitalData, onHandleChange }) {
                         onChange={onHandleChange}
                         className="w-full border p-2"
                     />
-                    <p className="text-md text-gray-700">Category: {category}</p>
+                    <p className="text-md text-gray-700">
+                        Category: {category}
+                    </p>
                 </div>
                 <div className="mt-4">
                     <Label htmlFor="notes" className="block">

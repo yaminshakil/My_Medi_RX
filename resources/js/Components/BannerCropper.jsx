@@ -1,12 +1,19 @@
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { getCroppedImg } from '@/lib/imageCropper';
-import { Crop, Edit, RotateCw, Upload, X, ZoomIn, ZoomOut } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Cropper from 'react-easy-crop';
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { getCroppedImg } from "@/lib/imageCropper";
+import { Crop, Edit, RotateCw, Upload, X, ZoomIn, ZoomOut } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Cropper from "react-easy-crop";
 
-const BannerCropper = ({ data, setData, field, fieldCropData, initialImage = null, initialCropData = null }) => {
+const BannerCropper = ({
+    data,
+    setData,
+    field,
+    fieldCropData,
+    initialImage = null,
+    initialCropData = null,
+}) => {
     const [image, setImage] = useState(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
@@ -26,13 +33,16 @@ const BannerCropper = ({ data, setData, field, fieldCropData, initialImage = nul
             // If we have existing crop data, pre-populate the form
             if (initialCropData) {
                 try {
-                    const cropData = typeof initialCropData === 'string' ? JSON.parse(initialCropData) : initialCropData;
+                    const cropData =
+                        typeof initialCropData === "string"
+                            ? JSON.parse(initialCropData)
+                            : initialCropData;
 
                     if (cropData.rotation) {
                         setRotation(cropData.rotation);
                     }
                 } catch (e) {
-                    console.error('Error parsing crop data:', e);
+                    console.error("Error parsing crop data:", e);
                 }
             }
         }
@@ -51,7 +61,7 @@ const BannerCropper = ({ data, setData, field, fieldCropData, initialImage = nul
     const readFile = (file) => {
         return new Promise((resolve) => {
             const reader = new FileReader();
-            reader.addEventListener('load', () => resolve(reader.result));
+            reader.addEventListener("load", () => resolve(reader.result));
             reader.readAsDataURL(file);
         });
     };
@@ -66,16 +76,20 @@ const BannerCropper = ({ data, setData, field, fieldCropData, initialImage = nul
 
     const handleCropComplete = useCallback(async () => {
         if (!image || !croppedAreaPixels) {
-            console.error('No image or crop data available');
+            console.error("No image or crop data available");
             return;
         }
 
         try {
-            const croppedImageBlob = await getCroppedImg(image, croppedAreaPixels, rotation);
+            const croppedImageBlob = await getCroppedImg(
+                image,
+                croppedAreaPixels,
+                rotation,
+            );
 
             // Create a file from the blob
-            const file = new File([croppedImageBlob], 'banner.jpg', {
-                type: 'image/jpeg',
+            const file = new File([croppedImageBlob], "banner.jpg", {
+                type: "image/jpeg",
                 lastModified: Date.now(),
             });
 
@@ -97,7 +111,7 @@ const BannerCropper = ({ data, setData, field, fieldCropData, initialImage = nul
             setIsCropping(false);
             setImage(null);
         } catch (error) {
-            console.error('Error cropping image:', error);
+            console.error("Error cropping image:", error);
         }
     }, [image, croppedAreaPixels, rotation, setData]);
 
@@ -117,30 +131,30 @@ const BannerCropper = ({ data, setData, field, fieldCropData, initialImage = nul
 
             // Reset form data to initial values
             setData(field, null);
-            setData(fieldCropData, initialCropData || '');
+            setData(fieldCropData, initialCropData || "");
         } else {
             // If no initial image, clear everything
             setCroppedImage(null);
             setData(field, null);
-            setData(fieldCropData, '');
+            setData(fieldCropData, "");
         }
 
         if (fileInputRef.current) {
-            fileInputRef.current.value = '';
+            fileInputRef.current.value = "";
         }
     };
 
     const removeBanner = () => {
         setCroppedImage(null);
         setData(field, null);
-        setData(fieldCropData, '');
+        setData(fieldCropData, "");
         setIsEditing(true);
     };
 
     const startEditing = () => {
         setIsEditing(true);
         // If we have an existing image, we need to load it for editing
-        if (croppedImage && croppedImage.startsWith('blob:')) {
+        if (croppedImage && croppedImage.startsWith("blob:")) {
             // Already a blob URL, we can use it directly
             setImage(croppedImage);
         } else if (croppedImage) {
@@ -152,7 +166,7 @@ const BannerCropper = ({ data, setData, field, fieldCropData, initialImage = nul
                     setImage(url);
                 })
                 .catch((error) => {
-                    console.error('Error loading image for editing:', error);
+                    console.error("Error loading image for editing:", error);
                 });
         }
         setIsCropping(true);
@@ -162,13 +176,26 @@ const BannerCropper = ({ data, setData, field, fieldCropData, initialImage = nul
         <div className="w-full">
             {croppedImage && !isCropping ? (
                 <div className="mt-2">
-                    <img src={croppedImage} alt="Banner preview" className="h-48 max-w-full rounded border object-contain" />
+                    <img
+                        src={croppedImage}
+                        alt="Banner preview"
+                        className="h-48 max-w-full rounded border object-contain"
+                    />
                     <div className="mt-2 flex space-x-2">
-                        <Button type="button" onClick={startEditing} className="flex items-center rounded-md px-3 py-1 text-sm text-white">
+                        <Button
+                            type="button"
+                            onClick={startEditing}
+                            className="flex items-center rounded-md px-3 py-1 text-sm text-white"
+                        >
                             <Edit className="mr-1 h-4 w-4" />
                             Edit
                         </Button>
-                        <Button variant="destructive" type="button" onClick={removeBanner} className="flex items-center text-sm">
+                        <Button
+                            variant="destructive"
+                            type="button"
+                            onClick={removeBanner}
+                            className="flex items-center text-sm"
+                        >
                             <X className="mr-1 h-4 w-4" />
                             Remove
                         </Button>
@@ -200,19 +227,29 @@ const BannerCropper = ({ data, setData, field, fieldCropData, initialImage = nul
                                 min={1}
                                 max={3}
                                 step={0.1}
-                                onChange={(e) => setZoom(parseFloat(e.target.value))}
+                                onChange={(e) =>
+                                    setZoom(parseFloat(e.target.value))
+                                }
                                 className="w-full"
                             />
                             <ZoomIn className="h-4 w-4 text-gray-600" />
                         </div>
 
                         <div className="flex items-center space-x-4">
-                            <span className="text-sm text-gray-600">Rotate</span>
-                            <Button onClick={() => setRotation(rotation - 90)} className="p-2">
+                            <span className="text-sm text-gray-600">
+                                Rotate
+                            </span>
+                            <Button
+                                onClick={() => setRotation(rotation - 90)}
+                                className="p-2"
+                            >
                                 <RotateCw className="h-4 w-4 rotate-90 transform" />
                             </Button>
                             <span className="text-sm">{rotation}°</span>
-                            <Button onClick={() => setRotation(rotation + 90)} className="p-2">
+                            <Button
+                                onClick={() => setRotation(rotation + 90)}
+                                className="p-2"
+                            >
                                 <RotateCw className="h-4 w-4 -rotate-90 transform" />
                             </Button>
                         </div>
@@ -242,7 +279,14 @@ const BannerCropper = ({ data, setData, field, fieldCropData, initialImage = nul
                 <div className="rounded-lg border-2 border-dashed border-gray-300 p-8 text-center">
                     <Upload className="mx-auto mb-4 h-12 w-12 text-gray-400" />
                     <p className="mb-4 text-gray-600">Select a image to crop</p>
-                    <Input ref={fileInputRef} type="file" accept="image/*" onChange={onFileChange} className="hidden" id="banner-upload" />
+                    <Input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={onFileChange}
+                        className="hidden"
+                        id="banner-upload"
+                    />
                     <Label
                         htmlFor="banner-upload"
                         className="inline-flex cursor-pointer items-center rounded-lg bg-[var(--btn-base-color)] px-4 py-2 text-white hover:bg-[var(--btn-base-hover-color)]"

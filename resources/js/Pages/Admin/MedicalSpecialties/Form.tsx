@@ -1,11 +1,11 @@
-import MainForm from '@/Components/Form/MainForm';
-import InputError from '@/Components/input-error';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import { router, usePage } from '@inertiajs/react';
-import { Select } from 'antd';
-import type { Language } from '@/types';
+import MainForm from "@/Components/Form/MainForm";
+import InputError from "@/Components/input-error";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { Textarea } from "@/Components/ui/textarea";
+import { router, usePage } from "@inertiajs/react";
+import { Select } from "antd";
+import type { Language } from "@/types";
 
 const { Option } = Select;
 
@@ -49,23 +49,20 @@ export default function Form({
     handleSubmit,
     processing,
     errors,
-    submitTitle = 'Create',
+    submitTitle = "Create",
     heading,
 }: FormProps) {
     const { languages } = usePage<SharedProps>().props;
 
     const handleCancel = () => {
-        router.get(route('medical-specialties.index'));
+        router.get(route("medical-specialties.index"));
     };
 
     /**
      * Update translation value
      */
-    const updateTranslation = (
-        locale: string,
-        value: string,
-    ) => {
-        setData('translations', {
+    const updateTranslation = (locale: string, value: string) => {
+        setData("translations", {
             ...(data.translations ?? {}),
 
             name: {
@@ -82,9 +79,7 @@ export default function Form({
             processing={processing}
             submitTitle={submitTitle}
         >
-            <h1 className="items-start !text-left font-extrabold">
-                {heading}
-            </h1>
+            <h1 className="items-start !text-left font-extrabold">{heading}</h1>
 
             {/* =========================
                 Default Name
@@ -100,15 +95,11 @@ export default function Form({
                 <Input
                     id="name"
                     className="w-full border"
-                    value={data.name ?? ''}
-                    onChange={(e) =>
-                        setData('name', e.target.value)
-                    }
+                    value={data.name ?? ""}
+                    onChange={(e) => setData("name", e.target.value)}
                 />
 
-                {errors.name && (
-                    <InputError message={errors.name} />
-                )}
+                {errors.name && <InputError message={errors.name} />}
             </div>
 
             {/* =========================
@@ -116,59 +107,38 @@ export default function Form({
             ========================== */}
             <div className="grid gap-4 rounded-lg border p-4">
                 <div>
-                    <h3 className="font-semibold">
-                        Translations
-                    </h3>
+                    <h3 className="font-semibold">Translations</h3>
 
                     <p className="text-sm text-muted-foreground">
-                        Enter the specialty name in each
-                        supported language.
+                        Enter the specialty name in each supported language.
                     </p>
                 </div>
 
                 {languages.map((language) => (
-                    <div
-                        key={language.code}
-                        className="grid gap-2"
-                    >
-                        <Label
-                            htmlFor={`translation_name_${language.code}`}
-                        >
+                    <div key={language.code} className="grid gap-2">
+                        <Label htmlFor={`translation_name_${language.code}`}>
                             Name ({language.name})
                         </Label>
 
                         <Input
                             id={`translation_name_${language.code}`}
-                            dir={
-                                language.code === 'ar'
-                                    ? 'rtl'
-                                    : 'ltr'
-                            }
+                            dir={language.code === "ar" ? "rtl" : "ltr"}
                             className="w-full border"
                             value={
-                                data.translations?.name?.[
-                                language.code
-                                ] ?? ''
+                                data.translations?.name?.[language.code] ?? ""
                             }
                             onChange={(e) =>
-                                updateTranslation(
-                                    language.code,
-                                    e.target.value,
-                                )
+                                updateTranslation(language.code, e.target.value)
                             }
                         />
 
-                        {errors[
-                            `translations.name.${language.code}`
-                        ] && (
-                                <InputError
-                                    message={
-                                        errors[
-                                        `translations.name.${language.code}`
-                                        ]
-                                    }
-                                />
-                            )}
+                        {errors[`translations.name.${language.code}`] && (
+                            <InputError
+                                message={
+                                    errors[`translations.name.${language.code}`]
+                                }
+                            />
+                        )}
                     </div>
                 ))}
             </div>
@@ -177,17 +147,13 @@ export default function Form({
                 Icon
             ========================== */}
             <div className="grid gap-2">
-                <Label htmlFor="icon">
-                    Icon
-                </Label>
+                <Label htmlFor="icon">Icon</Label>
 
                 <Input
                     id="icon"
                     className="w-full border"
-                    value={data.icon ?? ''}
-                    onChange={(e) =>
-                        setData('icon', e.target.value)
-                    }
+                    value={data.icon ?? ""}
+                    onChange={(e) => setData("icon", e.target.value)}
                 />
             </div>
 
@@ -195,20 +161,13 @@ export default function Form({
                 Description
             ========================== */}
             <div className="grid gap-2">
-                <Label htmlFor="description">
-                    Description
-                </Label>
+                <Label htmlFor="description">Description</Label>
 
                 <Textarea
                     id="description"
                     className="w-full border"
-                    value={data.description ?? ''}
-                    onChange={(e) =>
-                        setData(
-                            'description',
-                            e.target.value,
-                        )
-                    }
+                    value={data.description ?? ""}
+                    onChange={(e) => setData("description", e.target.value)}
                 />
             </div>
 
@@ -216,35 +175,21 @@ export default function Form({
                 Parent
             ========================== */}
             <div className="grid gap-2">
-                <Label htmlFor="parent_id">
-                    Parent
-                </Label>
+                <Label htmlFor="parent_id">Parent</Label>
 
                 <Select
                     id="parent_id"
                     allowClear
                     className="w-full"
-                    value={
-                        data.parent_id ?? undefined
-                    }
-                    onChange={(value) =>
-                        setData(
-                            'parent_id',
-                            value ?? null,
-                        )
-                    }
+                    value={data.parent_id ?? undefined}
+                    onChange={(value) => setData("parent_id", value ?? null)}
                     placeholder="Select parent specialty"
                 >
-                    {Object.entries(parents).map(
-                        ([id, name]) => (
-                            <Option
-                                key={id}
-                                value={Number(id)}
-                            >
-                                {name}
-                            </Option>
-                        ),
-                    )}
+                    {Object.entries(parents).map(([id, name]) => (
+                        <Option key={id} value={Number(id)}>
+                            {name}
+                        </Option>
+                    ))}
                 </Select>
             </div>
 
@@ -256,20 +201,11 @@ export default function Form({
                     id="is_surgical"
                     className="w-6"
                     type="checkbox"
-                    checked={Boolean(
-                        data.is_surgical,
-                    )}
-                    onChange={(e) =>
-                        setData(
-                            'is_surgical',
-                            e.target.checked,
-                        )
-                    }
+                    checked={Boolean(data.is_surgical)}
+                    onChange={(e) => setData("is_surgical", e.target.checked)}
                 />
 
-                <Label htmlFor="is_surgical">
-                    Surgical?
-                </Label>
+                <Label htmlFor="is_surgical">Surgical?</Label>
             </div>
         </MainForm>
     );

@@ -1,6 +1,5 @@
-
-import { FormEvent, useState } from 'react';
-import { Head, router, useForm } from '@inertiajs/react';
+import { FormEvent, useState } from "react";
+import { Head, router, useForm } from "@inertiajs/react";
 import {
     Plus,
     Search,
@@ -9,21 +8,21 @@ import {
     Syringe,
     ChevronLeft,
     ChevronRight,
-} from 'lucide-react';
+} from "lucide-react";
 
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import { Switch } from '@/Components/ui/switch';
-import { Badge } from '@/Components/ui/badge';
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { Textarea } from "@/Components/ui/textarea";
+import { Switch } from "@/Components/ui/switch";
+import { Badge } from "@/Components/ui/badge";
 import {
     Card,
     CardContent,
     CardHeader,
     CardTitle,
     CardDescription,
-} from '@/Components/ui/card';
+} from "@/Components/ui/card";
 import {
     Table,
     TableBody,
@@ -31,7 +30,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/Components/ui/table';
+} from "@/Components/ui/table";
 import {
     Dialog,
     DialogContent,
@@ -39,7 +38,7 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from '@/Components/ui/dialog';
+} from "@/Components/ui/dialog";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -49,16 +48,16 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-} from '@/Components/ui/alert-dialog';
+} from "@/Components/ui/alert-dialog";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/Components/ui/select';
-import AppLayout from '@/Layouts/app-layout';
-import { Upload, FileSpreadsheet, Download } from 'lucide-react';
+} from "@/Components/ui/select";
+import AppLayout from "@/Layouts/app-layout";
+import { Upload, FileSpreadsheet, Download } from "lucide-react";
 
 interface Vaccine {
     id: number;
@@ -108,19 +107,26 @@ interface VaccineForm {
 }
 
 const emptyForm: VaccineForm = {
-    name: '',
-    code: '',
-    manufacturer_id: '',
-    description: '',
+    name: "",
+    code: "",
+    manufacturer_id: "",
+    description: "",
     is_active: true,
 };
 
-export default function Index({ vaccines, filters, manufacturers, import_result }: Props) {
+export default function Index({
+    vaccines,
+    filters,
+    manufacturers,
+    import_result,
+}: Props) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [editingVaccine, setEditingVaccine] = useState<Vaccine | null>(null);
-    const [deletingVaccine, setDeletingVaccine] = useState<Vaccine | null>(null);
-    const [search, setSearch] = useState(filters.search ?? '');
-    const [status, setStatus] = useState(filters.status ?? 'all');
+    const [deletingVaccine, setDeletingVaccine] = useState<Vaccine | null>(
+        null,
+    );
+    const [search, setSearch] = useState(filters.search ?? "");
+    const [status, setStatus] = useState(filters.status ?? "all");
     const [importDialogOpen, setImportDialogOpen] = useState(false);
     const [loadingManufacturers, setLoadingManufacturers] = useState(false);
 
@@ -128,7 +134,7 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
 
     function applyFilters(nextSearch = search, nextStatus = status) {
         router.get(
-            route('admin.vaccines.index'),
+            route("admin.vaccines.index"),
             {
                 search: nextSearch || undefined,
                 status: nextStatus,
@@ -153,9 +159,9 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
         form.clearErrors();
         form.setData({
             name: vaccine.name,
-            code: vaccine.code ?? '',
-            manufacturer_id: vaccine.manufacturer_id ?? '',
-            description: vaccine.description ?? '',
+            code: vaccine.code ?? "",
+            manufacturer_id: vaccine.manufacturer_id ?? "",
+            description: vaccine.description ?? "",
             is_active: Boolean(vaccine.is_active),
         });
         setDialogOpen(true);
@@ -175,32 +181,29 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
 
         if (editingVaccine) {
             form.put(
-                route('admin.vaccines.update', editingVaccine.uuid),
+                route("admin.vaccines.update", editingVaccine.uuid),
                 options,
             );
         } else {
-            form.post(route('admin.vaccines.store'), options);
+            form.post(route("admin.vaccines.store"), options);
         }
     }
 
     function deleteVaccine() {
         if (!deletingVaccine) return;
 
-        router.delete(
-            route('admin.vaccines.destroy', deletingVaccine.uuid),
-            {
-                preserveScroll: true,
-                onSuccess: () => setDeletingVaccine(null),
-            },
-        );
+        router.delete(route("admin.vaccines.destroy", deletingVaccine.uuid), {
+            preserveScroll: true,
+            onSuccess: () => setDeletingVaccine(null),
+        });
     }
 
     function changePage(page: number) {
         router.get(
-            route('admin.vaccines.index'),
+            route("admin.vaccines.index"),
             {
                 search: filters.search || undefined,
-                status: filters.status || 'all',
+                status: filters.status || "all",
                 page,
             },
             {
@@ -211,12 +214,12 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
     }
 
     /**
-  * Manufacturer change
-  */
+     * Manufacturer change
+     */
     const handleManufacturerChange = (value: string) => {
         const manufacturerId = value;
 
-        form.setData('manufacturer_id', manufacturerId);
+        form.setData("manufacturer_id", manufacturerId);
     };
 
     const importForm = useForm<{ file: File | null }>({
@@ -226,7 +229,7 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
     function submitImport(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        importForm.post(route('admin.vaccines.import'), {
+        importForm.post(route("admin.vaccines.import"), {
             forceFormData: true,
             preserveScroll: true,
             onSuccess: () => {
@@ -268,7 +271,9 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                             type="button"
                             variant="outline"
                             onClick={() =>
-                                window.location.assign(route('admin.vaccines.template'))
+                                window.location.assign(
+                                    route("admin.vaccines.template"),
+                                )
                             }
                         >
                             <Download className="mr-2 h-4 w-4" />
@@ -302,15 +307,19 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                     </p>
 
                                     <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
-                                        {import_result.errors.map((error, index) => (
-                                            <li key={`${index}-${error}`}>{error}</li>
-                                        ))}
+                                        {import_result.errors.map(
+                                            (error, index) => (
+                                                <li key={`${index}-${error}`}>
+                                                    {error}
+                                                </li>
+                                            ),
+                                        )}
                                     </ul>
 
                                     {import_result.additional_errors > 0 && (
                                         <p className="mt-2 text-sm text-muted-foreground">
-                                            {import_result.additional_errors} more warnings
-                                            were omitted.
+                                            {import_result.additional_errors}{" "}
+                                            more warnings were omitted.
                                         </p>
                                     )}
                                 </div>
@@ -324,7 +333,7 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                         <CardTitle>Vaccines</CardTitle>
                         <CardDescription>
                             {vaccines.total} vaccine
-                            {vaccines.total === 1 ? '' : 's'} in the catalog
+                            {vaccines.total === 1 ? "" : "s"} in the catalog
                         </CardDescription>
                     </CardHeader>
 
@@ -340,7 +349,9 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                 <Input
                                     value={search}
-                                    onChange={(event) => setSearch(event.target.value)}
+                                    onChange={(event) =>
+                                        setSearch(event.target.value)
+                                    }
                                     placeholder="Search name, code, manufacturer..."
                                     className="pl-9"
                                 />
@@ -357,18 +368,24 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                     <SelectValue placeholder="Filter status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All vaccines</SelectItem>
-                                    <SelectItem value="active">Active</SelectItem>
-                                    <SelectItem value="inactive">Inactive</SelectItem>
+                                    <SelectItem value="all">
+                                        All vaccines
+                                    </SelectItem>
+                                    <SelectItem value="active">
+                                        Active
+                                    </SelectItem>
+                                    <SelectItem value="inactive">
+                                        Inactive
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
 
                             <Button
                                 variant="outline"
                                 onClick={() => {
-                                    setSearch('');
-                                    setStatus('all');
-                                    applyFilters('', 'all');
+                                    setSearch("");
+                                    setStatus("all");
+                                    applyFilters("", "all");
                                 }}
                             >
                                 Reset
@@ -399,30 +416,33 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                                     </div>
                                                     {vaccine.description && (
                                                         <p className="mt-1 max-w-xs truncate text-xs text-muted-foreground">
-                                                            {vaccine.description}
+                                                            {
+                                                                vaccine.description
+                                                            }
                                                         </p>
                                                     )}
                                                 </TableCell>
 
                                                 <TableCell>
-                                                    {vaccine.code || '—'}
+                                                    {vaccine.code || "—"}
                                                 </TableCell>
 
                                                 <TableCell>
-                                                    {vaccine.manufacturer.name || '—'}
+                                                    {vaccine.manufacturer
+                                                        .name || "—"}
                                                 </TableCell>
 
                                                 <TableCell>
                                                     <Badge
                                                         variant={
                                                             vaccine.is_active
-                                                                ? 'default'
-                                                                : 'secondary'
+                                                                ? "default"
+                                                                : "secondary"
                                                         }
                                                     >
                                                         {vaccine.is_active
-                                                            ? 'Active'
-                                                            : 'Inactive'}
+                                                            ? "Active"
+                                                            : "Inactive"}
                                                     </Badge>
                                                 </TableCell>
 
@@ -433,7 +453,9 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                                             variant="outline"
                                                             title="Edit vaccine"
                                                             onClick={() =>
-                                                                openEditDialog(vaccine)
+                                                                openEditDialog(
+                                                                    vaccine,
+                                                                )
                                                             }
                                                         >
                                                             <Pencil className="h-4 w-4" />
@@ -444,7 +466,9 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                                             variant="destructive"
                                                             title="Delete vaccine"
                                                             onClick={() =>
-                                                                setDeletingVaccine(vaccine)
+                                                                setDeletingVaccine(
+                                                                    vaccine,
+                                                                )
                                                             }
                                                         >
                                                             <Trash2 className="h-4 w-4" />
@@ -470,7 +494,8 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
 
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <p className="text-sm text-muted-foreground">
-                                Page {vaccines.current_page} of {vaccines.last_page}
+                                Page {vaccines.current_page} of{" "}
+                                {vaccines.last_page}
                             </p>
 
                             <div className="flex gap-2">
@@ -490,7 +515,8 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                     variant="outline"
                                     size="sm"
                                     disabled={
-                                        vaccines.current_page >= vaccines.last_page
+                                        vaccines.current_page >=
+                                        vaccines.last_page
                                     }
                                     onClick={() =>
                                         changePage(vaccines.current_page + 1)
@@ -509,7 +535,7 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                 <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
                     <DialogHeader>
                         <DialogTitle>
-                            {editingVaccine ? 'Edit Vaccine' : 'Add Vaccine'}
+                            {editingVaccine ? "Edit Vaccine" : "Add Vaccine"}
                         </DialogTitle>
                         <DialogDescription>
                             Enter the vaccine catalog information below.
@@ -523,7 +549,7 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                 id="name"
                                 value={form.data.name}
                                 onChange={(event) =>
-                                    form.setData('name', event.target.value)
+                                    form.setData("name", event.target.value)
                                 }
                                 placeholder="e.g. Hepatitis B"
                                 required
@@ -542,7 +568,7 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                     id="code"
                                     value={form.data.code}
                                     onChange={(event) =>
-                                        form.setData('code', event.target.value)
+                                        form.setData("code", event.target.value)
                                     }
                                     placeholder="e.g. HEPB"
                                 />
@@ -553,18 +579,26 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                 )}
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="manufacturer_id">Manufacturer</Label>
+                                <Label htmlFor="manufacturer_id">
+                                    Manufacturer
+                                </Label>
 
                                 <Select
-                                    value={form.data.manufacturer_id?.toString() ?? ''}
+                                    value={
+                                        form.data.manufacturer_id?.toString() ??
+                                        ""
+                                    }
                                     onValueChange={handleManufacturerChange}
                                 >
-                                    <SelectTrigger id="manufacturer_id" className="w-full">
+                                    <SelectTrigger
+                                        id="manufacturer_id"
+                                        className="w-full"
+                                    >
                                         <SelectValue
                                             placeholder={
                                                 loadingManufacturers
-                                                    ? 'Loading Manufacturer...'
-                                                    : 'Select Manufacturer'
+                                                    ? "Loading Manufacturer..."
+                                                    : "Select Manufacturer"
                                             }
                                         />
                                     </SelectTrigger>
@@ -595,7 +629,10 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                 id="description"
                                 value={form.data.description}
                                 onChange={(event) =>
-                                    form.setData('description', event.target.value)
+                                    form.setData(
+                                        "description",
+                                        event.target.value,
+                                    )
                                 }
                                 placeholder="Vaccine description..."
                                 rows={3}
@@ -611,7 +648,8 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                             <div className="space-y-1">
                                 <Label htmlFor="is_active">Active Status</Label>
                                 <p className="text-xs text-muted-foreground">
-                                    Allow this vaccine to be selected for schedules.
+                                    Allow this vaccine to be selected for
+                                    schedules.
                                 </p>
                             </div>
 
@@ -619,7 +657,7 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                 id="is_active"
                                 checked={form.data.is_active}
                                 onCheckedChange={(checked) =>
-                                    form.setData('is_active', checked)
+                                    form.setData("is_active", checked)
                                 }
                             />
                         </div>
@@ -639,16 +677,15 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                             </Button>
                             <Button type="submit" disabled={form.processing}>
                                 {form.processing
-                                    ? 'Saving...'
+                                    ? "Saving..."
                                     : editingVaccine
-                                        ? 'Update Vaccine'
-                                        : 'Create Vaccine'}
+                                      ? "Update Vaccine"
+                                      : "Create Vaccine"}
                             </Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>
             </Dialog>
-
 
             <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
                 <DialogContent className="sm:max-w-lg">
@@ -673,7 +710,7 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                                 accept=".csv,text/csv"
                                 onChange={(event) => {
                                     importForm.setData(
-                                        'file',
+                                        "file",
                                         event.target.files?.[0] ?? null,
                                     );
                                 }}
@@ -693,9 +730,7 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
 
                         <div className="rounded-md border bg-muted/30 p-3 text-sm">
                             <p className="font-medium">Required column</p>
-                            <p className="mt-1 text-muted-foreground">
-                                name
-                            </p>
+                            <p className="mt-1 text-muted-foreground">name</p>
 
                             <p className="mt-3 font-medium">Optional columns</p>
                             <p className="mt-1 text-muted-foreground">
@@ -714,16 +749,20 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
 
                             <Button
                                 type="submit"
-                                disabled={importForm.processing || !importForm.data.file}
+                                disabled={
+                                    importForm.processing ||
+                                    !importForm.data.file
+                                }
                             >
                                 <Upload className="mr-2 h-4 w-4" />
-                                {importForm.processing ? 'Importing...' : 'Upload & Import'}
+                                {importForm.processing
+                                    ? "Importing..."
+                                    : "Upload & Import"}
                             </Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>
             </Dialog>
-
 
             <AlertDialog
                 open={Boolean(deletingVaccine)}
@@ -735,7 +774,7 @@ export default function Index({ vaccines, filters, manufacturers, import_result 
                     <AlertDialogHeader>
                         <AlertDialogTitle>Delete vaccine?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This will soft-delete{' '}
+                            This will soft-delete{" "}
                             <strong>{deletingVaccine?.name}</strong>. It will no
                             longer appear in the normal vaccine list.
                         </AlertDialogDescription>

@@ -1,7 +1,7 @@
 import AppLayout from "@/Layouts/app-layout";
 import { Head } from "@inertiajs/react";
 import TipForm from "./Form";
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem } from "@/types";
 
 type Tip = {
     id: number;
@@ -18,7 +18,9 @@ type Tip = {
 };
 
 export default function Edit({ tip }: { tip: Tip }) {
-    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Edit Pregnancy Tip', href: '/admin/pregnancy/tips/edit' }];
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: "Edit Pregnancy Tip", href: "/admin/pregnancy/tips/edit" },
+    ];
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Edit Tip: ${tip.title}`} />

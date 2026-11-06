@@ -615,7 +615,9 @@ export default function Show({ user, doctorAnalytics }: ShowProps) {
                                                                     {prescription.diagnosis ??
                                                                         "No diagnosis"}
                                                                 </p>
-                                                                {prescription.medications.length >
+                                                                {prescription
+                                                                    .medications
+                                                                    .length >
                                                                     0 && (
                                                                     <p className="max-w-xs truncate text-xs text-muted-foreground">
                                                                         {prescription.medications

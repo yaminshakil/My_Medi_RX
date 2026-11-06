@@ -37,7 +37,7 @@ class SubscriptionService
             $now = now();
             $base = $sub->ends_at && $sub->ends_at->isFuture() ? $sub->ends_at->copy() : $now;
             $days = (int) $sub->plan()->value('duration_days');
-            $sub->update(['starts_at' => $sub->starts_at ?? $now, 'ends_at' => $base->addDays($days), 'status' => 'active']);
+            $sub->update(['starts_at' => now(), 'ends_at' => $base->addDays($days), 'status' => 'active']);
             $locked->update(['status' => 'paid', 'paid_at' => now(), 'validation_id' => $validated['val_id'] ?? null,
                 'bank_transaction_id' => $validated['bank_tran_id'] ?? null, 'payment_method' => $validated['card_type'] ?? null, 'gateway_response' => $validated]);
         });

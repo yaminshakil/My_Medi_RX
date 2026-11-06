@@ -1,12 +1,10 @@
-import { AdminPageHeader } from '@/Components/AdminPageHeader';
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/react';
-import { useEffect } from 'react';
-import Form from './Form';
-import { AppPageProps } from '@/types';
-
-
+import { AdminPageHeader } from "@/Components/AdminPageHeader";
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, useForm, usePage } from "@inertiajs/react";
+import { useEffect } from "react";
+import Form from "./Form";
+import { AppPageProps } from "@/types";
 
 export default function Edit(props) {
     const { translations } = usePage<AppPageProps>().props;
@@ -25,19 +23,19 @@ export default function Edit(props) {
 
     useEffect(() => {
         return () => {
-            reset('name', 'slug');
+            reset("name", "slug");
         };
     }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('menus.update', [props.editmenu.id]));
+        post(route("menus.update", [props.editmenu.id]));
     };
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: translations.common.edit_menu,
-            href: '/menus',
+            href: "/menus",
         },
     ];
     console.log(data);
@@ -45,7 +43,10 @@ export default function Edit(props) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={translations.common.edit_menu} />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl px-4">
-                <AdminPageHeader breadcrumbs={breadcrumbs} description={translations.common.edit_menu_description} />
+                <AdminPageHeader
+                    breadcrumbs={breadcrumbs}
+                    description={translations.common.edit_menu_description}
+                />
                 <div className="flex h-full flex-1 flex-col items-center gap-4 overflow-x-auto rounded-xl p-4">
                     <Form
                         data={data}

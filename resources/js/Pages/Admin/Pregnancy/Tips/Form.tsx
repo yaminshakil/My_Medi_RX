@@ -39,9 +39,7 @@ export default function TipForm({ tip }: Props) {
 
         const payload = {
             ...form.data,
-            trimester: form.data.trimester
-                ? Number(form.data.trimester)
-                : null,
+            trimester: form.data.trimester ? Number(form.data.trimester) : null,
         };
 
         if (tip?.id) {
@@ -194,8 +192,8 @@ export default function TipForm({ tip }: Props) {
                 {form.processing
                     ? "Saving..."
                     : tip?.id
-                        ? "Update Tip"
-                        : "Create Tip"}
+                      ? "Update Tip"
+                      : "Create Tip"}
             </Button>
         </form>
     );

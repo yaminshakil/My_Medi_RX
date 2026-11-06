@@ -1,7 +1,6 @@
-
-import { Head, Link } from '@inertiajs/react';
-import AppLayout from '@/Layouts/app-layout';
-import { Button } from '@/Components/ui/button';
+import { Head, Link } from "@inertiajs/react";
+import AppLayout from "@/Layouts/app-layout";
+import { Button } from "@/Components/ui/button";
 
 export default function Create() {
     return (
@@ -20,13 +19,13 @@ export default function Create() {
                 </div>
 
                 <p className="rounded-md border p-4 text-sm">
-                    A profile is automatically created for an authenticated
-                    user by the cycle status API. Use the Profiles page to
-                    manage existing profiles.
+                    A profile is automatically created for an authenticated user
+                    by the cycle status API. Use the Profiles page to manage
+                    existing profiles.
                 </p>
 
                 <Button asChild variant="outline">
-                    <Link href={route('admin.menstrual-cycle.profiles.index')}>
+                    <Link href={route("admin.menstrual-cycle.profiles.index")}>
                         Back to profiles
                     </Link>
                 </Button>

@@ -1,27 +1,29 @@
-import AddVital from '@/Components/AddVital';
-import { CommonModal } from '@/Components/CommonModal';
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import GynaeHistoryForm from '@/Components/GynaeHistoryForm';
-import GynaeHistorySidebar from '@/Components/GynaeHistorySidebar';
-import InputError from '@/Components/input-error';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm } from '@inertiajs/react';
-import axios from 'axios';
-import { History, LoaderCircle, PlusIcon, X } from 'lucide-react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import DateTimePicker from 'react-datetime-picker';
-import AddMedicine from './AddMedicine';
-import Footer from './Footer';
-import InstructionSelector from './InstructionSelector';
-import MedicationsList from './MedicationsList';
-import PatientInfo from './PatientInfo';
+import AddVital from "@/Components/AddVital";
+import { CommonModal } from "@/Components/CommonModal";
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import GynaeHistoryForm from "@/Components/GynaeHistoryForm";
+import GynaeHistorySidebar from "@/Components/GynaeHistorySidebar";
+import InputError from "@/Components/input-error";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import { Textarea } from "@/Components/ui/textarea";
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm } from "@inertiajs/react";
+import axios from "axios";
+import { History, LoaderCircle, PlusIcon, X } from "lucide-react";
+import { FormEventHandler, useEffect, useState } from "react";
+import DateTimePicker from "react-datetime-picker";
+import AddMedicine from "./AddMedicine";
+import Footer from "./Footer";
+import InstructionSelector from "./InstructionSelector";
+import MedicationsList from "./MedicationsList";
+import PatientInfo from "./PatientInfo";
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Followup Prescription', href: '/prescriptions' }];
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: "Followup Prescription", href: "/prescriptions" },
+];
 
 export default function EditPrescription(props) {
     const [showAddVitalModal, setShowAddVitalModal] = useState(false);
@@ -30,14 +32,14 @@ export default function EditPrescription(props) {
     const [selectedInstructions, setSelectedInstructions] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
     const [editingMedication, setEditingMedication] = useState({
-        type: '',
+        type: "",
         medicine_id: null,
-        brand_name: '',
-        strength: '',
-        dosage: '',
-        duration: '',
-        advice: '',
-        meal_time: '',
+        brand_name: "",
+        strength: "",
+        dosage: "",
+        duration: "",
+        advice: "",
+        meal_time: "",
     });
 
     const [showAddGynaeHiModal, setShowAddGynaeHiModal] = useState(false);
@@ -45,36 +47,46 @@ export default function EditPrescription(props) {
     const [localErrors, setLocalErrors] = useState({});
 
     const { data, setData, post, errors } = useForm({
-        patient_id: '',
+        patient_id: "",
         followup_date: new Date(props.prescription.data.followup_date),
         diagnosis: props.prescription.data.diagnosis,
         symptoms: props.prescription.data.symptoms,
         medications: props.prescription.data.medications,
-        vital_id: '',
+        vital_id: "",
         instructions: props.prescription.data.instructions,
         follow_up_advice: props.prescription.data.follow_up_advice,
         onexaminations: props.prescription.data.onexaminations,
         investigations: props.prescription.data.investigations,
-        status: 'issued',
+        status: "issued",
         appointment_id: props.appointment_id,
         is_followup: true,
         gynae_history: {
-            marital_status: props.prescription?.data?.gynae_history?.marital_status || '',
-            marriage_duration: props.prescription?.data?.gynae_history?.marriage_duration || '',
-            consanguinity: props.prescription?.data?.gynae_history?.consanguinity || '',
-            menarche_age: props.prescription?.data?.gynae_history?.menarche_age || '',
-            lmp: props.prescription?.data?.gynae_history?.lmp || '',
-            cycle: props.prescription?.data?.gynae_history?.cycle || '',
-            flow: props.prescription?.data?.gynae_history?.flow || '',
-            dysmenorrhea: props.prescription?.data?.gynae_history?.dysmenorrhea || false,
-            contraceptive_use: props.prescription?.data?.gynae_history?.contraceptive_use || false,
-            gravida: props.prescription?.data?.gynae_history?.gravida || '',
-            para: props.prescription?.data?.gynae_history?.para || '',
-            abortion: props.prescription?.data?.gynae_history?.abortion || '',
-            living_children: props.prescription?.data?.gynae_history?.living_children || '',
-            edd: props.prescription?.data?.gynae_history?.edd || '',
-            anc: props.prescription?.data?.gynae_history?.anc || '',
-            other_history: props.prescription?.data?.gynae_history?.other_history || '',
+            marital_status:
+                props.prescription?.data?.gynae_history?.marital_status || "",
+            marriage_duration:
+                props.prescription?.data?.gynae_history?.marriage_duration ||
+                "",
+            consanguinity:
+                props.prescription?.data?.gynae_history?.consanguinity || "",
+            menarche_age:
+                props.prescription?.data?.gynae_history?.menarche_age || "",
+            lmp: props.prescription?.data?.gynae_history?.lmp || "",
+            cycle: props.prescription?.data?.gynae_history?.cycle || "",
+            flow: props.prescription?.data?.gynae_history?.flow || "",
+            dysmenorrhea:
+                props.prescription?.data?.gynae_history?.dysmenorrhea || false,
+            contraceptive_use:
+                props.prescription?.data?.gynae_history?.contraceptive_use ||
+                false,
+            gravida: props.prescription?.data?.gynae_history?.gravida || "",
+            para: props.prescription?.data?.gynae_history?.para || "",
+            abortion: props.prescription?.data?.gynae_history?.abortion || "",
+            living_children:
+                props.prescription?.data?.gynae_history?.living_children || "",
+            edd: props.prescription?.data?.gynae_history?.edd || "",
+            anc: props.prescription?.data?.gynae_history?.anc || "",
+            other_history:
+                props.prescription?.data?.gynae_history?.other_history || "",
         },
     });
 
@@ -83,24 +95,29 @@ export default function EditPrescription(props) {
         setData: setVitalData,
         post: postVital,
     } = useForm({
-        patient_id: '',
-        blood_pressure: '',
-        heart_rate: '',
-        temperature: '',
-        respiratory_rate: '',
-        oxygen_saturation: '',
-        weight: '',
-        height: '',
-        bmi: '',
-        notes: '',
+        patient_id: "",
+        blood_pressure: "",
+        heart_rate: "",
+        temperature: "",
+        respiratory_rate: "",
+        oxygen_saturation: "",
+        weight: "",
+        height: "",
+        bmi: "",
+        notes: "",
     });
 
     const onHandleChange = (event) => {
-        setVitalData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
+        setVitalData(
+            event.target.name,
+            event.target.type === "checkbox"
+                ? event.target.checked
+                : event.target.value,
+        );
     };
 
     const handleAddvital = () => {
-        postVital(route('vitals.store'), {
+        postVital(route("vitals.store"), {
             preserveScroll: true,
             onSuccess: () => {
                 setShowAddVitalModal(false);
@@ -113,52 +130,74 @@ export default function EditPrescription(props) {
     };
 
     function Content({ content }) {
-        return <div className="ql-editor" dangerouslySetInnerHTML={{ __html: content }} />;
+        return (
+            <div
+                className="ql-editor"
+                dangerouslySetInnerHTML={{ __html: content }}
+            />
+        );
     }
 
     const addComplaint = () => {
-        setData('symptoms', [...data.symptoms, { name: '' }]);
+        setData("symptoms", [...data.symptoms, { name: "" }]);
     };
 
     const updateComplaient = (index, field, value) => {
         const symptoms = [...data.symptoms];
         symptoms[index][field] = value;
-        setData('symptoms', symptoms);
+        setData("symptoms", symptoms);
     };
 
     const handleSymptomRemove = (index) => {
         const list = [...data.symptoms];
         list.splice(index, 1);
-        setData('symptoms', list);
+        setData("symptoms", list);
     };
 
     const handleMedicineRemove = (index) => {
         const list = [...data.medications];
         list.splice(index, 1);
-        setData('medications', list);
+        setData("medications", list);
     };
     useEffect(() => {
         if (props.prescription.data.patient) {
-            setData((prev) => ({ ...prev, patient_id: props.prescription.data.patient.id }));
+            setData((prev) => ({
+                ...prev,
+                patient_id: props.prescription.data.patient.id,
+            }));
         }
         if (props.prescription.vitals) {
-            setData((prev) => ({ ...prev, vital_id: props.prescription.vitals.id }));
+            setData((prev) => ({
+                ...prev,
+                vital_id: props.prescription.vitals.id,
+            }));
         }
-    }, [props.prescription.data.patient, props.prescription.data.doctor, props.prescription.vitals]);
+    }, [
+        props.prescription.data.patient,
+        props.prescription.data.doctor,
+        props.prescription.vitals,
+    ]);
 
     // Load medicines
     useEffect(() => {
-        axios.get('/admin/get-medicines').then((res) => {
-            const options = res.data.map((m) => ({ value: m.id, label: m.brand_name + ' ' + m.strength, strength: m.strength, type: m.type }));
+        axios.get("/admin/get-medicines").then((res) => {
+            const options = res.data.map((m) => ({
+                value: m.id,
+                label: m.brand_name + " " + m.strength,
+                strength: m.strength,
+                type: m.type,
+            }));
 
             setMedicines(options);
             const medsWithNames = data.medications.map((med) => {
-                const selected = options.find((o) => o.value === med.medicine_id);
+                const selected = options.find(
+                    (o) => o.value === med.medicine_id,
+                );
                 return {
                     ...med,
-                    brand_name: selected?.label || med.brand_name || '',
-                    strength: selected?.strength || med.strength || '',
-                    type: selected?.type || med.type || '',
+                    brand_name: selected?.label || med.brand_name || "",
+                    strength: selected?.strength || med.strength || "",
+                    type: selected?.type || med.type || "",
                 };
             });
             setData((prev) => ({ ...prev, medications: medsWithNames }));
@@ -168,51 +207,56 @@ export default function EditPrescription(props) {
     // On Examinations
 
     const onExamination = () => {
-        setData('onexaminations', [...data.onexaminations, { name: '' }]);
+        setData("onexaminations", [...data.onexaminations, { name: "" }]);
     };
 
     const updateOnExamination = (index, field, value) => {
         const onexaminations = [...data.onexaminations];
         onexaminations[index][field] = value;
-        setData('onexaminations', onexaminations);
+        setData("onexaminations", onexaminations);
     };
 
     const handleOnExamination = (index) => {
         const list = [...data.onexaminations];
         list.splice(index, 1);
-        setData('onexaminations', list);
+        setData("onexaminations", list);
     };
 
     // On Investigations
 
     const addInvestigation = () => {
-        setData('investigations', [...data.investigations, { name: '' }]);
+        setData("investigations", [...data.investigations, { name: "" }]);
     };
 
     const updateInvestigation = (index, field, value) => {
         const investigations = [...data.investigations];
         investigations[index][field] = value;
-        setData('investigations', investigations);
+        setData("investigations", investigations);
     };
 
     const handleInvestigation = (index) => {
         const list = [...data.investigations];
         list.splice(index, 1);
-        setData('investigations', list);
+        setData("investigations", list);
     };
 
     const saveAndNew = (e) => {
-        setLoadingButton('saveNew');
+        setLoadingButton("saveNew");
         if (!data.medications.length) {
             setShowConfirm(true);
             return true;
         }
         e.preventDefault();
         // Check if symptoms are empty or have blank values
-        const hasComplaint = Array.isArray(data.symptoms) && data.symptoms.some((s) => s.name && s.name.trim() !== '');
+        const hasComplaint =
+            Array.isArray(data.symptoms) &&
+            data.symptoms.some((s) => s.name && s.name.trim() !== "");
 
         if (!hasComplaint) {
-            setLocalErrors((prev) => ({ ...prev, symptoms: 'Chief Complaint is required.' }));
+            setLocalErrors((prev) => ({
+                ...prev,
+                symptoms: "Chief Complaint is required.",
+            }));
             setLoadingButton(null);
             return;
         }
@@ -220,9 +264,11 @@ export default function EditPrescription(props) {
         setLocalErrors((prev) => ({ ...prev, symptoms: null }));
         const payload = {
             ...data,
-            followup_date: data.followup_date ? formatDateToYMD(new Date(data.followup_date)) : null,
+            followup_date: data.followup_date
+                ? formatDateToYMD(new Date(data.followup_date))
+                : null,
         };
-        router.post(route('prescriptions.saveandnew.store'), payload, {
+        router.post(route("prescriptions.saveandnew.store"), payload, {
             preserveScroll: true,
             onSuccess: () => setLoadingButton(null),
             onError: () => setLoadingButton(null),
@@ -241,18 +287,24 @@ export default function EditPrescription(props) {
     const handleChangeDate = (date) => {
         if (date) {
             // Create UTC date at midnight
-            const utcMidnight = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+            const utcMidnight = new Date(
+                Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+            );
 
-            setData('followup_date', utcMidnight);
+            setData("followup_date", utcMidnight);
         }
     };
 
     const saveMedication = () => {
         const meds = [...data.medications];
         if (editingMedication.medicine_id) {
-            const selected = medicines.find((m) => m.value === editingMedication.medicine_id);
-            editingMedication.brand_name = selected?.label || editingMedication.brand_name;
-            editingMedication.strength = selected?.strength || editingMedication.strength;
+            const selected = medicines.find(
+                (m) => m.value === editingMedication.medicine_id,
+            );
+            editingMedication.brand_name =
+                selected?.label || editingMedication.brand_name;
+            editingMedication.strength =
+                selected?.strength || editingMedication.strength;
             editingMedication.type = selected?.type || editingMedication.type;
         }
 
@@ -262,18 +314,18 @@ export default function EditPrescription(props) {
             meds.push({ ...editingMedication });
         }
 
-        setData('medications', meds);
+        setData("medications", meds);
 
         setEditingIndex(null);
         setEditingMedication({
-            type: '',
+            type: "",
             medicine_id: null,
-            brand_name: '',
-            strength: '',
-            dosage: '',
-            duration: '',
-            advice: '',
-            meal_time: '',
+            brand_name: "",
+            strength: "",
+            dosage: "",
+            duration: "",
+            advice: "",
+            meal_time: "",
         });
     };
 
@@ -281,7 +333,7 @@ export default function EditPrescription(props) {
     useEffect(() => {
         if (data.instructions) {
             // Split by newline and remove empty lines
-            const selected = data.instructions.split('\n').filter(Boolean);
+            const selected = data.instructions.split("\n").filter(Boolean);
             setSelectedInstructions(selected);
         }
     }, [data.instructions]);
@@ -294,36 +346,53 @@ export default function EditPrescription(props) {
         setShowAddGynaeHiModal(false);
     };
 
-    const medicineDosesOptions = props.prescription?.data?.doctor?.medicine_doses.map((m) => ({ value: m.name, label: m.name }));
-    const medicineDurationsOptions = props.prescription?.data?.doctor?.medicine_durations.map((m) => ({ value: m.name, label: m.name }));
+    const medicineDosesOptions =
+        props.prescription?.data?.doctor?.medicine_doses.map((m) => ({
+            value: m.name,
+            label: m.name,
+        }));
+    const medicineDurationsOptions =
+        props.prescription?.data?.doctor?.medicine_durations.map((m) => ({
+            value: m.name,
+            label: m.name,
+        }));
 
     const formatDateToYMD = (date) => {
         const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
         return `${year}-${month}-${day}`;
     };
 
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        setLoadingButton('saveComplete');
+        setLoadingButton("saveComplete");
 
-        if (!data.patient_id || !data.medications.length || !data.appointment_id) {
+        if (
+            !data.patient_id ||
+            !data.medications.length ||
+            !data.appointment_id
+        ) {
             setShowConfirm(true);
             return true;
         }
 
         // Check if symptoms are empty or have blank values
-        const hasComplaint = Array.isArray(data.symptoms) && data.symptoms.some((s) => s.name && s.name.trim() !== '');
+        const hasComplaint =
+            Array.isArray(data.symptoms) &&
+            data.symptoms.some((s) => s.name && s.name.trim() !== "");
 
         if (!hasComplaint) {
-            setLocalErrors((prev) => ({ ...prev, symptoms: 'Chief Complaint is required.' }));
+            setLocalErrors((prev) => ({
+                ...prev,
+                symptoms: "Chief Complaint is required.",
+            }));
             setLoadingButton(null);
             return;
         }
 
         setLocalErrors((prev) => ({ ...prev, symptoms: null }));
-        post(route('prescriptions.store'), {
+        post(route("prescriptions.store"), {
             onSuccess: () => setLoadingButton(null),
             onError: () => setLoadingButton(null),
             onFinish: () => setLoadingButton(null),
@@ -331,8 +400,8 @@ export default function EditPrescription(props) {
     };
 
     const mimealtimeOption = [
-        { label: 'Before Meal', value: 'Before Meal' },
-        { label: 'After Meal', value: 'After Meal' },
+        { label: "Before Meal", value: "Before Meal" },
+        { label: "After Meal", value: "After Meal" },
     ];
 
     return (
@@ -346,7 +415,12 @@ export default function EditPrescription(props) {
                         <div className="text-left">
                             <div className="border-b p-2">
                                 <div className="text-md font-medium">
-                                    <Content content={props.prescription.data?.doctor?.chamber.header_left} />
+                                    <Content
+                                        content={
+                                            props.prescription.data?.doctor
+                                                ?.chamber.header_left
+                                        }
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -354,14 +428,27 @@ export default function EditPrescription(props) {
 
                     {/* Center - Logo */}
                     <div className="flex items-center justify-center">
-                        <img src={'/storage/' + props.prescription.data?.doctor?.chamber?.chamber_logo} alt="Clinic Logo" className="h-24" />
+                        <img
+                            src={
+                                "/storage/" +
+                                props.prescription.data?.doctor?.chamber
+                                    ?.chamber_logo
+                            }
+                            alt="Clinic Logo"
+                            className="h-24"
+                        />
                     </div>
 
                     {/* Right - Doctor Profile */}
                     <div className="flex flex-col items-center space-x-3">
                         <div className="text-right">
                             <div className="text-md font-medium">
-                                <Content content={props.prescription.data?.doctor?.chamber?.header_right} />
+                                <Content
+                                    content={
+                                        props.prescription.data?.doctor?.chamber
+                                            ?.header_right
+                                    }
+                                />
                             </div>
                         </div>
                     </div>
@@ -373,7 +460,9 @@ export default function EditPrescription(props) {
                     <aside className="flex w-full flex-col bg-white shadow-lg md:w-72">
                         <div className="mb-2 ml-2 flex items-center space-x-2">
                             <History className="h-5 w-5 text-indigo-500" />
-                            <span className="font-semibold">Patient History</span>
+                            <span className="font-semibold">
+                                Patient History
+                            </span>
                         </div>
 
                         {/* Patient History */}
@@ -386,28 +475,48 @@ export default function EditPrescription(props) {
                                             className="mb-2 w-full cursor-pointer justify-center text-white"
                                             onClick={() => addComplaint()}
                                         >
-                                            <PlusIcon className="cursor-pointer" size={14} />
+                                            <PlusIcon
+                                                className="cursor-pointer"
+                                                size={14}
+                                            />
                                             Chief Complaint(cc)
                                         </Button>
                                         {data.symptoms.map((symptom, index) => (
-                                            <div key={index} className="mt-2 flex">
+                                            <div
+                                                key={index}
+                                                className="mt-2 flex"
+                                            >
                                                 <Input
                                                     placeholder="Complaint"
                                                     value={symptom.name}
-                                                    onChange={(e) => updateComplaient(index, 'name', e.target.value)}
+                                                    onChange={(e) =>
+                                                        updateComplaient(
+                                                            index,
+                                                            "name",
+                                                            e.target.value,
+                                                        )
+                                                    }
                                                 />
                                                 {index !== 0 && (
                                                     <X
                                                         className="mt-3 cursor-pointer text-red-700"
-                                                        onClick={() => handleSymptomRemove(index)}
+                                                        onClick={() =>
+                                                            handleSymptomRemove(
+                                                                index,
+                                                            )
+                                                        }
                                                         size={15}
                                                     />
                                                 )}
                                             </div>
                                         ))}
                                         {/* Show validation error */}
-                                        {(localErrors.symptoms || errors.symptoms) && (
-                                            <p className="mt-1 text-sm text-red-600">{localErrors.symptoms || errors.symptoms}</p>
+                                        {(localErrors.symptoms ||
+                                            errors.symptoms) && (
+                                            <p className="mt-1 text-sm text-red-600">
+                                                {localErrors.symptoms ||
+                                                    errors.symptoms}
+                                            </p>
                                         )}
                                     </div>
 
@@ -418,36 +527,134 @@ export default function EditPrescription(props) {
                                                 className="mb-2 w-full cursor-pointer justify-center text-white"
                                                 onClick={() => {
                                                     setShowAddVitalModal(true);
-                                                    setVitalData('patient_id', props.prescription.data?.patient.id);
+                                                    setVitalData(
+                                                        "patient_id",
+                                                        props.prescription.data
+                                                            ?.patient.id,
+                                                    );
                                                 }}
                                             >
-                                                <PlusIcon className="cursor-pointer" size={14} /> Add Vital
+                                                <PlusIcon
+                                                    className="cursor-pointer"
+                                                    size={14}
+                                                />{" "}
+                                                Add Vital
                                             </Button>
                                             {props.prescription.vitals?.id && (
                                                 <ul className="ml-5 list-disc">
-                                                    <h2 className="mb-2 font-bold">Vitals</h2>
+                                                    <h2 className="mb-2 font-bold">
+                                                        Vitals
+                                                    </h2>
 
-                                                    <div key={props.prescription.vitals?.id}>
-                                                        {props.prescription.vitals?.blood_pressure && (
-                                                            <li>BP: {props.prescription.vitals?.blood_pressure || ' '}</li>
+                                                    <div
+                                                        key={
+                                                            props.prescription
+                                                                .vitals?.id
+                                                        }
+                                                    >
+                                                        {props.prescription
+                                                            .vitals
+                                                            ?.blood_pressure && (
+                                                            <li>
+                                                                BP:{" "}
+                                                                {props
+                                                                    .prescription
+                                                                    .vitals
+                                                                    ?.blood_pressure ||
+                                                                    " "}
+                                                            </li>
                                                         )}
-                                                        {props.prescription.vitals?.heart_rate && (
-                                                            <li>HR: {props.prescription.vitals?.heart_rate || ' '}</li>
+                                                        {props.prescription
+                                                            .vitals
+                                                            ?.heart_rate && (
+                                                            <li>
+                                                                HR:{" "}
+                                                                {props
+                                                                    .prescription
+                                                                    .vitals
+                                                                    ?.heart_rate ||
+                                                                    " "}
+                                                            </li>
                                                         )}
-                                                        {props.prescription.vitals?.temperature && (
-                                                            <li>Temp: {props.prescription.vitals?.temperature || ' '}</li>
+                                                        {props.prescription
+                                                            .vitals
+                                                            ?.temperature && (
+                                                            <li>
+                                                                Temp:{" "}
+                                                                {props
+                                                                    .prescription
+                                                                    .vitals
+                                                                    ?.temperature ||
+                                                                    " "}
+                                                            </li>
                                                         )}
-                                                        {props.prescription.vitals?.oxygen_saturation && (
-                                                            <li>SpO₂: {props.prescription.vitals?.oxygen_saturation || ' '}</li>
+                                                        {props.prescription
+                                                            .vitals
+                                                            ?.oxygen_saturation && (
+                                                            <li>
+                                                                SpO₂:{" "}
+                                                                {props
+                                                                    .prescription
+                                                                    .vitals
+                                                                    ?.oxygen_saturation ||
+                                                                    " "}
+                                                            </li>
                                                         )}
-                                                        {props.prescription.vitals?.respiratory_rate && (
-                                                            <li>RR: {props.prescription.vitals?.respiratory_rate || ' '}</li>
+                                                        {props.prescription
+                                                            .vitals
+                                                            ?.respiratory_rate && (
+                                                            <li>
+                                                                RR:{" "}
+                                                                {props
+                                                                    .prescription
+                                                                    .vitals
+                                                                    ?.respiratory_rate ||
+                                                                    " "}
+                                                            </li>
                                                         )}
-                                                        {props.prescription.vitals?.weight && <li>Wt: {props.prescription.vitals?.weight || ' '}</li>}
-                                                        {props.prescription.vitals?.height && <li>Ht: {props.prescription.vitals?.height || ' '}</li>}
-                                                        {props.prescription.vitals?.bmi && <li>BMI: {props.prescription.vitals?.bmi || ' '}</li>}
-                                                        {props.prescription.vitals?.notes && (
-                                                            <li>Notes: {props.prescription.vitals?.notes || ' '}</li>
+                                                        {props.prescription
+                                                            .vitals?.weight && (
+                                                            <li>
+                                                                Wt:{" "}
+                                                                {props
+                                                                    .prescription
+                                                                    .vitals
+                                                                    ?.weight ||
+                                                                    " "}
+                                                            </li>
+                                                        )}
+                                                        {props.prescription
+                                                            .vitals?.height && (
+                                                            <li>
+                                                                Ht:{" "}
+                                                                {props
+                                                                    .prescription
+                                                                    .vitals
+                                                                    ?.height ||
+                                                                    " "}
+                                                            </li>
+                                                        )}
+                                                        {props.prescription
+                                                            .vitals?.bmi && (
+                                                            <li>
+                                                                BMI:{" "}
+                                                                {props
+                                                                    .prescription
+                                                                    .vitals
+                                                                    ?.bmi ||
+                                                                    " "}
+                                                            </li>
+                                                        )}
+                                                        {props.prescription
+                                                            .vitals?.notes && (
+                                                            <li>
+                                                                Notes:{" "}
+                                                                {props
+                                                                    .prescription
+                                                                    .vitals
+                                                                    ?.notes ||
+                                                                    " "}
+                                                            </li>
                                                         )}
                                                     </div>
                                                 </ul>
@@ -461,25 +668,46 @@ export default function EditPrescription(props) {
                                             className="mb-2 w-full cursor-pointer justify-center text-white"
                                             onClick={() => onExamination()}
                                         >
-                                            <PlusIcon className="cursor-pointer" size={14} />
+                                            <PlusIcon
+                                                className="cursor-pointer"
+                                                size={14}
+                                            />
                                             On Examinations (O/Ex)
                                         </Button>
-                                        {data.onexaminations.map((onexamination, index) => (
-                                            <div key={index} className="mt-2 flex">
-                                                <Input
-                                                    placeholder="On Examination"
-                                                    value={onexamination.name}
-                                                    onChange={(e) => updateOnExamination(index, 'name', e.target.value)}
-                                                />
-                                                {data.onexaminations.length !== 0 && (
-                                                    <X
-                                                        className="mt-3 cursor-pointer text-red-700"
-                                                        onClick={() => handleOnExamination(index)}
-                                                        size={15}
+                                        {data.onexaminations.map(
+                                            (onexamination, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="mt-2 flex"
+                                                >
+                                                    <Input
+                                                        placeholder="On Examination"
+                                                        value={
+                                                            onexamination.name
+                                                        }
+                                                        onChange={(e) =>
+                                                            updateOnExamination(
+                                                                index,
+                                                                "name",
+                                                                e.target.value,
+                                                            )
+                                                        }
                                                     />
-                                                )}
-                                            </div>
-                                        ))}
+                                                    {data.onexaminations
+                                                        .length !== 0 && (
+                                                        <X
+                                                            className="mt-3 cursor-pointer text-red-700"
+                                                            onClick={() =>
+                                                                handleOnExamination(
+                                                                    index,
+                                                                )
+                                                            }
+                                                            size={15}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ),
+                                        )}
                                     </div>
 
                                     {/* On Investigations */}
@@ -489,25 +717,46 @@ export default function EditPrescription(props) {
                                             className="mb-2 w-full cursor-pointer justify-center text-white"
                                             onClick={() => addInvestigation()}
                                         >
-                                            <PlusIcon className="cursor-pointer" size={14} />
+                                            <PlusIcon
+                                                className="cursor-pointer"
+                                                size={14}
+                                            />
                                             Investigations
                                         </Button>
-                                        {data.investigations.map((investigation, index) => (
-                                            <div key={index} className="mt-2 flex">
-                                                <Input
-                                                    placeholder="Investigation"
-                                                    value={investigation.name}
-                                                    onChange={(e) => updateInvestigation(index, 'name', e.target.value)}
-                                                />
-                                                {data.investigations.length !== 0 && (
-                                                    <X
-                                                        className="mt-3 cursor-pointer text-red-700"
-                                                        onClick={() => handleInvestigation(index)}
-                                                        size={15}
+                                        {data.investigations.map(
+                                            (investigation, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="mt-2 flex"
+                                                >
+                                                    <Input
+                                                        placeholder="Investigation"
+                                                        value={
+                                                            investigation.name
+                                                        }
+                                                        onChange={(e) =>
+                                                            updateInvestigation(
+                                                                index,
+                                                                "name",
+                                                                e.target.value,
+                                                            )
+                                                        }
                                                     />
-                                                )}
-                                            </div>
-                                        ))}
+                                                    {data.investigations
+                                                        .length !== 0 && (
+                                                        <X
+                                                            className="mt-3 cursor-pointer text-red-700"
+                                                            onClick={() =>
+                                                                handleInvestigation(
+                                                                    index,
+                                                                )
+                                                            }
+                                                            size={15}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ),
+                                        )}
                                     </div>
 
                                     {/* Gyne. & Obs. History */}
@@ -519,24 +768,42 @@ export default function EditPrescription(props) {
                                                 setShowAddGynaeHiModal(true);
                                             }}
                                         >
-                                            <PlusIcon className="cursor-pointer" size={14} /> Gyne. & Obs. History
+                                            <PlusIcon
+                                                className="cursor-pointer"
+                                                size={14}
+                                            />{" "}
+                                            Gyne. & Obs. History
                                         </Button>
                                         {data.gynae_history && (
                                             <GynaeHistorySidebar
-                                                gynaeHistory={data.gynae_history}
-                                                setGynaeHistory={(newHistory) => setData('gynae_history', newHistory)}
+                                                gynaeHistory={
+                                                    data.gynae_history
+                                                }
+                                                setGynaeHistory={(newHistory) =>
+                                                    setData(
+                                                        "gynae_history",
+                                                        newHistory,
+                                                    )
+                                                }
                                             />
                                         )}
                                     </div>
 
                                     {/* Diagnosis */}
                                     <div>
-                                        <label className="mb-1 block text-sm font-medium">Diagnosis</label>
+                                        <label className="mb-1 block text-sm font-medium">
+                                            Diagnosis
+                                        </label>
                                         <Textarea
                                             value={data.diagnosis}
                                             className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                             rows={3}
-                                            onChange={(e) => setData('diagnosis', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "diagnosis",
+                                                    e.target.value,
+                                                )
+                                            }
                                             placeholder="Enter diagnosis here..."
                                         />
                                     </div>
@@ -549,18 +816,26 @@ export default function EditPrescription(props) {
                     <main className="flex-1 overflow-y-auto p-6">
                         <div className="space-y-4 rounded-lg bg-white p-6 shadow">
                             {/* Patient Select */}
-                            <PatientInfo selectedPatient={props.prescription.data?.patient} />
+                            <PatientInfo
+                                selectedPatient={
+                                    props.prescription.data?.patient
+                                }
+                            />
 
                             {/* Medicines */}
                             <div>
-                                <Label className="mb-1 block text-sm font-medium">Medicines</Label>
+                                <Label className="mb-1 block text-sm font-medium">
+                                    Medicines
+                                </Label>
 
                                 <AddMedicine
                                     editingMedication={editingMedication}
                                     setEditingMedication={setEditingMedication}
                                     medicines={medicines}
                                     medicine_doses={medicineDosesOptions}
-                                    medicine_durations={medicineDurationsOptions}
+                                    medicine_durations={
+                                        medicineDurationsOptions
+                                    }
                                     mimealtimeOption={mimealtimeOption}
                                     editingIndex={editingIndex}
                                     saveMedication={saveMedication}
@@ -570,7 +845,9 @@ export default function EditPrescription(props) {
 
                                 <MedicationsList
                                     medications={data.medications}
-                                    onReorder={(newList) => setData('medications', newList)}
+                                    onReorder={(newList) =>
+                                        setData("medications", newList)
+                                    }
                                     setEditingIndex={setEditingIndex}
                                     setEditingMedication={setEditingMedication}
                                     handleMedicineRemove={handleMedicineRemove}
@@ -582,23 +859,34 @@ export default function EditPrescription(props) {
                                 data={data}
                                 setData={setData}
                                 selectedInstructions={selectedInstructions}
-                                setSelectedInstructions={setSelectedInstructions}
+                                setSelectedInstructions={
+                                    setSelectedInstructions
+                                }
                             />
 
                             {/* Followup Advice */}
                             <div>
-                                <Label className="mb-1 block text-sm font-medium">Followup Advice</Label>
+                                <Label className="mb-1 block text-sm font-medium">
+                                    Followup Advice
+                                </Label>
                                 <Textarea
                                     value={data.follow_up_advice}
                                     className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                     rows={2}
-                                    onChange={(e) => setData('follow_up_advice', e.target.value)}
+                                    onChange={(e) =>
+                                        setData(
+                                            "follow_up_advice",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="Followup Advice..."
                                 />
                             </div>
 
                             <div>
-                                <Label htmlFor="followup_date">Followup Date</Label>
+                                <Label htmlFor="followup_date">
+                                    Followup Date
+                                </Label>
                                 <DateTimePicker
                                     required={true}
                                     onChange={(e) => {
@@ -610,24 +898,45 @@ export default function EditPrescription(props) {
                                     className="w-full bg-white sm:w-auto"
                                 />
 
-                                <InputError className="mt-2 text-red-700" message={errors.followup_date} />
+                                <InputError
+                                    className="mt-2 text-red-700"
+                                    message={errors.followup_date}
+                                />
                             </div>
 
                             {/* Actions */}
                             <div className="flex justify-end space-x-3">
-                                <Button onClick={(e) => saveAndNew(e)} type="button" className="" disabled={loadingButton !== null}>
-                                    {loadingButton === 'saveNew' && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                                <Button
+                                    onClick={(e) => saveAndNew(e)}
+                                    type="button"
+                                    className=""
+                                    disabled={loadingButton !== null}
+                                >
+                                    {loadingButton === "saveNew" && (
+                                        <LoaderCircle className="h-4 w-4 animate-spin" />
+                                    )}
                                     Save and New
                                 </Button>
-                                <Button onClick={(e) => onSubmit(e)} type="button" className="" disabled={loadingButton !== null}>
-                                    {loadingButton === 'saveComplete' && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                                <Button
+                                    onClick={(e) => onSubmit(e)}
+                                    type="button"
+                                    className=""
+                                    disabled={loadingButton !== null}
+                                >
+                                    {loadingButton === "saveComplete" && (
+                                        <LoaderCircle className="h-4 w-4 animate-spin" />
+                                    )}
                                     Save Prescription
                                 </Button>
                             </div>
                         </div>
                     </main>
                 </div>
-                <Footer content={props.prescription.data?.doctor?.chamber?.footer_info} />
+                <Footer
+                    content={
+                        props.prescription.data?.doctor?.chamber?.footer_info
+                    }
+                />
                 <CommonModal
                     onConfirm={handleAddvital}
                     onCancel={handleAddvitalCancel}
@@ -635,18 +944,22 @@ export default function EditPrescription(props) {
                     onClose={() => setShowAddVitalModal(false)}
                     title="Add Vital"
                 >
-                    <AddVital vitalData={vitalData} setVitalData={setVitalData} onHandleChange={onHandleChange} />
+                    <AddVital
+                        vitalData={vitalData}
+                        setVitalData={setVitalData}
+                        onHandleChange={onHandleChange}
+                    />
                 </CommonModal>
                 <ConfirmDialog
                     title="Validation Error!"
                     message={
                         !data.patient_id
-                            ? 'You have net selected any Patient?'
+                            ? "You have net selected any Patient?"
                             : !data.appointment_id
-                              ? 'This Patient have not any Appointment?'
+                              ? "This Patient have not any Appointment?"
                               : !data.medications?.length
-                                ? 'You did not added any medicine!'
-                                : 'You have net selected any Patient?'
+                                ? "You did not added any medicine!"
+                                : "You have net selected any Patient?"
                     }
                     onConfirm={handleConfirm}
                     onCancel={handleCancel}
@@ -661,7 +974,11 @@ export default function EditPrescription(props) {
                     onClose={() => setShowAddGynaeHiModal(false)}
                     title="Gynae History"
                 >
-                    <GynaeHistoryForm data={data} setData={setData} errors={errors} />
+                    <GynaeHistoryForm
+                        data={data}
+                        setData={setData}
+                        errors={errors}
+                    />
                 </CommonModal>
             </div>
         </AppLayout>

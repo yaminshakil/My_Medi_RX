@@ -1,17 +1,41 @@
-import { CommonModal } from '@/Components/CommonModal';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import axios from 'axios';
-import { GripVertical } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { CommonModal } from "@/Components/CommonModal";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+    closestCenter,
+    DndContext,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from "@dnd-kit/core";
+import {
+    arrayMove,
+    SortableContext,
+    useSortable,
+    verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import axios from "axios";
+import { GripVertical } from "lucide-react";
+import { useEffect, useState } from "react";
 
 // 🔸 Single sortable item component
-function SortableInstructionItem({ inst, selectedInstructions, onSelect, onEdit, onDelete }) {
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+function SortableInstructionItem({
+    inst,
+    selectedInstructions,
+    onSelect,
+    onEdit,
+    onDelete,
+}) {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({
         id: inst.id.toString(),
     });
 
@@ -28,12 +52,15 @@ function SortableInstructionItem({ inst, selectedInstructions, onSelect, onEdit,
             style={style}
             {...attributes}
             className={`flex cursor-pointer items-center justify-between rounded-lg border p-2 ${
-                selected ? 'border-green-500 bg-green-100' : 'hover:bg-gray-100'
-            } ${isDragging ? 'bg-gray-200' : ''}`}
+                selected ? "border-green-500 bg-green-100" : "hover:bg-gray-100"
+            } ${isDragging ? "bg-gray-200" : ""}`}
             onClick={() => onSelect(inst)}
         >
             <div className="flex items-center gap-2">
-                <span {...listeners} className="cursor-grab rounded p-1 hover:bg-gray-200">
+                <span
+                    {...listeners}
+                    className="cursor-grab rounded p-1 hover:bg-gray-200"
+                >
                     <GripVertical className="h-4 w-4 text-gray-500" />
                 </span>
                 <span>{inst.text}</span>
@@ -64,15 +91,22 @@ function SortableInstructionItem({ inst, selectedInstructions, onSelect, onEdit,
     );
 }
 
-export default function InstructionSelector({ data, setData, selectedInstructions, setSelectedInstructions }) {
+export default function InstructionSelector({
+    data,
+    setData,
+    selectedInstructions,
+    setSelectedInstructions,
+}) {
     const [showInstructionModal, setShowInstructionModal] = useState(false);
     const [instructionList, setInstructionList] = useState([]);
-    const [newInstruction, setNewInstruction] = useState('');
+    const [newInstruction, setNewInstruction] = useState("");
     const [editId, setEditId] = useState(null);
 
     // Load instructions from API
     const loadInstructions = () => {
-        axios.get('/admin/api/instructions').then((res) => setInstructionList(res.data));
+        axios
+            .get("/admin/api/instructions")
+            .then((res) => setInstructionList(res.data));
     };
 
     useEffect(() => {
@@ -87,13 +121,17 @@ export default function InstructionSelector({ data, setData, selectedInstruction
         const { active, over } = event;
         if (!over || active.id === over.id) return;
 
-        const oldIndex = instructionList.findIndex((i) => i.id.toString() === active.id);
-        const newIndex = instructionList.findIndex((i) => i.id.toString() === over.id);
+        const oldIndex = instructionList.findIndex(
+            (i) => i.id.toString() === active.id,
+        );
+        const newIndex = instructionList.findIndex(
+            (i) => i.id.toString() === over.id,
+        );
         const reordered = arrayMove(instructionList, oldIndex, newIndex);
         setInstructionList(reordered);
 
         // Persist new order to backend
-        axios.post('/admin/api/instructions/reorder', {
+        axios.post("/admin/api/instructions/reorder", {
             order: reordered.map((item) => item.id),
         });
     };
@@ -101,31 +139,42 @@ export default function InstructionSelector({ data, setData, selectedInstruction
     // Select/Deselect
     const handleSelectInstruction = (instruction) => {
         if (selectedInstructions.includes(instruction.text)) {
-            setSelectedInstructions(selectedInstructions.filter((i) => i !== instruction.text));
+            setSelectedInstructions(
+                selectedInstructions.filter((i) => i !== instruction.text),
+            );
         } else {
-            setSelectedInstructions([...selectedInstructions, instruction.text]);
+            setSelectedInstructions([
+                ...selectedInstructions,
+                instruction.text,
+            ]);
         }
     };
 
     // Sync to textarea
     useEffect(() => {
-        setData('instructions', selectedInstructions.join('\n'));
+        setData("instructions", selectedInstructions.join("\n"));
     }, [selectedInstructions]);
 
     // Save / Update
     const handleSaveInstruction = () => {
         if (!newInstruction.trim()) return;
         if (editId) {
-            axios.put(`/admin/api/instructions/${editId}`, { text: newInstruction }).then(() => {
-                setNewInstruction('');
-                setEditId(null);
-                loadInstructions();
-            });
+            axios
+                .put(`/admin/api/instructions/${editId}`, {
+                    text: newInstruction,
+                })
+                .then(() => {
+                    setNewInstruction("");
+                    setEditId(null);
+                    loadInstructions();
+                });
         } else {
-            axios.post('/admin/api/instructions', { text: newInstruction }).then(() => {
-                setNewInstruction('');
-                loadInstructions();
-            });
+            axios
+                .post("/admin/api/instructions", { text: newInstruction })
+                .then(() => {
+                    setNewInstruction("");
+                    loadInstructions();
+                });
         }
     };
 
@@ -135,8 +184,10 @@ export default function InstructionSelector({ data, setData, selectedInstruction
     };
 
     const handleDeleteInstruction = (id) => {
-        if (confirm('Are you sure you want to delete this instruction?')) {
-            axios.delete(`/admin/api/instructions/${id}`).then(() => loadInstructions());
+        if (confirm("Are you sure you want to delete this instruction?")) {
+            axios
+                .delete(`/admin/api/instructions/${id}`)
+                .then(() => loadInstructions());
         }
     };
 
@@ -144,24 +195,30 @@ export default function InstructionSelector({ data, setData, selectedInstruction
         <div>
             {/* Advice Notes */}
             <div>
-                <label className="mb-1 block text-sm font-medium">Advice Notes</label>
+                <label className="mb-1 block text-sm font-medium">
+                    Advice Notes
+                </label>
                 <div className="flex gap-2">
                     <Textarea
                         className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                         rows={3}
                         value={data.instructions}
                         onChange={(e) => {
-                            setData('instructions', e.target.value);
+                            setData("instructions", e.target.value);
                             setSelectedInstructions(
                                 e.target.value
-                                    .split('\n')
+                                    .split("\n")
                                     .map((l) => l.trim())
                                     .filter(Boolean),
                             );
                         }}
                         placeholder="Advice notes..."
                     />
-                    <Button type="button" className="cursor-pointer rounded-lg px-4 text-white" onClick={() => setShowInstructionModal(true)}>
+                    <Button
+                        type="button"
+                        className="cursor-pointer rounded-lg px-4 text-white"
+                        onClick={() => setShowInstructionModal(true)}
+                    >
                         + Select
                     </Button>
                 </div>
@@ -178,7 +235,13 @@ export default function InstructionSelector({ data, setData, selectedInstruction
                                 <button
                                     type="button"
                                     className="ml-2 text-red-600 hover:text-red-800"
-                                    onClick={() => setSelectedInstructions(selectedInstructions.filter((i) => i !== inst))}
+                                    onClick={() =>
+                                        setSelectedInstructions(
+                                            selectedInstructions.filter(
+                                                (i) => i !== inst,
+                                            ),
+                                        )
+                                    }
                                 >
                                     ✕
                                 </button>
@@ -206,13 +269,20 @@ export default function InstructionSelector({ data, setData, selectedInstruction
                         onChange={(e) => setNewInstruction(e.target.value)}
                     />
                     <Button type="button" onClick={handleSaveInstruction}>
-                        {editId ? 'Update' : 'Add'}
+                        {editId ? "Update" : "Add"}
                     </Button>
                 </div>
 
                 {/* Sortable List */}
-                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                    <SortableContext items={instructionList.map((i) => i.id.toString())} strategy={verticalListSortingStrategy}>
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                >
+                    <SortableContext
+                        items={instructionList.map((i) => i.id.toString())}
+                        strategy={verticalListSortingStrategy}
+                    >
                         <div className="max-h-64 space-y-2 overflow-y-auto">
                             {instructionList.map((inst) => (
                                 <SortableInstructionItem

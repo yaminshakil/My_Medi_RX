@@ -5,10 +5,10 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from '@/Components/ui/dropdown-menu';
-import { Link, usePage } from '@inertiajs/react';
-import { AlignJustify, Mail, Phone } from 'lucide-react';
-import React, { useState } from 'react';
+} from "@/Components/ui/dropdown-menu";
+import { Link, usePage } from "@inertiajs/react";
+import { AlignJustify, Mail, Phone } from "lucide-react";
+import React, { useState } from "react";
 
 export default function Navbar() {
     const { appSettings, menuPages, auth, ziggy } = usePage().props;
@@ -50,11 +50,16 @@ export default function Navbar() {
                     </Link>
                 </div>
                 <div className="flex justify-end md:hidden">
-                    <button className="flex justify-end rounded ring-1 ring-white" onClick={showNav}>
+                    <button
+                        className="flex justify-end rounded ring-1 ring-white"
+                        onClick={showNav}
+                    >
                         <AlignJustify className="h-6 w-6 text-gray-700" />
                     </button>
                     {auth?.user?.id && (
-                        <div className={`${toggle ? 'flex' : 'flex'} flex-row gap-2 md:flex`}>
+                        <div
+                            className={`${toggle ? "flex" : "flex"} flex-row gap-2 md:flex`}
+                        >
                             <div className="flex sm:ml-6 sm:items-center">
                                 <div className="relative ml-3">
                                     <DropdownMenu>
@@ -65,7 +70,8 @@ export default function Navbar() {
                                             >
                                                 <img
                                                     src={
-                                                        auth?.user?.profile_image_url ||
+                                                        auth?.user
+                                                            ?.profile_image_url ||
                                                         `https://ui-avatars.com/api/?name=${encodeURIComponent(auth?.user?.name)}&size=128`
                                                     }
                                                     alt={`${auth?.user?.name}`}
@@ -88,18 +94,31 @@ export default function Navbar() {
                                             </button>
                                         </DropdownMenuTrigger>
 
-                                        <DropdownMenuContent className="w-56 rounded-lg bg-white shadow-md" align="end">
-                                            <DropdownMenuLabel>{auth.user.name}</DropdownMenuLabel>
+                                        <DropdownMenuContent
+                                            className="w-56 rounded-lg bg-white shadow-md"
+                                            align="end"
+                                        >
+                                            <DropdownMenuLabel>
+                                                {auth.user.name}
+                                            </DropdownMenuLabel>
                                             <DropdownMenuSeparator />
 
                                             <DropdownMenuItem asChild>
-                                                <Link href={route('user.profile')}>Profile</Link>
+                                                <Link
+                                                    href={route("user.profile")}
+                                                >
+                                                    Profile
+                                                </Link>
                                             </DropdownMenuItem>
 
                                             <DropdownMenuSeparator />
 
                                             <DropdownMenuItem asChild>
-                                                <Link href={route('logout')} method="post" as="button">
+                                                <Link
+                                                    href={route("logout")}
+                                                    method="post"
+                                                    as="button"
+                                                >
                                                     Log Out
                                                 </Link>
                                             </DropdownMenuItem>
@@ -115,7 +134,11 @@ export default function Navbar() {
                     className={`hidden w-full flex-col items-center justify-center first:mt-2 md:flex md:w-auto md:flex-row md:space-x-4 md:bg-transparent`}
                 >
                     <li>
-                        <Link className="font-semibold text-white hover:text-sky-500" href="/" onClick={showNav}>
+                        <Link
+                            className="font-semibold text-white hover:text-sky-500"
+                            href="/"
+                            onClick={showNav}
+                        >
                             Home
                         </Link>
                     </li>
@@ -124,24 +147,30 @@ export default function Navbar() {
                             // If has submenu
                             <li key={index} className="group relative">
                                 <Link
-                                    href={route('pages.show', link.slug)}
+                                    href={route("pages.show", link.slug)}
                                     onClick={showNav}
-                                    className={`font-semibold transition-colors duration-300 ${ziggy.location === route('pages.show', link.slug)
-                                        ? 'text-sky-400 underline decoration-2 underline-offset-4'
-                                        : 'text-white hover:text-sky-500'
-                                        }`}
+                                    className={`font-semibold transition-colors duration-300 ${
+                                        ziggy.location ===
+                                        route("pages.show", link.slug)
+                                            ? "text-sky-400 underline decoration-2 underline-offset-4"
+                                            : "text-white hover:text-sky-500"
+                                    }`}
                                 >
                                     {link.title}
                                 </Link>
                                 <ul className="absolute left-0 mt-0 hidden w-48 rounded bg-[var(--btn-base-color)] shadow-lg group-hover:block">
                                     {link.children.map((sub, sidx) => (
-                                        <li key={sidx} className="border-b border-white last:border-b-0">
+                                        <li
+                                            key={sidx}
+                                            className="border-b border-white last:border-b-0"
+                                        >
                                             <Link
                                                 href={sub.url}
-                                                className={`block px-4 py-2 text-sm text-white hover:bg-[var(--btn-base-hover-color)] ${ziggy.location === sub.url
-                                                    ? 'text-sky-400 underline decoration-2 underline-offset-4'
-                                                    : 'text-white decoration-2 underline-offset-4 hover:underline'
-                                                    }`}
+                                                className={`block px-4 py-2 text-sm text-white hover:bg-[var(--btn-base-hover-color)] ${
+                                                    ziggy.location === sub.url
+                                                        ? "text-sky-400 underline decoration-2 underline-offset-4"
+                                                        : "text-white decoration-2 underline-offset-4 hover:underline"
+                                                }`}
                                             >
                                                 {sub.title}
                                             </Link>
@@ -152,12 +181,14 @@ export default function Navbar() {
                         ) : (
                             <li key={index} className={link.cname}>
                                 <Link
-                                    href={route('pages.show', link.slug)}
+                                    href={route("pages.show", link.slug)}
                                     onClick={showNav}
-                                    className={`font-semibold transition-colors duration-300 ${ziggy.location === route('pages.show', link.slug)
-                                        ? 'text-sky-400 underline decoration-2 underline-offset-4'
-                                        : 'text-white hover:text-sky-500'
-                                        }`}
+                                    className={`font-semibold transition-colors duration-300 ${
+                                        ziggy.location ===
+                                        route("pages.show", link.slug)
+                                            ? "text-sky-400 underline decoration-2 underline-offset-4"
+                                            : "text-white hover:text-sky-500"
+                                    }`}
                                 >
                                     {link.title}
                                 </Link>
@@ -166,7 +197,9 @@ export default function Navbar() {
                     })}
                 </ul>
                 {auth?.user?.id ? (
-                    <div className={`${toggle ? 'flex' : 'hidden'} flex-row gap-2 justify-self-end md:flex`}>
+                    <div
+                        className={`${toggle ? "flex" : "hidden"} flex-row gap-2 justify-self-end md:flex`}
+                    >
                         <div className="hidden sm:ml-6 sm:flex sm:items-center">
                             <div className="relative ml-3">
                                 <DropdownMenu>
@@ -177,7 +210,8 @@ export default function Navbar() {
                                         >
                                             <img
                                                 src={
-                                                    auth?.user?.profile_image_url ||
+                                                    auth?.user
+                                                        ?.profile_image_url ||
                                                     `https://ui-avatars.com/api/?name=${encodeURIComponent(auth?.user?.name)}&size=128`
                                                 }
                                                 alt={`${auth?.user?.name}`}
@@ -200,14 +234,22 @@ export default function Navbar() {
                                         </button>
                                     </DropdownMenuTrigger>
 
-                                    <DropdownMenuContent className="w-56 rounded-lg bg-white shadow-md" align="end">
+                                    <DropdownMenuContent
+                                        className="w-56 rounded-lg bg-white shadow-md"
+                                        align="end"
+                                    >
                                         <DropdownMenuLabel>
-                                            <Link href={route('dashboard')}>{auth.user.name}</Link>
+                                            <Link href={route("dashboard")}>
+                                                {auth.user.name}
+                                            </Link>
                                         </DropdownMenuLabel>
                                         <DropdownMenuSeparator />
 
                                         <DropdownMenuItem asChild>
-                                            <Link href={route('user.profile')} className="cursor-pointer">
+                                            <Link
+                                                href={route("user.profile")}
+                                                className="cursor-pointer"
+                                            >
                                                 Profile
                                             </Link>
                                         </DropdownMenuItem>
@@ -215,7 +257,12 @@ export default function Navbar() {
                                         <DropdownMenuSeparator />
 
                                         <DropdownMenuItem asChild>
-                                            <Link href={route('logout')} className="cursor-pointer" method="post" as="button">
+                                            <Link
+                                                href={route("logout")}
+                                                className="cursor-pointer"
+                                                method="post"
+                                                as="button"
+                                            >
                                                 Log Out
                                             </Link>
                                         </DropdownMenuItem>
@@ -225,18 +272,22 @@ export default function Navbar() {
                         </div>
                     </div>
                 ) : (
-                    <div className={`hidden flex-row justify-end gap-2 md:flex`}>
+                    <div
+                        className={`hidden flex-row justify-end gap-2 md:flex`}
+                    >
                         <Link
                             href="/login"
-                            className={`${toggle ? 'flex' : 'hidden'
-                                } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
+                            className={`${
+                                toggle ? "flex" : "hidden"
+                            } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
                         >
                             Login
                         </Link>
                         <Link
-                            href={route('register')}
-                            className={`${toggle ? 'flex' : 'hidden'
-                                } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
+                            href={route("register")}
+                            className={`${
+                                toggle ? "flex" : "hidden"
+                            } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
                         >
                             Registration
                         </Link>
@@ -245,9 +296,15 @@ export default function Navbar() {
             </div>
             {toggle && (
                 <React.Fragment>
-                    <ul className={`flex w-full flex-col items-center justify-center first:mt-2 md:hidden`}>
+                    <ul
+                        className={`flex w-full flex-col items-center justify-center first:mt-2 md:hidden`}
+                    >
                         <li>
-                            <Link className="font-semibold text-white hover:text-sky-500" href="/" onClick={showNav}>
+                            <Link
+                                className="font-semibold text-white hover:text-sky-500"
+                                href="/"
+                                onClick={showNav}
+                            >
                                 Home
                             </Link>
                         </li>
@@ -256,24 +313,31 @@ export default function Navbar() {
                                 // If has submenu
                                 <li key={index} className="group relative">
                                     <Link
-                                        href={route('pages.show', link.slug)}
+                                        href={route("pages.show", link.slug)}
                                         onClick={showNav}
-                                        className={`font-semibold transition-colors duration-300 ${ziggy.location === route('pages.show', link.slug)
-                                            ? 'text-sky-400 underline decoration-2 underline-offset-4'
-                                            : 'text-white hover:text-sky-500'
-                                            }`}
+                                        className={`font-semibold transition-colors duration-300 ${
+                                            ziggy.location ===
+                                            route("pages.show", link.slug)
+                                                ? "text-sky-400 underline decoration-2 underline-offset-4"
+                                                : "text-white hover:text-sky-500"
+                                        }`}
                                     >
                                         {link.title}
                                     </Link>
                                     <ul className="absolute left-0 mt-0 hidden w-48 rounded bg-[var(--btn-base-color)] shadow-lg group-hover:block">
                                         {link.children.map((sub, sidx) => (
-                                            <li key={sidx} className="border-b border-white last:border-b-0">
+                                            <li
+                                                key={sidx}
+                                                className="border-b border-white last:border-b-0"
+                                            >
                                                 <Link
                                                     href={sub.url}
-                                                    className={`block px-4 py-2 text-sm text-white hover:bg-[var(--btn-base-hover-color)] ${ziggy.location === sub.url
-                                                        ? 'text-sky-400 underline decoration-2 underline-offset-4'
-                                                        : 'text-white decoration-2 underline-offset-4 hover:underline'
-                                                        }`}
+                                                    className={`block px-4 py-2 text-sm text-white hover:bg-[var(--btn-base-hover-color)] ${
+                                                        ziggy.location ===
+                                                        sub.url
+                                                            ? "text-sky-400 underline decoration-2 underline-offset-4"
+                                                            : "text-white decoration-2 underline-offset-4 hover:underline"
+                                                    }`}
                                                 >
                                                     {sub.title}
                                                 </Link>
@@ -284,12 +348,14 @@ export default function Navbar() {
                             ) : (
                                 <li key={index} className={link.cname}>
                                     <Link
-                                        href={route('pages.show', link.slug)}
+                                        href={route("pages.show", link.slug)}
                                         onClick={showNav}
-                                        className={`font-semibold transition-colors duration-300 ${ziggy.location === route('pages.show', link.slug)
-                                            ? 'text-sky-400 underline decoration-2 underline-offset-4'
-                                            : 'text-white hover:text-sky-500'
-                                            }`}
+                                        className={`font-semibold transition-colors duration-300 ${
+                                            ziggy.location ===
+                                            route("pages.show", link.slug)
+                                                ? "text-sky-400 underline decoration-2 underline-offset-4"
+                                                : "text-white hover:text-sky-500"
+                                        }`}
                                     >
                                         {link.title}
                                     </Link>
@@ -297,18 +363,22 @@ export default function Navbar() {
                             );
                         })}
                     </ul>
-                    <div className={`flex flex-row justify-end gap-2 pb-4 md:hidden`}>
+                    <div
+                        className={`flex flex-row justify-end gap-2 pb-4 md:hidden`}
+                    >
                         <Link
                             href="/login"
-                            className={`${toggle ? 'flex' : 'hidden'
-                                } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
+                            className={`${
+                                toggle ? "flex" : "hidden"
+                            } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
                         >
                             Login
                         </Link>
                         <Link
-                            href={route('register')}
-                            className={`${toggle ? 'flex' : 'hidden'
-                                } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
+                            href={route("register")}
+                            className={`${
+                                toggle ? "flex" : "hidden"
+                            } mx-auto mt-4 items-center justify-center rounded-lg border border-white bg-[var(--btn-base-color)] px-4 py-2 font-medium text-white hover:bg-[var(--btn-base-hover-color)] md:mx-0 md:mt-0 md:flex`}
                         >
                             Registration
                         </Link>

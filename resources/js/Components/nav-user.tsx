@@ -1,11 +1,20 @@
-import { useIsMobile } from '@/Components/hooks/use-mobile';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/Components/ui/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/Components/ui/sidebar';
-import { UserInfo } from '@/Components/user-info';
-import { UserMenuContent } from '@/Components/user-menu-content';
-import { type SharedData } from '@/types';
-import { usePage } from '@inertiajs/react';
-import { ChevronsUpDown } from 'lucide-react';
+import { useIsMobile } from "@/Components/hooks/use-mobile";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from "@/Components/ui/dropdown-menu";
+import {
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    useSidebar,
+} from "@/Components/ui/sidebar";
+import { UserInfo } from "@/Components/user-info";
+import { UserMenuContent } from "@/Components/user-menu-content";
+import { type SharedData } from "@/types";
+import { usePage } from "@inertiajs/react";
+import { ChevronsUpDown } from "lucide-react";
 
 export function NavUser() {
     const { auth } = usePage<SharedData>().props;
@@ -17,7 +26,10 @@ export function NavUser() {
             <SidebarMenuItem>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <SidebarMenuButton size="lg" className="group text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent">
+                        <SidebarMenuButton
+                            size="lg"
+                            className="group text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent"
+                        >
                             <UserInfo user={auth.user} />
                             <ChevronsUpDown className="ml-auto size-4" />
                         </SidebarMenuButton>
@@ -25,7 +37,13 @@ export function NavUser() {
                     <DropdownMenuContent
                         className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
                         align="end"
-                        side={isMobile ? 'bottom' : state === 'collapsed' ? 'left' : 'bottom'}
+                        side={
+                            isMobile
+                                ? "bottom"
+                                : state === "collapsed"
+                                  ? "left"
+                                  : "bottom"
+                        }
                     >
                         <UserMenuContent user={auth.user} />
                     </DropdownMenuContent>

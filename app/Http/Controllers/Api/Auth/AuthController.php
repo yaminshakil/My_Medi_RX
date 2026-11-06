@@ -186,10 +186,37 @@ class AuthController extends Controller
         // $tokens = AuthService::generateTokens($user);
         $token = auth('api')->login($user);
 
+        $activeSubscription = $user->subscriptions()
+            ->with('plan')
+            ->where('status', 'active')
+            ->where('starts_at', '<=', now())
+            ->where('ends_at', '>', now())
+            ->latest('ends_at')
+            ->first();
+
         $userResource = new UserBasicResource($user);
 
         $userData = [
-            'user'       => $userResource->resolve(),
+            'user' => $userResource->resolve(),
+
+            // Subscription information
+            'is_subscription_active' => $activeSubscription !== null,
+
+            'subscription' => $activeSubscription ? [
+                'id'     => $activeSubscription->id,
+                'status' => $activeSubscription->status,
+                'plan'   => $activeSubscription->plan ? [
+                    'id'            => $activeSubscription->plan->id,
+                    'name'          => $activeSubscription->plan->name,
+                    'slug'          => $activeSubscription->plan->slug,
+                    'billing_cycle' => $activeSubscription->plan->billing_cycle,
+                    'duration_days' => $activeSubscription->plan->duration_days,
+                ] : null,
+                'starts_at'  => $activeSubscription->starts_at,
+                'ends_at'    => $activeSubscription->ends_at,
+                'auto_renew' => (bool) $activeSubscription->auto_renew,
+            ] : null,
+
             'token_type' => 'Bearer',
             'tokens'     => [
                 'accessToken' => $token,

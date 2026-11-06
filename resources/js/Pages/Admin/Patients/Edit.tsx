@@ -1,14 +1,14 @@
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler, useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import Form from './Form';
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import Form from "./Form";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Patient Profile',
-        href: '/pateint/profile',
+        title: "Patient Profile",
+        href: "/pateint/profile",
     },
 ];
 
@@ -29,25 +29,25 @@ type PatientForm = {
 export default function Edit() {
     const { patient, flash } = usePage().props;
     const { data, setData, post, errors, processing } = useForm<PatientForm>({
-        name: patient.name || '',
-        phone: patient.phone || '',
-        email: patient.email || '',
-        date_of_birth: patient.birth_date || '',
+        name: patient.name || "",
+        phone: patient.phone || "",
+        email: patient.email || "",
+        date_of_birth: patient.birth_date || "",
         age: patient.age.y || 0,
-        address: patient.address || '',
-        city: patient.city || '',
-        gender: patient.gender || '',
-        blood_group: patient.blood_group || '',
+        address: patient.address || "",
+        city: patient.city || "",
+        gender: patient.gender || "",
+        blood_group: patient.blood_group || "",
         profile_image: null,
-        marital_status: patient.marital_status || '',
-        _method: 'PUT',
+        marital_status: patient.marital_status || "",
+        _method: "PUT",
     });
 
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('patients.update', patient.id));
+        post(route("patients.update", patient.id));
     };
-    console.log('patient', patient);
+    console.log("patient", patient);
 
     useEffect(() => {
         if (flash.message.success) {

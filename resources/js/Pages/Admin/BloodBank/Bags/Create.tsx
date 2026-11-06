@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
-import { useForm } from '@inertiajs/react';
-import { Droplet, CalendarClock, Package, ShieldCheck } from 'lucide-react';
+import { useMemo } from "react";
+import { useForm } from "@inertiajs/react";
+import { Droplet, CalendarClock, Package, ShieldCheck } from "lucide-react";
 
-import BloodBankLayout from '@/Components/BloodBank/BloodBankLayout';
+import BloodBankLayout from "@/Components/BloodBank/BloodBankLayout";
 
-import { Button } from '@/Components/ui/button';
+import { Button } from "@/Components/ui/button";
 import {
     Card,
     CardContent,
@@ -12,17 +12,17 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from '@/Components/ui/card';
-import { Checkbox } from '@/Components/ui/checkbox';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
+} from "@/Components/ui/card";
+import { Checkbox } from "@/Components/ui/checkbox";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/Components/ui/select';
+} from "@/Components/ui/select";
 
 interface Option {
     value: string;
@@ -40,19 +40,19 @@ interface CreateProps {
 
 export default function Create({ options }: CreateProps) {
     const { data, setData, post, processing, errors } = useForm({
-        bag_number: '',
-        batch_number: '',
-        blood_group: '',
-        component: '',
-        volume_ml: '',
-        collected_at: '',
-        expires_at: '',
-        storage_unit_id: '',
+        bag_number: "",
+        batch_number: "",
+        blood_group: "",
+        component: "",
+        volume_ml: "",
+        collected_at: "",
+        expires_at: "",
+        storage_unit_id: "",
         quarantine: false,
     });
 
     const component = options.components.find(
-        (item) => item.value === data.component
+        (item) => item.value === data.component,
     );
 
     const suggestedExpiry = useMemo(() => {
@@ -67,7 +67,7 @@ export default function Create({ options }: CreateProps) {
         }
 
         collectedAt.setDate(
-            collectedAt.getDate() + (component.shelf_life_days ?? 0)
+            collectedAt.getDate() + (component.shelf_life_days ?? 0),
         );
 
         return collectedAt;
@@ -75,13 +75,13 @@ export default function Create({ options }: CreateProps) {
 
     const formatDateTime = (date: Date) =>
         new Intl.DateTimeFormat(undefined, {
-            dateStyle: 'medium',
-            timeStyle: 'short',
+            dateStyle: "medium",
+            timeStyle: "short",
         }).format(date);
 
     const submit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        post(route('blood-bank.bags.store'));
+        post(route("blood-bank.bags.store"));
     };
 
     const fieldError = (name: keyof typeof errors) =>
@@ -124,49 +124,65 @@ export default function Create({ options }: CreateProps) {
                             <div className="grid gap-5 sm:grid-cols-2">
                                 <div className="space-y-2">
                                     <Label htmlFor="bag_number">
-                                        Bag number <span className="text-destructive">*</span>
+                                        Bag number{" "}
+                                        <span className="text-destructive">
+                                            *
+                                        </span>
                                     </Label>
                                     <Input
                                         id="bag_number"
                                         value={data.bag_number}
                                         onChange={(e) =>
-                                            setData('bag_number', e.target.value)
+                                            setData(
+                                                "bag_number",
+                                                e.target.value,
+                                            )
                                         }
                                         placeholder="Enter barcode or ISBT number"
                                         aria-invalid={!!errors.bag_number}
                                         required
                                     />
                                     <p className="text-xs text-muted-foreground">
-                                        Barcode or ISBT number printed on the bag.
+                                        Barcode or ISBT number printed on the
+                                        bag.
                                     </p>
-                                    {fieldError('bag_number')}
+                                    {fieldError("bag_number")}
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="batch_number">
-                                        Batch number <span className="text-destructive">*</span>
+                                        Batch number{" "}
+                                        <span className="text-destructive">
+                                            *
+                                        </span>
                                     </Label>
                                     <Input
                                         id="batch_number"
                                         value={data.batch_number}
                                         onChange={(e) =>
-                                            setData('batch_number', e.target.value)
+                                            setData(
+                                                "batch_number",
+                                                e.target.value,
+                                            )
                                         }
                                         placeholder="Enter batch number"
                                         aria-invalid={!!errors.batch_number}
                                         required
                                     />
-                                    {fieldError('batch_number')}
+                                    {fieldError("batch_number")}
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="blood_group">
-                                        Blood group <span className="text-destructive">*</span>
+                                        Blood group{" "}
+                                        <span className="text-destructive">
+                                            *
+                                        </span>
                                     </Label>
                                     <Select
                                         value={data.blood_group || undefined}
                                         onValueChange={(value) =>
-                                            setData('blood_group', value)
+                                            setData("blood_group", value)
                                         }
                                     >
                                         <SelectTrigger
@@ -186,17 +202,20 @@ export default function Create({ options }: CreateProps) {
                                             ))}
                                         </SelectContent>
                                     </Select>
-                                    {fieldError('blood_group')}
+                                    {fieldError("blood_group")}
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="component">
-                                        Blood component <span className="text-destructive">*</span>
+                                        Blood component{" "}
+                                        <span className="text-destructive">
+                                            *
+                                        </span>
                                     </Label>
                                     <Select
                                         value={data.component || undefined}
                                         onValueChange={(value) =>
-                                            setData('component', value)
+                                            setData("component", value)
                                         }
                                     >
                                         <SelectTrigger
@@ -216,12 +235,15 @@ export default function Create({ options }: CreateProps) {
                                             ))}
                                         </SelectContent>
                                     </Select>
-                                    {fieldError('component')}
+                                    {fieldError("component")}
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="volume_ml">
-                                        Volume (ml) <span className="text-destructive">*</span>
+                                        Volume (ml){" "}
+                                        <span className="text-destructive">
+                                            *
+                                        </span>
                                     </Label>
                                     <Input
                                         id="volume_ml"
@@ -230,43 +252,54 @@ export default function Create({ options }: CreateProps) {
                                         max={1000}
                                         value={data.volume_ml}
                                         onChange={(e) =>
-                                            setData('volume_ml', e.target.value)
+                                            setData("volume_ml", e.target.value)
                                         }
                                         placeholder="e.g. 450"
                                         aria-invalid={!!errors.volume_ml}
                                         required
                                     />
-                                    {fieldError('volume_ml')}
+                                    {fieldError("volume_ml")}
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="storage_unit_id">
-                                        Storage unit <span className="text-destructive">*</span>
+                                        Storage unit{" "}
+                                        <span className="text-destructive">
+                                            *
+                                        </span>
                                     </Label>
                                     <Select
-                                        value={data.storage_unit_id || undefined}
+                                        value={
+                                            data.storage_unit_id || undefined
+                                        }
                                         onValueChange={(value) =>
-                                            setData('storage_unit_id', value)
+                                            setData("storage_unit_id", value)
                                         }
                                     >
                                         <SelectTrigger
                                             id="storage_unit_id"
-                                            aria-invalid={!!errors.storage_unit_id}
+                                            aria-invalid={
+                                                !!errors.storage_unit_id
+                                            }
                                         >
                                             <SelectValue placeholder="Select storage unit" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {options.storage_units.map((unit) => (
-                                                <SelectItem
-                                                    key={unit.value}
-                                                    value={String(unit.value)}
-                                                >
-                                                    {unit.label}
-                                                </SelectItem>
-                                            ))}
+                                            {options.storage_units.map(
+                                                (unit) => (
+                                                    <SelectItem
+                                                        key={unit.value}
+                                                        value={String(
+                                                            unit.value,
+                                                        )}
+                                                    >
+                                                        {unit.label}
+                                                    </SelectItem>
+                                                ),
+                                            )}
                                         </SelectContent>
                                     </Select>
-                                    {fieldError('storage_unit_id')}
+                                    {fieldError("storage_unit_id")}
                                 </div>
                             </div>
                         </section>
@@ -282,29 +315,40 @@ export default function Create({ options }: CreateProps) {
                             <div className="grid gap-5 sm:grid-cols-2">
                                 <div className="space-y-2">
                                     <Label htmlFor="collected_at">
-                                        Collected at <span className="text-destructive">*</span>
+                                        Collected at{" "}
+                                        <span className="text-destructive">
+                                            *
+                                        </span>
                                     </Label>
                                     <Input
                                         id="collected_at"
                                         type="datetime-local"
                                         value={data.collected_at}
                                         onChange={(e) =>
-                                            setData('collected_at', e.target.value)
+                                            setData(
+                                                "collected_at",
+                                                e.target.value,
+                                            )
                                         }
                                         aria-invalid={!!errors.collected_at}
                                         required
                                     />
-                                    {fieldError('collected_at')}
+                                    {fieldError("collected_at")}
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="expires_at">Expires at</Label>
+                                    <Label htmlFor="expires_at">
+                                        Expires at
+                                    </Label>
                                     <Input
                                         id="expires_at"
                                         type="datetime-local"
                                         value={data.expires_at}
                                         onChange={(e) =>
-                                            setData('expires_at', e.target.value)
+                                            setData(
+                                                "expires_at",
+                                                e.target.value,
+                                            )
                                         }
                                         aria-invalid={!!errors.expires_at}
                                     />
@@ -312,9 +356,9 @@ export default function Create({ options }: CreateProps) {
                                     <p className="text-xs text-muted-foreground">
                                         {suggestedExpiry
                                             ? `Suggested expiry: ${formatDateTime(suggestedExpiry)}. Leave empty to use the server's default shelf life.`
-                                            : 'Leave empty to use the standard shelf life for the selected component.'}
+                                            : "Leave empty to use the standard shelf life for the selected component."}
                                     </p>
-                                    {fieldError('expires_at')}
+                                    {fieldError("expires_at")}
                                 </div>
                             </div>
                         </section>
@@ -325,7 +369,7 @@ export default function Create({ options }: CreateProps) {
                                     id="quarantine"
                                     checked={data.quarantine}
                                     onCheckedChange={(checked) =>
-                                        setData('quarantine', checked === true)
+                                        setData("quarantine", checked === true)
                                     }
                                 />
 
@@ -354,7 +398,9 @@ export default function Create({ options }: CreateProps) {
                             variant="outline"
                             disabled={processing}
                             onClick={() =>
-                                (window.location.href = route('blood-bank.bags.index'))
+                                (window.location.href = route(
+                                    "blood-bank.bags.index",
+                                ))
                             }
                         >
                             Cancel
@@ -366,7 +412,9 @@ export default function Create({ options }: CreateProps) {
                             className="w-full bg-rose-700 text-white hover:bg-rose-800 sm:w-auto"
                         >
                             <Droplet className="mr-2 size-4" />
-                            {processing ? 'Registering...' : 'Register blood unit'}
+                            {processing
+                                ? "Registering..."
+                                : "Register blood unit"}
                         </Button>
                     </CardFooter>
                 </Card>

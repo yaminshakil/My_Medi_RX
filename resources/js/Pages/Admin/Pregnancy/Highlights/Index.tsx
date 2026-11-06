@@ -10,7 +10,7 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem } from "@/types";
 
 type Highlight = {
     id: number;
@@ -37,7 +37,12 @@ type Props = {
 };
 
 export default function Index({ highlights }: Props) {
-    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Pregnancy Weekly Highlights', href: '/admin/pregnancy/highlights' }];
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: "Pregnancy Weekly Highlights",
+            href: "/admin/pregnancy/highlights",
+        },
+    ];
     function remove(id: number) {
         if (!window.confirm("Delete this weekly highlight?")) return;
 
@@ -149,7 +154,7 @@ export default function Index({ highlights }: Props) {
 
                 <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
                     <span>
-                        Showing {highlights.from} to {highlights.to} {" "} from total {" "}
+                        Showing {highlights.from} to {highlights.to} from total{" "}
                         {highlights.total} Highlights
                     </span>
                     <div className="flex flex-wrap gap-2">

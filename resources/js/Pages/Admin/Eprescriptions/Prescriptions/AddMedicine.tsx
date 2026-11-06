@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select } from 'antd';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select } from "antd";
 
 export default function AddMedicine({
     editingMedication,
@@ -21,7 +21,12 @@ export default function AddMedicine({
                             className="h-10 w-full"
                             placeholder="Type"
                             value={editingMedication.type}
-                            onChange={(e) => setEditingMedication({ ...editingMedication, type: e.target.value })}
+                            onChange={(e) =>
+                                setEditingMedication({
+                                    ...editingMedication,
+                                    type: e.target.value,
+                                })
+                            }
                         />
                     </div>
                     <div className="w-full">
@@ -34,13 +39,15 @@ export default function AddMedicine({
                             value={editingMedication.medicine_id}
                             options={medicines}
                             onChange={(value) => {
-                                const selected = medicines.find((m) => m.value === value);
+                                const selected = medicines.find(
+                                    (m) => m.value === value,
+                                );
                                 setEditingMedication({
                                     ...editingMedication,
                                     medicine_id: value,
-                                    brand_name: selected?.label || '',
-                                    strength: selected?.strength || '',
-                                    type: selected?.type || '',
+                                    brand_name: selected?.label || "",
+                                    strength: selected?.strength || "",
+                                    type: selected?.type || "",
                                 });
                             }}
                         />
@@ -50,7 +57,12 @@ export default function AddMedicine({
                             className="h-10 w-full"
                             placeholder="Strength"
                             value={editingMedication.strength}
-                            onChange={(e) => setEditingMedication({ ...editingMedication, strength: e.target.value })}
+                            onChange={(e) =>
+                                setEditingMedication({
+                                    ...editingMedication,
+                                    strength: e.target.value,
+                                })
+                            }
                         />
                     </div>
                     <div className="w-full">
@@ -109,13 +121,24 @@ export default function AddMedicine({
                             className="h-10 w-full"
                             placeholder="Advice"
                             value={editingMedication.advice}
-                            onChange={(e) => setEditingMedication({ ...editingMedication, advice: e.target.value })}
+                            onChange={(e) =>
+                                setEditingMedication({
+                                    ...editingMedication,
+                                    advice: e.target.value,
+                                })
+                            }
                         />
                     </div>
                 </div>
             </div>
-            <Button type="button" className="mb-2 cursor-pointer text-white" onClick={saveMedication}>
-                {editingIndex !== null ? 'Update Medication' : '+ Add Medication'}
+            <Button
+                type="button"
+                className="mb-2 cursor-pointer text-white"
+                onClick={saveMedication}
+            >
+                {editingIndex !== null
+                    ? "Update Medication"
+                    : "+ Add Medication"}
             </Button>
         </div>
     );

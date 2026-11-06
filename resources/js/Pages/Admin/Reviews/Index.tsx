@@ -1,16 +1,24 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Badge } from '@/Components/ui/badge';
+import { Head, Link, router } from "@inertiajs/react";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Badge } from "@/Components/ui/badge";
 import {
-    Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from '@/Components/ui/table';
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/Components/ui/table";
 import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
-} from '@/Components/ui/dropdown-menu';
-import { MoreHorizontal, Plus, Search, Star } from 'lucide-react';
-import { useState } from 'react';
-import AppLayout from '@/Layouts/app-layout';
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/Components/ui/dropdown-menu";
+import { MoreHorizontal, Plus, Search, Star } from "lucide-react";
+import { useState } from "react";
+import AppLayout from "@/Layouts/app-layout";
 
 interface Review {
     id: number;
@@ -34,16 +42,20 @@ interface Props {
 }
 
 export default function Index({ reviews, filters }: Props) {
-    const [search, setSearch] = useState(filters.search || '');
+    const [search, setSearch] = useState(filters.search || "");
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        router.get(route('admin.reviews.index'), { search }, { preserveState: true });
+        router.get(
+            route("admin.reviews.index"),
+            { search },
+            { preserveState: true },
+        );
     };
 
     const deleteReview = (id: number) => {
-        if (confirm('Are you sure you want to delete this review?')) {
-            router.delete(route('admin.reviews.destroy', id));
+        if (confirm("Are you sure you want to delete this review?")) {
+            router.delete(route("admin.reviews.destroy", id));
         }
     };
 
@@ -54,11 +66,15 @@ export default function Index({ reviews, filters }: Props) {
             <div className="space-y-6 px-4">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight">Reviews</h1>
-                        <p className="text-muted-foreground">Manage all user reviews</p>
+                        <h1 className="text-2xl font-bold tracking-tight">
+                            Reviews
+                        </h1>
+                        <p className="text-muted-foreground">
+                            Manage all user reviews
+                        </p>
                     </div>
                     <Button asChild>
-                        <Link href={route('admin.reviews.create')}>
+                        <Link href={route("admin.reviews.create")}>
                             <Plus className="mr-2 h-4 w-4" />
                             Add Review
                         </Link>
@@ -76,7 +92,9 @@ export default function Index({ reviews, filters }: Props) {
                             onChange={(e) => setSearch(e.target.value)}
                         />
                     </div>
-                    <Button type="submit" variant="secondary">Search</Button>
+                    <Button type="submit" variant="secondary">
+                        Search
+                    </Button>
                 </form>
 
                 {/* Table */}
@@ -96,18 +114,27 @@ export default function Index({ reviews, filters }: Props) {
                         <TableBody>
                             {reviews.data.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
+                                    <TableCell
+                                        colSpan={7}
+                                        className="h-24 text-center text-muted-foreground"
+                                    >
                                         No reviews found.
                                     </TableCell>
                                 </TableRow>
                             ) : (
                                 reviews.data.map((review) => (
                                     <TableRow key={review.id}>
-                                        <TableCell className="font-medium">{review.user.name}</TableCell>
+                                        <TableCell className="font-medium">
+                                            {review.user.name}
+                                        </TableCell>
                                         <TableCell>
                                             <div className="text-sm">
-                                                {review.reviewable_type.split('\\').pop()}
-                                                <span className="text-muted-foreground ml-1">#{review.reviewable_id}</span>
+                                                {review.reviewable_type
+                                                    .split("\\")
+                                                    .pop()}
+                                                <span className="text-muted-foreground ml-1">
+                                                    #{review.reviewable_id}
+                                                </span>
                                             </div>
                                         </TableCell>
                                         <TableCell>
@@ -116,19 +143,41 @@ export default function Index({ reviews, filters }: Props) {
                                                     <Star
                                                         key={i}
                                                         size={16}
-                                                        className={i < review.rating ? 'fill-[var(--base-color)] text-[var(--base-color)]' : 'text-gray-300'}
+                                                        className={
+                                                            i < review.rating
+                                                                ? "fill-[var(--base-color)] text-[var(--base-color)]"
+                                                                : "text-gray-300"
+                                                        }
                                                     />
                                                 ))}
-                                                <span className="text-muted-foreground text-xs ">({review.rating})</span>
+                                                <span className="text-muted-foreground text-xs ">
+                                                    ({review.rating})
+                                                </span>
                                             </div>
                                         </TableCell>
                                         <TableCell className="max-w-xs truncate">
-                                            {review.comment || <span className="text-muted-foreground">—</span>}
+                                            {review.comment || (
+                                                <span className="text-muted-foreground">
+                                                    —
+                                                </span>
+                                            )}
                                         </TableCell>
                                         <TableCell>
-                                            <Badge variant={review.approved ? 'default' : 'secondary'}
-                                                className={review.approved ? 'bg-green-600 hover:bg-green-700' : 'bg-yellow-500 hover:bg-yellow-600 text-black'}>
-                                                {review.approved ? 'Approved' : 'Pending'}
+                                            <Badge
+                                                variant={
+                                                    review.approved
+                                                        ? "default"
+                                                        : "secondary"
+                                                }
+                                                className={
+                                                    review.approved
+                                                        ? "bg-green-600 hover:bg-green-700"
+                                                        : "bg-yellow-500 hover:bg-yellow-600 text-black"
+                                                }
+                                            >
+                                                {review.approved
+                                                    ? "Approved"
+                                                    : "Pending"}
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="text-muted-foreground text-sm">
@@ -137,22 +186,45 @@ export default function Index({ reviews, filters }: Props) {
                                         <TableCell>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <Button variant="default" size="icon">
+                                                    <Button
+                                                        variant="default"
+                                                        size="icon"
+                                                    >
                                                         <MoreHorizontal className="h-4 w-4" />
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuItem asChild>
-                                                        <Link href={route('admin.reviews.edit', review.id)}>Edit</Link>
+                                                        <Link
+                                                            href={route(
+                                                                "admin.reviews.edit",
+                                                                review.id,
+                                                            )}
+                                                        >
+                                                            Edit
+                                                        </Link>
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
-                                                        onClick={() => router.patch(route('admin.reviews.toggle-approved', review.id))}
+                                                        onClick={() =>
+                                                            router.patch(
+                                                                route(
+                                                                    "admin.reviews.toggle-approved",
+                                                                    review.id,
+                                                                ),
+                                                            )
+                                                        }
                                                     >
-                                                        {review.approved ? 'Unapprove' : 'Approve'}
+                                                        {review.approved
+                                                            ? "Unapprove"
+                                                            : "Approve"}
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
                                                         className="text-destructive"
-                                                        onClick={() => deleteReview(review.id)}
+                                                        onClick={() =>
+                                                            deleteReview(
+                                                                review.id,
+                                                            )
+                                                        }
                                                     >
                                                         Delete
                                                     </DropdownMenuItem>
@@ -171,7 +243,7 @@ export default function Index({ reviews, filters }: Props) {
                     {reviews.links.map((link: any, i: number) => (
                         <Button
                             key={i}
-                            variant={link.active ? 'default' : 'outline'}
+                            variant={link.active ? "default" : "outline"}
                             size="sm"
                             disabled={!link.url}
                             onClick={() => link.url && router.get(link.url)}

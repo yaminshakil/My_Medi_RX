@@ -1,18 +1,18 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import PageHeader from '@/Components/PageHeader';
-import { Pagination } from '@/Components/pagination';
-import Table from '@/Components/Table';
-import AppLayout from '@/Layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import PageHeader from "@/Components/PageHeader";
+import { Pagination } from "@/Components/pagination";
+import Table from "@/Components/Table";
+import AppLayout from "@/Layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Medicines',
-        href: '/medicines',
+        title: "Medicines",
+        href: "/medicines",
     },
 ];
 
@@ -20,18 +20,18 @@ export default function Index() {
     const { medicines, flash, filters } = usePage().props;
     const [showConfirm, setShowConfirm] = useState(false);
     const [medicine, setMedicine] = useState([]);
-    const canCreate = useCan('Create');
-    const canEdit = useCan('Edit');
-    const canDelete = useCan('Delete');
+    const canCreate = useCan("Create");
+    const canEdit = useCan("Edit");
+    const canDelete = useCan("Delete");
 
     const { data, setData } = useForm({
-        search: filters?.search || '',
+        search: filters?.search || "",
     });
 
     const handleReset = () => {
-        setData('search', '');
+        setData("search", "");
         router.get(
-            route('medicines.index'),
+            route("medicines.index"),
             {},
             {
                 preserveState: true,
@@ -41,11 +41,19 @@ export default function Index() {
     };
 
     const handleSearch = (e) => {
-        setData('search', e.target.value);
-        router.get(route('medicines.index'), { ...filters, search: e.target.value }, { preserveState: true });
+        setData("search", e.target.value);
+        router.get(
+            route("medicines.index"),
+            { ...filters, search: e.target.value },
+            { preserveState: true },
+        );
     };
     const handlePerPageChange = (e) => {
-        router.get(route('medicines.index'), { ...filters, per_page: e.target.value }, { preserveState: true });
+        router.get(
+            route("medicines.index"),
+            { ...filters, per_page: e.target.value },
+            { preserveState: true },
+        );
     };
 
     useEffect(() => {
@@ -58,7 +66,7 @@ export default function Index() {
     }, [flash]);
 
     const handleConfirm = () => {
-        router.delete(route('medicines.destroy', medicine.id), {
+        router.delete(route("medicines.destroy", medicine.id), {
             preserveScroll: true,
             onSuccess: () => {
                 setShowConfirm(false);
@@ -71,7 +79,7 @@ export default function Index() {
     };
 
     const handleEdit: FormEventHandler = (item) => {
-        router.get(route('medicines.edit', item.id));
+        router.get(route("medicines.edit", item.id));
     };
 
     const handleDelete: FormEventHandler = (item) => {
@@ -80,15 +88,15 @@ export default function Index() {
     };
 
     const columns = [
-        { key: '#', label: '#', render: (item) => item.id },
-        { key: 'brand_name', label: 'Brand Name' },
-        { key: 'generic_name', label: 'Generic Name' },
-        { key: 'strength', label: 'Strength' },
-        { key: 'type', label: 'Type' },
+        { key: "#", label: "#", render: (item) => item.id },
+        { key: "brand_name", label: "Brand Name" },
+        { key: "generic_name", label: "Generic Name" },
+        { key: "strength", label: "Strength" },
+        { key: "type", label: "Type" },
     ];
 
     const handleCreate = () => {
-        router.visit(route('medicines.create'));
+        router.visit(route("medicines.create"));
     };
 
     return (

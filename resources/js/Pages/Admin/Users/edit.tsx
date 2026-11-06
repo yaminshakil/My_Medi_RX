@@ -1,13 +1,13 @@
-import { AdminPageHeader } from '@/Components/AdminPageHeader';
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
-import Form from './Form';
+import { AdminPageHeader } from "@/Components/AdminPageHeader";
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, useForm } from "@inertiajs/react";
+import { FormEventHandler } from "react";
+import Form from "./Form";
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Users', href: '/admin/users' },
-    { title: 'Edit User', href: '' },
+    { title: "Users", href: "/admin/users" },
+    { title: "Edit User", href: "" },
 ];
 
 type UserForm = {
@@ -19,19 +19,21 @@ type UserForm = {
 };
 
 export default function Edit({ user, userRoles, roles }) {
-    const { data, setData, post, processing, errors, reset } = useForm<Required<UserForm>>({
+    const { data, setData, post, processing, errors, reset } = useForm<
+        Required<UserForm>
+    >({
         name: user.name,
         email: user.email,
-        password: '',
-        password_confirmation: '',
+        password: "",
+        password_confirmation: "",
         roles: userRoles || [],
-        _method: 'PUT',
+        _method: "PUT",
     });
 
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('users.update', user.uuid), {
-            onFinish: () => reset('password', 'password_confirmation'),
+        post(route("users.update", user.uuid), {
+            onFinish: () => reset("password", "password_confirmation"),
         });
     };
 
@@ -39,7 +41,10 @@ export default function Edit({ user, userRoles, roles }) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Edit User" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl px-4">
-                <AdminPageHeader breadcrumbs={breadcrumbs} description="Update user account details and roles" />
+                <AdminPageHeader
+                    breadcrumbs={breadcrumbs}
+                    description="Update user account details and roles"
+                />
                 <div className="flex flex-1 flex-col mb-4">
                     <Form
                         data={data}

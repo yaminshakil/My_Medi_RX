@@ -1,43 +1,42 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import PageHeader from '@/Components/PageHeader';
-import { Pagination } from '@/Components/pagination';
-import Table from '@/Components/Table';
-import AppLayout from '@/Layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import { AppPageProps } from '@/types';
-
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import PageHeader from "@/Components/PageHeader";
+import { Pagination } from "@/Components/pagination";
+import Table from "@/Components/Table";
+import AppLayout from "@/Layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { FormEventHandler, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import { AppPageProps } from "@/types";
 
 export default function Index({ specialties }) {
     const { translations } = usePage<AppPageProps>().props;
     const { flash, filters } = usePage().props;
     const [showConfirm, setShowConfirm] = useState(false);
     const [specialty, setSpecialty] = useState(false);
-    const canCreate = useCan('Create');
-    const canEdit = useCan('Edit');
-    const canDelete = useCan('Delete');
+    const canCreate = useCan("Create");
+    const canEdit = useCan("Edit");
+    const canDelete = useCan("Delete");
 
     const { data, setData } = useForm({
-        search: filters?.search || '',
+        search: filters?.search || "",
     });
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setData('search', value);
+        setData("search", value);
         const queryString = value ? { search: value } : {};
-        router.get(route('medical-specialties.index'), queryString, {
+        router.get(route("medical-specialties.index"), queryString, {
             preserveState: true,
             preserveScroll: true,
         });
     };
 
     const handleReset = () => {
-        setData('search', '');
+        setData("search", "");
         router.get(
-            route('medical-specialties.index'),
+            route("medical-specialties.index"),
             {},
             {
                 preserveState: true,
@@ -56,7 +55,7 @@ export default function Index({ specialties }) {
     }, [flash]);
 
     const handleConfirm = () => {
-        router.delete(route('medical-specialties.destroy', specialty.id), {
+        router.delete(route("medical-specialties.destroy", specialty.id), {
             preserveScroll: true,
         });
         setShowConfirm(false);
@@ -67,11 +66,15 @@ export default function Index({ specialties }) {
     };
 
     const handlePerPageChange = (e) => {
-        router.get(route('medical-specialties.index'), { ...filters, per_page: e.target.value }, { preserveState: true });
+        router.get(
+            route("medical-specialties.index"),
+            { ...filters, per_page: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleEdit: FormEventHandler = (item) => {
-        router.get(route('medical-specialties.edit', item.id));
+        router.get(route("medical-specialties.edit", item.id));
     };
 
     const handleDelete: FormEventHandler = (item) => {
@@ -80,30 +83,46 @@ export default function Index({ specialties }) {
     };
 
     const columns = [
-        { key: '#', label: '#', render: (item) => item.id },
-        { key: 'name', label: 'Name', render: (item) => item.translated_name ? item.translated_name : '-' },
-        { key: 'description', label: 'Description', render: (item) => item.translated_description ? item.translated_description : '-' },
-        { key: 'Parent', label: 'Parent', render: (item) => item.parent?.name ?? '-' },
+        { key: "#", label: "#", render: (item) => item.id },
         {
-            key: 'is_surgical',
-            label: 'Surgical?',
-            className: 'text-center',
+            key: "name",
+            label: "Name",
+            render: (item) =>
+                item.translated_name ? item.translated_name : "-",
+        },
+        {
+            key: "description",
+            label: "Description",
+            render: (item) =>
+                item.translated_description ? item.translated_description : "-",
+        },
+        {
+            key: "Parent",
+            label: "Parent",
+            render: (item) => item.parent?.name ?? "-",
+        },
+        {
+            key: "is_surgical",
+            label: "Surgical?",
+            className: "text-center",
             render: (item) => (
-                <span className={`badge ${item.is_surgical ? 'badge--success' : 'badge--warning'}`}>{item.is_surgical ? 'Yes' : 'No'}</span>
+                <span
+                    className={`badge ${item.is_surgical ? "badge--success" : "badge--warning"}`}
+                >
+                    {item.is_surgical ? "Yes" : "No"}
+                </span>
             ),
         },
     ];
 
     const handleCreate = () => {
-        router.visit(route('medical-specialties.create'));
+        router.visit(route("medical-specialties.create"));
     };
-
-
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: translations.common.medical_specialties,
-            href: '/dashboard',
+            href: "/dashboard",
         },
     ];
 
@@ -133,7 +152,9 @@ export default function Index({ specialties }) {
                             onEdit={handleEdit}
                             onDelete={handleDelete}
                             actionHeadClass="border p-4 w-24 text-center"
-                            emptyMessage={translations.common.no_specialty_found}
+                            emptyMessage={
+                                translations.common.no_specialty_found
+                            }
                         />
                         <div className="mt-4 w-full">
                             <Pagination items={specialties} />

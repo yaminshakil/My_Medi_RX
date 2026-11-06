@@ -11,12 +11,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export type MedicineOption = {
     value: string;
@@ -125,9 +120,7 @@ export default function RuleForm({
                     type={options.type ?? "text"}
                     value={form.data[name]}
                     placeholder={options.placeholder}
-                    onChange={(event) =>
-                        form.setData(name, event.target.value)
-                    }
+                    onChange={(event) => form.setData(name, event.target.value)}
                     aria-invalid={Boolean(error)}
                 />
 
@@ -137,9 +130,7 @@ export default function RuleForm({
                     </p>
                 )}
 
-                {error && (
-                    <p className="text-sm text-destructive">{error}</p>
-                )}
+                {error && <p className="text-sm text-destructive">{error}</p>}
             </div>
         );
     }
@@ -158,9 +149,7 @@ export default function RuleForm({
                     id={name}
                     value={form.data[name]}
                     placeholder={placeholder}
-                    onChange={(event) =>
-                        form.setData(name, event.target.value)
-                    }
+                    onChange={(event) => form.setData(name, event.target.value)}
                     aria-invalid={Boolean(form.errors[name])}
                     rows={3}
                 />

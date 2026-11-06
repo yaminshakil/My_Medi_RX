@@ -1,7 +1,6 @@
-
 import { Head, Link, router } from "@inertiajs/react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
-import AppLayout from '@/Layouts/app-layout';
+import AppLayout from "@/Layouts/app-layout";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import {
@@ -12,7 +11,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem } from "@/types";
 
 type Profile = {
     id: number;
@@ -44,12 +43,14 @@ type Props = {
 };
 
 export default function Index({ profiles, filters }: Props) {
-    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Pregnancy Profiles', href: '/admin/pregnancy/profiles' }];
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: "Pregnancy Profiles", href: "/admin/pregnancy/profiles" },
+    ];
     function search(value: string) {
         router.get(
             route("admin.pregnancy.profiles.index"),
             { search: value || undefined },
-            { preserveState: true, replace: true }
+            { preserveState: true, replace: true },
         );
     }
 
@@ -158,7 +159,7 @@ export default function Index({ profiles, filters }: Props) {
                                                     <Link
                                                         href={route(
                                                             "admin.pregnancy.profiles.edit",
-                                                            profile.id
+                                                            profile.id,
                                                         )}
                                                     >
                                                         <Pencil className="h-4 w-4" />
@@ -169,7 +170,9 @@ export default function Index({ profiles, filters }: Props) {
                                                     variant="destructive"
                                                     size="icon"
                                                     onClick={() =>
-                                                        removeProfile(profile.id)
+                                                        removeProfile(
+                                                            profile.id,
+                                                        )
                                                     }
                                                 >
                                                     <Trash2 className="h-4 w-4" />
@@ -184,7 +187,7 @@ export default function Index({ profiles, filters }: Props) {
                 </div>
                 <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
                     <span>
-                        Showing {profiles.from} to {profiles.to} {" "} from total {" "}
+                        Showing {profiles.from} to {profiles.to} from total{" "}
                         {profiles.total} Highlights
                     </span>
                     <div className="flex flex-wrap gap-2">

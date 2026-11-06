@@ -1,26 +1,28 @@
-import { ConfirmDialog } from '@/Components/ConfirmDialog';
-import PageHeader from '@/Components/PageHeader';
-import { Pagination } from '@/Components/pagination';
-import { Button } from '@/Components/ui/button';
-import AppLayout from '@/Layouts/app-layout';
-import { useCan } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import dayjs from 'dayjs';
-import { Edit, Trash2 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ConfirmDialog } from "@/Components/ConfirmDialog";
+import PageHeader from "@/Components/PageHeader";
+import { Pagination } from "@/Components/pagination";
+import { Button } from "@/Components/ui/button";
+import AppLayout from "@/Layouts/app-layout";
+import { useCan } from "@/lib/can";
+import { type BreadcrumbItem } from "@/types";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
+import dayjs from "dayjs";
+import { Edit, Trash2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'Patients', href: '/patients' }];
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: "Patients", href: "/patients" },
+];
 
 export default function Index(props) {
     const { flash, filters } = usePage().props;
     const [expanded, setExpanded] = useState({});
     const [showConfirm, setShowConfirm] = useState(false);
     const [patientId, setPatientId] = useState(false);
-    const canCreate = useCan('Create');
-    const canEdit = useCan('Edit');
-    const canDelete = useCan('Delete');
+    const canCreate = useCan("Create");
+    const canEdit = useCan("Edit");
+    const canDelete = useCan("Delete");
 
     const toggleExpand = (id) => {
         setExpanded({});
@@ -28,13 +30,13 @@ export default function Index(props) {
     };
 
     const { data, setData } = useForm({
-        search: filters?.search || '',
+        search: filters?.search || "",
     });
 
     const handleReset = () => {
-        setData('search', '');
+        setData("search", "");
         router.get(
-            route('patients.index'),
+            route("patients.index"),
             {},
             {
                 preserveState: true,
@@ -44,7 +46,7 @@ export default function Index(props) {
     };
 
     const handleConfirm = () => {
-        router.delete(route('patients.destroy', patientId), {
+        router.delete(route("patients.destroy", patientId), {
             preserveScroll: true,
             onSuccess: () => {
                 setShowConfirm(false);
@@ -59,25 +61,37 @@ export default function Index(props) {
     // if Laravel flashed an ID, open PDF
     useEffect(() => {
         if (flash.prescription_id) {
-            window.open(route('eprescription.pdf', flash.prescription_id), '_blank');
+            window.open(
+                route("eprescription.pdf", flash.prescription_id),
+                "_blank",
+            );
             return () => (flash.prescription_id = null);
         }
     }, [flash.prescription_id]);
 
     const handleSearch = (e) => {
-        setData('search', e.target.value);
-        router.get(route('patients.index'), { ...filters, search: e.target.value }, { preserveState: true });
+        setData("search", e.target.value);
+        router.get(
+            route("patients.index"),
+            { ...filters, search: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handlePerPageChange = (e) => {
-        router.get(route('patients.index'), { ...filters, per_page: e.target.value }, { preserveState: true });
+        router.get(
+            route("patients.index"),
+            { ...filters, per_page: e.target.value },
+            { preserveState: true },
+        );
     };
 
     const handleSort = (field) => {
         const isSameField = filters.sort_by === field;
-        const direction = isSameField && filters.sort_direction === 'asc' ? 'desc' : 'asc';
+        const direction =
+            isSameField && filters.sort_direction === "asc" ? "desc" : "asc";
         router.get(
-            route('patients.index'),
+            route("patients.index"),
             {
                 ...filters,
                 sort_by: field,
@@ -88,8 +102,8 @@ export default function Index(props) {
     };
 
     const renderSortIcon = (field) => {
-        if (filters.sort_by !== field) return '⇅';
-        return filters.sort_direction === 'asc' ? '↑' : '↓';
+        if (filters.sort_by !== field) return "⇅";
+        return filters.sort_direction === "asc" ? "↑" : "↓";
     };
 
     useEffect(() => {
@@ -108,7 +122,7 @@ export default function Index(props) {
     }, []);
 
     const handleCreate = () => {
-        router.visit(route('patients.create'));
+        router.visit(route("patients.create"));
     };
 
     return (
@@ -132,16 +146,34 @@ export default function Index(props) {
                         <table className="w-full border text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
                             <thead className="bg-[var(--base-color)] text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
                                 <tr className="bg-[var(--base-color)]">
-                                    {['patient_number', 'name', 'phone', 'gender', 'address', 'city', 'created_at'].map((field) => (
-                                        <th key={field} onClick={() => handleSort(field)} className="cursor-pointer border p-4 text-white">
+                                    {[
+                                        "patient_number",
+                                        "name",
+                                        "phone",
+                                        "gender",
+                                        "address",
+                                        "city",
+                                        "created_at",
+                                    ].map((field) => (
+                                        <th
+                                            key={field}
+                                            onClick={() => handleSort(field)}
+                                            className="cursor-pointer border p-4 text-white"
+                                        >
                                             <div className="flex items-center space-x-1">
-                                                <span className="capitalize">{field.replace('_', ' ')}</span>
-                                                <span>{renderSortIcon(field)}</span>
+                                                <span className="capitalize">
+                                                    {field.replace("_", " ")}
+                                                </span>
+                                                <span>
+                                                    {renderSortIcon(field)}
+                                                </span>
                                             </div>
                                         </th>
                                     ))}
 
-                                    <th className="border p-4 text-center text-white">Actions</th>
+                                    <th className="border p-4 text-center text-white">
+                                        Actions
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -155,25 +187,52 @@ export default function Index(props) {
                                                 }}
                                                 className="border border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                                             >
-                                                <td className="border p-4">{patient.patient_number}</td>
                                                 <td className="border p-4">
-                                                    <button onClick={() => toggleExpand(patient.id)} className="text-blue-500 underline">
+                                                    {patient.patient_number}
+                                                </td>
+                                                <td className="border p-4">
+                                                    <button
+                                                        onClick={() =>
+                                                            toggleExpand(
+                                                                patient.id,
+                                                            )
+                                                        }
+                                                        className="text-blue-500 underline"
+                                                    >
                                                         {patient.name}
                                                     </button>
                                                 </td>
-                                                <td className="border p-4">{patient.phone}</td>
-                                                <td className="border p-4">{patient.gender}</td>
-                                                <td className="border p-4">{patient.address}</td>
-                                                <td className="border p-4">{patient.city}</td>
-                                                <td className="border p-4">{patient.created_at}</td>
+                                                <td className="border p-4">
+                                                    {patient.phone}
+                                                </td>
+                                                <td className="border p-4">
+                                                    {patient.gender}
+                                                </td>
+                                                <td className="border p-4">
+                                                    {patient.address}
+                                                </td>
+                                                <td className="border p-4">
+                                                    {patient.city}
+                                                </td>
+                                                <td className="border p-4">
+                                                    {patient.created_at}
+                                                </td>
                                                 <td className="border p-4 text-center align-middle">
                                                     <div className="flex items-center justify-center gap-2">
                                                         {canEdit && (
                                                             <Button
-                                                                onClick={() => router.get(route('patients.edit', patient.id))}
+                                                                onClick={() =>
+                                                                    router.get(
+                                                                        route(
+                                                                            "patients.edit",
+                                                                            patient.id,
+                                                                        ),
+                                                                    )
+                                                                }
                                                                 className="inline-flex cursor-pointer items-center text-white"
                                                             >
-                                                                <Edit className="mr-1 h-4 w-4" /> Edit
+                                                                <Edit className="mr-1 h-4 w-4" />{" "}
+                                                                Edit
                                                             </Button>
                                                         )}
                                                         {canDelete && (
@@ -181,11 +240,16 @@ export default function Index(props) {
                                                                 variant="destructive"
                                                                 className="cursor-pointer text-white md:ml-2"
                                                                 onClick={() => {
-                                                                    setShowConfirm(true);
-                                                                    setPatientId(patient.id);
+                                                                    setShowConfirm(
+                                                                        true,
+                                                                    );
+                                                                    setPatientId(
+                                                                        patient.id,
+                                                                    );
                                                                 }}
                                                             >
-                                                                <Trash2 className="mr-1 h-4 w-4" /> Delete
+                                                                <Trash2 className="mr-1 h-4 w-4" />{" "}
+                                                                Delete
                                                             </Button>
                                                         )}
                                                     </div>
@@ -193,67 +257,175 @@ export default function Index(props) {
                                             </tr>
                                             {expanded[patient.id] && (
                                                 <tr>
-                                                    <td colSpan="6" className="border bg-gray-50 p-4">
+                                                    <td
+                                                        colSpan="6"
+                                                        className="border bg-gray-50 p-4"
+                                                    >
                                                         <div className="grid grid-cols-2 gap-4">
                                                             <div>
-                                                                <h2 className="mb-2 font-bold">Prescriptions</h2>
-                                                                {patient?.prescriptions?.length > 0 ? (
+                                                                <h2 className="mb-2 font-bold">
+                                                                    Prescriptions
+                                                                </h2>
+                                                                {patient
+                                                                    ?.prescriptions
+                                                                    ?.length >
+                                                                0 ? (
                                                                     <ul className="ml-5 list-disc">
-                                                                        {patient.prescriptions.map((p) => (
-                                                                            <li className="mt-5" key={p.id}>
-                                                                                <a
-                                                                                    href={route('eprescription.pdf', p.uuid)}
-                                                                                    className="rounded-lg bg-[var(--btn-base-color)] px-2 py-2 text-white hover:bg-[var(--btn-base-hover-color)]"
-                                                                                    target="_blank"
+                                                                        {patient.prescriptions.map(
+                                                                            (
+                                                                                p,
+                                                                            ) => (
+                                                                                <li
+                                                                                    className="mt-5"
+                                                                                    key={
+                                                                                        p.id
+                                                                                    }
                                                                                 >
-                                                                                    {dayjs(p.created_at, ['YYYY-MM-DD', 'HH:mm:ss']).format(
-                                                                                        'YYYY-MM-DD HH:mm:ss',
-                                                                                    )}{' '}
-                                                                                    - {p.diagnosis || 'No diagnosis'}
-                                                                                </a>
-                                                                            </li>
-                                                                        ))}
+                                                                                    <a
+                                                                                        href={route(
+                                                                                            "eprescription.pdf",
+                                                                                            p.uuid,
+                                                                                        )}
+                                                                                        className="rounded-lg bg-[var(--btn-base-color)] px-2 py-2 text-white hover:bg-[var(--btn-base-hover-color)]"
+                                                                                        target="_blank"
+                                                                                    >
+                                                                                        {dayjs(
+                                                                                            p.created_at,
+                                                                                            [
+                                                                                                "YYYY-MM-DD",
+                                                                                                "HH:mm:ss",
+                                                                                            ],
+                                                                                        ).format(
+                                                                                            "YYYY-MM-DD HH:mm:ss",
+                                                                                        )}{" "}
+                                                                                        -{" "}
+                                                                                        {p.diagnosis ||
+                                                                                            "No diagnosis"}
+                                                                                    </a>
+                                                                                </li>
+                                                                            ),
+                                                                        )}
                                                                     </ul>
                                                                 ) : (
-                                                                    <p className="text-gray-500">No prescriptions</p>
+                                                                    <p className="text-gray-500">
+                                                                        No
+                                                                        prescriptions
+                                                                    </p>
                                                                 )}
                                                             </div>
 
                                                             <div>
-                                                                <h2 className="mb-2 font-bold">Vitals</h2>
-                                                                {patient?.vitals.length > 0 ? (
+                                                                <h2 className="mb-2 font-bold">
+                                                                    Vitals
+                                                                </h2>
+                                                                {patient?.vitals
+                                                                    .length >
+                                                                0 ? (
                                                                     <ul className="ml-5 list-disc">
-                                                                        {patient.vitals.map((v) => (
-                                                                            <div className="mb-1 border-b" key={v.id}>
-                                                                                {v.blood_pressure && <li>BP: {v.blood_pressure || ' '}</li>}
-                                                                                {v.heart_rate && <li>HR: {v.heart_rate || ' '}</li>}
-                                                                                {v.temperature && <li>Temp: {v.temperature || ' '}</li>}
-                                                                                {v.oxygen_saturation && <li>SpO₂: {v.oxygen_saturation || ' '}</li>}
-                                                                                {v.respiratory_rate && <li>RR: {v.respiratory_rate || ' '}</li>}
-                                                                                {v.weight && <li>Wt: {v.weight || ' '}</li>}
-                                                                                {v.height && <li>Ht: {v.height || ' '}</li>}
-                                                                                {v.bmi && <li>BMI: {v.bmi || ' '}</li>}
-                                                                                {v.notes && <li>Notes: {v.notes || ' '}</li>}
-                                                                            </div>
-                                                                        ))}
+                                                                        {patient.vitals.map(
+                                                                            (
+                                                                                v,
+                                                                            ) => (
+                                                                                <div
+                                                                                    className="mb-1 border-b"
+                                                                                    key={
+                                                                                        v.id
+                                                                                    }
+                                                                                >
+                                                                                    {v.blood_pressure && (
+                                                                                        <li>
+                                                                                            BP:{" "}
+                                                                                            {v.blood_pressure ||
+                                                                                                " "}
+                                                                                        </li>
+                                                                                    )}
+                                                                                    {v.heart_rate && (
+                                                                                        <li>
+                                                                                            HR:{" "}
+                                                                                            {v.heart_rate ||
+                                                                                                " "}
+                                                                                        </li>
+                                                                                    )}
+                                                                                    {v.temperature && (
+                                                                                        <li>
+                                                                                            Temp:{" "}
+                                                                                            {v.temperature ||
+                                                                                                " "}
+                                                                                        </li>
+                                                                                    )}
+                                                                                    {v.oxygen_saturation && (
+                                                                                        <li>
+                                                                                            SpO₂:{" "}
+                                                                                            {v.oxygen_saturation ||
+                                                                                                " "}
+                                                                                        </li>
+                                                                                    )}
+                                                                                    {v.respiratory_rate && (
+                                                                                        <li>
+                                                                                            RR:{" "}
+                                                                                            {v.respiratory_rate ||
+                                                                                                " "}
+                                                                                        </li>
+                                                                                    )}
+                                                                                    {v.weight && (
+                                                                                        <li>
+                                                                                            Wt:{" "}
+                                                                                            {v.weight ||
+                                                                                                " "}
+                                                                                        </li>
+                                                                                    )}
+                                                                                    {v.height && (
+                                                                                        <li>
+                                                                                            Ht:{" "}
+                                                                                            {v.height ||
+                                                                                                " "}
+                                                                                        </li>
+                                                                                    )}
+                                                                                    {v.bmi && (
+                                                                                        <li>
+                                                                                            BMI:{" "}
+                                                                                            {v.bmi ||
+                                                                                                " "}
+                                                                                        </li>
+                                                                                    )}
+                                                                                    {v.notes && (
+                                                                                        <li>
+                                                                                            Notes:{" "}
+                                                                                            {v.notes ||
+                                                                                                " "}
+                                                                                        </li>
+                                                                                    )}
+                                                                                </div>
+                                                                            ),
+                                                                        )}
                                                                     </ul>
                                                                 ) : (
-                                                                    <p className="text-gray-500">No vitals recorded</p>
+                                                                    <p className="text-gray-500">
+                                                                        No
+                                                                        vitals
+                                                                        recorded
+                                                                    </p>
                                                                 )}
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td colSpan="2" className="border bg-gray-50 p-4">
-
+                                                    <td
+                                                        colSpan="2"
+                                                        className="border bg-gray-50 p-4"
+                                                    >
                                                         <Button
                                                             className="cursor-pointer rounded-lg !p-3 text-white md:ml-2"
                                                             onClick={() => {
-                                                                router.visit(route('patients.show', patient.id));
+                                                                router.visit(
+                                                                    route(
+                                                                        "patients.show",
+                                                                        patient.id,
+                                                                    ),
+                                                                );
                                                             }}
                                                         >
                                                             View Details
                                                         </Button>
-
                                                     </td>
                                                 </tr>
                                             )}
@@ -261,7 +433,10 @@ export default function Index(props) {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td className="p-4 text-center" colSpan="8">
+                                        <td
+                                            className="p-4 text-center"
+                                            colSpan="8"
+                                        >
                                             No Patients found.
                                         </td>
                                     </tr>

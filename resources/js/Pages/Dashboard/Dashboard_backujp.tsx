@@ -1,10 +1,8 @@
-import { PlaceholderPattern } from '@/Components/ui/placeholder-pattern';
-import AppLayout from '@/Layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, usePage } from '@inertiajs/react';
-import { AppPageProps } from '@/types';
-
-
+import { PlaceholderPattern } from "@/Components/ui/placeholder-pattern";
+import AppLayout from "@/Layouts/app-layout";
+import { type BreadcrumbItem } from "@/types";
+import { Head, usePage } from "@inertiajs/react";
+import { AppPageProps } from "@/types";
 
 export default function Dashboard() {
     const { translations } = usePage<AppPageProps>().props;
@@ -12,7 +10,7 @@ export default function Dashboard() {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: translations.common.dashboard,
-            href: '/dashboard',
+            href: "/dashboard",
         },
     ];
     return (

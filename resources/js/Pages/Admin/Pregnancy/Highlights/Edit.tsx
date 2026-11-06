@@ -1,7 +1,7 @@
-import AppLayout from '@/Layouts/app-layout';
+import AppLayout from "@/Layouts/app-layout";
 import { Head } from "@inertiajs/react";
 import HighlightForm from "./Form";
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem } from "@/types";
 
 type Highlight = {
     id: number;
@@ -16,7 +16,9 @@ type Highlight = {
 };
 
 export default function Edit({ highlight }: { highlight: Highlight }) {
-    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Edit Weekly Highlight', href: '/admin/pregnancy/highlights' }];
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: "Edit Weekly Highlight", href: "/admin/pregnancy/highlights" },
+    ];
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Edit Week ${highlight.week} Highlight`} />

@@ -1,8 +1,8 @@
-import InputError from '@/components/input-error';
-import { useAutoFocusError } from '@/lib/utils';
-import { Card, Select } from 'antd';
-import type { BaseSelectRef } from 'antd/es/select';
-import { useRef } from 'react';
+import InputError from "@/components/input-error";
+import { useAutoFocusError } from "@/lib/utils";
+import { Card, Select } from "antd";
+import type { BaseSelectRef } from "antd/es/select";
+import { useRef } from "react";
 
 const { Option } = Select;
 
@@ -22,18 +22,26 @@ const PatientSearchSelect = ({ patients, data, setData, errors }) => {
                 }}
                 allowClear
                 showSearch
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 placeholder="Search by name or mobile"
                 value={data.patient_id}
-                onChange={(values) => setData('patient_id', values)}
+                onChange={(values) => setData("patient_id", values)}
                 filterOption={(input, option) => {
-                    const name = option?.name?.toLowerCase() || '';
-                    const mobile = option?.mobile?.toLowerCase() || '';
-                    return name.includes(input.toLowerCase()) || mobile.includes(input.toLowerCase());
+                    const name = option?.name?.toLowerCase() || "";
+                    const mobile = option?.mobile?.toLowerCase() || "";
+                    return (
+                        name.includes(input.toLowerCase()) ||
+                        mobile.includes(input.toLowerCase())
+                    );
                 }}
             >
                 {patients.map((p) => (
-                    <Option key={p.id} value={p.id} name={p.name} mobile={p.mobile}>
+                    <Option
+                        key={p.id}
+                        value={p.id}
+                        name={p.name}
+                        mobile={p.mobile}
+                    >
                         {p.name} ({p.mobile})
                     </Option>
                 ))}
@@ -41,7 +49,11 @@ const PatientSearchSelect = ({ patients, data, setData, errors }) => {
             <InputError message={errors.patient_id} className="mt-2" />
             {/* Show selected patient info */}
             {selectedPatient && (
-                <Card className="mt-4" title={selectedPatient.name} size="small">
+                <Card
+                    className="mt-4"
+                    title={selectedPatient.name}
+                    size="small"
+                >
                     <p>
                         <strong>ID:</strong> {selectedPatient.patient_number}
                     </p>
@@ -52,7 +64,8 @@ const PatientSearchSelect = ({ patients, data, setData, errors }) => {
                         <strong>Gender:</strong> {selectedPatient.gender}
                     </p>
                     <p>
-                        <strong>Blood Group:</strong> {selectedPatient.blood_group}
+                        <strong>Blood Group:</strong>{" "}
+                        {selectedPatient.blood_group}
                     </p>
                 </Card>
             )}

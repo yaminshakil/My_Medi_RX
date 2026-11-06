@@ -1,9 +1,17 @@
 // Edit.tsx
-import { Head } from '@inertiajs/react';
-import ReviewForm from './Form';
-import AppLayout from '@/Layouts/app-layout';
+import { Head } from "@inertiajs/react";
+import ReviewForm from "./Form";
+import AppLayout from "@/Layouts/app-layout";
 
-export default function Edit({ review, users, doctors }: { review: any; users: any[], doctors: any[] }) {
+export default function Edit({
+    review,
+    users,
+    doctors,
+}: {
+    review: any;
+    users: any[];
+    doctors: any[];
+}) {
     return (
         <AppLayout>
             <Head title="Edit Review" />
