@@ -8,12 +8,7 @@ import { LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: "Site Identity",
-        href: "/settings/site-identity",
-    },
-];
+
 
 export default function Index() {
     const { appSettings, flash } = usePage().props as {
@@ -21,12 +16,21 @@ export default function Index() {
         flash: Record<string, string>;
     };
 
+    const { translations } = usePage<AppPageProps>().props;
+
     const { data, setData, post, processing } = useForm({
         logo: null as File | null,
         favicon: null as File | null,
         navbar_logo: null as File | null,
         dashboard_logo: null as File | null,
     });
+
+    const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: translations.common.site_identity,
+        href: "/settings/site-identity",
+    },
+];
 
     // Local preview URLs
     const [logoPreview, setLogoPreview] = useState<string | null>(
@@ -89,7 +93,7 @@ export default function Index() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Logo And Favicon Settings" />
+            <Head title={translations.common.site_identity} />
             <ToastContainer />
             <div className="overflow-hidden bg-white p-4 shadow-md sm:rounded-lg">
                 <form
@@ -101,7 +105,7 @@ export default function Index() {
                         {/* Logo Upload */}
                         <div>
                             <Label htmlFor="logo" className="mb-1 block">
-                                Logo
+                               {translations.common.logo}
                             </Label>
                             <Input
                                 id="logo"
@@ -123,7 +127,7 @@ export default function Index() {
                         {/* Navbar Logo Upload */}
                         <div>
                             <Label htmlFor="navbar_logo" className="mb-1 block">
-                                Navbar Logo
+                                {translations.common.navbar_logo}
                             </Label>
                             <Input
                                 id="navbar_logo"
@@ -151,7 +155,7 @@ export default function Index() {
                                 htmlFor="dashboard_logo"
                                 className="mb-1 block"
                             >
-                                Dashboard Logo
+                                {translations.common.dashboard_logo}
                             </Label>
                             <Input
                                 id="dashboard_logo"
@@ -176,7 +180,7 @@ export default function Index() {
                         {/* Favicon Upload */}
                         <div>
                             <Label htmlFor="favicon" className="mb-1 block">
-                                Favicon
+                                {translations.common.favicon}
                             </Label>
                             <Input
                                 id="favicon"
@@ -205,13 +209,13 @@ export default function Index() {
                                 router.get(route("settings.system.index"));
                             }}
                         >
-                            Cancel
+                            {translations.common.cancel}
                         </Button>
                         <Button type="submit" disabled={processing}>
                             {processing && (
                                 <LoaderCircle className="h-4 w-4 animate-spin" />
                             )}
-                            Save Settings
+                            {translations.common.save} {translations.common.settings}
                         </Button>
                     </div>
                 </form>

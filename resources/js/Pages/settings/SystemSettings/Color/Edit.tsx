@@ -3,17 +3,12 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import AppLayout from "@/Layouts/app-layout";
 import { type BreadcrumbItem } from "@/types";
-import { Head, router, useForm } from "@inertiajs/react";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
 import { LoaderCircle } from "lucide-react";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: "Color Settings",
-        href: "/settings/Color/Edit",
-    },
-];
+
 
 interface Props {
     appSettings: Record<string, string>;
@@ -21,6 +16,15 @@ interface Props {
 }
 
 export default function Edit({ appSettings, flash }: Props) {
+    const { translations } = usePage<AppPageProps>().props;
+
+    const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: translations.common.color_settings,
+        href: "/settings/Color/Edit",
+    },
+];
+
     const { data, setData, post, processing } = useForm({
         site_base_color: appSettings.site_base_color || "#84cc16",
         site_button_bgcolor: appSettings.site_button_bgcolor || "#84cc16",
@@ -49,7 +53,7 @@ export default function Edit({ appSettings, flash }: Props) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Color Settings" />
+            <Head title={translations.common.color_settings} />
             <ToastContainer />
             <div className="overflow-hidden bg-white shadow-md sm:rounded-lg">
                 <form
@@ -67,7 +71,7 @@ export default function Edit({ appSettings, flash }: Props) {
                                 htmlFor="site_base_color"
                                 className="after:text-red-500 after:content-['*']"
                             >
-                                Site Base Color
+                                {translations.common.site_base_color}
                             </Label>
                             <Input
                                 id="site_base_color"
@@ -85,7 +89,7 @@ export default function Edit({ appSettings, flash }: Props) {
                                 htmlFor="site_button_bgcolor"
                                 className="after:text-red-500 after:content-['*']"
                             >
-                                Site Button Color
+                                {translations.common.site_button_bgcolor}
                             </Label>
                             <Input
                                 id="site_button_bgcolor"
@@ -106,7 +110,7 @@ export default function Edit({ appSettings, flash }: Props) {
                                 htmlFor="site_button_hover_bgcolor"
                                 className="after:text-red-500 after:content-['*']"
                             >
-                                Site Button Hover Color
+                                {translations.common.site_button_hover_bgcolor}
                             </Label>
                             <Input
                                 id="site_button_hover_bgcolor"
@@ -126,8 +130,8 @@ export default function Edit({ appSettings, flash }: Props) {
                             <Label
                                 htmlFor="site_header_top_bgcolor"
                                 className="after:text-red-500 after:content-['*']"
-                            >
-                                Site Header Top Color
+                            >   {translations.common.site_header_top_bgcolor}
+
                             </Label>
                             <Input
                                 id="site_header_top_bgcolor"
@@ -148,7 +152,7 @@ export default function Edit({ appSettings, flash }: Props) {
                                 htmlFor="site_footer_bgcolor"
                                 className="after:text-red-500 after:content-['*']"
                             >
-                                Site Footer Color
+                                {translations.common.site_footer_bgcolor}
                             </Label>
                             <Input
                                 id="site_footer_bgcolor"
@@ -169,7 +173,8 @@ export default function Edit({ appSettings, flash }: Props) {
                                 htmlFor="site_footer_bottom_bgcolor"
                                 className="after:text-red-500 after:content-['*']"
                             >
-                                Site Footer Bottom Color
+                                {translations.common.site_footer_bottom_bgcolor}
+
                             </Label>
                             <Input
                                 id="site_footer_bottom_bgcolor"
@@ -193,13 +198,13 @@ export default function Edit({ appSettings, flash }: Props) {
                                 router.get(route("settings.system.index"));
                             }}
                         >
-                            Cancel
+                            {translations.common.cancel}
                         </Button>
                         <Button type="submit" disabled={processing}>
                             {processing && (
                                 <LoaderCircle className="h-4 w-4 animate-spin" />
                             )}
-                            Save Settings
+                            {translations.common.save} {translations.common.settings}
                         </Button>
                     </div>
                 </form>

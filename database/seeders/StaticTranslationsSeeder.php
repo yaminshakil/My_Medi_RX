@@ -270,6 +270,46 @@ class StaticTranslationsSeeder extends Seeder
                 'en' => 'Site Address',
                 'bn' => 'সাইট ঠিকানা',
             ],
+            'logo' => [
+                'en' => 'Logo',
+                'bn' => 'লোগো',
+            ],
+            'navbar_logo' => [
+                'en' => 'Navbar Logo',
+                'bn' => 'নাভিগেশন লোগো',
+            ],
+            'dashboard_logo' => [
+                'en' => 'Dashboard Logo',
+                'bn' => 'ড্যাশবোর্ড লোগো',
+            ],
+            'favicon' => [
+                'en' => 'Favicon',
+                'bn' => 'ফেভিকন',
+            ],
+            'site_base_color' => [
+                'en' => 'Site Base Color',
+                'bn' => 'সাইট বেস রঙ',
+            ],
+            'site_button_bgcolor' => [
+                'en' => 'Site Button Color',
+                'bn' => 'সাইট বাটন রঙ',
+            ],
+            'site_button_hover_bgcolor' => [
+                'en' => 'Site Button Hover Color',
+                'bn' => 'সাইট বাটন রঙ',
+            ],
+            'site_header_top_bgcolor' => [
+                'en' => 'Site Header Top Color',
+                'bn' => 'সাইট হেডার টপ রঙ',
+            ],
+            'site_footer_bgcolor' => [
+                'en' => 'Site Footer Color',
+                'bn' => 'সাইট ফুটার রঙ',
+            ],
+            'site_footer_bottom_bgcolor' => [
+                'en' => 'Site Footer Bottom Color',
+                'bn' => 'সাইট ফুটার নিচের রঙ',
+            ],
         ];
 
         $now = now();
