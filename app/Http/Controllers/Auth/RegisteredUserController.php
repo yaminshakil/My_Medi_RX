@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Doctor;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Validation\Rule;
 
 class RegisteredUserController extends Controller
 {
@@ -49,6 +51,15 @@ class RegisteredUserController extends Controller
             'email'             => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password'          => ['required', 'confirmed', Rules\Password::defaults()],
             'registration_type' => 'required|string|in:Patient,Doctor,Pharmacy,Hospital',
+            'bmdc_number' => [
+            Rule::requiredIf(
+                $request->registration_type === 'Doctor'
+            ),
+                'nullable',
+                'string',
+                'max:100',
+                'unique:doctors,registration_no',
+            ],
         ]);
 
         $user = User::create([
@@ -64,6 +75,14 @@ class RegisteredUserController extends Controller
             ->where('guard_name', 'web')
             ->firstOrFail();
         $user->syncRoles([$role]);
+
+        // Doctor registration
+        if ($request['registration_type'] === 'Doctor') {
+            $doctor = Doctor::create([
+                'user_id'         => $user->id,
+                'registration_no' => $request['bmdc_number'],
+            ]);
+        }
 
         event(new Registered($user));
 

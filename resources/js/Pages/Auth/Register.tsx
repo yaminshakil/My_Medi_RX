@@ -26,6 +26,7 @@ type RegisterForm = {
     password: string;
     password_confirmation: string;
     registration_type: string;
+    bmdc_number: string;
 };
 
 const registrationtype = [
@@ -55,6 +56,7 @@ export default function Register({ roles }: Props) {
         password: "",
         password_confirmation: "",
         registration_type: "",
+        bmdc_number: "",
     });
 
     const submit: FormEventHandler = (e) => {
@@ -278,6 +280,32 @@ export default function Register({ roles }: Props) {
                                     className="mt-2 text-red-700"
                                 />
                             </div>
+
+                            {data.registration_type === "Doctor" && (
+                            <div className="grid gap-2">
+                                    <Label htmlFor="bmdc_number" className="text-white">
+                                        BMDC Registration Number
+                                        <span className="text-red-500 ml-1">*</span>
+                                    </Label>
+
+                                    <Input
+                                        id="bmdc_number"
+                                        type="text"
+                                        required
+                                        value={data.bmdc_number}
+                                        onChange={(e) =>
+                                            setData("bmdc_number", e.target.value)
+                                        }
+                                        disabled={processing}
+                                        placeholder="Enter BMDC registration number"
+                                    />
+
+                                    <InputError
+                                        message={errors.bmdc_number}
+                                        className="mt-1"
+                                    />
+                                </div>
+                            )}
 
                             <Button
                                 type="submit"
