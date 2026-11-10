@@ -12,7 +12,7 @@ Route::middleware('web')->group(function () {
     Route::get('/diagnostics', [DiagnosticController::class, 'index'])->name('diagnostics.index');
     Route::get('/diagnostics/{hospital}', [DiagnosticController::class, 'show'])->name('diagnostics.show');
 });
-Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'verified', 'role.redirect:Admin,Hospital'])->group(function () {
     /* Hospital CRUD */
     Route::get('/hospitals', [HospitalController::class, 'index'])->name('hospital.index');
     Route::get('/hospitals/create', [HospitalController::class, 'create'])->name('hospital.create');

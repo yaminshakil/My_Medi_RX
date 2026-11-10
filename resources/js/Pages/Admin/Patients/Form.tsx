@@ -53,6 +53,28 @@ export default function Form({
         router.visit(route("patients.index"));
     };
 
+    const calculateAge = (dob: string): number => {
+    if (!dob) return 0;
+
+    const birthDate = new Date(dob);
+    const today = new Date();
+
+    if (birthDate > today) return 0;
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+        age--;
+    }
+
+    return age;
+};
+
     return (
         <form
             role="form"
@@ -259,7 +281,12 @@ export default function Form({
                             type="date"
                             required={true}
                             onChange={(e) => {
-                                setData("date_of_birth", e.target.value);
+                                const dob = e.target.value;
+                                setData((prev) => ({
+                                    ...prev,
+                                    date_of_birth: dob,
+                                    age: calculateAge(dob),
+                                }));
                             }}
                             value={data.date_of_birth}
                             name="date_of_birth"

@@ -15,7 +15,7 @@ Route::prefix('blood-bank')
         Route::get('dashboard', DashboardApiController::class)->name('dashboard');
         Route::get('lookups', [LookupApiController::class, 'index'])->name('lookups.index');
         Route::get('components', [LookupApiController::class, 'components'])->name('components.index');
-        Route::get('patients', [LookupApiController::class, 'patients'])->name('patients.index');
+        Route::get('patients', [LookupApiController::class, 'getPatients'])->name('patients.index');
         Route::get('storage-units', [StorageUnitApiController::class, 'index'])->name('storage-units.index');
 
         Route::get('bags', [BloodBagApiController::class, 'index'])->name('bags.index');

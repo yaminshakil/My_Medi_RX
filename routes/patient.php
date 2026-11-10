@@ -4,8 +4,11 @@ use App\Http\Controllers\Admin\MenstrualCycle\MenstrualCycleLogController;
 use App\Http\Controllers\Admin\MenstrualCycle\MenstrualCycleProfileController;
 use App\Http\Controllers\Admin\Patients\PatientController;
 use App\Http\Controllers\Admin\Patients\PatientProfileController;
+use App\Http\Controllers\Admin\Vaccination\VaccinationController;
+use App\Http\Controllers\Admin\Vaccination\VaccinationScheduleController;
 use App\Http\Controllers\Profile\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::middleware('guest')->group(function () {
     Route::get('/pateint', function () {
@@ -54,4 +57,54 @@ Route::prefix('admin/menstrual-cycle')
             MenstrualCycleLogController::class,
             'index',
         ])->name('logs.index');
+    });
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/admin/pediatric-dose', function () {
+        return Inertia::render('Admin/PediatricDose/Index');
+    })->name('pediatric-dose.index');
+});
+
+Route::middleware(['auth'])->prefix('admin/vaccinations')->name('admin.vaccinations.')->group(function () {
+    // Patient vaccination records
+    Route::get('/', [VaccinationController::class, 'index'])
+        ->name('index');
+
+    Route::get('/create', [VaccinationController::class, 'create'])
+        ->name('create');
+
+    Route::post('/', [VaccinationController::class, 'store'])
+        ->name('store');
+
+    Route::get('/{record}/edit', [VaccinationController::class, 'edit'])
+        ->name('edit');
+
+    Route::put('/{record}', [VaccinationController::class, 'update'])
+        ->name('update');
+
+    Route::delete('/{record}', [VaccinationController::class, 'destroy'])
+        ->name('destroy');
+});
+
+Route::middleware(['auth', 'role.redirect:Admin,Patient'])
+    ->prefix('vaccination-schedules')
+    ->name('vaccination-schedules.')
+    ->group(function () {
+        Route::get('/', [VaccinationScheduleController::class, 'index'])
+            ->name('index');
+
+        Route::get('/create', [VaccinationScheduleController::class, 'create'])
+            ->name('create');
+
+        Route::post('/', [VaccinationScheduleController::class, 'store'])
+            ->name('store');
+
+        Route::get('/{schedule}/edit', [VaccinationScheduleController::class, 'edit'])
+            ->name('edit');
+
+        Route::put('/{schedule}', [VaccinationScheduleController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/{schedule}', [VaccinationScheduleController::class, 'destroy'])
+            ->name('destroy');
     });

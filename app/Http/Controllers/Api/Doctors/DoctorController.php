@@ -26,7 +26,12 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        //
+        $doctors = $this->doctorService->all();
+
+        return ApiResponseService::success(
+            DoctorResource::collection($doctors),
+            'Doctors retrieved successfully!'
+        );
     }
 
     /**

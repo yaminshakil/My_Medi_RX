@@ -55,7 +55,6 @@ Route::prefix('/patient')
         Route::get('/medications/dashboard', [
             MedicationController::class, 'dashboard',
         ]);
-        Route::apiResource('medications', MedicationController::class);
 
         // Medication schedules
         Route::get('/medications/{medication}/schedules', [
@@ -148,6 +147,8 @@ Route::prefix('/patient')
 
         // Vital Trands
         Route::get('dashboard/{id}/vitals-trends', [VitalTrendsController::class, 'getVitalsTrends']);
+
+        Route::apiResource('medications', MedicationController::class);
     });
 
 Route::prefix('pediatric-dose')

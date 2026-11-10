@@ -5,8 +5,14 @@ namespace Tests\Feature\Dashboard;
 use App\Models\Appointment;
 use App\Models\DoctorChamber;
 use App\Models\Hospital;
+use App\Models\MedicationLog;
+use App\Models\MenstrualCycleProfile;
 use App\Models\Patient;
+use App\Models\PatientMedication;
+use App\Models\PregnancyProfile;
+use App\Models\Prescription;
 use App\Models\User;
+use App\Models\Vital;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 use Spatie\Permission\Models\Role;
@@ -72,6 +78,106 @@ class DashboardControllerTest extends TestCase
                 ->where('stats.todayAppointments', 0)
                 ->where('stats.pendingAppointments', 0)
                 ->has('chambers', 0));
+    }
+
+    public function test_patient_dashboard_shows_patient_api_summaries(): void
+    {
+        $this->travelTo('2026-11-10 12:00:00');
+        $patientUser = $this->userWithRole('Patient');
+        $patient = Patient::query()->create([
+            'user_id'        => $patientUser->id,
+            'patient_number' => 'PT-DASH-001',
+            'name'           => 'Dashboard Patient',
+            'age'            => '32',
+            'phone'          => '01700000000',
+        ]);
+        $doctor = User::factory()->create();
+        $hospital = $this->createHospital(
+            User::factory()->create(),
+            'Dashboard Hospital'
+        );
+        $chamber = $this->createChamber($hospital, $doctor, 'Main Chamber', true);
+        $this->createAppointment(
+            'APT-DASH-001',
+            $doctor,
+            $patient,
+            $chamber,
+            today()->addDays(2)->toDateString(),
+            'confirmed'
+        );
+        Prescription::query()->create([
+            'patient_id'          => $patient->id,
+            'doctor_id'           => $doctor->id,
+            'prescription_number' => 'RX-DASH-001',
+            'header_left'         => '',
+            'header_right'        => '',
+            'footer_info'         => '',
+            'status'              => 'issued',
+        ]);
+        $medication = PatientMedication::query()->create([
+            'patient_id'    => $patient->id,
+            'medicine_name' => 'Medication A',
+            'source'        => 'manual',
+            'start_date'    => today()->toDateString(),
+            'status'        => 'active',
+        ]);
+        MedicationLog::query()->create([
+            'patient_id'            => $patient->id,
+            'patient_medication_id' => $medication->id,
+            'scheduled_date'        => today()->toDateString(),
+            'scheduled_at'          => now(),
+            'status'                => 'taken',
+        ]);
+        MedicationLog::query()->create([
+            'patient_id'            => $patient->id,
+            'patient_medication_id' => $medication->id,
+            'scheduled_date'        => today()->toDateString(),
+            'scheduled_at'          => now()->addHour(),
+            'status'                => 'upcoming',
+        ]);
+        MedicationLog::query()->create([
+            'patient_id'            => $patient->id,
+            'patient_medication_id' => $medication->id,
+            'scheduled_date'        => today()->subDay()->toDateString(),
+            'scheduled_at'          => now()->subDay(),
+            'status'                => 'missed',
+        ]);
+        Vital::query()->create([
+            'patient_id'     => $patient->id,
+            'blood_pressure' => '120/80',
+            'heart_rate'     => 72,
+        ]);
+        PregnancyProfile::query()->create([
+            'user_id'               => $patientUser->id,
+            'last_menstrual_period' => today()->subDays(42)->toDateString(),
+            'is_active'             => true,
+        ]);
+        MenstrualCycleProfile::query()->create([
+            'user_id'           => $patientUser->id,
+            'last_period_start' => today()->subDays(7)->toDateString(),
+            'cycle_length'      => 28,
+            'period_length'     => 5,
+            'is_active'         => true,
+        ]);
+
+        $this->actingAs($patientUser)
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('Dashboard/PatientDashboard')
+                ->where('patientinfo.totalappoinments', 1)
+                ->where('patientinfo.upcomingAppointments', 1)
+                ->where('patientinfo.totalprescriptions', 1)
+                ->where('patientinfo.activePrescriptions', 1)
+                ->where('patientinfo.medications.active', 1)
+                ->where('patientinfo.medications.today.total', 2)
+                ->where('patientinfo.medications.today.taken', 1)
+                ->where('patientinfo.medications.today.upcoming', 1)
+                ->where('patientinfo.medications.adherence.percentage', 50.0)
+                ->where('patientinfo.vitals.bloodPressure', '120/80')
+                ->where('patientinfo.pregnancy.status', 'active')
+                ->where('patientinfo.pregnancy.currentWeek', 7)
+                ->where('patientinfo.cycle.phase', 'Follicular Phase'));
     }
 
     private function userWithRole(string $roleName): User

@@ -15,8 +15,17 @@ class HospitalRepository implements HospitalRepositoryInterface
 {
     public function getAllHospital($perPage = 10, $search = null, $verification_status = null)
     {
+        $user = auth()->user();
+
         $hospitals = Hospital::query()
             ->with('hospitalType')
+
+            // Admin sees all; Hospital user sees only own hospital
+            ->when(
+                ! $user->hasRole('Admin'),
+                fn ($query) => $query->where('created_by', $user->id)
+            )
+
             ->when(
                 $search,
                 fn ($query, $search) => $query->where(function ($q) use ($search) {
@@ -25,10 +34,12 @@ class HospitalRepository implements HospitalRepositoryInterface
                         ->orWhere('email', 'like', "%{$search}%");
                 })
             )
+
             ->when(
                 $verification_status,
                 fn ($query, $status) => $query->where('verification_status', $status)
             )
+
             ->orderBy('sort_order')
             ->orderByDesc('id')
             ->paginate($perPage)

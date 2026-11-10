@@ -46,7 +46,7 @@ class LookupApiController extends BloodBankApiController
         );
     }
 
-    public function patients(Request $request): JsonResponse
+    public function getPatients(Request $request): JsonResponse
     {
         $data = $request->validate([
             'search' => ['required', 'string', 'min:2', 'max:100'],

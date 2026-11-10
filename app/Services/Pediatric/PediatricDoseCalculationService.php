@@ -220,7 +220,7 @@ class PediatricDoseCalculationService
             ->map(fn (PediatricDoseCalculation $item) => [
                 'calculationId'  => $item->uuid,
                 'medicineId'     => $item->medicine_id,
-                'medicineName'   => $item->medicine?->name,
+                'medicineName'   => $item->medicine?->brand_name,
                 'formulation'    => $item->formulation,
                 'indication'     => $item->indication,
                 'childWeightKg'  => (float) $item->child_weight_kg,

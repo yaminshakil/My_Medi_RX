@@ -7,9 +7,13 @@ use App\Models\Appointment;
 use App\Models\DoctorAssistant;
 use App\Models\Manufacturer;
 use App\Models\Medicine;
+use App\Models\MenstrualCycleProfile;
 use App\Models\Patient;
+use App\Models\PregnancyProfile;
 use App\Models\Prescription;
 use App\Models\User;
+use App\Services\MenstrualCycle\MenstrualCycleService;
+use App\Services\Pregnancy\PregnancyStatusService;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
@@ -23,8 +27,10 @@ class DashboardRepository implements DashboardRepositoryInterface
 
     protected $patient_id;
 
-    public function __construct()
-    {
+    public function __construct(
+        private PregnancyStatusService $pregnancyStatusService,
+        private MenstrualCycleService $menstrualCycleService,
+    ) {
         $this->user = Auth::user();
 
         if ($this->user->hasRole('Doctor')) {
@@ -287,21 +293,167 @@ class DashboardRepository implements DashboardRepositoryInterface
 
     // Eprescription dashboard
 
-    public function patientDashboardInfo()
+    public function patientDashboardInfo(): array
     {
-        $user_id = $this->patient_id;
+        $patient = $this->user->patient;
+        $now = now();
+        $today = $now->toDateString();
 
-        $totalappoinments = Appointment::where('patient_id', $user_id)->count();
-        $newappointments = Appointment::where('patient_id', $user_id)
-            ->where('status', 'pending')->count();
+        $todayLogCounts = $patient
+            ? $patient->medicationLogs()
+                ->whereDate('scheduled_at', $today)
+                ->select('status')
+                ->selectRaw('COUNT(*) as total')
+                ->groupBy('status')
+                ->pluck('total', 'status')
+                ->all()
+            : [];
 
-        $totalprescriptions = Prescription::where('patient_id', $user_id)->count();
+        $adherenceLogCounts = $patient
+            ? $patient->medicationLogs()
+                ->whereBetween('scheduled_at', [
+                    $now->copy()->subDays(29)->startOfDay(),
+                    $now,
+                ])
+                ->whereIn('status', ['taken', 'missed', 'skipped'])
+                ->select('status')
+                ->selectRaw('COUNT(*) as total')
+                ->groupBy('status')
+                ->pluck('total', 'status')
+                ->all()
+            : [];
 
-        return collect([
-            'totalappoinments'   => $totalappoinments,
-            'newappointments'    => $newappointments,
-            'totalprescriptions' => $totalprescriptions,
-        ]);
+        $overdueUpcomingCount = $patient
+            ? $patient->medicationLogs()
+                ->whereDate('scheduled_at', $today)
+                ->where('status', 'upcoming')
+                ->where('scheduled_at', '<', $now)
+                ->count()
+            : 0;
+
+        if ($overdueUpcomingCount > 0) {
+            $todayLogCounts['missed'] = (int) ($todayLogCounts['missed'] ?? 0)
+                + $overdueUpcomingCount;
+            $todayLogCounts['upcoming'] = max(
+                0,
+                (int) ($todayLogCounts['upcoming'] ?? 0) - $overdueUpcomingCount
+            );
+        }
+
+        $todayTaken = (int) ($todayLogCounts['taken'] ?? 0);
+        $todayMissed = (int) ($todayLogCounts['missed'] ?? 0);
+        $todayUpcoming = (int) ($todayLogCounts['upcoming'] ?? 0);
+        $todaySkipped = (int) ($todayLogCounts['skipped'] ?? 0);
+        $todaySnoozed = (int) ($todayLogCounts['snoozed'] ?? 0);
+        $eligibleDoses = (int) ($adherenceLogCounts['taken'] ?? 0)
+            + (int) ($adherenceLogCounts['missed'] ?? 0);
+        $adherenceTaken = (int) ($adherenceLogCounts['taken'] ?? 0);
+        $latestVital = $patient?->latestVital()->first();
+
+        return [
+            'name'                 => $this->user->name ?? $patient?->name ?? 'Patient',
+            'totalappoinments'     => $patient?->appointments()->count() ?? 0,
+            'newappointments'      => $patient?->appointments()->where('status', 'pending')->count() ?? 0,
+            'upcomingAppointments' => $patient?->appointments()
+                ->whereDate('appointment_date', '>=', $today)
+                ->where('status', '!=', 'completed')
+                ->count() ?? 0,
+            'totalprescriptions'  => $patient?->prescriptions()->count() ?? 0,
+            'activePrescriptions' => $patient?->prescriptions()
+                ->where('status', 'issued')
+                ->count() ?? 0,
+            'medications' => [
+                'active' => $patient?->medications()
+                    ->where('status', 'active')
+                    ->count() ?? 0,
+                'today' => [
+                    'total'    => array_sum(array_map('intval', $todayLogCounts)),
+                    'taken'    => $todayTaken,
+                    'missed'   => $todayMissed,
+                    'upcoming' => $todayUpcoming,
+                    'skipped'  => $todaySkipped,
+                    'snoozed'  => $todaySnoozed,
+                ],
+                'adherence' => [
+                    'total'      => $eligibleDoses,
+                    'taken'      => $adherenceTaken,
+                    'missed'     => $eligibleDoses - $adherenceTaken,
+                    'skipped'    => (int) ($adherenceLogCounts['skipped'] ?? 0),
+                    'percentage' => $eligibleDoses > 0
+                        ? round(($adherenceTaken / $eligibleDoses) * 100, 2)
+                        : null,
+                ],
+            ],
+            'vitals' => [
+                'recordedAt'       => $latestVital?->created_at?->format('M j, Y'),
+                'bloodPressure'    => $latestVital?->blood_pressure,
+                'heartRate'        => $latestVital?->heart_rate,
+                'oxygenSaturation' => $latestVital?->oxygen_saturation,
+                'temperature'      => $latestVital?->temperature,
+                'weight'           => $latestVital?->weight,
+                'bmi'              => $latestVital?->bmi,
+            ],
+            'pregnancy' => $this->pregnancyDashboardInfo(),
+            'cycle'     => $this->menstrualCycleDashboardInfo(),
+        ];
+    }
+
+    private function pregnancyDashboardInfo(): array
+    {
+        $profile = PregnancyProfile::query()
+            ->where('user_id', $this->user->id)
+            ->first();
+
+        if (! $profile) {
+            return ['status' => 'not_started'];
+        }
+
+        if (! $profile->is_active) {
+            return ['status' => 'inactive'];
+        }
+
+        $lastMenstrualPeriod = $profile->last_menstrual_period;
+
+        if (
+            ! $lastMenstrualPeriod
+            || $lastMenstrualPeriod->isFuture()
+            || $lastMenstrualPeriod->diffInDays(today()) > 300
+        ) {
+            return ['status' => 'needs_review'];
+        }
+
+        $status = $this->pregnancyStatusService->getStatus($profile);
+
+        return [
+            'status'           => 'active',
+            'currentWeek'      => $status['currentWeek'],
+            'daysToGo'         => $status['daysToGo'],
+            'estimatedDueDate' => $status['estimatedDueDate'],
+        ];
+    }
+
+    private function menstrualCycleDashboardInfo(): array
+    {
+        $profile = MenstrualCycleProfile::query()
+            ->where('user_id', $this->user->id)
+            ->first();
+
+        if (! $profile) {
+            return ['status' => 'not_started'];
+        }
+
+        if (! $profile->is_active) {
+            return ['status' => 'inactive'];
+        }
+
+        $status = $this->menstrualCycleService->getStatus($profile);
+
+        return [
+            'status'          => 'active',
+            'currentCycleDay' => $status['currentCycleDay'],
+            'phase'           => $status['phase'],
+            'nextPeriod'      => $status['predictions']['nextPeriod']['dateFormatted'] ?? null,
+        ];
     }
 
     public function transformPrescriptionData($raw)
