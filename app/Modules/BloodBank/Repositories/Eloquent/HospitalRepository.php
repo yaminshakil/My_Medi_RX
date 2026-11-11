@@ -2,13 +2,13 @@
 
 namespace App\Modules\BloodBank\Repositories\Eloquent;
 
-use App\Modules\BloodBank\Models\Hospital;
+use App\Modules\BloodBank\Models\Hospital as BloodBankHospital;
 use App\Modules\BloodBank\Repositories\Contracts\HospitalRepositoryInterface;
 
 class HospitalRepository implements HospitalRepositoryInterface
 {
-    public function find(int $id): ?Hospital
+    public function find(int $id): ?BloodBankHospital
     {
-        return Hospital::find($id);
+        return BloodBankHospital::find($id);
     }
 }

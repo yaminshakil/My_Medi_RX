@@ -11,7 +11,10 @@ class StorageUnitRepository implements StorageUnitRepositoryInterface
 {
     public function active(): Collection
     {
-        return StorageUnit::query()->where('is_active', true)->orderBy('name')->get(['id', 'name', 'type']);
+        return StorageUnit::query()
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get(['id', 'name', 'type', 'hospital_id']);
     }
 
     public function all(): Collection
@@ -22,6 +25,7 @@ class StorageUnitRepository implements StorageUnitRepositoryInterface
     public function paginate(int $perPage = 20): LengthAwarePaginator
     {
         return StorageUnit::query()
+            ->with('hospital:id,hospital_name')
             ->withCount('bags')
             ->orderBy('name')
             ->orderBy('id')

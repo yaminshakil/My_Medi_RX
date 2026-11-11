@@ -45,6 +45,7 @@ class DonorRepository implements DonorRepositoryInterface
         $lngDelta = $radiusKm / (111.0 * max(cos(deg2rad($lat)), 0.01));
 
         $query = BloodDonor::query()
+            ->with(['user:id', 'user.firebaseDeviceTokens:id,user_id'])
             ->where('is_verified', true)
             ->where('is_available', true)
             ->whereIn('blood_group', array_map(fn ($g) => $g->value, $groups))
@@ -53,7 +54,10 @@ class DonorRepository implements DonorRepositoryInterface
             // Skip donors who gave too recently (default 56 days).
             ->where(fn ($q) => $q
                 ->whereNull('last_donated_at')
-                ->orWhere('last_donated_at', '<=', now()->subDays(config('blood-bank.donor_min_interval_days'))->toDateString()));
+                ->orWhere('last_donated_at', '<=', now()->subDays(config('blood-bank.donor_min_interval_days'))->toDateString()))
+            ->when(! config('blood-bank.emergency.extra_channel'), fn ($q) => $q->where(
+                fn ($contact) => $contact->whereNotNull('email')->orWhereHas('user.firebaseDeviceTokens')
+            ));
 
         if (DB::connection()->getDriverName() === 'sqlite') {
             return $query->get()

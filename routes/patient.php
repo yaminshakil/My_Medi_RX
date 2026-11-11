@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Patients\PatientProfileController;
 use App\Http\Controllers\Admin\Vaccination\VaccinationController;
 use App\Http\Controllers\Admin\Vaccination\VaccinationScheduleController;
 use App\Http\Controllers\Profile\ProfileController;
+use App\Modules\BloodBank\Http\Controllers\PatientBloodBankController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -107,4 +108,20 @@ Route::middleware(['auth', 'role.redirect:Admin,Patient'])
 
         Route::delete('/{schedule}', [VaccinationScheduleController::class, 'destroy'])
             ->name('destroy');
+    });
+
+Route::middleware(['auth', 'role.redirect:Patient'])
+    ->prefix('patient/blood-bank')
+    ->name('patient.blood-bank.')
+    ->group(function () {
+        Route::get('/', [PatientBloodBankController::class, 'index'])->name('index');
+        Route::post('/emergency', [PatientBloodBankController::class, 'store'])
+            ->middleware('throttle:5,1')
+            ->name('emergency.store');
+        Route::post('/donor-profile', [PatientBloodBankController::class, 'registerDonor'])->name('donor-profile.store');
+        Route::patch('/donor-profile', [PatientBloodBankController::class, 'updateDonorProfile'])->name('donor-profile.update');
+        Route::patch('/donor-profile/availability', [PatientBloodBankController::class, 'updateDonorAvailability'])
+            ->name('donor-profile.availability');
+        Route::patch('/emergency/{emergencyRequest}/cancel', [PatientBloodBankController::class, 'cancel'])
+            ->name('emergency.cancel');
     });

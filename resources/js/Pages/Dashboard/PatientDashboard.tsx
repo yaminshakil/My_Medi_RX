@@ -7,6 +7,7 @@ import {
     CalendarDays,
     CheckCircle2,
     Clock3,
+    Droplet,
     HeartPulse,
     Pill,
 } from "lucide-react";
@@ -62,7 +63,7 @@ type PatientDashboardInfo = {
 
 type SummaryCardProps = {
     title: string;
-    value: number;
+    value: number | string;
     description: string;
     icon: LucideIcon;
     href: string;
@@ -169,6 +170,13 @@ export default function PatientDashboard() {
                         description={`${patientinfo.activePrescriptions} active`}
                         icon={Pill}
                         href={route("prescriptions.index")}
+                    />
+                    <SummaryCard
+                        title="Blood bank & donors"
+                        value="Open"
+                        description="Find live blood availability or request donors"
+                        icon={Droplet}
+                        href={route("patient.blood-bank.index")}
                     />
                 </section>
 

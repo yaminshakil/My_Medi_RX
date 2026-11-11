@@ -2,8 +2,10 @@
 
 namespace App\Modules\BloodBank\Models;
 
+use App\Models\User;
 use App\Modules\BloodBank\Enums\BloodGroup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 
 class BloodDonor extends Model
@@ -19,7 +21,7 @@ class BloodDonor extends Model
 
     protected $fillable = [
         'user_id', 'name', 'phone', 'email', 'blood_group', 'latitude', 'longitude',
-        'city', 'last_donated_at', 'is_verified', 'verified_at', 'is_available',
+        'city', 'last_donated_at', 'is_verified', 'verified_at', 'is_available', 'consented_at',
     ];
 
     protected function casts(): array
@@ -32,11 +34,17 @@ class BloodDonor extends Model
             'verified_at'     => 'datetime',
             'is_verified'     => 'boolean',
             'is_available'    => 'boolean',
+            'consented_at'    => 'datetime',
         ];
     }
 
     public function routeNotificationForMail(): ?string
     {
         return $this->email;
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

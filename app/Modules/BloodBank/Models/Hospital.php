@@ -8,7 +8,13 @@ class Hospital extends Model
 {
     protected $table = 'bb_hospitals';
 
-    protected $fillable = ['name', 'address', 'phone', 'latitude', 'longitude'];
+    protected $fillable = [
+        'name',
+        'address',
+        'phone',
+        'latitude',
+        'longitude',
+    ];
 
     protected function casts(): array
     {

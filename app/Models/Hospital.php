@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Modules\BloodBank\Models\StorageUnit as BloodBankStorageUnit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -131,5 +132,10 @@ class Hospital extends Model
     public function departments(): HasMany
     {
         return $this->hasMany(Department::class);
+    }
+
+    public function bloodBankStorageUnits(): HasMany
+    {
+        return $this->hasMany(BloodBankStorageUnit::class, 'hospital_id');
     }
 }

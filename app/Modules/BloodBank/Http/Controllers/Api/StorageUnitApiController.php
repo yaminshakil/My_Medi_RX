@@ -14,14 +14,15 @@ class StorageUnitApiController extends BloodBankApiController
     {
         return $this->success(
             $this->storageUnits->all()->map(fn (StorageUnit $unit): array => [
-                'id'         => $unit->id,
-                'name'       => $unit->name,
-                'location'   => $unit->location,
-                'type'       => $unit->type,
-                'min_temp_c' => $unit->min_temp_c,
-                'max_temp_c' => $unit->max_temp_c,
-                'capacity'   => $unit->capacity,
-                'is_active'  => $unit->is_active,
+                'id'          => $unit->id,
+                'name'        => $unit->name,
+                'location'    => $unit->location,
+                'hospital_id' => $unit->hospital_id,
+                'type'        => $unit->type,
+                'min_temp_c'  => $unit->min_temp_c,
+                'max_temp_c'  => $unit->max_temp_c,
+                'capacity'    => $unit->capacity,
+                'is_active'   => $unit->is_active,
             ])->values(),
             'Storage units loaded.',
         );

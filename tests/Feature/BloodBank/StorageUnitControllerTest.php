@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\BloodBank;
 
+use App\Models\Hospital;
 use App\Models\User;
 use App\Modules\BloodBank\Models\BloodBag;
 use App\Modules\BloodBank\Models\StorageUnit;
@@ -34,33 +35,38 @@ class StorageUnitControllerTest extends TestCase
 
     public function test_admin_can_create_a_storage_unit(): void
     {
+        $hospital = $this->hospital();
+
         $this->actingAs($this->administrator())
             ->from(route('blood-bank.storage-units.index'))
             ->post(route('blood-bank.storage-units.store'), [
-                'name'       => 'Main refrigerator',
-                'location'   => 'Ground floor',
-                'type'       => 'refrigerator',
-                'min_temp_c' => '2.0',
-                'max_temp_c' => '6.0',
-                'capacity'   => '120',
-                'is_active'  => true,
+                'name'        => 'Main refrigerator',
+                'location'    => 'Ground floor',
+                'hospital_id' => $hospital->id,
+                'type'        => 'refrigerator',
+                'min_temp_c'  => '2.0',
+                'max_temp_c'  => '6.0',
+                'capacity'    => '120',
+                'is_active'   => true,
             ])
             ->assertRedirect(route('blood-bank.storage-units.index'))
             ->assertSessionHas('success', 'Storage unit created.');
 
         $this->assertDatabaseHas('bb_storage_units', [
-            'name'       => 'Main refrigerator',
-            'location'   => 'Ground floor',
-            'type'       => 'refrigerator',
-            'min_temp_c' => 2.0,
-            'max_temp_c' => 6.0,
-            'capacity'   => 120,
-            'is_active'  => true,
+            'name'        => 'Main refrigerator',
+            'location'    => 'Ground floor',
+            'type'        => 'refrigerator',
+            'min_temp_c'  => 2.0,
+            'max_temp_c'  => 6.0,
+            'capacity'    => 120,
+            'is_active'   => true,
+            'hospital_id' => $hospital->id,
         ]);
     }
 
     public function test_admin_can_update_storage_unit_details_and_status(): void
     {
+        $hospital = $this->hospital();
         $unit = StorageUnit::query()->create([
             'name' => 'Old refrigerator',
             'type' => 'refrigerator',
@@ -69,26 +75,28 @@ class StorageUnitControllerTest extends TestCase
         $this->actingAs($this->administrator())
             ->from(route('blood-bank.storage-units.index'))
             ->put(route('blood-bank.storage-units.update', $unit), [
-                'name'       => 'Backup freezer',
-                'location'   => 'Basement',
-                'type'       => 'freezer',
-                'min_temp_c' => '-25.0',
-                'max_temp_c' => '-18.0',
-                'capacity'   => 80,
-                'is_active'  => false,
+                'name'        => 'Backup freezer',
+                'location'    => 'Basement',
+                'hospital_id' => $hospital->id,
+                'type'        => 'freezer',
+                'min_temp_c'  => '-25.0',
+                'max_temp_c'  => '-18.0',
+                'capacity'    => 80,
+                'is_active'   => false,
             ])
             ->assertRedirect(route('blood-bank.storage-units.index'))
             ->assertSessionHas('success', 'Storage unit updated.');
 
         $this->assertDatabaseHas('bb_storage_units', [
-            'id'         => $unit->id,
-            'name'       => 'Backup freezer',
-            'location'   => 'Basement',
-            'type'       => 'freezer',
-            'min_temp_c' => -25.0,
-            'max_temp_c' => -18.0,
-            'capacity'   => 80,
-            'is_active'  => false,
+            'id'          => $unit->id,
+            'name'        => 'Backup freezer',
+            'location'    => 'Basement',
+            'type'        => 'freezer',
+            'min_temp_c'  => -25.0,
+            'max_temp_c'  => -18.0,
+            'capacity'    => 80,
+            'is_active'   => false,
+            'hospital_id' => $hospital->id,
         ]);
     }
 
@@ -109,6 +117,38 @@ class StorageUnitControllerTest extends TestCase
         $this->assertDatabaseMissing('bb_storage_units', [
             'name' => 'Invalid refrigerator',
         ]);
+    }
+
+    public function test_hospital_staff_cannot_assign_storage_to_another_hospital(): void
+    {
+        $owner = User::factory()->create([
+            'first_name' => 'Hospital',
+            'last_name'  => 'Staff',
+        ]);
+        $ownHospital = Hospital::query()->create([
+            'hospital_name' => 'Owner Hospital',
+            'mobile_number' => '01700000000',
+            'address'       => '1 Hospital Road',
+            'created_by'    => $owner->id,
+        ]);
+        $otherHospital = $this->hospital();
+
+        $this->actingAs($owner)
+            ->from(route('blood-bank.storage-units.index'))
+            ->post(route('blood-bank.storage-units.store'), [
+                'name'        => 'Restricted refrigerator',
+                'type'        => 'refrigerator',
+                'is_active'   => true,
+                'hospital_id' => $otherHospital->id,
+            ])
+            ->assertForbidden();
+
+        $this->assertDatabaseMissing('bb_storage_units', [
+            'name'        => 'Restricted refrigerator',
+            'hospital_id' => $otherHospital->id,
+        ]);
+
+        $this->assertModelExists($ownHospital);
     }
 
     public function test_admin_can_delete_a_storage_unit_without_blood_bags(): void
@@ -177,5 +217,14 @@ class StorageUnitControllerTest extends TestCase
         $user->assignRole($role);
 
         return $user;
+    }
+
+    private function hospital(): Hospital
+    {
+        return Hospital::query()->create([
+            'hospital_name' => 'Storage Unit Hospital',
+            'mobile_number' => '01700000000',
+            'address'       => '1 Hospital Road',
+        ]);
     }
 }

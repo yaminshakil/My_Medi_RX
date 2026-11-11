@@ -2,6 +2,7 @@
 
 namespace App\Modules\BloodBank\Services;
 
+use App\Jobs\SendFirebasePushNotification;
 use App\Models\Hospital;
 use App\Models\User;
 use App\Modules\BloodBank\Enums\BloodComponent;
@@ -13,7 +14,6 @@ use App\Modules\BloodBank\Models\EmergencyRequest;
 use App\Modules\BloodBank\Notifications\EmergencyBloodRequestNotification;
 use App\Modules\BloodBank\Repositories\Contracts\DonorRepositoryInterface;
 use App\Modules\BloodBank\Repositories\Contracts\EmergencyRequestRepositoryInterface;
-use App\Modules\BloodBank\Repositories\Contracts\HospitalRepositoryInterface;
 use App\Modules\BloodBank\Support\BloodCompatibility;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -24,7 +24,6 @@ class EmergencyBroadcastService
     public function __construct(
         private readonly EmergencyRequestRepositoryInterface $requests,
         private readonly DonorRepositoryInterface $donors,
-        private readonly HospitalRepositoryInterface $hospitals,
     ) {}
 
     public function broadcast(User $user, array $data): EmergencyRequest
@@ -35,6 +34,11 @@ class EmergencyBroadcastService
             throw new BloodBankException('Your account is not linked to a hospital, so there is no location to search from.');
         }
 
+        return $this->broadcastForHospital($user, $hospital, $data);
+    }
+
+    public function broadcastForHospital(User $user, Hospital $hospital, array $data): EmergencyRequest
+    {
         if (is_null($hospital->latitude) || is_null($hospital->longitude)) {
             throw new BloodBankException("Add latitude and longitude to {$hospital->hospital_name} before broadcasting requests.");
         }
@@ -72,11 +76,27 @@ class EmergencyBroadcastService
 
             $this->requests->attachDonors(
                 $request,
-                $donors->mapWithKeys(fn (BloodDonor $d) => [$d->id => [
-                    'distance_km' => round((float) $d->distance_km, 2),
-                    'channel'     => 'mail',
-                    'notified_at' => now(),
-                ]])->all()
+                $donors->mapWithKeys(function (BloodDonor $donor): array {
+                    $channels = [];
+
+                    if ($donor->email) {
+                        $channels[] = 'mail';
+                    }
+
+                    if ($donor->user?->firebaseDeviceTokens->isNotEmpty()) {
+                        $channels[] = 'push';
+                    }
+
+                    if ($extraChannel = config('blood-bank.emergency.extra_channel')) {
+                        $channels[] = $extraChannel;
+                    }
+
+                    return [$donor->id => [
+                        'distance_km' => round((float) $donor->distance_km, 2),
+                        'channel'     => implode(',', $channels),
+                        'notified_at' => now(),
+                    ]];
+                })->all()
             );
 
             $this->requests->update($request, ['donors_notified_count' => $donors->count()]);
@@ -86,7 +106,21 @@ class EmergencyBroadcastService
 
         // Send only after the transaction commits, so a rollback can never leave donors alerted about a request that does not exist.
         foreach ($donors as $donor) {
-            $donor->notify(new EmergencyBloodRequestNotification($request, $donor, (float) $donor->distance_km));
+            $notification = new EmergencyBloodRequestNotification($request, $donor, (float) $donor->distance_km);
+            $donor->notify($notification);
+
+            foreach ($donor->user?->firebaseDeviceTokens ?? [] as $deviceToken) {
+                SendFirebasePushNotification::dispatch(
+                    $deviceToken->id,
+                    "{$request->urgency->label()}: {$request->blood_group->value} blood needed",
+                    "A nearby hospital needs {$request->blood_group->value} blood. Tap to respond.",
+                    [
+                        'type'       => 'blood_donation_request',
+                        'request_id' => (string) $request->id,
+                        'action_url' => $notification->acceptedResponseUrl(),
+                    ],
+                );
+            }
         }
 
         return $request;

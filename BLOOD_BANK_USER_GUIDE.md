@@ -7,8 +7,17 @@ This guide explains how to use the Blood Bank screens in Medi Rx. It describes t
 1. Sign in with an account that is linked to a hospital, or an application administrator account.
 2. Open `/blood-bank` in the same application. Use the tabs at the top to open **Overview**, **Blood units**, **Issue log**, **Emergency requests**, or **Donors**.
 3. Before operating the module, ask your system administrator to confirm that the correct hospital and location are configured, active storage units exist, and the patient and physician records needed by staff are available.
-4. For donor broadcasts, the hospital needs latitude and longitude. Donor records need accurate locations and working email addresses; the mail service and queue worker must also be running for email delivery.
+4. For donor broadcasts, the hospital needs latitude and longitude. Donor records need accurate locations and a working email address or a linked account with a registered Firebase device token. The relevant queue worker must be running for queued delivery.
 5. The module's expiry and emergency-request cleanup runs through the Laravel scheduler. Your administrator should ensure the scheduler is running in production.
+
+## Patient blood-bank and donor network
+
+1. Patients open **Blood bank & donors** from their dashboard. The directory lists verified hospitals that have an active storage unit assigned to them. The map uses the hospital's saved coordinates; patients can call the hospital directly from its listing.
+2. The live availability table counts only available, unexpired units in active storage units assigned to that hospital. Existing storage units have no hospital assignment until staff select one in **Storage units**; assign existing units before relying on patient-facing counts.
+3. Patients can join the donor network with their blood group, contact number, and location. A patient must explicitly opt in, and an authorized staff member must verify the profile before it can receive alerts. Donors can pause or resume alerts from the same screen.
+4. To request blood, patients select a listed blood bank, blood group, component, urgency, and search radius. The request searches for compatible, verified, available donors near that bank. It does not replace a clinician's assessment or laboratory crossmatch.
+5. Donors with a linked account and registered Firebase device token receive a push alert; email is also sent when available. Queued notifications require a running queue worker and valid Firebase configuration for push delivery.
+6. Patients see accepted donors in their request history and can call them from the app. A donor's phone number is not shown to the patient until that donor accepts. Patients can cancel their own open requests.
 
 ## 2. Overview dashboard
 
@@ -57,7 +66,7 @@ The compatibility list is an aid, not a crossmatch result. Whole blood and packe
 4. Save the donor. New donors are unverified and are not eligible for emergency requests until an authorized staff member confirms the record and selects **Verify**.
 5. Use search and the blood-group/verification filters to find donor records. **Remove** removes verification.
 
-Emergency alerts are sent by email when an email address is present (unless an additional channel has been configured). Keep contact details accurate and confirm consent and availability under local policy. The current Donors screen does not provide an availability/opt-in control; eligibility also depends on the donor's system availability setting.
+Emergency alerts use email when an email address is present, and may also use Firebase push for donors with linked accounts and registered device tokens (unless another channel is configured). Keep contact details accurate and verify donor consent and availability under local policy. Patients manage their own alert availability in the patient donor network.
 
 ## 6. Send and follow an emergency donor request
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Profile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Doctor\CreateDoctorProfileRequest;
 use App\Http\Requests\Doctor\UpdateDoctorProfileRequest;
+use App\Modules\BloodBank\Models\BloodDonor;
 use App\Services\Doctors\DoctorService;
 use App\Services\Profile\ProfileServices;
 use Illuminate\Support\Facades\Auth;
@@ -40,7 +41,8 @@ class ProfileController extends Controller
 
     public function getDoctorProfile()
     {
-        $doctor = $this->profileService->getDoctorProfile();
+        $id = $this->user->id;
+        $doctor = $this->profileService->getDoctorProfile($id);
 
         $specialties = $this->doctorService->getSpecialtiesForSelect();
 
@@ -79,9 +81,37 @@ class ProfileController extends Controller
     public function getPatientProfile()
     {
         $patient = $this->profileService->getPatientProfile();
+
         if ($patient) {
+            $donor = BloodDonor::query()
+                ->where('user_id', $this->user->id)
+                ->first([
+                    'id',
+                    'name',
+                    'phone',
+                    'blood_group',
+                    'latitude',
+                    'longitude',
+                    'city',
+                    'last_donated_at',
+                    'is_verified',
+                    'is_available',
+                ]);
+
             return Inertia::render('Profile/Patient/Edit', [
                 'patient' => $patient,
+                'donor'   => $donor ? [
+                    'id'              => $donor->id,
+                    'name'            => $donor->name,
+                    'phone'           => $donor->phone,
+                    'blood_group'     => $donor->blood_group->value,
+                    'latitude'        => $donor->latitude,
+                    'longitude'       => $donor->longitude,
+                    'city'            => $donor->city,
+                    'last_donated_at' => $donor->last_donated_at?->toDateString(),
+                    'is_verified'     => $donor->is_verified,
+                    'is_available'    => $donor->is_available,
+                ] : null,
             ]);
         } else {
             return Inertia::render('Profile/Patient/Create');

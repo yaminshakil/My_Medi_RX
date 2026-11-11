@@ -72,6 +72,11 @@ class EmergencyBloodRequestNotification extends Notification implements ShouldQu
         );
     }
 
+    public function acceptedResponseUrl(): string
+    {
+        return $this->link('accepted');
+    }
+
     // Signed + expiring link: the donor answers without logging in, and nobody can forge another donor's reply.
     private function link(string $response): string
     {

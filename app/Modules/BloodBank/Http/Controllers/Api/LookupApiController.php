@@ -31,9 +31,10 @@ class LookupApiController extends BloodBankApiController
                 'department' => $physician->department,
             ])->values(),
             'storage_units' => $this->storageUnits->active()->map(fn ($unit) => [
-                'id'   => $unit->id,
-                'name' => $unit->name,
-                'type' => $unit->type,
+                'id'          => $unit->id,
+                'name'        => $unit->name,
+                'type'        => $unit->type,
+                'hospital_id' => $unit->hospital_id,
             ])->values(),
         ], 'Blood-bank lookup options loaded.');
     }

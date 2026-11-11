@@ -17,6 +17,8 @@ type StorageUnit = {
     id: number;
     name: string;
     location: string | null;
+    hospital_id: number | null;
+    hospital_name: string | null;
     type: string;
     min_temp_c: string | number | null;
     max_temp_c: string | number | null;
@@ -28,6 +30,7 @@ type StorageUnit = {
 type StorageUnitForm = {
     name: string;
     location: string;
+    hospital_id: string;
     type: string;
     min_temp_c: string;
     max_temp_c: string;
@@ -38,6 +41,11 @@ type StorageUnitForm = {
 type TypeOption = {
     value: string;
     label: string;
+};
+
+type HospitalOption = {
+    id: number;
+    hospital_name: string;
 };
 
 type PaginationLink = {
@@ -52,11 +60,13 @@ type PageProps = {
         links: PaginationLink[];
     };
     type_options: TypeOption[];
+    hospitals: HospitalOption[];
 };
 
 const initialForm: StorageUnitForm = {
     name: "",
     location: "",
+    hospital_id: "",
     type: "",
     min_temp_c: "",
     max_temp_c: "",
@@ -64,7 +74,11 @@ const initialForm: StorageUnitForm = {
     is_active: true,
 };
 
-export default function Index({ storage_units, type_options }: PageProps) {
+export default function Index({
+    storage_units,
+    type_options,
+    hospitals,
+}: PageProps) {
     const [editingId, setEditingId] = useState<number | null>(null);
     const [formOpen, setFormOpen] = useState(false);
     const { data, setData, post, put, processing, errors, reset, clearErrors } =
@@ -82,6 +96,7 @@ export default function Index({ storage_units, type_options }: PageProps) {
         setData({
             name: unit.name,
             location: unit.location ?? "",
+            hospital_id: unit.hospital_id === null ? "" : String(unit.hospital_id),
             type: unit.type,
             min_temp_c: unit.min_temp_c === null ? "" : String(unit.min_temp_c),
             max_temp_c: unit.max_temp_c === null ? "" : String(unit.max_temp_c),
@@ -188,6 +203,37 @@ export default function Index({ storage_units, type_options }: PageProps) {
                                         setData("location", event.target.value)
                                     }
                                 />
+                            </Field>
+                            <Field
+                                label="Blood bank"
+                                error={errors.hospital_id}
+                                hint={undefined}
+                                className={undefined}
+                                id={undefined}
+                            >
+                                <select
+                                    className={inputCls}
+                                    value={data.hospital_id}
+                                    onChange={(
+                                        event: ChangeEvent<HTMLSelectElement>,
+                                    ) =>
+                                        setData(
+                                            "hospital_id",
+                                            event.target.value,
+                                        )
+                                    }
+                                    required
+                                >
+                                    <option value="">Select a hospital</option>
+                                    {hospitals.map((hospital) => (
+                                        <option
+                                            key={hospital.id}
+                                            value={hospital.id}
+                                        >
+                                            {hospital.hospital_name}
+                                        </option>
+                                    ))}
+                                </select>
                             </Field>
                             <Field
                                 label="Type"
@@ -338,6 +384,7 @@ export default function Index({ storage_units, type_options }: PageProps) {
                                 <tr>
                                     <th className={th}>Name</th>
                                     <th className={th}>Location</th>
+                                    <th className={th}>Blood bank</th>
                                     <th className={th}>Type</th>
                                     <th className={th}>Temperature range</th>
                                     <th className={th}>Capacity</th>
@@ -356,6 +403,9 @@ export default function Index({ storage_units, type_options }: PageProps) {
                                         </td>
                                         <td className={td}>
                                             {unit.location ?? "—"}
+                                        </td>
+                                        <td className={td}>
+                                            {unit.hospital_name ?? "Unassigned"}
                                         </td>
                                         <td className={td}>
                                             {type_options.find(
